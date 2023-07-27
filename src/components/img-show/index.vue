@@ -1,0 +1,106 @@
+<template>
+  <img
+    v-if="imgPath"
+    :src="imgPath"
+    :class="classList"
+    :alt="imgAlt"
+    :style="wrapStyle"
+    @error="onhandleError"
+    @click="onHandleClick"
+  >
+  <img
+    v-else
+    src="~@/assets/images/def.png"
+    :class="classList"
+    :style="wrapStyle"
+    @click="onHandleClick"
+  >
+</template>
+
+<script setup>
+
+const props = defineProps({
+  src: {
+    type: String,
+    default: ''
+  },
+  width: {
+    type: [String, Number],
+    default: '100%'
+  },
+  height: {
+    type: [String, Number],
+    default: '100%'
+  },
+  radius: {
+    type: [String, Number],
+    default: 0
+  },
+  imgAlt: {
+    type: String,
+    default: ''
+  },
+  classList: {
+    type: Array,
+    default: () => {
+      return []
+    }
+  },
+  imgStyle: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  isNeedHandle: {
+    type: Boolean,
+    default: true
+  }
+})
+const emit = defineEmits(['handleClick'])
+// 图片地址
+const imgPath = ref('')
+
+const resourcesUrl = ref(import.meta.env.VITE_APP_RESOURCES_URL)
+watch(
+  () => props.src,
+  (path) => {
+    if (path && !/^https?:\/\//.test(path) && props.isNeedHandle) {
+      imgPath.value = resourcesUrl.value + path
+    } else {
+      imgPath.value = path
+    }
+  },
+  {
+    immediate: true
+  }
+)
+
+// 验证十进制数字
+function number (value) {
+  return /^[+-]?(\d+\.?\d*|\.\d+|\d\.\d+e\+\d+)$/.test(value)
+}
+// 是否携带单位
+function addUnit (value = 'auto') {
+  value = String(value)
+  return number(value) ? `${value}px` : value
+}
+// 样式整合
+const wrapStyle = computed(() => {
+  const style = {}
+  style.width = addUnit(props.width)
+  style.height = addUnit(props.height)
+  // 如果是显示圆形，设置一个很多的半径值即可
+  style.borderRadius = addUnit(props.radius)
+  // 如果设置圆角，必须要有hidden，否则可能圆角无效
+  style.overflow = props.radius > 0 ? 'hidden' : 'visible'
+  return { ...style, ...props.imgStyle }
+})
+
+function onHandleClick () {
+  emit('handleClick')
+}
+function onhandleError () {
+  imgPath.value = ''
+}
+</script>

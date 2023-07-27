@@ -1,0 +1,113 @@
+.group-container {
+  .button-add {
+    padding:3px;
+    color:#fff;
+  }
+  .spec-name {
+    margin: 15px 5px;
+    // 属性名称
+    .spec-name-int {
+      padding: 10px 10px 10px 10px;
+      border: 1px solid #DCDCDC;
+      display: inline-block;
+      margin-bottom: 15px;
+      margin-right: 10px;
+      vertical-align: top;
+      // 属性图片
+      .img-box {
+        display: flex;
+        align-items: flex-end;
+        margin-top: 10px;
+        .spec-imgbox {
+          display: block;
+          width: 60px;
+          height: 60px;
+          position: relative;
+          .preview-btn {
+            display: none;
+            width: 100%;
+            position: absolute;
+            bottom: -1px;
+            left: 1px;
+            font-size: 12px;
+            line-height: 1.5em;
+            color: #fff;
+            text-align: center;
+            border-radius: 0 0 6px 6px;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+          }
+          :deep(.spec-img) {
+            // sku上传图片组件大小修改
+            .plugin-images {
+              .el-upload {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 60px;
+                height: 60px;
+                .pic-uploader-icon {
+                  width: 60px;
+                  height: 60px;
+                  line-height: 60px;
+                  font-size: 18px;
+                }
+                .pic {
+                  width: auto;
+                  max-width: 60px;
+                  height: auto;
+                  max-height: 60px;
+                }
+              }
+            }
+          }
+        }
+        .spec-imgbox:hover .preview-btn {
+          display: block;
+        }
+        .del-pic {
+          font-size: 12px;
+          color: #155bd4;
+          margin-left: 5px;
+          cursor: pointer;
+        }
+      }
+      .error-tips {
+        margin-left: 25px;
+        margin-top: 10px;
+        color: #e43130;
+      }
+      .el-tag--plain {
+        position: relative;
+        min-width: 100px;
+        color: #606266;
+        border-color: #dcdfe6;
+        padding-right: 22px;
+      }
+      .el-tag--plain .el-tag__close {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 4px;
+        color: #606266;
+      }
+      .el-tag--plain .el-tag__close:hover {
+        background: #dcdfe6;
+      }
+    }
+    .add-spec-btn {
+      display: inline-block;
+      font-size: 12px;
+      line-height: 1.5em;
+      margin-top: 10px;
+      color: #155bd4;
+      cursor: pointer;
+    }
+    .sku-item {
+      display: inline-block;
+      .popover-select {
+        width: 100%;
+      }
+    }
+  }
+}

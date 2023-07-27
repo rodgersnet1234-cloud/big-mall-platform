@@ -1,0 +1,266 @@
+<template>
+  <div class="select-account-range">
+    <el-form-item
+      label=""
+      prop="type"
+    >
+      <el-button @click="dialogVisible = true">
+        选择{{ name }}
+      </el-button>
+    </el-form-item>
+    <el-form-item
+      v-if="tableData.length > 0"
+      label=""
+      prop="type"
+    >
+      <el-table
+        :data="tableData"
+        header-cell-class-name="table-header"
+        row-class-name="table-row-low"
+      >
+        <el-table-column
+          :prop="propList[0]"
+          :label="`${name}名称`"
+        />
+        <el-table-column
+          v-if="type != 2"
+          :prop="propList[1]"
+          label="联系人"
+        />
+        <el-table-column
+          :prop="propList[2]"
+          label="联系电话"
+        />
+        <el-table-column
+          prop="email"
+          label="联系邮箱"
+        />
+        <el-table-column
+          class="table-item"
+          label="操作"
+          align="center"
+        >
+          <template #default="{row}">
+            <div class="table-btn-con">
+              <el-button
+                type="text"
+                @click="onDelete(row)"
+              >
+                删除
+              </el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form-item>
+    <el-dialog
+      v-model:visible="dialogVisible"
+      :title="`选择${name}`"
+      append-to-body
+    >
+      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
+      <el-form
+        :inline="true"
+        :model="searchParam"
+        class="demo-form-inline"
+        size="small"
+        @submit.prevent
+      >
+        <el-form-item :label="`${name}名称`">
+          <el-input
+            v-model="searchParam[propList[0]]"
+            :placeholder="`${name}名称`"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="searchInfo()"
+          >
+            查询
+          </el-button>
+          <el-button @click="clearSearchInfo()">
+            {{ $t('table.reset') }}
+          </el-button>
+        </el-form-item>
+      </el-form>
+      <el-table
+        ref="multipleTableRef"
+        v-loading="pageLoading"
+        :data="pageVO.list"
+        header-cell-class-name="table-header"
+        row-class-name="table-row-low"
+        :row-key="getRowKeys"
+        @selection-change="onSelectSome"
+      >
+        <el-table-column
+          type="selection"
+          :reserve-selection="true"
+          width="55"
+        />
+        <el-table-column
+          :prop="propList[0]"
+          :label="`${name}名称`"
+        />
+        <el-table-column
+          v-if="type != 2"
+          :prop="propList[1]"
+          label="联系人"
+        />
+        <el-table-column
+          :prop="propList[2]"
+          label="联系电话"
+        />
+        <el-table-column
+          :prop="propList[3]"
+          label="状态"
+        >
+          <template #default="{row}">
+            <span v-if="row[propList[3]] === -1">未开通</span>
+            <span v-if="row[propList[3]] === 0">{{ type == 2 ? '禁用' : '停业中' }}</span>
+            <span v-if="row[propList[3]] === 1">{{ type == 2 ? '正常' : '营业中' }}</span>
+            <span v-if="row[propList[3]] === 2">平台下线</span>
+            <span v-if="row[propList[3]] === 3">开店待审核</span>
+            <span v-if="row[propList[3]] === 4">店铺申请中</span>
+            <span v-if="row[propList[3]] === 5">上线待审核</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页条 -->
+      <pagination
+        v-if="pageVO.total>0"
+        v-model:page="searchParam.pageNum"
+        v-model:limit="searchParam.pageSize"
+        :total="pageVO.total"
+        @pagination="getPage()"
+      />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="onSubmit"
+          >确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script setup>
+import Pagination from '@/components/Pagination/index.vue'
+import * as shopApi from '@/api/platform/audit-shop'
+import * as supplierApi from '@/api/platform/audit-supplier'
+import * as userApi from '@/api/user/user-manager'
+
+const emit = defineEmits(['getIds', 'getIds'])
+
+const tableData = ref([])
+const dialogVisible = ref(false)
+const multipleSelection = ref([])
+const searchParam = reactive({
+  pageSize: 10,
+  pageNum: 1
+})
+// 返回参数
+const pageVO = reactive({
+  list: [], // 返回的列表
+  total: 0, // 一共多少条数据
+  pages: 0 // 一共多少页
+})
+// loading
+const pageLoading = ref(true)
+const props = defineProps({
+  type: {
+    type: Number,
+    default: 0
+  },
+  tableList: {
+    type: Array,
+    default: () => []
+  }
+})
+const multipleTableRef = ref()
+const name = computed(() => {
+  return props.type === 1 ? '商家' : props.type === 2 ? '用户' : '供应商'
+})
+const api = computed(() => {
+  return props.type === 1 ? shopApi.managePage : props.type === 2 ? userApi.list : supplierApi.managePage
+})
+const propList = computed(() => {
+  const shopProp = ['shopName', 'contactName', 'contactPhone', 'shopStatus']
+  const supplierProp = ['supplierName', 'contactName', 'contactPhone', 'supplierStatus']
+  const userProp = ['nickName', 'realName', 'phone', 'status']
+  return props.type === 1 ? shopProp : props.type === 2 ? userProp : supplierProp
+})
+const idKey = computed(() => {
+  return props.type === 1 ? 'shopId' : props.type === 2 ? 'userId' : 'supplierId'
+})
+
+watch(() => dialogVisible, (data) => {
+  if (data) {
+    nextTick(() => {
+      multipleTableRef.value?.clearSelection()
+      multipleSelection.value = tableData.value.map(item => item[idKey])
+      tableData.value.forEach(row => {
+        const index = pageVO.list.findIndex(item => item[idKey] === row[idKey])
+        if (index >= 0) {
+          multipleTableRef.value.toggleRowSelection(pageVO.list[index], true)
+        }
+      })
+    })
+  }
+})
+
+onMounted(() => {
+  getPage()
+  tableData.value = props.tableList
+})
+
+const getPage = () => {
+  pageLoading.value = true
+  api(searchParam).then(res => {
+    pageVO.list = res.list
+    pageVO.total = res.total
+    pageVO.pages = res.pages
+    pageLoading.value = false
+  }).catch(() => {
+    pageLoading.value = false
+  })
+}
+const onSelectSome = (val) => {
+  multipleSelection.value = val
+}
+const onSubmit = () => {
+  dialogVisible.value = false
+  tableData.value = multipleSelection.value
+  const ids = tableData.value.map(item => item[idKey])
+  emit('getIds', ids)
+}
+// 清空搜索内容
+const clearSearchInfo = () => {
+  searchParam[propList[0]] = null
+  searchParam.pageNum = 1
+  getPage()
+}
+const searchInfo = () => {
+  searchParam.current = 1
+  getPage()
+}
+// 记录选中状态
+const getRowKeys = (row) => {
+  return row[idKey]
+}
+const onDelete = (row) => {
+  tableData.value = tableData.value.filter(item => item[idKey] !== row[idKey])
+  multipleSelection.value = tableData.value
+  const ids = tableData.value.map(item => item[idKey])
+  emit('getIds', ids)
+}
+
+</script>
+
+<style lang="scss">
+
+</style>

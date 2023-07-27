@@ -1,0 +1,36 @@
+/**class 必须有一个父class包起来，避免混淆*/
+.micro-header-box {
+  .preview-header {
+    height: 64px;
+    width: 100%;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    -moz-background-size:100% 100%;
+    position: relative;
+    background-image: url("@/assets/micro-page/micro-create-header.png");
+    display: flex;
+    justify-content: center;
+    .preview-header-title {
+      box-sizing: initial;
+      display: inline-block;
+      padding: 28px 60px 0;
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      vertical-align: middle;
+      color: #222;
+    }
+  }
+  .header-edit-tips {
+    font-size: 12px;
+    color: #AAAAAA;
+    margin-left: 40px;
+  }
+  .el-color-picker__trigger {
+    width: 186px;
+  }
+}

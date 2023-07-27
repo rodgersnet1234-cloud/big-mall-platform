@@ -1,0 +1,250 @@
+<template>
+  <div
+    :class="{fullscreen:fullscreen}"
+    class="component-tinymce-container"
+    :style="{width:containerWidth}"
+  >
+    <textarea
+      :id="tinymceId"
+      class="tinymce-textarea"
+    />
+    <div class="editor-custom-btn-container">
+      <editorImage
+        color="#155bd4"
+        class="editor-upload-btn"
+        @success-c-b-k="imageSuccessCBK"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+/**
+ * docs:
+ * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
+ */
+import editorImage from './components/EditorImage.vue'
+import plugins from './plugins'
+import * as toolbarPar from './toolbar'
+import load from './dynamicLoadScript'
+import { ElMessage } from 'element-plus'
+
+const emit = defineEmits(['input', 'update:modelValue'])
+
+const props = defineProps({
+  id: {
+    type: String,
+    default: function () {
+      return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
+    }
+  },
+  value: {
+    type: String,
+    default: ''
+  },
+  toolbar: {
+    type: Array,
+    required: false,
+    default () {
+      return []
+    }
+  },
+  menubar: {
+    type: String,
+    default: 'file edit insert view format table'
+  },
+  height: {
+    type: [Number, String],
+    required: false,
+    default: 360
+  },
+  width: {
+    type: [Number, String],
+    required: false,
+    default: 'auto'
+  }
+})
+
+const languageTypeList = {
+  en: 'en',
+  zh: 'zh_CN',
+  es: 'es_MX',
+  ja: 'ja'
+}
+
+const language = computed(() => {
+  return languageTypeList[useAppStore().language]
+})
+
+const containerWidth = computed(() => {
+  const widthPar = props.width
+  if (/^[\d]+(\.[\d]+)?$/.test(widthPar)) { // matches `100`, `'100'`
+    return `${widthPar}px`
+  }
+  return widthPar
+})
+
+let hasInit = false
+let hasChange = false
+watch(() => props.value, (val) => {
+  if (!hasChange && hasInit) {
+    setContent(val)
+  }
+})
+
+watch(() => language, () => {
+  destroyTinymce()
+  nextTick(() => initTinymce())
+})
+
+onMounted(() => {
+  init()
+})
+
+onActivated(() => {
+  if (window.tinymce) {
+    initTinymce()
+  }
+})
+
+onDeactivated(() => {
+  destroyTinymce()
+})
+
+onUnmounted(() => {
+  destroyTinymce()
+})
+
+const resourceCdn1 = './static/js/tinymce/js/tinymce/tinymce.min.js'
+const resourceCdn2 = 'https://unpkg.com/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const resourceCdn3 = 'https://npm.elemecdn.com/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const init = () => {
+  // dynamic load tinymce from cdn
+  load(resourceCdn1, (err) => {
+    if (!err) {
+      initTinymce()
+      return
+    }
+    load(resourceCdn2, (err2) => {
+      if (!err2) {
+        initTinymce()
+        return
+      }
+      load(resourceCdn3, (err3) => {
+        if (!err3) {
+          initTinymce()
+          return
+        }
+        ElMessage.error(err.message)
+      })
+    })
+  })
+}
+
+const tinymceId = ref(props.id)
+const fullscreen = ref(false)
+const initTinymce = () => {
+  window.tinymce.init({
+    language,
+    selector: `#${tinymceId.value}`,
+    height: props.height,
+    body_class: 'panel-body ',
+    object_resizing: false,
+    toolbar: props.toolbar.length > 0 ? props.toolbar : toolbarPar,
+    menubar: props.menubar,
+    plugins,
+    end_container_on_empty_block: true,
+    powerpaste_word_import: 'clean',
+    code_dialog_height: 450,
+    code_dialog_width: 1000,
+    content_style: 'body {-webkit-user-modify: read-write;overflow-wrap: break-word;-webkit-line-break: after-white-space;}',
+    advlist_bullet_styles: 'square',
+    advlist_number_styles: 'default',
+    imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
+    default_link_target: '_blank',
+    link_title: false,
+    nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+    init_instance_callback: (editor) => {
+      if (props.value) {
+        editor.setContent(props.value)
+      }
+      hasInit = true
+      editor.on('NodeChange Change KeyUp SetContent', () => {
+        hasChange = true
+        emit('update:modelValue', editor.getContent())
+      })
+    },
+    setup: (editor) => {
+      editor.on('FullscreenStateChanged', (e) => {
+        fullscreen.value = e.state
+      })
+    },
+    convert_urls: false
+  })
+}
+
+const destroyTinymce = () => {
+  const tinymce = window.tinymce.get(tinymceId.value)
+  if (fullscreen) {
+    tinymce.execCommand('mceFullScreen')
+  }
+
+  if (tinymce) {
+    tinymce.destroy()
+  }
+}
+const setContent = (value) => {
+  if (window.tinymce) {
+    window.tinymce.get(tinymceId.value).setContent(value || '')
+  }
+}
+const imageSuccessCBK = (arr) => {
+  arr.forEach(v => {
+    window.tinymce.get(tinymceId).insertContent(`<img class="wscnph" src="${v}" alt >`)
+  })
+}
+
+defineExpose({
+  setContent
+})
+
+</script>
+
+<style lang="scss" scoped>
+.component-tinymce-container {
+  -webkit-user-modify: read-write;
+  overflow-wrap: break-word;
+  -webkit-line-break: after-white-space;
+}
+
+.component-tinymce-container {
+  position: relative;
+  line-height: normal;
+}
+
+.component-tinymce-container {
+  :deep(.mce-fullscreen){
+    z-index: 2000;
+  }
+}
+
+.tinymce-textarea {
+  visibility: hidden;
+  z-index: -1;
+}
+
+.editor-custom-btn-container {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.fullscreen .editor-custom-btn-container {
+  z-index: 10000;
+  position: fixed;
+}
+
+.editor-upload-btn {
+  display: inline-block;
+}
+</style>

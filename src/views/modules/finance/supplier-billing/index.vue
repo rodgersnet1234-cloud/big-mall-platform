@@ -1,0 +1,366 @@
+<template>
+  <div class="page-supplier-billing">
+    <div class="shop-billing">
+      <div class="search-bar">
+        <el-form
+          clearable
+          :inline="true"
+          :model="dataFrom"
+          class="demo-form-inline from"
+          @submit.prevent
+        >
+          <div class="input-row">
+            <el-form-item label="订单编号：">
+              <el-input
+                v-model="dataFrom.orderId"
+                maxlength="20"
+                style="width: 160px"
+                clearable
+                placeholder="订单号"
+              />
+            </el-form-item>
+            <el-form-item label="退款编号：">
+              <el-input
+                v-model="dataFrom.refundId"
+                maxlength="20"
+                style="width: 160px"
+                clearable
+                placeholder="退款编号"
+              />
+            </el-form-item>
+            <el-form-item label="收支类型：">
+              <el-select
+                v-model="dataFrom.ioType"
+                clearable
+                placeholder="收支类型"
+              >
+                <el-option
+                  v-for="item in ioType"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="金额类型：">
+              <el-select
+                v-model="dataFrom.amountType"
+                clearable
+                placeholder="金额类型"
+              >
+                <el-option
+                  v-for="item in amountType"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="资金变化原因：">
+              <el-select
+                v-model="dataFrom.reason"
+                clearable
+                placeholder="资金变化原因"
+              >
+                <el-option
+                  v-for="item in reason"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                @click="onSubmit(true)"
+              >
+                <i class="el-icon-search" />搜索
+              </el-button>
+              <el-button
+                @click="onClear"
+              >
+                {{ $t('table.reset') }}
+              </el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </div>
+      <div class="main-content">
+        <div class="table-con">
+          <el-table
+            :data="tableData"
+            header-cell-class-name="table-header"
+            row-class-name="table-row"
+            style="width: 100%"
+          >
+            <el-table-column
+              type="index"
+              label="序号"
+              align="left"
+              width="85"
+            />
+            <el-table-column
+              prop="amountType"
+              label="金额类型"
+              width="120"
+            >
+              <template #default="scope">
+                <span>{{ ['待结算金额','可提现金额','冻结金额','总结算金额'][scope.row.amountType] }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="changeAmount"
+              label="改变金额"
+              width="120"
+            >
+              <template #default="scope">
+                <span>{{ ['-','+'][scope.row.ioType] }} ￥{{ amount(Math.abs(scope.row.changeAmount)) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="orderId"
+              label="订单编号"
+              align="left"
+              width="220"
+            >
+              <template #default="scope">
+                <span>{{ scope.row.orderId ? scope.row.orderId : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="refundId"
+              label="退款编号"
+              width="220"
+            >
+              <template #default="scope">
+                <span>{{ scope.row.refundId ? scope.row.refundId : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="userAmount"
+              label="操作金额"
+              width="140"
+            >
+              <template #default="scope">
+                <span v-if="scope.row.userAmount === 0 || !scope.row.userAmount">0</span>
+                <span v-else>{{ ['-','+'][scope.row.ioType] }}{{ amount((scope.row.userAmount || 0)) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="platformAmount"
+              label="平台优惠金额"
+              width="150"
+            >
+              <template #default="scope">
+                <span>￥ {{ amount((scope.row.platformAmount || 0)) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="distributionAmount"
+              label="分销金额"
+              width="130"
+            >
+              <template #default="scope">
+                <span>￥ {{ amount((scope.row.distributionAmount || 0)) }}</span>
+              </template>
+            </el-table-column> -->
+            <el-table-column
+              prop="platformCommission"
+              label="平台佣金"
+              width="130"
+            >
+              <template #default="scope">
+                <span>￥ {{ amount((scope.row.platformCommission || 0)) }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="reason"
+              width="150"
+              align="left"
+              label="资金变化原因"
+            >
+              <template #default="scope">
+                <span>{{ ['用户支付','订单结算','用户申请退款','拒绝用户退款申请','提现申请',
+                          '提现申请被拒绝','提现申请通过','','','扣除订单分销金额'][scope.row.reason] }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="createTime"
+              width="150"
+              label="创建时间"
+            />
+            <el-table-column
+              prop="operation"
+              label="操作"
+              align="center"
+              fixed="right"
+              min-width="110"
+            >
+              <template #default="scope">
+                <span v-if="scope.row.orderId!=null||scope.row.refundId!=null">
+                  <el-button
+                    type="primary"
+                    link
+                    @click="onHandleDetail(scope.row.orderId,scope.row.refundId)"
+                  >详情</el-button>
+                </span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <!-- 分页条 -->
+      <Pagination
+        v-model:page="params.pageNum"
+        v-model:limit="params.pageSize"
+        style="text-align: right"
+        :total="total"
+        @pagination="pagination"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import Pagination from '@/components/Pagination/index.vue'
+import { page } from '@/api/supplier-balance'
+import Big from 'big.js'
+
+const amount = (value) => {
+  if (value) {
+    return new Big(value).div(100).toFixed(2)
+  }
+  return 0
+}
+
+let tempSearchForm = null // 保存上次点击查询的请求条件
+const total = ref(0)
+const params = ref({
+  pageNum: 1,
+  pageSize: 10
+})
+const ioType = [{
+  value: 0,
+  label: '支出'
+}, {
+  value: 1,
+  label: '收入'
+}]
+const amountType = [{
+  value: 0,
+  label: '待结算金额'
+}, {
+  value: 1,
+  label: '可用店铺余额'
+}, {
+  value: 2,
+  label: '冻结金额'
+}] // '未结算金额', '可提现金额', '冻结金额'
+const reason = [
+  {
+    value: 0,
+    label: '用户支付'
+  },
+  {
+    value: 1,
+    label: '订单结算'
+  },
+  {
+    value: 2,
+    label: '用户申请退款'
+  },
+  {
+    value: 4,
+    label: '提现申请'
+  },
+  {
+    value: 5,
+    label: '提现申请被拒绝'
+  },
+  {
+    value: 6,
+    label: '提现申请通过'
+  }
+]
+const dataFrom = ref({
+  ioType: '',
+  amountType: '',
+  orderId: '',
+  refundId: '',
+  reason: '',
+  supplierId: ''
+})
+const tableData = ref([{
+  balance: 111
+}])
+const route = useRoute()
+onMounted(() => {
+  params.value = {
+    ...params.value,
+    supplierId: route.query.supplierId,
+    endTime: route.query.endTime,
+    startTime: route.query.startTime
+  }
+  onGetData()
+})
+
+// 获取列表数据
+const onGetData = (newData = false) => {
+  if (newData || !tempSearchForm) {
+    tempSearchForm = { ...dataFrom.value, ...params.value }
+  } else {
+    tempSearchForm = { ...tempSearchForm, ...params.value }
+  }
+  page(tempSearchForm).then(res => {
+    tableData.value = res.list
+    total.value = res.total
+  })
+}
+const pagination = (page) => {
+  params.value.pageNum = page.pageNum
+  params.value.pageSize = page.pageSize
+  onGetData()
+}
+// 查询
+const onSubmit = (newData = false) => {
+  onGetData(newData)
+}
+// 跳转到详情页
+const router = useRouter()
+const onHandleDetail = (orderId, refundId) => {
+  router.push({
+    path: '/billing-details',
+    query: {
+      path: 2,
+      orderId,
+      refundId
+    }
+  })
+}
+
+// 清空查询 的表单
+const onClear = () => {
+  dataFrom.value = {
+    ioType: '',
+    amountType: '',
+    orderId: '',
+    refundId: '',
+    reason: ''
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+  .page-supplier-billing {
+    background: #F5F5F5;
+    width: 100%;
+    min-height: 100vh;
+    .shop-billing {
+      background: #FFFFFF;
+      width: 100%;
+      padding: 24px;
+    }
+  }
+</style>

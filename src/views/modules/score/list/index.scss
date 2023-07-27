@@ -1,0 +1,72 @@
+.mod-prod-list {
+  // 1.筛选条件搜索
+  .search-bar {
+    padding: 20px 20px 7px;
+    background: #f9f9f9;
+    .el-form-item {
+      width: 260px;
+    }
+  }
+  .main-content {
+    .operation-bar{
+      .release-prod-btn {
+        display: inline-block;
+        margin-left: 30px;
+        margin-right: 0px;
+      }
+    }
+    .table-con {
+      .el-table-column--selection .cell {
+        text-align: center;
+      }
+      .table-cell-con {
+        .table-cell-text {
+          display: flex;
+          justify-content: space-between;
+          .prod-name {
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+        }
+      }
+      .table-cell-text {
+        display: flex;
+        align-items: center;
+        i {
+          margin-left: 5px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .change-prod-status {
+    margin: 15px;
+    .button-box {
+      display: inline-block;
+      margin-left: 20px;
+    }
+  }
+}
+.popover-table-con {
+  width: 360px;
+}
+.popover-bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  padding-right: 15px;
+}
+.spu-name-input-con {
+  display: flex;
+}
+.pagination{
+  text-align: right;
+}
