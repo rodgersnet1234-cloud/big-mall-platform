@@ -57,10 +57,8 @@
         <el-cascader
           v-model="selectedMenu"
           clearable
-          expand-trigger="hover"
           :options="menuList"
           :props="menuListTreeProps"
-          change-on-select
           @change="handleSelectMenuChange"
         />
       </el-form-item>
@@ -255,11 +253,13 @@ const menuHideOpts = [{
   value: 1,
   label: '是'
 }]
-let menuList = ref([])
+const menuList = ref([])
 const selectedMenu = ref([])
 const menuListTreeProps = {
   value: 'id',
-  label: 'title'
+  label: 'title',
+  checkStrictly: true,
+  expandTrigger: 'hover'
 }
 const dataFormRef = ref(null)
 watch(visible, (val) => {
@@ -281,7 +281,7 @@ const init = (menuId) => {
       data.forEach(item => {
         item.title = item.meta.title
       })
-      menuList = treeDataTranslate(data)
+      menuList.value = treeDataTranslate(data)
     })
     if (dataForm.value.menuId) {
       api.get(menuId).then(data => {
@@ -303,7 +303,8 @@ const init = (menuId) => {
         dataForm.value.icon = data.icon
         // idList方法返回的选中菜单数组格式(内容:[{id: value, name: value}])
         // el-cascader回显的数组只需一个id的数字数组，因此需要把id取出来
-        const selectedMenuList = idList(menuList, data.parentId).reverse()
+        console.log(menuList.value, 'menuList.value')
+        const selectedMenuList = idList(menuList.value, data.parentId).reverse()
         const tempSelectedMenu = []
         selectedMenuList.forEach(item => {
           tempSelectedMenu.push(item.id)
@@ -334,7 +335,8 @@ const initFrameCon = () => {
 }
 // 监听上级菜单的改动
 const handleSelectMenuChange = (val) => {
-  dataForm.value.parentId = val[val.length - 1]
+  console.log(val, 'val')
+  dataForm.value.parentId = val && val[val.length - 1]
   if (dataForm.value.parentId === undefined) {
     dataForm.value.parentId = 0
   }

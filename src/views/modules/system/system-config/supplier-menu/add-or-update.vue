@@ -56,7 +56,6 @@
         <el-cascader
           v-model="selectedMenu"
           clearable
-          expand-trigger="hover"
           :options="menuList"
           :props="menuListTreeProps"
           change-on-select
@@ -262,7 +261,9 @@ const menuList = ref([])
 let selectedMenu = ref([])
 const menuListTreeProps = {
   value: 'id',
-  label: 'title'
+  label: 'title',
+  checkStrictly: true,
+  expandTrigger: 'hover'
 }
 const dataFormRef = ref()
 watch(visible, (val) => {

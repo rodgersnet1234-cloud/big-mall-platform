@@ -58,7 +58,6 @@
         <el-cascader
           v-model="selectedMenu"
           clearable
-          expand-trigger="hover"
           :options="menuList"
           :props="menuListTreeProps"
           change-on-select
@@ -263,10 +262,12 @@ const menuHideOpts = [{
 }]
 const menuList = ref([])
 const selectedMenu = ref([])
-const menuListTreeProps = reactive({
+const menuListTreeProps = {
   value: 'id',
-  label: 'title'
-})
+  label: 'title',
+  checkStrictly: true,
+  expandTrigger: 'hover'
+}
 const dataFormRef = ref()
 watch(() => visible, (val) => {
   // 如果弹窗关闭，dataForm里的值初始化
