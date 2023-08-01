@@ -160,7 +160,7 @@
                 />
                 <span
                   class="text-gray-500"
-                  style="font-size: 14px;margin: 0px 7px"
+                  style="font-size: 14px;margin: 0 7px"
                 >至</span>
                 <el-col
                   :span="8"
@@ -261,7 +261,7 @@
             style="margin: 30px 0;"
             prop="frontCardImg"
           >
-            <div style="80px">
+            <div>
               <img-upload
                 v-model:value="ruleForm.frontCardImg"
                 @new-img="imgChange(1,'frontCardImg')"
@@ -342,7 +342,7 @@
                 />
                 <span
                   class="text-gray-500"
-                  style="font-size: 14px;margin: 0px 7px"
+                  style="font-size: 14px;margin: 0 7px"
                 >至</span>
                 <el-col
                   :span="8"
@@ -472,7 +472,6 @@
               </div>
             </div>
           </el-form-item>
-
           <el-form-item
             label="经营场景"
             prop="type"
@@ -480,7 +479,10 @@
           >
             <div>
               <div>
-                <el-checkbox-group v-model="busInFormation.type">
+                <el-checkbox-group
+                  v-model="busInFormation.type"
+                  @change="changVisibles"
+                >
                   <el-checkbox
                     label="线下场景"
                     name="type"
@@ -491,6 +493,11 @@
                   />
                   <el-checkbox
                     label="小程序"
+                    name="type"
+                  />
+
+                  <el-checkbox
+                    label="APP"
                     name="type"
                   />
                   <el-checkbox
@@ -513,82 +520,456 @@
               </div>
             </div>
           </el-form-item>
-          <div
-            class="subject-information"
-          >
-            <div style="display: inline-block;">
-              公众号
+          <div v-if="isVisible1">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                线下场所
+              </div>
+              <span>你选择了“线下场所场景，入驻成功后，服务商可帮商户发起付款码支付、JSAPI支付，同时系统将会对地址等信息进行核实</span>
             </div>
-            <span>审核通过后，服务商可帮商家发起JSAPI支付</span>
-          </div>
-          <el-form-item
-            label="APPID所属"
-            prop="resource"
-            style="margin: 30px 0;"
-          >
-            <el-radio-group v-model="busInFormation.resource">
-              <el-radio :label="0">
-                服务商公众号appid
-              </el-radio>
-              <el-radio :label="1">
-                商家公众号appid
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item
-            v-if="busInFormation.resource===0"
-            label="服务商APPID"
-            prop="serviceAPPID"
-          >
-            <div>
+            <el-form-item
+              label="线下场所名称"
+              prop="placeName"
+              style="margin: 30px 0;"
+            >
               <div>
-                <el-input
-                  v-model="busInFormation.serviceAPPID"
-                  placeholder="请输入"
-                  style="width: 268px;"
-                />
+                <div>
+                  <el-input
+                    v-model="busInFormation.placeName"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
               </div>
-              <div
-                class="hint"
-              >
-                可选择服务商商户号已绑定的APPID，需为已认证的服务号、政府或媒体类型的订阅号
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item
-            v-if="busInFormation.resource===1"
-            label="商家appid"
-            prop="merchantAppId"
-          >
-            <div>
-              <div>
-                <el-input
-                  v-model="busInFormation.merchantAppId"
-                  placeholder="请输入"
-                  style="width: 268px;"
-                />
-              </div>
-              <div
-                class="hint"
-              >
-                可选择服务商商户号已绑定的APPID，需为已认证的服务号、政府或媒体类型的订阅号
-              </div>
-            </div>
-          </el-form-item>
-          <el-form-item
-            label="公众号页面截图"
-            prop="pageScreenshot"
-          >
-            <div>
-              <imgs-upload
-                v-model:value="busInFormation.pageScreenshot"
-                :limit="5"
+            </el-form-item>
+            <el-form-item
+              label="线下场所省市"
+              prop="currentAddr"
+            >
+              <el-cascader
+                ref="cascaderAddrRef"
+                v-model="busInFormation.currentAddr"
+                style="width: 268px;"
+                :options="addrList"
+                :props="addrListTreeProps"
+                placeholder="请选择"
+                @change="handleAddrChange"
               />
-              <div class="hint">
-                请提供展示商品/服务的页面截图/设计稿（最多5张），若小程序未建设完善或未上线请务必提供
+            </el-form-item>
+            <el-form-item
+              label="线下场所地址"
+              prop="placeAddress"
+              style="margin:30px 0"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.placeAddress"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                >
+                  请填写详细的经营场所信息，如有多个场所，选择一个主要场所填写即可
+                </div>
               </div>
+            </el-form-item>
+            <el-form-item
+              label="线下场所门头照片"
+              prop="doorHeaderImg"
+            >
+              <div>
+                <img-upload
+                  v-model:value="busInFormation.doorHeaderImg"
+                />
+                <div class="hint">
+                  请上传门店照片(要求门店招牌清晰可见)。若为停车场、售卖机等无固定门头照片的经营场所，请提供真实的经营现场照片
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="线下场所内部照片"
+              prop="inDoorImg"
+            >
+              <div>
+                <img-upload
+                  v-model:value="busInFormation.inDoorImg"
+                />
+                <div class="hint">
+                  请上传门店照片(要求门店招牌清晰可见)。若为停车场、售卖机等无固定门头照片的经营场所，请提供真实的经营现场照片
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="线下场所对应的公众号APPID"
+              prop="merchantAppId"
+              style="margin:30px 0"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.merchantAppId"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height: auto;"
+                >
+                  1、可填写已认证的公众号、小程序、应用的APPID，其中公众号APPID需是已认证的服务号、政府或媒体类型的订阅号。AppiD查看指引<br>
+                  2、完成进件后，系统发起特约商户号与该AppID的绑定(即配置为sub appid，可在发起支付时传入)<br>
+                  (1) 若APPID主体与商家主体一致，则直接完成绑定;<br>
+                  (2)若APPID主体与商家主体不一致，则商户签约时显示联合营运承诺函》，并且AppID的管理员需登录公众平台认绑定意愿;(暂不支持绑定异主体的应用A读PPID)
+                </div>
+              </div>
+            </el-form-item>
+          </div>
+          <div v-if="isVisible2">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                公众号
+              </div>
+              <span>审核通过后，服务商可帮商家发起JSAPI支付</span>
             </div>
-          </el-form-item>
+            <el-form-item
+              label="APPID所属"
+              prop="resource"
+              style="margin: 30px 0;"
+            >
+              <el-radio-group v-model="busInFormation.resource">
+                <el-radio :label="0">
+                  服务商公众号appid
+                </el-radio>
+                <el-radio :label="1">
+                  商家公众号appid
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item
+              v-if="busInFormation.resource===0"
+              label="服务商APPID"
+              prop="serviceAPPID"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.serviceAPPID"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  可选择服务商商户号已绑定的APPID，需为已认证的服务号、政府或媒体类型的订阅号
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              v-if="busInFormation.resource===1"
+              label="商家appid"
+              prop="merchantAppId"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.merchantAppId"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                >
+                  可选择服务商商户号已绑定的APPID，需为已认证的服务号、政府或媒体类型的订阅号
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="公众号页面截图"
+              prop="pageScreenshot"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <imgs-upload
+                  v-model="busInFormation.pageScreenshot"
+                  :limit="5"
+                />
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  请提供展示商品/服务的页面截图/设计稿（最多5张），若小程序未建设完善或未上线请务必提供
+                </div>
+              </div>
+            </el-form-item>
+          </div>
+          <div v-if="isVisible3">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                小程序
+              </div>
+              <span>你选择了“小程序”场景，审核通过后，服务商可帮商家发起JSAPI支付</span>
+            </div>
+            <el-form-item
+              label="小程序APPID"
+              prop="applet"
+              style="margin:30px 0"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.applet"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  1、请填写已认证的小程序APPID。AppID查看指引<br>
+                  2、完成进件后，系统发起特约商户号与该AppID的绑定(即配置为sub appid，可在发起支付时传入)。<br>
+                  (1) 若APPID主体与商家主体/服务商主体一致，则直接完成绑定。<br>
+                  (2)若APPID主体与商家主体/服务商主体不一致，则商户签约时显示《联合营运承诺函》，并且AppID的管理员需登录公众平台确认绑定意愿。<br>
+                </div>
+              </div>
+            </el-form-item>
+
+            <el-form-item
+              label="小程序截图"
+              prop="appletScreenshot"
+            >
+              <div>
+                <imgs-upload
+                  v-model="busInFormation.appletScreenshot"
+                  :limit="5"
+                />
+                <div class="hint">
+                  请提供展示商品/服务的页面截图/设计稿(最多5张)，若小程序未建设完善或未上线请务必提供。
+                </div>
+              </div>
+            </el-form-item>
+          </div>
+          <div v-if="isVisible4">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                APP
+              </div>
+              <span>你选择了“APP”场景，审核通过后，服务商可帮商家发起APP支付</span>
+            </div>
+            <el-form-item
+              label="APPID所属"
+              prop="resource2"
+              style="margin: 30px 0;"
+            >
+              <el-radio-group v-model="busInFormation.resource2">
+                <el-radio :label="0">
+                  服务商公众号appid
+                </el-radio>
+                <el-radio :label="1">
+                  商家公众号appid
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item
+              v-if="busInFormation.resource2===0"
+              label="服务商应用AppId"
+              prop="appServiceAPPID"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.appServiceAPPID"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  可填写当前服务商商户号已绑定的应用AppD: 查看APPID指引
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              v-if="busInFormation.resource2===1"
+              label="商家应用AppId"
+              prop="appMerchantAppId"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.appMerchantAppId"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  请填写与商家主体一致且已认证的应用APPID; 暂不支持绑定异主体的APPID<br>
+                  审该通过后，系统将发起待约商家商户号与该ApID的绑定(即配置为su appid) ，服务商随后可在发起支付时选择传入该appid，以完成支付，并获取sub_openid用<br>
+                  于数据统计，营销等业务场景 。AppID查看指引
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="APP截图"
+              prop="appScreenshot"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <imgs-upload
+                  v-model="busInFormation.appScreenshot"
+                  :limit="5"
+                />
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  请提供APP首页截图，尾页截图，应用内截图，支付页截图各1张 查看示例
+                </div>
+              </div>
+            </el-form-item>
+          </div>
+          <div v-if="isVisible5">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                互联网网站
+              </div>
+              <span>你选择了“互联网网站”场景，审核通过后，服务商可帮商家发起JSAPI支付、Native支付</span>
+            </div>
+
+            <el-form-item
+              label="互联网网站域名"
+              prop="domainName"
+              style="margin:30px 0"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.domainName"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  如为PC端商城、智能终端等场景，可上传官网链接(格式需以http://或https://开头)；<br>
+                  网站域名需ICP备案，若备案主体与申请主体不同，请上传加盖公章的网站授权函
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="网站授权函"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <img-upload
+                  v-model:value="busInFormation.authorizationImg"
+                />
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  若备案主体与申请主体不同，请务必上传加盖公章的网站授权函
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="互联网网站对应的商家AppID(选填)"
+              style="margin-bottom:30px"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.internetAppid"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  1.可填写已认证的公众号，小程席，应用的APPID，其中公众号APPID需是已认证的服务号、政府或媒体类型的订阅号。ADplD查看指引<br>
+                  2.完成进件后，系统发起特约商户号与该AppID的绑定(即配置为sub appid，可在发起支付时传入)<br>
+                  (1) 若APPID主体与商家主体一致，则直接完成绑定:<br>
+                  (2)若APPID主体与商家主体不一致，则商户签约时显示《联合营运承诺函》，并且AppID的管理员需登录公众平台确认绑定意愿;(暂不支持绑定异主体的应用APPID)
+                </div>
+              </div>
+            </el-form-item>
+          </div>
+          <div v-if="isVisible6">
+            <div
+              class="subject-information"
+            >
+              <div style="display: inline-block;">
+                企业微信
+              </div>
+              <span> 你选择了“企业微信"场景，审核通过后，商家可自行发起JSAPI支付、Native支付</span>
+            </div>
+
+            <el-form-item
+              label="商家企业微信CorpID"
+              prop="WeComCorpID"
+              style="margin:30px 0"
+            >
+              <div>
+                <div>
+                  <el-input
+                    v-model="busInFormation.WeComCorpID"
+                    placeholder="请输入"
+                    style="width: 268px;"
+                  />
+                </div>
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  可填写与商家主体一致且已认证的企业微信CorpD;审核通过后，系统将为商家开通企业微信专区的自有交易权限，并完成商家商户号与该CorpID的定;CorpID查看指引
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="企业微信页面截图"
+              prop="WeComPageScreenshot"
+            >
+              <div>
+                <imgs-upload
+                  v-model="busInFormation.WeComPageScreenshot"
+                />
+                <div
+                  class="hint"
+                  style="height:auto"
+                >
+                  请提供展示商品/服务的页面截图/设计稿 (最多5张) 查看示例
+                </div>
+              </div>
+            </el-form-item>
+          </div>
         </el-form>
       </div>
       <!-- 2.填写经营信息end -->
@@ -646,7 +1027,7 @@
           >
             <div>
               <imgs-upload
-                v-model:value="qualificationForm.qualificationImg"
+                v-model="qualificationForm.qualificationImg"
               />
               <div class="hint">
                 根据所属行业进行提示，如餐饮的就是餐饮服务许可证
@@ -699,7 +1080,7 @@
           >
             <div>
               <imgs-upload
-                v-model:value="qualificationForm.followUpImg"
+                v-model="qualificationForm.followUpImg"
               />
             </div>
           </el-form-item>
@@ -894,7 +1275,6 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item
-            v-if="superAdmin.resource2===0"
             label="证件号码"
             prop="carNumber"
             style="margin:30px 0"
@@ -906,7 +1286,7 @@
             />
           </el-form-item>
           <el-form-item
-            v-if="superAdmin.resource2===1"
+            v-if="superAdmin.resource===1"
             label="微信openid"
             prop="wxOpenId"
             style="margin:30px 0"
@@ -1059,6 +1439,8 @@
 import moment from 'moment'
 import ImgUpload from '@/components/img-upload/index.vue'
 import { ElMessage } from 'element-plus'
+import * as addrApi from '@/api/delivery/transport'
+import { treeDataTranslate } from '@/utils'
 import { isEmail, isMobile, checkIDCard } from '@/utils/validate'
 import ImgsUpload from '@/components/imgs-upload/index.vue'
 import waitPage from './components/wait-page.vue'
@@ -1066,6 +1448,11 @@ const stateSubmit = ref(1)
 const postingSteps = ref(1)
 const formSize = ref('default')
 const ruleFormRef = ref(null)
+onMounted(() => {
+  // 请求地址列表
+  queryAddressList()
+})
+
 const ruleForm = reactive({
   licenseImg: 'flag', // 营业执照
   trader: 'flag', // 商户名称
@@ -1111,17 +1498,44 @@ const rules = reactive({
 const router = useRouter()
 
 // 经营信息
+const addrListTreeProps = reactive({
+  value: 'areaId',
+  label: 'areaName'
+})
 const busInFormationRef = ref(null)
 const busInFormation = reactive({
   merchantName: 'flag', // 商户名称
   serviceNumber: 'flag', // 客服电话
   count: 'flag',
   delivery: false,
-  type: ['flag'],
-  resource: 0, // appId所属
+  type: [],
+  resource: 0, // 公众号appId所属
+  // 线下场所
+  placeName: '', // 线下场所名称
+  currentAddr: '', // 线下场所省市
+  placeAddress: '', // 场所地址
+  doorHeaderImg: '', // 线下场所门头照片
+  inDoorImg: '', // 线下场所内部照片
+  // 小程序
+  applet: '', // 小程序AppId
+  appletScreenshot: '', // 小程序截图
+  // App
+  resource2: 0, // APP-appId所属
+  appServiceAPPID: '', // app-服务商应用AppID
+  appMerchantAppId: '', // app-商家应用appid
+  appScreenshot: '', // app截图
+  // 互联网网站
+  domainName: '', // 互联网网站域名
+  authorizationImg: '', // 网站授权函
+  internetAppid: '', // 互联网网站对应的商家AppID
+
+  // 公众号
   serviceAPPID: 'flag', // 服务商APPID
   merchantAppId: 'flag', // 商家appid
-  pageScreenshot: 'flag'// 公众号页面截图
+  pageScreenshot: 'flag', // 公众号页面截图
+  // 企业微信
+  WeComCorpID: '', //
+  WeComPageScreenshot: ''// 企业微信页面截图
 })
 // 填写行业资质
 const rules2 = reactive({
@@ -1129,11 +1543,31 @@ const rules2 = reactive({
   serviceNumber: [{ required: true, message: '请输入客服电话', trigger: 'blur' }],
   type: [{ type: 'array', required: true, message: '请选择经营场景', trigger: 'change' }],
   resource: [{ required: true, message: '请选择appId所属', trigger: 'change' }],
+  resource2: [{ required: true, message: '请选择appId所属', trigger: 'change' }],
+  // 线下场所
+  placeName: [{ required: true, message: '请输入线下场所名称', trigger: 'blur' }],
+  currentAddr: [{ required: true, message: '请选择所在地区', trigger: ['blur', 'change'] }],
+  placeAddress: [{ required: true, message: '请输入线下场所地址', trigger: 'blur' }],
+  doorHeaderImg: [{ required: true, message: '请上传场所门头照片', trigger: ['blur', 'change'] }],
+  inDoorImg: [{ required: true, message: '请上传场所内部照片', trigger: ['blur', 'change'] }],
+  // 小程序
+  applet: [{ required: true, message: '请输入线小程序APPID', trigger: 'blur' }],
+  // App
+  appServiceAPPID: [{ required: true, message: '请输入服务商应用APPID', trigger: 'blur' }],
+  appMerchantAppId: [{ required: true, message: '请输入商家APPID', trigger: 'blur' }],
+  appScreenshot: [{ required: true, message: '请上传app截图', trigger: ['blur', 'change'] }],
+  // 互联网网站
+  domainName: [{ required: true, message: '请输入服务商APPID', trigger: 'blur' }],
+  authorizationImg: [{ required: true, message: '请上传网站授权函截图', trigger: ['blur', 'change'] }],
+
+  // 公众号
   serviceAPPID: [{ required: true, message: '请输入服务商APPID', trigger: 'blur' }],
   merchantAppId: [{ required: true, message: '请输入商家APPID', trigger: 'blur' }],
-  pageScreenshot: [{ required: true, message: '请上传公众号页面截图', trigger: ['blur', 'change'] }]
+  pageScreenshot: [{ required: true, message: '请上传公众号页面截图', trigger: ['blur', 'change'] }],
+  // 企业微信
+  WeComCorpID: [{ required: true, message: '请输入商家企业微信CorpID', trigger: 'blur' }],
+  WeComPageScreenshot: [{ required: true, message: '请上传企业微信页面截图', trigger: ['blur', 'change'] }]
 })
-
 const qualificationFormRef = ref(null)
 const qualificationForm = reactive({
   region: '', // 所属行业
@@ -1144,6 +1578,30 @@ const qualificationForm = reactive({
   followUpImg: ''// 优惠费率活动补充材料
 
 })
+/**
+ * 请求地址列表
+ */
+const addrList = ref([])
+const queryAddressList = () => {
+  addrApi.listAreaOfEnable({}).then(data => {
+    addrList.value = treeDataTranslate(data, 'areaId', 'parentId')
+  })
+}
+/**
+ * 监听地址改变
+ */
+const cascaderAddrRef = ref(null)
+const handleAddrChange = (value) => {
+  if (value.length > 0) {
+    // const labels = cascaderAddrRef.value.getCheckedNodes()[0].pathLabels
+    // qualificationForm.province = labels[0]
+    // qualificationForm.provinceId = value[0]
+    // qualificationForm.city = labels[1]
+    // qualificationForm.cityId = value[1]
+  }
+  // mapLocation(true)
+}
+
 const rules3 = reactive({
   region: [{ required: true, message: '请选择所诉行业', trigger: 'change' }]
 })
@@ -1340,6 +1798,24 @@ const toNextStep = () => {
     })
   }
 }
+const isVisible1 = ref(false)
+const isVisible2 = ref(false)
+const isVisible3 = ref(false)
+const isVisible4 = ref(false)
+const isVisible5 = ref(false)
+const isVisible6 = ref(false)
+const changVisibles = () => {
+  isVisible1.value = judgeStrArrIncludeOtherString('线下场景')
+  isVisible2.value = judgeStrArrIncludeOtherString('公众号')
+  isVisible3.value = judgeStrArrIncludeOtherString('小程序')
+  isVisible4.value = judgeStrArrIncludeOtherString('APP')
+  isVisible5.value = judgeStrArrIncludeOtherString('互联网网站')
+  isVisible6.value = judgeStrArrIncludeOtherString('企业微信')
+}
+const judgeStrArrIncludeOtherString = (str) => {
+  console.log(busInFormation.type, 'busInFormation.type')
+  return busInFormation.type?.includes(str)
+}
 // 提交认证
 const onSubmit = () => {
   console.log('提交认证')
@@ -1348,7 +1824,6 @@ const onSubmit = () => {
 </script>
 <style lang="scss" scoped>
 .page-certification-information{
-  min-height: 800px;
   background: #f9f9f9;
 
   .title-tips{
@@ -1373,7 +1848,6 @@ const onSubmit = () => {
   }
  .information-content{
    width: 100%;
-   height: 1680px;
    background: #FFFFFF;
    border: 1px solid #FFF;
    padding: 20px;

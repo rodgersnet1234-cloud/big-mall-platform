@@ -16,13 +16,14 @@
           </div>
           <div class="balance">
             <span
-              v-if="shopWalletInfo.settledAmount === null"
+              v-if="!shopWalletInfo|| shopWalletInfo.settledAmount === null"
               style="margin-right:20px"
             > {{ '-' }}</span>
             <span
               v-else
               style="margin-right:20px"
-            >{{ amount(shopWalletInfo.settledAmount) }}</span>
+            >{{ amount(shopWalletInfo.settledAmount) }}
+            </span>
           </div>
         </div>
         <div
@@ -41,7 +42,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.unsettledAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount):'-' }}
+            </span>
           </div>
         </div>
         <div class="head-item">
@@ -57,7 +60,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.freezeAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount):'-' }}
+            </span>
           </div>
         </div>
         <div class="head-item">
@@ -73,7 +78,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.totalSettledAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount):'-' }}
+            </span>
           </div>
         </div>
       </div>
