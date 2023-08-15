@@ -41,6 +41,23 @@
               />
             </el-form-item>
           </el-form>
+          <div class="reg">
+            <div>
+              没有账号？
+              <router-link
+                class="to-reg"
+                to="/register"
+              >
+                立即注册
+              </router-link>
+            </div>
+            <router-link
+              to="/forget-password"
+              class="to-reg"
+            >
+              忘记密码了？
+            </router-link>
+          </div>
           <div
             class="login-btn"
             :loading="loading"
@@ -198,7 +215,17 @@ const onLogin = verifyResult => {
     margin: auto;
     border-radius: 10px;
     overflow: hidden;
-
+    .reg {
+        display: flex;
+        font-size: 14px;
+        color: #999;
+        justify-content: space-between;
+        .to-reg {
+         color: #155BD4;
+         cursor: pointer;
+         text-decoration: none;
+      }
+      }
     .login-img {
       width: 626px;
       height: 100%;

@@ -27,7 +27,8 @@
           >
             选择
           </el-button>
-        </div>        <div class="label-item">
+        </div>
+        <div class="label-item">
           <div class="label-title">
             企业
           </div>

@@ -26,6 +26,7 @@
           <el-image
             src=""
             fit="fill"
+            style="width:100%;"
           >
             <template #error>
               <div class="image-slot">
@@ -360,7 +361,7 @@ watch(() => props.config, (newVal) => {
     }
 
     .module-left-content {
-      margin: 17px 0 13.5px 24px;
+      // margin: 17px 0 13.5px 24px;
     }
   }
 

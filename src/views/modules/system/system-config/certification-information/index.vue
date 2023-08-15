@@ -143,14 +143,17 @@
                   </el-radio>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item prop="date1">
+                  <el-form-item
+                    :prop="'date1'"
+                    :rules="
+                      ruleForm.tradeResource==0 ?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
+                  >
                     <el-date-picker
                       v-model="ruleForm.date1"
                       type="date"
                       placeholder="开始时间"
                       style="margin-left:30px;width:152px"
-
-                      @change="dateChange('tradeLongTermDate')"
                     />
                   </el-form-item>
                 </el-col>
@@ -165,13 +168,16 @@
                 <el-col
                   :span="8"
                 >
-                  <el-form-item prop="date2">
+                  <el-form-item
+                    :rules="
+                      ruleForm.tradeResource==0 ?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
+                    :prop="'date2'"
+                  >
                     <el-date-picker
                       v-model="ruleForm.date2"
                       placeholder="结束时间"
                       style="width:152px"
-
-                      @change="dateChange('tradeLongTermDate')"
                     />
                   </el-form-item>
                 </el-col>
@@ -189,11 +195,13 @@
                 <el-col :span="15">
                   <el-form-item
                     prop="tradeLongTermDate"
+                    :rules="
+                      ruleForm.tradeResource == '1' ?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
                     class="long-term"
                   >
                     <el-date-picker
                       v-model="ruleForm.tradeLongTermDate"
-
                       type="date"
                       placeholder="开始时间"
                       @change="dateChange('date1','date2')"
@@ -308,10 +316,10 @@
           <el-form-item
             label="证件有效期"
             style="margin: 30px 0;"
-            prop="carResource"
+            prop="idCarPeriodValidity"
           >
             <el-radio-group
-              v-model="ruleForm.carResource"
+              v-model="ruleForm.idCarPeriodValidity"
               style="display: block;"
             >
               <el-row>
@@ -325,14 +333,17 @@
                   </el-radio>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item prop="date1">
+                  <el-form-item
+                    :prop="'carValidityDate1' "
+                    :rules="
+                      ruleForm.idCarPeriodValidity == 0 ?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
+                  >
                     <el-date-picker
                       v-model="ruleForm.carValidityDate1"
-
                       type="date"
                       placeholder="开始时间"
                       style="margin-left:30px;width:152px"
-                      @change="carTimeChange('carLongTerm')"
                     />
                   </el-form-item>
                 </el-col>
@@ -347,13 +358,16 @@
                 <el-col
                   :span="8"
                 >
-                  <el-form-item prop="date2">
+                  <el-form-item
+                    :prop="'carValidityDate2'"
+                    :rules="
+                      ruleForm.idCarPeriodValidity == 0 ?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
+                  >
                     <el-date-picker
                       v-model="ruleForm.carValidityDate2"
-
                       placeholder="结束时间"
                       style="width:152px"
-                      @change="carTimeChange('carLongTerm')"
                     />
                   </el-form-item>
                 </el-col>
@@ -370,14 +384,16 @@
                 </el-col>
                 <el-col :span="15">
                   <el-form-item
-                    prop="carLongTerm"
+                    :prop="'carLongTerm'"
+                    :rules="
+                      ruleForm.idCarPeriodValidity == 1?[{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }]:''
+                    "
                     class="long-term"
                   >
                     <el-date-picker
                       v-model="ruleForm.carLongTerm"
                       type="date"
                       placeholder="开始时间"
-                      @change="carTimeChange('date1','date2')"
                     />
                   </el-form-item>
                 </el-col>
@@ -1444,7 +1460,7 @@ import { treeDataTranslate } from '@/utils'
 import { isEmail, isMobile, checkIDCard } from '@/utils/validate'
 import ImgsUpload from '@/components/imgs-upload/index.vue'
 import waitPage from './components/wait-page.vue'
-const stateSubmit = ref(1)
+const stateSubmit = ref(0)
 const postingSteps = ref(1)
 const formSize = ref('default')
 const ruleFormRef = ref(null)
@@ -1458,31 +1474,31 @@ const ruleForm = reactive({
   trader: 'flag', // 商户名称
   registration: 'flag', // 注册号
   operator: 'flag', // 经营者
-  date1: moment().add(0, 'days').startOf('days').format('LL'), // 开始时间
-  date2: moment().add(1, 'days').endOf('days').format('LL'), // 结束时间
-  carLongTerm: moment().add(0, 'days').endOf('days').format('LL'), // 证件长期有效
-  carValidityDate1: moment().add(0, 'days').startOf('days').format('LL'), // 开始时间
-  carValidityDate2: moment().add(1, 'days').startOf('days').format('LL'), // 开始时间
-  tradeLongTermDate: moment().add(0, 'days').endOf('days').format('LL'), // 营业长期有效
+  date1: '', // 开始时间
+  date2: '', // 结束时间
+  tradeLongTermDate: '', // 营业长期有效
   desc: 'flag', // 注册地址
   region: '', // 证件类型
   tradeResource: 0, // 营业期限
-  carResource: 0, // 证件有效期
+  carLongTerm: '', // 证件长期有效
+  carValidityDate1: '', // 开始时间
+  carValidityDate2: '', // 结束时间
   frontCardImg: 'flag', // 身份证正面
   reverseCarImg: 'flag', // 身份证反面
   idCarName: 'flag', // 证件姓名
   idCarNumber: 'flag', // 证件号码
-  idCarPeriodValidity: moment().add(0, 'days').endOf('days').format('LL'), // 证件有效期
+  idCarPeriodValidity: 0, // 证件有效期
   beneficiaryOwner: 0 // 是否为受益所有人
 })
 const rules = reactive({
   licenseImg: [{ required: true, message: '请上传营业执照', trigger: ['blur', 'change'] }],
-  date1: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
-  tradeLongTermDate: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
-  carLongTerm: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // date1: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // tradeLongTermDate: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // carValidityDate1: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // carValidityDate2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
+  // carLongTerm: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
   tradeResource: [{ required: true, message: '请选择营业期限', trigger: 'change' }],
-  carResource: [{ required: true, message: '请选择营业期限', trigger: 'change' }],
-  date2: [{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }],
   desc: [{ required: true, message: '请输入注册地址', trigger: 'blur' }],
   trader: [{ required: true, message: '请输入商户名称', trigger: 'blur' }],
   operator: [{ required: true, message: '请输入经营者姓名', trigger: 'blur' }],

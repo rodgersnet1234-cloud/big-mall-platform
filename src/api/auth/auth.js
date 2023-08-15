@@ -22,3 +22,26 @@ export function updatePassword (data) {
     data
   })
 }
+
+export function getRegisterCode (data) {
+  return request({
+    url: '/mall4cloud_biz/ua/sms/verification_code/apply_shop',
+    method: 'PUT',
+    data
+  })
+}
+export function register (data) {
+  return request({
+    url: '/mall4cloud_admin/ua/shop_user_register',
+    method: 'POST',
+    data
+  })
+}
+
+// 商家注册协议
+export function getMerchantRegisterProtocol () {
+  return request({
+    url: '/mall4cloud_admin/ua/shop_user_register/get_merchant_register_protocol',
+    method: 'GET'
+  })
+}
