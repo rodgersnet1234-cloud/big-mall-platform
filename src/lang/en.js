@@ -125,6 +125,34 @@ export default {
     putOnShelf: 'Put on the shelf',
     offShelf: 'off the shelf'
   },
+  register: {
+    reg: 'Supplier registration',
+    hasAccount: 'Existing account?',
+    toLogin: 'Go to login',
+    username: 'Please enter the user name',
+    usernameEmptyTips: 'Please set the user name',
+    usernameErrTips: 'The user name consists of letters, numbers or underlined 4-16 digits and cannot be a pure number',
+    mobile: 'Please enter your mobile number',
+    mobileErrTips: 'Please enter the correct mobile number',
+    validCode: 'Please enter the correct mobile number',
+    getCode: 'Get verification code',
+    validCodeErrTips: 'Please enter the verification code',
+    passwordTips: 'Please set the 6-16 digit login password',
+    passwordEmptyTips: 'Login password cannot be empty',
+    passwordErrorTips: 'The length of the login password is 6-16 bits',
+    passwordErrorTips2: 'Spaces are not allowed at the beginning or end of a password',
+    register: 'register',
+    agree: 'I have read consent',
+    agree2: 'Have read and agreed to this Agreement',
+    Agreement: 'Supplier Registration Agreement',
+    readAgreement: 'Please read the Supplier registration agreement below the button first',
+    registerSuccess: 'Registration succeeded! About to jump to landing page...'
+  },
+  forgetPassword: {
+    retrievePassword: 'Retrieve password',
+    nextStep: 'next step',
+    returnLogin: 'Return to login'
+  },
   rbac: {
     role,
     menu,

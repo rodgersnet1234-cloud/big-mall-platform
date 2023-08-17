@@ -144,6 +144,34 @@ export default {
     m: '近30天',
     a: '全部'
   },
+  register: {
+    reg: '供应商注册',
+    hasAccount: '已有账号？',
+    toLogin: '前去登录',
+    username: '请输入用户名',
+    usernameEmptyTips: '请设置用户名',
+    usernameErrTips: '用户名由字母、数字或下划线 4-16位组成，且不能为纯数字',
+    mobile: '请输入手机号',
+    mobileErrTips: '请输入正确的手机号',
+    validCode: '请输入验证码',
+    getCode: '获取验证码',
+    validCodeErrTips: '请输入验证码',
+    passwordTips: '请设置6-16位登录密码',
+    passwordEmptyTips: '登录密码不能为空',
+    passwordErrorTips: '登录密码长度为6-16位',
+    passwordErrorTips2: '不允许使用空格作为密码的开头或结尾',
+    register: '立即注册',
+    agree: '我已阅读同意',
+    agree2: '已阅读并同意本协议',
+    agreement: '供应商注册协议',
+    readAgreement: '请先阅读按钮下方《供应商注册协议》',
+    registerSuccess: '注册成功！即将跳转到登录页...'
+  },
+  forgetPassword: {
+    retrievePassword: '找回密码',
+    nextStep: '下一步',
+    returnLogin: '返回登录'
+  },
   rbac: {
     role,
     menu,

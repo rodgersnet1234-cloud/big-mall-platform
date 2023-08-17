@@ -12,7 +12,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/modules/user.js'
 import { usePermissionStore } from '@/stores/modules/permission.js'
 
-const whiteList = ['/login', '/register'] // no redirect whitelist
+const whiteList = ['/login', '/register', '/forget-password', '/reset-password']// no redirect whitelist
 // eslint-disable-next-line no-unused-vars
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()

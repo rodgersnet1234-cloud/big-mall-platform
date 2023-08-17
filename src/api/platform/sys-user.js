@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function shopUserInfo () {
   return request({
-    url: '/mall4cloud_admin/p/sys_user/info',
+    url: '/mall4cloud_admin/p/platform_user/info',
     method: 'get'
   })
 }

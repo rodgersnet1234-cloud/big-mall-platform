@@ -32,7 +32,7 @@ export function getRegisterCode (data) {
 }
 export function register (data) {
   return request({
-    url: '/mall4cloud_admin/ua/shop_user_register',
+    url: '/mall4cloud_admin/ua/platform_user_register',
     method: 'POST',
     data
   })
@@ -41,7 +41,23 @@ export function register (data) {
 // 商家注册协议
 export function getMerchantRegisterProtocol () {
   return request({
-    url: '/mall4cloud_admin/ua/shop_user_register/get_merchant_register_protocol',
+    url: '/mall4cloud_admin/ua/platform_user_register/get_platform_register_protocol',
     method: 'GET'
+  })
+}
+// 获取忘记密码验证码
+export function getForgetCode (data) {
+  return request({
+    url: '/mall4cloud_biz/m/sms/ua/update_pwd',
+    method: 'POST',
+    data
+  })
+}
+// 校验忘记密码验证码
+export function checkUpdatePwd (data) {
+  return request({
+    url: '/mall4cloud_biz/m/sms/ua/check_update_pwd',
+    method: 'put',
+    data
   })
 }

@@ -25,6 +25,16 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/forget-password',
+    component: () => import('@/views/common/forget-password/index.vue'),
+    hidden: true
+  },
+  {
+    path: '/reset-password',
+    component: () => import('@/views/common/reset-password/index.vue'),
+    hidden: true
+  },
+  {
     path: '/login',
     component: () => import('@/views/common/login/index.vue'),
     hidden: true
