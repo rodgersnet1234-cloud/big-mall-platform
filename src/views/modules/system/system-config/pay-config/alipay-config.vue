@@ -8,11 +8,11 @@
         content="开启通联支付后将无需设置此处支付配置信息"
         placement="right"
       >
-        <i class="el-icon-question" />
+        <el-icon>
+          <QuestionFilled />
+        </el-icon>
       </el-tooltip>
     </div>
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       label-width="180px"
@@ -38,10 +38,12 @@
       <el-form-item
         :label="$t('platform.config.appCertPublicKey') + '：'"
         style="width:640px"
-        prop="appCertPath"
+        prop="appCertContent"
       >
         <el-input
-          v-model="dataForm.appCertPath"
+          v-model="dataForm.appCertContent"
+          type="textarea"
+          rows="10"
           :placeholder="$t('platform.config.appCertPublicKey')"
           controls-position="right"
         />
@@ -49,10 +51,12 @@
       <el-form-item
         :label="$t('platform.config.alipayCertPublicKey') + '：'"
         style="width:640px"
-        prop="alipayCertPath"
+        prop="alipayCertContent"
       >
         <el-input
-          v-model="dataForm.alipayCertPath"
+          v-model="dataForm.alipayCertContent"
+          type="textarea"
+          rows="10"
           :placeholder="$t('platform.config.alipayCertPublicKey')"
           controls-position="right"
         />
@@ -60,11 +64,12 @@
       <el-form-item
         :label="$t('platform.config.alipayRootCertPath') + '：'"
         style="width:640px"
-        prop="alipayRootCertPath"
+        prop="alipayRootCertContent"
       >
         <el-input
-          v-model="dataForm.alipayRootCertPath"
-          type="text"
+          v-model="dataForm.alipayRootCertContent"
+          type="textarea"
+          rows="10"
           :placeholder="$t('platform.config.alipayRootCertPath')"
           controls-position="right"
         />
@@ -77,7 +82,7 @@
         <el-input
           v-model="dataForm.appPrivateKey"
           type="textarea"
-          rows="28"
+          rows="10"
           :placeholder="$t('platform.config.appPrivateKey')"
           controls-position="right"
         />
@@ -90,47 +95,47 @@
       </el-button>
     </el-form>
     <template>
-      <span class="dialog-footer">
-      <!-- <el-button @click="visible = false">取消</el-button> -->
-      </span>
+      <span class="dialog-footer" />
     </template>
   </div>
 </template>
 
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
-import useStore from 'element-plus/es/components/table/src/store/index'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let dataForm = reactive({
+const dataForm = reactive({
   appId: null,
   appCertPath: null,
+  appCertContent: null,
   alipayCertPath: null,
+  alipayCertContent: null,
   alipayRootCertPath: null,
+  alipayRootCertContent: null,
   appPrivateKey: null
 })
 const dataRule = {
   appId: [
     { required: true, message: $t('platform.config.appNullTips'), trigger: 'blur' }
   ],
-  appCertPath: [
+  appCertContent: [
     { required: true, message: $t('platform.config.appCertPublicKeyNullTips'), trigger: 'blur' }
   ],
-  alipayCertPath: [
+  alipayCertContent: [
     { required: true, message: $t('platform.config.alipayCertPublicKeyNullTips'), trigger: 'blur' }
   ],
-  alipayRootCertPath: [
+  alipayRootCertContent: [
     { required: true, message: $t('platform.config.alipayRootCertPathNullTips'), trigger: 'blur' }
   ],
   appPrivateKey: [
     { required: true, message: $t('platform.config.appPrivateKeyNullTips'), trigger: 'blur' }
   ]
 }
-
+const useAllinpay = useAllinpayStore()
 const paySettlementType = computed(() => {
-  return useStore.state.allinpay.paySettlementType
+  return useAllinpay.paySettlementType
 })
 
 onMounted(() => {
@@ -141,7 +146,7 @@ const init = () => {
   nextTick(() => {
     api.get('ALIPAY_CONFIG').then(data => {
       if (data) {
-        dataForm = JSON.parse(data)
+        Object.assign(dataForm, JSON.parse(data))
       }
     })
     dataFormRef.value?.resetFields()
@@ -156,7 +161,7 @@ const onSubmit = () => {
         paramKey: 'ALIPAY_CONFIG',
         paramValue: JSON.stringify(dataForm),
         remark: $t('platform.config.alipayPaymentConfiguration')
-      }).then(data => {
+      }).then(() => {
         init()
         ElMessage({
           message: $t('table.actionSuccess'),
@@ -170,5 +175,5 @@ const onSubmit = () => {
     }
   })
 }
-
+defineExpose({ init })
 </script>

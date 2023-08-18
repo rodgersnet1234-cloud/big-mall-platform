@@ -34,7 +34,9 @@
           type="primary"
           @click="toPrincipalConfig"
         >
-          继续编辑
+          <router-link to="information-config">
+            继续编辑
+          </router-link>
         </el-button>
       </div>
       <div class="card-content">
@@ -86,6 +88,15 @@
           线下结算
         </div>
         <el-button
+          v-if="1==1"
+          type="primary"
+        >
+          <router-link to="pay-config">
+            立即认证
+          </router-link>
+        </el-button>
+        <el-button
+          v-if="1==2"
           type="primary"
         >
           继续编辑
@@ -96,10 +107,7 @@
 </template>
 <script setup>
 const state = ref('a')
-const router = useRouter()
-const toPrincipalConfig = () => {
-  router.push('/system/system-config/information-config')
-}
+
 </script>
 <style lang="scss" scoped>
 .page-principal-config {

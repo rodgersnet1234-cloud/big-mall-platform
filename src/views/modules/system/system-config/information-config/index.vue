@@ -63,6 +63,7 @@
    padding: 248px 165px;
    :deep(.el-button){
     color: #155BD4;
+    width: 124px;
     border: 1px solid #155BD4;
     border-radius: 2px;
   }

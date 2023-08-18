@@ -1,15 +1,11 @@
 <template>
   <div class="mod-pay">
-    <miniapp ref="miniappRef" />
-    <mp ref="mpRef" />
     <app ref="appRef" />
     <pay ref="payRef" />
   </div>
 </template>
 <script setup>
-import miniapp from './wx-ma-config.vue'
 import app from './wx-app-config.vue'
-import mp from './wx-mp-config.vue'
 import pay from './wx-pay-config.vue'
 
 </script>
@@ -18,13 +14,13 @@ import pay from './wx-pay-config.vue'
 通用样式
 */
 .mod-pay {
-  .sdp-top {
+  :deep(.sdp-top) {
     .IsdistributionText {
       display: inline-block;
       padding-left: 10px;
     }
   }
-  .footer-bar-pagination {
+  :deep(.footer-bar-pagination) {
     width: calc(100% + 30px);
     background-color: white;
     bottom: 0px;
@@ -35,44 +31,44 @@ import pay from './wx-pay-config.vue'
     left: -30px;
     line-height: 50px;
   }
-  #tabs {
+  :deep(#tabs) {
     margin-top: 20px;
   }
 
-  .tips {
+  :deep(.tips) {
     color: #9797a1;
     font-size: 12px;
   }
-  .title {
+  :deep(.title) {
     font-size: 16px;
     font-weight: 700;
     display: inline-block;
     vertical-align: middle;
     padding-right: 20px;
   }
-  .gray-box {
+  :deep(.gray-box) {
     background: #f2f2f6;
     padding: 20px 35px;
     height: 100%;
   }
-  .border-bottom-gray {
+  :deep(.border-bottom-gray) {
     border-bottom: 1px solid #dddce2;
   }
-  .bottom-redius {
+  :deep(.bottom-redius) {
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
-  .top-redius {
+  :deep(.top-redius) {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
   }
 
-  .set-form {
+  :deep(.set-form) {
     margin-left: 20%;
     margin: 20px;
   }
 
-  .valid-input {
+  :deep(.valid-input) {
     margin-left: 20px;
     border-top-left-radius: 0px;
   }
@@ -80,21 +76,21 @@ import pay from './wx-pay-config.vue'
   /**
     elenemt
     **/
-  .el-checkbox__label,
-  .el-radio__label {
+  :deep(.el-checkbox__label),
+  :deep(.el-radio__label) {
     padding-left: 5px;
     font-size: 13px;
   }
-  .el-checkbox__inner,
-  .el-radio__inner {
+  :deep(.el-checkbox__inner),
+  :deep(.el-radio__inner) {
     border: 2px solid #b2aebc;
   }
-  .el-checkbox__inner::after {
+  :deep(.el-checkbox__inner::after) {
     left: 3px;
     top: 0px;
   }
 
-  .el-input__inner {
+  :deep(.el-input__inner) {
     border-radius: 0%;
   }
 }

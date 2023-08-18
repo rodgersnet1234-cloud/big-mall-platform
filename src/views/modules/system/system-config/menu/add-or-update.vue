@@ -4,7 +4,7 @@
     :title="dataForm.menuId? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
   >
-    <!-- 目录和菜单框 -->
+    <!-- 目录和菜单框 11-->
     <el-form
       ref="dataFormRef"
       :model="dataForm"
@@ -285,6 +285,7 @@ const init = (menuId) => {
     })
     if (dataForm.value.menuId) {
       api.get(menuId).then(data => {
+        console.log(data, 'data')
         // 不是目录，才显示组件路径（data.component返回Layout就为目录）
         if (data.component !== 'Layout') {
           dataForm.value.type = 1
