@@ -166,7 +166,6 @@
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/product/category'
 import { treeDataTranslate } from '@/utils'
-import { ElMessageBox, ElMessage } from 'element-plus'
 
 // 查询的参数
 const pageQuery = reactive({
@@ -191,7 +190,6 @@ const pageLoading = ref(true)
 const searchParam = {
 }
 const addOrUpdateVisible = ref(false)
-const disable = ref(false)
 onMounted(() => {
   isSubmit.value = false
   getPage()
@@ -238,67 +236,10 @@ const onAddOrUpdate = (categoryId, level) => {
   })
 }
 
-/**
- * 删除
- */
-const onDelete = (categoryId) => {
-  ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
-    confirmButtonText: $t('table.confirm'),
-    cancelButtonText: $t('table.cancel'),
-    type: 'warning'
-  }).then(() => deleteById(categoryId))
-}
-const deleteById = (categoryId) => {
-  api.deleteById(categoryId).then(() => {
-    ElMessage({
-      message: $t('table.actionSuccess'),
-      type: 'success',
-      duration: 1500,
-      onClose: () => getPage()
-    })
-  })
-}
-
-/**
- * 上架/下架分类
- */
-const enableOrDisable = (categoryId, sts, idx) => {
-  const categoryDTO = {}
-  categoryDTO.categoryId = categoryId
-  categoryDTO.status = sts === 0 ? 1 : 0
-  ElMessageBox.confirm(sts === 1 ? '是否确认下架当前分类?' : '是否确认上架当前分类?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    api.enableOrDisable(categoryDTO).then(() => {
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-        duration: 1500,
-        onClose: () => getPage()
-      })
-    })
-  }).catch(() => {
-  })
-}
-
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-container {
-  .cate-img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 200px;
-  }
-  .cate-icon-img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100px;
-  }
 
   // 地址列表区域
   .category-list {
@@ -349,7 +290,7 @@ const enableOrDisable = (categoryId, sts, idx) => {
             }
             min-width: 98px;
             margin-right: 10px;
-            .el-button--text {
+            :deep(.el-button--text) {
               color: #155bd4;
             }
           }
