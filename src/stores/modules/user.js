@@ -12,7 +12,7 @@ import { login, logout } from '@/api/auth/auth'
 import { menuPermissionsList } from '@/api/rbac/menu-permission'
 import { shopUserInfo } from '@/api/platform/sys-user'
 import { listMenuIds } from '@/api/rbac/menu'
-import { getToken, removeToken, setToken } from '@/utils/auth'
+import { getToken, removeToken, setToken, getTenantId, setTenantId, removeTenantId } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 export const useUserStore = defineStore('user', {
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
       introduction: '',
       isAdmin: 0,
       userId: '',
-      tenantId: '',
+      tenantId: getTenantId(),
       roles: [],
       menuIds: [],
       isPassShop: 0
@@ -38,6 +38,7 @@ export const useUserStore = defineStore('user', {
         login(loginData).then(response => {
           this.token = response.accessToken
           this.tenantId = response.tenantId
+          setTenantId(response.tenantId)
           setToken(response.accessToken)
           resolve()
         }).catch(error => {
@@ -112,6 +113,7 @@ export const useUserStore = defineStore('user', {
     resetToken () {
       this.token = ''
       removeToken()
+      removeTenantId()
       this.name = ''
       this.userName = ''
       this.avatar = ''

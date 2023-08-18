@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -59,6 +55,9 @@ dependencies:
   vue-baidu-map-3x:
     specifier: ^1.0.34
     version: 1.0.34(vue@3.2.47)
+  vue-clipboard3:
+    specifier: ^2.0.0
+    version: 2.0.0
   vue-cookies:
     specifier: ^1.8.3
     version: 1.8.3
@@ -3782,6 +3781,12 @@ packages:
       vue-router: 4.2.1(vue@3.2.47)
     dev: false
 
+  /vue-clipboard3@2.0.0:
+    resolution: {integrity: sha512-Q9S7dzWGax7LN5iiSPcu/K1GGm2gcBBlYwmMsUc5/16N6w90cbKow3FnPmPs95sungns4yvd9/+JhbAznECS2A==}
+    dependencies:
+      clipboard: 2.0.11
+    dev: false
+
   /vue-cookies@1.8.3:
     resolution: {integrity: sha512-VBRsyRMVdahBgFfh389TMHPmDdr4URDJNMk4FKSCfuNITs7+jitBDhwyL4RJd3WUsfOYNNjPAkfbehyH9AFuoA==}
     dev: false
@@ -3941,3 +3946,7 @@ packages:
     dependencies:
       tslib: 2.3.0
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

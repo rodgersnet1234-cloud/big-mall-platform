@@ -6,33 +6,12 @@
         class="tabs"
       >
         <el-tab-pane
-          :label="$t('rbac.webConfig.platformSideConfiguration')"
-          name="webConfigBs"
-        >
-          <!-- <webConfigBs v-if="activeName === 'webConfigBs'" /> -->
-          <add-or-update
-            v-if="activeName === 'webConfigBs'"
-            :config-type="1"
-          />
-        </el-tab-pane>
-        <el-tab-pane
           :label="$t('rbac.webConfig.merchantSideConfiguration')"
           name="webConfigShop"
         >
-          <!-- <webConfigShop v-if="activeName === 'webConfigShop'" /> -->
           <add-or-update
             v-if="activeName === 'webConfigShop'"
             :config-type="2"
-          />
-        </el-tab-pane>
-        <el-tab-pane
-          :label="$t('rbac.webConfig.supplierSideConfiguration')"
-          name="webConfigSupplier"
-        >
-          <!-- <webConfigSupplier v-if="activeName === 'webConfigSupplier'" /> -->
-          <add-or-update
-            v-if="activeName === 'webConfigSupplier'"
-            :config-type="6"
           />
         </el-tab-pane>
         <el-tab-pane
@@ -74,7 +53,7 @@
 
 import AddOrUpdate from './webConfig-add-or-update.vue'
 
-const activeName = ref('webConfigBs')
+const activeName = ref('webConfigShop')
 
 </script>
 <style scoped>

@@ -92,6 +92,7 @@ export default {
     edit: 'Edit',
     view: 'view',
     create: 'Create',
+    getLink: 'Obtain Inbound Link',
     addGood: ' Add good',
     publish: 'Publish',
     delete: 'Delete',

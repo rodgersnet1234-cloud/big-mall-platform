@@ -88,6 +88,7 @@ export default {
     edit: '编辑',
     save: '保存',
     create: '新建',
+    getLink: '获取入驻链接',
     addGood: '添加商品',
     view: '查看',
     clear: '清空',

@@ -22,6 +22,8 @@ const service = axios.create({
 service.interceptors.request.use(async config => {
   if (useUserStore().token) {
     config.headers.Authorization = useUserStore().token
+  }
+  if (useUserStore().tenantId) {
     config.headers.tenantId = useUserStore().tenantId
   }
   // 只针对get方式进行序列化

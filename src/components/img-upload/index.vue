@@ -1,5 +1,5 @@
 <template>
-  <div class="component-img-upload-box">
+  <div class="component-img-upload-box single-image-upload">
     <div class="plugin-images">
       <div
         tabindex="0"

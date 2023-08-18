@@ -10,7 +10,7 @@
 import Cookies from 'vue-cookies'
 
 const TokenKey = 'Luck-platform-Token'
-
+const myTenantId = 'Luck-platform-TenantId'
 export function getToken () {
   return Cookies.get(TokenKey)
 }
@@ -21,4 +21,15 @@ export function setToken (token) {
 
 export function removeToken () {
   return Cookies.remove(TokenKey)
+}
+
+export function getTenantId () {
+  return Cookies.get(myTenantId)
+}
+
+export function setTenantId (tenantId) {
+  return Cookies.set(myTenantId, tenantId, { sameSite: 'Lax' })
+}
+export function removeTenantId () {
+  return Cookies.remove(myTenantId)
 }
