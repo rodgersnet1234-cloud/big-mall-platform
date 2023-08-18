@@ -13,8 +13,7 @@
       </el-form-item>
     </el-form>
     <!-- 搜索相关区域 -->
-    <div class="filter-container">
-      <!-- <el-button icon="el-icon-search" class="filter-item" @click="getPage()">{{ $t('table.search') }}</el-button> -->
+    <!-- <div class="filter-container">
       <el-button
         v-permission="['product:category:save']"
         type="primary"
@@ -31,7 +30,7 @@
       >
         导出
       </el-button>
-    </div>
+    </div> -->
 
     <!-- 分类列表 -->
     <div class="category-list">
@@ -66,42 +65,6 @@
                   正常
                 </el-tag>
               </div>
-              <el-button
-                v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
-                @click="onAddOrUpdate(firstItem.categoryId, firstItem.level)"
-              >
-                编辑
-              </el-button>
-              <!-- 上架 -->
-              <el-button
-                v-if="firstItem.status === 0"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
-                @click="enableOrDisable(firstItem.categoryId, firstItem.status, index)"
-              >
-                {{ $t('action.putOnShelf') }}
-              </el-button>
-              <!-- 下架 -->
-              <el-button
-                v-if="firstItem.status === 1"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
-                @click="enableOrDisable(firstItem.categoryId, firstItem.status, index)"
-              >
-                {{ $t('action.offShelf') }}
-              </el-button>
-              <el-button
-                v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
-                @click="onDelete(firstItem.categoryId)"
-              >
-                删除
-              </el-button>
             </div>
           </div>
         </div>
@@ -137,41 +100,6 @@
                   正常
                 </el-tag>
               </div>
-              <el-button
-                v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
-                @click="onAddOrUpdate(secondItem.categoryId, secondItem.level)"
-              >
-                编辑
-              </el-button>
-              <!-- 上架 -->
-              <el-button
-                v-if="secondItem.status === 0"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
-                @click="enableOrDisable(secondItem.categoryId, secondItem.status, secondIdx)"
-              >
-                {{ $t('action.putOnShelf') }}
-              </el-button><!-- 下架 -->
-              <el-button
-                v-if="secondItem.status === 1"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
-                @click="enableOrDisable(secondItem.categoryId, secondItem.status, secondIdx)"
-              >
-                {{ $t('action.offShelf') }}
-              </el-button>
-              <el-button
-                v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
-                @click="onDelete(secondItem.categoryId)"
-              >
-                删除
-              </el-button>
             </div>
           </div>
         </div>
@@ -211,34 +139,6 @@
                 @click="onAddOrUpdate(threeItem.categoryId, threeItem.level)"
               >
                 编辑
-              </el-button>
-              <!-- 上架 -->
-              <el-button
-                v-if="threeItem.status === 0"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
-                @click="enableOrDisable(threeItem.categoryId, threeItem.status, threeIdx)"
-              >
-                {{ $t('action.putOnShelf') }}
-              </el-button>
-              <!-- 下架 -->
-              <el-button
-                v-if="threeItem.status === 1"
-                v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
-                @click="enableOrDisable(threeItem.categoryId, threeItem.status, threeIdx)"
-              >
-                {{ $t('action.offShelf') }}
-              </el-button>
-              <el-button
-                v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
-                @click="onDelete(threeItem.categoryId)"
-              >
-                删除
               </el-button>
             </div>
           </div>
@@ -338,42 +238,6 @@ const onAddOrUpdate = (categoryId, level) => {
   })
 }
 
-/**
- * 导出
- */
-const exportFrom = () => {
-  ElMessageBox.confirm($t('table.sureToExport'), $t('table.tips'), {
-    confirmButtonText: $t('table.confirm'),
-    cancelButtonText: $t('table.cancel'),
-    type: 'warning'
-  }).then(() => {
-    if (isSubmit.value) {
-      return
-    }
-    isSubmit.value = true
-    api.soldExcel({ ...pageQuery, ...searchParam }).then((data) => {
-      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-      // var blob = data
-      const fileName = '平台分类.xlsx'
-      const elink = document.createElement('a')
-      if ('download' in elink) { // 非IE下载
-        elink.download = fileName
-        elink.style.display = 'none'
-        elink.href = URL.createObjectURL(blob)
-        document.body.appendChild(elink)
-        elink.click()
-        URL.revokeObjectURL(elink.href) // 释放URL 对象
-        document.body.removeChild(elink)
-      } else { // IE10+下载
-        navigator.msSaveBlob(blob, fileName)
-      }
-      isSubmit.value = false
-    }).catch((e) => {
-      ElMessage.error(e)
-      isSubmit.value = false
-    })
-  })
-}
 /**
  * 删除
  */
