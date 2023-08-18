@@ -111,6 +111,11 @@
         >
           {{ $t('table.create') }}
         </el-button>
+        <el-button
+          @click="onCopyLink()"
+        >
+          {{ $t('table.getLink') }}
+        </el-button>
       </div>
       <div class="table-con">
         <el-table
@@ -337,6 +342,7 @@ import Pagination from '@/components/Pagination/index.vue'
 import accountManage from './account-manage.vue'
 import * as api from '@/api/platform/audit-shop.js'
 import { ElMessage } from 'element-plus'
+import useClipboard from 'vue-clipboard3'
 // import OfflineManage from '@/components/offline-manage.index.vue'
 
 const tempSearchForm = ref(null) // 保存上次点击查询的请求条件
@@ -407,6 +413,18 @@ const router = useRouter()
 // 查看
 const createStore = () => {
   router.push('/platform/shop-process')
+}
+const { toClipboard } = useClipboard()
+const onCopyLink = async () => {
+  const res = await api.getLink()
+  try {
+    // 复制
+    await toClipboard(res)
+    ElMessage.success('复制成功')
+  } catch (e) {
+    // 复制失败
+    console.error(e)
+  }
 }
 
 /**
