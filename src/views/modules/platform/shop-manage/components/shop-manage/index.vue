@@ -2,7 +2,6 @@
   <div class="container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="searchParam"
@@ -86,7 +85,6 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="getPage(true)"
             >
               查询
@@ -105,16 +103,10 @@
       <div class="operation-bar">
         <el-button
           v-permission="['platform:shopManage:save']"
-          icon="el-icon-plus"
           type="primary"
           @click="createStore()"
         >
           {{ $t('table.create') }}
-        </el-button>
-        <el-button
-          @click="onCopyLink()"
-        >
-          {{ $t('table.getLink') }}
         </el-button>
       </div>
       <div class="table-con">
@@ -162,7 +154,6 @@
                 v-if="row.shopLogo"
                 class="table-cell-image"
               >
-                <!-- <img :src="(row.shopLogo).indexOf('http')===-1 ? resourcesUrl + row.shopLogo : row.shopLogo"> -->
                 <ImgShow :src="row.shopLogo" />
               </div>
             </template>
@@ -259,16 +250,18 @@
             <template #default="{row}">
               <el-button
                 v-permission="['platform:shopManage:info']"
-                type="text"
+                link
+                type="primary"
                 @click="toShopDetailPage(row.shopId)"
               >
-                <i class="el-icon-view" />详情
+                详情
               </el-button>
               <!-- 上线审核失败显示编辑按钮 -->
               <el-button
                 v-if="row.shopStatus < 3 && row.shopStatus !== -1 || (row.shopStatus === 6 && row.type === 1) && paySettlementType===1"
                 v-permission="['platform:shopManage:update','platform:shopManage:updateCompany']"
-                type="text"
+                link
+                type="primary"
                 @click="toShopEditPage(row.shopId)"
               >
                 <i class="el-icon-edit" />编辑
@@ -276,7 +269,8 @@
               <el-button
                 v-if="row.shopStatus === 1 || row.shopStatus === 0"
                 v-permission="['platform:shopManage:closeStore']"
-                type="text"
+                link
+                type="primary"
                 @click="offlineManageHandle(row, 'offline')"
               >
                 <i class="el-icon-lock" />下线店铺
@@ -284,7 +278,8 @@
               <el-button
                 v-if="(row.shopStatus === 2 || row.shopStatus === 5)&&(paySettlementType!==1 || (paySettlementType===1 && row.companyInfoProcessStatus!==0))"
                 v-permission="['platform:shopManage:openStore']"
-                type="text"
+                link
+                type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"
               >
                 <i class="el-icon-unlock" />下线管理
@@ -293,14 +288,16 @@
               <el-button
                 v-if="row.shopStatus !== -1"
                 v-permission="['platform:shopManage:preferred']"
-                type="text"
+                link
+                type="primary"
                 @click="preferredById(row)"
               >
                 <i class="el-icon-setting" />{{ row.isPreferred === 0 ?'设为好店': row.isPreferred === 1 ? '取消好店' : '' }}
               </el-button>
               <el-button
                 v-permission="['platform:shopManage:updatePassword']"
-                type="text"
+                link
+                type="primary"
                 @click="accountManageHandle(row.shopId)"
               >
                 <i class="el-icon-setting" />账号管理
@@ -338,17 +335,14 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import accountManage from './account-manage.vue'
 import * as api from '@/api/platform/audit-shop.js'
 import { ElMessage } from 'element-plus'
-import useClipboard from 'vue-clipboard3'
-// import OfflineManage from '@/components/offline-manage.index.vue'
 
 const tempSearchForm = ref(null) // 保存上次点击查询的请求条件
 // 当前选中的店铺id
 const shopId = ref('')
-// const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 // 查询的参数
 const pageQuery = ref({
   pageSize: 10,
@@ -366,19 +360,10 @@ const pageVO = ref({
 })
 // loading
 const pageLoading = ref(true)
-// const addOrUpdateVisible = ref(false)
 const accountManageVisible = ref(false)
 const accountManageRef = ref(null)
 const offlineDataRef = ref(null)
-// 关店
-// const closeStoreDialogVisible = ref(false)
-// 关店理由
-// const offlineReason = ref('')
 const resaonIntError = ref(false)
-// const currentShopIdOfCloseStore = null
-
-// 开启
-// const offlineStoresInfo = reactive({})
 // 违规下线对话框
 const offlineDialogVisible = ref(false)
 
@@ -401,8 +386,8 @@ const getPage = (newData = false) => {
     tempSearchForm.value.pageNum = pageQuery.value.pageNum
   }
   pageLoading.value = true
-  api.managePage(tempSearchForm.value).then(pageVOs => {
-    pageVO.value = pageVOs
+  api.managePage(tempSearchForm.value).then(pageVal => {
+    pageVO.value = pageVal
     pageLoading.value = false
   }).catch(() => {
     pageLoading.value = false
@@ -414,24 +399,11 @@ const router = useRouter()
 const createStore = () => {
   router.push('/platform/shop-process')
 }
-const { toClipboard } = useClipboard()
-const onCopyLink = async () => {
-  const res = await api.getLink()
-  try {
-    // 复制
-    await toClipboard(res)
-    ElMessage.success('复制成功')
-  } catch (e) {
-    // 复制失败
-    console.error(e)
-  }
-}
 
 /**
  * 跳转到店铺详情页
  */
-// eslint-disable-next-line no-unused-vars
-const toShopDetailPage = (shopId, type) => {
+const toShopDetailPage = (shopId) => {
   router.push('/platform/shop-detail?shopId=' + shopId + '&pageType=' + 'toDetail')
 }
 
@@ -450,16 +422,6 @@ const accountManageHandle = (shopId) => {
   })
 }
 
-/**
-   * 设置优选好店 / 取消优选好店
-   */
-// const preferredHandle = (row) => {
-//   // ElMessageBox.confirm('确定进行' + (row.isPreferred === 0 ? '设为优选好店' : '取消优选店铺') + '操作？', '提示', {
-//   //   confirmButtonText: $t('table.confirm'),
-//   //   cancelButtonText: $t('table.cancel'),
-//   //   type: 'warning'
-//   // }).then(() => preferredById(row))
-// }
 const preferredById = (row) => {
   api.updateShopPreferred({ shopId: row.shopId }).then(() => {
     ElMessage({
@@ -591,28 +553,3 @@ const clearSearchInfo = () => {
 }
 
 </script>
-
-<style lang="scss" scoped>
-// .container {
-//   // .img {
-//   //   width: auto;
-//   //   height: auto;
-//   //   max-width: 100%;
-//   //   max-height: 100px;
-//   // }
-// }
-// .close-store-dialog {
-//   ::v-deep(.el-dialog__body) {
-//     padding-top: 10px;
-//     padding-bottom: 10px;
-//   }
-//   .int-box {
-//     display: block;
-//     .resaon-int-error {
-//       color: crimson;
-//       margin-top: 10px;
-//       font-size: 12px;
-//     }
-//   }
-// }
-</style>

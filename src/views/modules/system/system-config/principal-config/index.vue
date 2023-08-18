@@ -30,15 +30,17 @@
           ③ 商城平台与SaaS后台进行线上结算，与商家及<br>
           供应商进行线下结算
         </div>
-        <el-button
-          type="primary"
-          @click="toPrincipalConfig"
-        >
-          <router-link to="information-config">
-            继续编辑
-          </router-link>
-        </el-button>
+
+        <router-link :to="{path:'information-config',query:{type:'subject'}}">
+          <el-button
+            type="primary"
+          >
+            立即认证
+          </el-button>
+        </router-link>
       </div>
+      <!-- 非主体认证 -->
+
       <div class="card-content">
         <div
           v-if="'b'===state"
@@ -60,11 +62,13 @@
           ③ 商城平台与SaaS后台、入驻商家及供应商都进<br>
           行线下结算
         </div>
-        <el-button
-          type="primary"
-        >
-          立即认证
-        </el-button>
+        <router-link :to="{path:'information-config',query:{type:'notSubject'}}">
+          <el-button
+            type="primary"
+          >
+            立即认证
+          </el-button>
+        </router-link>
       </div>
       <div class="card-content">
         <div
@@ -87,14 +91,16 @@
           ③ 商城平台与SaaS后台、入驻商家及供应商都进行<br>
           线下结算
         </div>
-        <el-button
-          v-if="1==1"
-          type="primary"
-        >
-          <router-link to="pay-config">
+
+        <router-link :to="{path:'information-config',query:{type:'NonSubSelfManage'}}">
+          <el-button
+            v-if="1==1"
+            type="primary"
+            @click="loading=true"
+          >
             立即认证
-          </router-link>
-        </el-button>
+          </el-button>
+        </router-link>
         <el-button
           v-if="1==2"
           type="primary"

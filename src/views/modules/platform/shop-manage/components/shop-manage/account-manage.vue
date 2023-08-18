@@ -9,7 +9,6 @@
       width="650px"
       @close="close"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :rules="rules"
@@ -90,7 +89,6 @@
 
 <script setup>
 import * as api from '@/api/platform/audit-shop.js'
-// import { validNoEmptySpace, noSpacesBothSides } from '@/utils/validate'
 import { encrypt } from '@/utils/crypto.js'
 import { ElMessage } from 'element-plus'
 
@@ -117,7 +115,7 @@ const validPassword = (rule, value, callback) => {
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
   } else if (dataForm.value.confirmPsw &&
-        value === this.dataForm.value.confirmPsw) {
+        value === dataForm.value.confirmPsw) {
     // 如两次输入密码相同,清除确认密码框校验
     callback(dataFormRef.value.clearValidate('confirmPsw'))
   } else {
@@ -174,7 +172,7 @@ const onSubmit = () => {
       password: encrypt(dataForm.value.password),
       shopId: dataForm.value.shopId
     }
-    api.updateLoginPassword(param).then((data) => {
+    api.updateLoginPassword(param).then(() => {
       ElMessage({
         message: '更新成功！',
         type: 'success',
@@ -198,9 +196,9 @@ const close = () => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .account-manage {
-  .el-dialog__wrapper {
+  ::v-deep(.el-dialog__wrapper) {
     display: flex;
     align-items: center;
     justify-content: center;

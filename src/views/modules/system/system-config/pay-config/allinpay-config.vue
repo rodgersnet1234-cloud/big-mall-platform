@@ -144,17 +144,11 @@
         />
       </el-form-item>
       <el-button
-        size="slmall"
         @click="onSubmit('ALLINPAY_CONFIG')"
       >
         {{ $t('platform.config.save') }}
       </el-button>
     </el-form>
-    <template>
-      <span class="dialog-footer">
-      <!-- <el-button @click="visible = false">取消</el-button> -->
-      </span>
-    </template>
   </div>
 </template>
 
