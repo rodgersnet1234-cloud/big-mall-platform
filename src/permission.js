@@ -10,12 +10,14 @@
 import router from './router'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/modules/user.js'
+import { mallUserStore } from '@/stores/modules/mallUser.js'
 import { usePermissionStore } from '@/stores/modules/permission.js'
 
 const whiteList = ['/login', '/register', '/forget-password', '/reset-password']// no redirect whitelist
 // eslint-disable-next-line no-unused-vars
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
+  const mallStore = mallUserStore()
   const permissionStore = usePermissionStore()
   const hasToken = getToken()
   if (hasToken) {
@@ -28,6 +30,7 @@ router.beforeEach(async (to, from, next) => {
       } else {
         try {
           // 获取用户信息
+          await mallStore.onGetMallUserInfo()
           const userInfo = await userStore.getUserInfo()
           // 获取权限信息
           await userStore.listPermissions()

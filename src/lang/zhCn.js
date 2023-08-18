@@ -54,7 +54,8 @@ export default {
     input: '请输入'
   },
   navbar: {
-    logOut: '退出登录'
+    logOut: '退出登录',
+    changeName: '修改名称'
   },
   tagsView: {
     refresh: '刷新',

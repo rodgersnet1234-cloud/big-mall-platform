@@ -68,6 +68,26 @@
           />
           客服
         </div>
+
+        <el-dropdown
+          class="avatar-container"
+          trigger="hover"
+          style="margin-right: 25px;"
+        >
+          <div class="avatar-wrapper">
+            <div class="user-name">
+              {{ mallName }}
+            </div>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="changeMallName">
+                <span style="display: block">{{ $t("navbar.changeName") }}</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
         <el-dropdown
           class="avatar-container"
           trigger="hover"
@@ -98,13 +118,20 @@
       v-if="updatePasswordVisible"
       ref="updatePasswordRef"
     />
+    <!-- 修改商店名称 -->
+    <update-mall-name
+      v-if="updateMallNameVisible"
+      ref="updateMallNameRef"
+    />
   </div>
 </template>
 
 <script setup>
 import UpdatePassword from '@/components/update-password/index.vue'
+import UpdateMallName from '@/components/update-mall-name/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { Base64 } from 'js-base64'
+import { mallUserStore } from '@/stores/modules/mallUser.js'
 
 const updatePasswordVisible = ref(false)
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
@@ -138,7 +165,14 @@ const logout = async () => {
     await router.push(`/login?redirect=${route.fullPath}`)
   })
 }
-
+const updateMallNameVisible = ref(false)
+const updateMallNameRef = ref(null)
+const changeMallName = () => {
+  updateMallNameVisible.value = true
+  nextTick(() => {
+    updateMallNameRef.value.init()
+  })
+}
 const updatePasswordRef = ref(null)
 const changePassword = () => {
   updatePasswordVisible.value = true
@@ -326,6 +360,9 @@ onMounted(() => {
   message.value = localStorage.getItem('cloudVsNotificationMessage') || null
   openWs()
 })
+const mallName = ref('')
+const mallStore = mallUserStore()
+mallName.value = mallStore.mallName
 const isDecorate = computed(() => {
   return !(/^\/(platform-decorate\/decorate-select-decorate)/.test(router.currentRoute.value.path))
 })

@@ -47,7 +47,8 @@ export default {
     input: 'please input'
   },
   navbar: {
-    logOut: 'Log Out'
+    logOut: 'Log Out',
+    changeName: 'Change Name'
   },
   tagsView: {
     refresh: 'Refresh',

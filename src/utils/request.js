@@ -13,17 +13,16 @@ import Qs from 'qs'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import 'element-plus/es/components/message-box/style/index'
 import 'element-plus/es/components/message/style/index'
-
 // create an axios instance
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 50000 // request timeout
 })
-
 // request interceptor
 service.interceptors.request.use(async config => {
   if (useUserStore().token) {
     config.headers.Authorization = useUserStore().token
+    config.headers.tenantId = useUserStore().tenantId
   }
   // 只针对get方式进行序列化
   if (config.method === 'get' || config.method === 'GET') {

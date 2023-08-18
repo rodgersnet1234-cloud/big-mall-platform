@@ -9,6 +9,17 @@
 -->
 <template>
   <div class="Mall4j dashboard-container">
+    <!-- 1.店铺状态信息提示 -->
+    <div
+      v-if="shopStatus!==null&&shopStatus===0"
+      class="shop-inf-imperfect-tips"
+    >
+      <router-link
+        to="/system/system-config/principal-config"
+      >
+        为了不影响商城日常经营，建议及时选择主体认证方式并完成相关操作 &gt;
+      </router-link>
+    </div>
     <!-- 今日指数 -->
     <div class="today-index item-wrapper first-layer layer">
       <div class="title">
@@ -424,8 +435,10 @@ import {
   countByShopStatus,
   listShopRankIngByFlow
 } from '@/api/multishop/shop-detail'
+import { mallUserStore } from '@/stores/modules/mallUser.js'
 import Big from 'big.js'
-
+const mallStore = mallUserStore()
+const shopStatus = computed(() => mallStore.platformStatus)
 const pendingShop = ref(0)
 // 客户数量概况
 const customerCountInfo = reactive({
@@ -724,6 +737,17 @@ const isTrueData = (data) => {
 
   /****** 通用样式 ******/
   // 层
+  .shop-inf-imperfect-tips {
+    width: 100%;
+    line-height: 32px;
+    font-size: 14px;
+    color: #666666;
+    background: #FFF7DD;
+    border: 1px solid #FFD888;
+    border-radius: 2px;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+  }
   .layer {
     margin-top: 20px;
     overflow: hidden;

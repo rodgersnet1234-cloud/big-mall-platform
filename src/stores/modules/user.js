@@ -37,6 +37,7 @@ export const useUserStore = defineStore('user', {
       return new Promise((resolve, reject) => {
         login(loginData).then(response => {
           this.token = response.accessToken
+          this.tenantId = response.tenantId
           setToken(response.accessToken)
           resolve()
         }).catch(error => {
