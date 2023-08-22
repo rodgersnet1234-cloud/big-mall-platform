@@ -4,8 +4,6 @@
     :title="dataForm.menuPermissionId? $t('table.edit'): $t('table.create')"
   >
     <div class="up-wrapper">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :model="dataForm"
@@ -144,7 +142,8 @@ const menuList = ref([])
 const selectedMenu = ref([])
 const menuListTreeProps = {
   value: 'id',
-  label: 'title'
+  label: 'title',
+  checkStrictly: true
 }
 const dataFormRef = ref(null)
 const init = (menuPermissionId) => {

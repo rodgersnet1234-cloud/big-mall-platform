@@ -247,7 +247,7 @@ const onSaveTime = () => {
   dataForm.paramValue = JSON.stringify(value)
   dataForm.remark = '秒杀场次选择'
   dataForm.paramKey = 'SECKILL_TIME_CONFIG'
-  api.saveOrUpdate(dataForm.value).then(() => {
+  api.saveOrUpdate(dataForm).then(() => {
     getData()
     ElMessage({
       message: $t('table.actionSuccess'),

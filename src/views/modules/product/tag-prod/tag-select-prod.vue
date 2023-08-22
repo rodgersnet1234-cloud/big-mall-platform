@@ -7,7 +7,6 @@
     :close-on-click-modal="false"
     @close="dialogClose()"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       :inline="true"
       :model="dataForm"
@@ -34,7 +33,6 @@
       <el-form-item>
         <el-button
           type="primary"
-          icon="el-icon-search"
           @click="searchProd"
         >
           {{
@@ -44,7 +42,6 @@
       </el-form-item>
       <el-form-item>
         <el-button
-          icon="el-icon-delete"
           @click="clean"
         >
           {{
@@ -134,7 +131,7 @@ import { treeDataTranslate, idList } from '@/utils'
 // import Big from 'big.js'
 import * as api from '@/api/product/tag-prod'
 import { categoryPage } from '@/api/product/category'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { ElMessage } from 'element-plus'
 
 const props = defineProps({

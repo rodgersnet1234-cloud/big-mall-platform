@@ -4,7 +4,7 @@
     :title="dataForm.menuId? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
   >
-    <!-- 目录和菜单框 11-->
+    <!-- 目录和菜单框 -->
     <el-form
       ref="dataFormRef"
       :model="dataForm"
@@ -285,7 +285,6 @@ const init = (menuId) => {
     })
     if (dataForm.value.menuId) {
       api.get(menuId).then(data => {
-        console.log(data, 'data')
         // 不是目录，才显示组件路径（data.component返回Layout就为目录）
         if (data.component !== 'Layout') {
           dataForm.value.type = 1
@@ -304,7 +303,6 @@ const init = (menuId) => {
         dataForm.value.icon = data.icon
         // idList方法返回的选中菜单数组格式(内容:[{id: value, name: value}])
         // el-cascader回显的数组只需一个id的数字数组，因此需要把id取出来
-        console.log(menuList.value, 'menuList.value')
         const selectedMenuList = idList(menuList.value, data.parentId).reverse()
         const tempSelectedMenu = []
         selectedMenuList.forEach(item => {
@@ -336,7 +334,6 @@ const initFrameCon = () => {
 }
 // 监听上级菜单的改动
 const handleSelectMenuChange = (val) => {
-  console.log(val, 'val')
   dataForm.value.parentId = val && val[val.length - 1]
   if (dataForm.value.parentId === undefined) {
     dataForm.value.parentId = 0

@@ -6,9 +6,9 @@
     <div class="export-btn">
       <el-button
         v-permission="['platform:accountRefundDetail:export']"
-        icon="el-icon-download"
         @click="onExportFrom()"
       >
+        <el-icon><Download /></el-icon>
         导出
       </el-button>
     </div>
@@ -250,7 +250,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { refundsDetail, refundSoldExcel, refundDetailInfo } from '@/api/funds-management/index'

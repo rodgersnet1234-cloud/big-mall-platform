@@ -2,27 +2,28 @@
   <div class="app-container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
-        :model="pageQuery"
+        :model="searchParam"
         @submit.prevent
       >
         <div class="input-row">
           <el-form-item label="昵称：">
             <el-input
-              v-model="pageQuery.nickName"
+              v-model="searchParam.nickName"
               maxlength="30"
               placeholder="输入昵称"
+              prop="nickName"
               clearable
             />
           </el-form-item>
           <el-form-item :label="$t('联系方式') + '：'">
             <el-input
-              v-model="pageQuery.phoneNum"
+              v-model="searchParam.phoneNum"
               maxlength="11"
               placeholder="输入联系方式"
+              prop="phoneNum"
               clearable
             />
           </el-form-item>
@@ -127,23 +128,26 @@
                 <el-button
                   v-if="row.hasAccount === 0"
                   v-permission="['platform:account:save']"
-                  type="text"
-                  @click="addOrUpdateAccountHandle(row.sysUserId,row.hasAccount)"
+                  link
+                  type="primary"
+                  @click="onAddOrUpdateAccount(row.sysUserId,row.hasAccount)"
                 >
                   设置账号
                 </el-button>
                 <el-button
                   v-if="row.hasAccount === 1"
                   v-permission="['platform:account:update']"
-                  type="text"
-                  @click="addOrUpdateAccountHandle(row.sysUserId,row.hasAccount)"
+                  link
+                  type="primary"
+                  @click="onAddOrUpdateAccount(row.sysUserId,row.hasAccount)"
                 >
                   修改账号
                 </el-button>
                 <el-button
                   v-if="row.hasAccount === 1"
                   v-permission="['platform:sysUser:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.sysUserId)"
                 >
                   {{ $t('table.edit') }}
@@ -151,7 +155,8 @@
                 <el-button
                   v-if="row.isAdmin !== 1"
                   v-permission="['platform:sysUser:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.sysUserId)"
                 >
                   {{ $t('table.delete') }}
@@ -166,8 +171,8 @@
     <!-- 分页条 -->
     <pagination
       v-show="pageData.total>0"
-      v-model:page="pageQuery.pageNum"
-      v-model:limit="pageQuery.pageSize"
+      v-model:page="searchParam.pageNum"
+      v-model:limit="searchParam.pageSize"
       :total="pageData.total"
       @pagination="getPage()"
     />
@@ -187,23 +192,19 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import AccountAddOrUpdate from './account-add-or-update.vue'
 import * as api from '@/api/platform/sys-user'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const pageQuery = reactive({
+const searchParam = reactive({
   pageSize: 10,
   pageNum: 1,
   phoneNum: '',
   nickName: ''
 })
 
-const addOrUpdateVisible = ref(false)
-const addOrUpdateRef = ref()
-const accountAddOrUpdateVisible = ref(false)
-const accountAddOrUpdateRef = ref()
 const pageLoading = ref(false)
 const searchFormRef = ref(null)
 // 保存上次点击查询的请求条件
@@ -214,12 +215,13 @@ const pageData = ref({
   total: 0, // 一共多少条数据
   pages: 0 // 一共多少页
 })
+
 const getPage = (newData = false) => {
   if (newData || !tempSearchForm) {
-    tempSearchForm = { ...pageQuery }
+    tempSearchForm = { ...searchParam }
   } else {
-    tempSearchForm.pageNum = pageQuery.pageNum
-    tempSearchForm.pageSize = pageQuery.pageSize
+    tempSearchForm.pageNum = searchParam.pageNum
+    tempSearchForm.pageSize = searchParam.pageSize
   }
   pageLoading.value = true
   api.page(tempSearchForm).then(res => {
@@ -233,13 +235,22 @@ const getPage = (newData = false) => {
   })
 }
 
+const addOrUpdateVisible = ref(false)
+const addOrUpdateRef = ref()
 const onAddOrUpdate = (sysUserId) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
     addOrUpdateRef.value.init(sysUserId)
   })
 }
-
+const accountAddOrUpdateVisible = ref(false)
+const accountAddOrUpdateRef = ref()
+const onAddOrUpdateAccount = (sysUserId, hasAccount) => {
+  accountAddOrUpdateVisible.value = true
+  nextTick(() => {
+    accountAddOrUpdateRef.value.init(sysUserId, hasAccount)
+  })
+}
 const onDelete = (sysUserId) => {
   ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
     confirmButtonText: $t('table.confirm'),
@@ -262,6 +273,10 @@ const deleteById = (sysUserId) => {
 const onResetSearch = (formEl) => {
   formEl.resetFields()
 }
+
+onMounted(() => {
+  getPage()
+})
 </script>
 
 <style lang="scss" scoped>

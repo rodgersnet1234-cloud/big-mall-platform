@@ -117,7 +117,8 @@
             <template #default="{row}">
               <el-button
                 v-permission="['distribution:distributionUserWallet:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row)"
               >
                 {{ $t('table.edit') }}

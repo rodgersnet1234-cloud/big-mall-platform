@@ -1,7 +1,6 @@
 <template>
   <div class="category-modal-content">
     <div class="category-form">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         inline

@@ -305,7 +305,7 @@
                           $t('order.order.logisticsCertificate')
                         "
                         style="margin-top: 22px"
-                        label-width="82px"
+                        label-width="100px"
                       />
                     </div>
                     <div class="buyers-info">
@@ -665,6 +665,17 @@ const dataForm = ref({})
 const isReceived = ref(0)
 const visible = ref(false)
 const orderRefundAddrPhotos = reactive([])
+
+const onlyRefundStepsStatus = computed(() => {
+  let index = 0
+  if (dataForm.value.handelTime) {
+    index++
+  }
+  if (dataForm.value.cancelTime || dataForm.value.refundTime || dataForm.value.rejectTime || dataForm.value.refundTime) {
+    index += 2
+  }
+  return index
+})
 
 const onlyRefundProcessStatus = computed(() => {
   switch (dataForm.value.returnMoneySts) {

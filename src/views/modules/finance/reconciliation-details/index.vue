@@ -42,7 +42,7 @@
           <el-table-column
             type="index"
             label="序号"
-            width="50"
+            width="55"
           />
           <el-table-column
             v-if="params.shopId !== '0'"
@@ -270,7 +270,7 @@
 
 <script setup>
 import { getPayInfo, getRefundInfo } from '@/api/funds-management/index'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import Big from 'big.js'
 
 const amount = (value) => {

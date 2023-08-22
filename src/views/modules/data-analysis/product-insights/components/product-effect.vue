@@ -297,8 +297,7 @@
 import titleBar from '../../public-components/title-bar.vue'
 import checkboxOptionsGroup from './checkbox-options-group.vue'
 import prodDetails from '@/views/modules/product/list/components/prod-details/index.vue'
-import pagination from '@/components/Pagination/index.vue'
-import moment from 'moment'
+import pagination from '@/components/pagination/index.vue'
 import { list, soldExcel } from '@/api/data-analysis/product-effect.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -321,10 +320,6 @@ const showTableColumn = computed(() => {
   }
 })
 
-onMounted(() => {
-  initTime()
-})
-
 const sortChange = (data) => {
   if (data.order) {
     // 排序参数
@@ -342,12 +337,6 @@ const sortChange = (data) => {
     default: params.sortType = ''
       break
   }
-  getData()
-}
-
-const initTime = () => {
-  params.startTime = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss')
-  params.endTime = moment().format('YYYY-MM-DD HH:mm:ss')
   getData()
 }
 

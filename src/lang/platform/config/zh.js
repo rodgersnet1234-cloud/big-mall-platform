@@ -97,5 +97,13 @@ export default {
   paymentCertificatePath: '支付证书路径',
   sensitiveConfiguration: '敏感词配置',
   sensitiveWord: '敏感词',
-  sensitiveAlert: '每个敏感词之间用中文逗号进行分割，只能输入中文以及中文逗号，请谨慎填写，该配置约五分钟起效。'
+  sensitiveAlert: '每个敏感词之间用中文逗号进行分割，只能输入中文以及中文逗号，请谨慎填写，该配置约五分钟起效。',
+  aliLiveConfig: '直播配置',
+  pushDomain: '推流域名',
+  pullDomain: '播流域名',
+  appName: '应用名称',
+  pushAuthKey: '推流鉴权key',
+  pullAuthKey: '播流鉴权key',
+  isHttps: '是否开启https配置',
+  liveTip2: '应用名称只支持数字、大小写字母、短划线(-)、下划线(_)、等号(=)'
 }

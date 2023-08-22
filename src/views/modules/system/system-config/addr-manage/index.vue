@@ -37,7 +37,8 @@
             <div class="btn">
               <el-button
                 v-permission="['system:addr:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(addr.areaId)"
               >
                 编辑
@@ -45,7 +46,8 @@
               <!-- @click="() => update(node, data)" -->
               <el-button
                 v-permission="['system:addr:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(addr.areaId)"
               >
                 删除
@@ -75,20 +77,20 @@
             <div class="btn">
               <el-button
                 v-permission="['system:addr:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(provItem.areaId)"
               >
                 编辑
               </el-button>
-              <!-- @click="() => update(node, data)" -->
               <el-button
                 v-permission="['system:addr:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(provItem.areaId)"
               >
                 删除
               </el-button>
-              <!-- @click="() => remove(node, data)" -->
             </div>
           </div>
         </div>
@@ -113,14 +115,16 @@
             <div class="btn">
               <el-button
                 v-permission="['system:addr:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(city.areaId)"
               >
                 编辑
               </el-button>
               <el-button
                 v-permission="['system:addr:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(city.areaId)"
               >
                 删除
@@ -146,14 +150,16 @@
             <div class="btn">
               <el-button
                 v-permission="['system:addr:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(area.areaId)"
               >
                 编辑
               </el-button>
               <el-button
                 v-permission="['system:addr:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(area.areaId)"
               >
                 删除
@@ -184,151 +190,68 @@ import AddOrUpdate from './add-or-update.vue'
 import { treeDataTranslate } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-// directives: { permission },
-
 const data = ref([])
-let oldRegionList = ref([]) // 旧的区域数据
-let regionList = ref([]) // 区域
-let provList = ref([]) // 省
-let cityList = ref([]) // 市
-let areaList = ref([]) // 区
+const oldRegionList = ref([]) // 旧的区域数据
+const regionList = ref([]) // 区域
+const provList = ref([]) // 省
+const cityList = ref([]) // 市
+const areaList = ref([]) // 区
 const areaName = ref('')
 const params = reactive({
   areaName: null
 })
-let pageLoading = ref(true)
+const pageLoading = ref(true)
 const props = reactive({
   id: 'areaId',
   label: 'areaName',
   children: 'children'
 })
-let regionId = ref(0)
-let provId = ref(0)
-let cityId = ref(0)
+const regionId = ref(0)
+const provId = ref(0)
+const cityId = ref(0)
 // 查询参数
 const searchParam = {
 }
-let addOrUpdateVisible = ref(false)
-const disable = ref(false)
-let selectProvIndex = ref('')
-let selectCityIndex = ref('')
-let selectAreaIndex = ref('')
-// watch: {
-//   areaName() {
-//     if (areaName) {
-//       var r = []
-//       var p = []
-//       var c = []
-//       var a = []
-//       regionList = JSON.parse(JSON.stringify(oldRegionList))
-//       regionList.forEach((el, index) => {
-//         if (el.areaName.match(areaName) != null) {
-//           r.push(el)
-//         }
-//         if (el && el.children) {
-//           el.children.forEach(prov => {
-//             if (prov.areaName.match(areaName) != null) {
-//               console.log(r, 'r')
-//               p.push(prov)
-//               r.push(el)
-//               var obj = {}
-//               r = r.reduce((cur, next) => {
-//                 obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                 return cur
-//               }, [])
-//               console.log(obj, '2')
-//             }
-//             if (prov && prov.children) {
-//               prov.children.forEach(city => {
-//                 if (city.areaName.match(areaName) != null) {
-//                   c.push(city)
-//                   r.push(el)
-//                   p.push(prov)
-//                   var obj = {}
-//                   r = r.reduce((cur, next) => {
-//                     obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                     return cur
-//                   }, [])
-//                   obj = {}
-//                   p = p.reduce((cur, next) => {
-//                     obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                     return cur
-//                   }, [])
-//                 }
-//                 if (city && city.children) {
-//                   city.children.forEach(area => {
-//                     if (area.areaName.match(areaName) != null) {
-//                       a.push(area)
-//                       r.push(el)
-//                       p.push(prov)
-//                       c.push(city)
-//                       var obj = {}
-//                       r = r.reduce((cur, next) => {
-//                         obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                         return cur
-//                       }, [])
-//                       obj = {}
-//                       p = p.reduce((cur, next) => {
-//                         obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                         return cur
-//                       }, [])
-//                       obj = {}
-//                       c = c.reduce((cur, next) => {
-//                         obj[next.areaName] ? '' : obj[next.areaName] = true && cur.push(next)
-//                         return cur
-//                       }, [])
-//                     }
-//                   })
-//                 }
-//               })
-//             }
-//           })
-//         }
-//       })
-//       regionList = r
-//       provList = p
-//       cityList = c
-//       areaList = a
-//     } else {
-//       getPage()
-//     }
-//   }
-// },
+const addOrUpdateVisible = ref(false)
+const selectProvIndex = ref('')
+const selectCityIndex = ref('')
+const selectAreaIndex = ref('')
+
 onMounted(() => {
   getPage()
 })
 
 const getPage = () => {
-  pageLoading = true
-  api.page().then(data => {
-    pageLoading = false
-    const treeData = treeDataTranslate(data, 'areaId', 'parentId')
-    data = regionList = treeData
-    oldRegionList = treeData
-    provList = cityList = areaList = []
-    getProvList(selectProvIndex)
-    getCityList(selectCityIndex)
-    getAreaList(selectAreaIndex)
+  pageLoading.value = true
+  api.page().then(res => {
+    pageLoading.value = false
+    const treeData = treeDataTranslate(res, 'areaId', 'parentId')
+    data.value = regionList.value = treeData
+    oldRegionList.value = treeData
+    provList.value = cityList.value = areaList.value = []
+    getProvList(selectProvIndex.value)
+    getCityList(selectCityIndex.value)
+    getAreaList(selectAreaIndex.value)
   }).catch(() => {
-    pageLoading = false
+    pageLoading.value = false
   })
 }
 const getProvList = (idx) => {
-  selectProvIndex = idx
-  provList = data[idx].children ? data[idx].children : []
-  cityList = areaList = []
-  regionId = data[idx].areaId
+  selectProvIndex.value = idx
+  provList.value = data.value[idx].children ? data.value[idx].children : []
+  cityList.value = areaList.value = []
+  regionId.value = data.value[idx].areaId
 }
 const getCityList = (idx) => {
-  selectCityIndex = idx
-  cityList = provList[idx].children ? provList[idx].children : []
-  areaList = []
-  provId = provList[idx].areaId
+  selectCityIndex.value = idx
+  cityList.value = provList.value[idx].children ? provList.value[idx].children : []
+  areaList.value = []
+  provId.value = provList.value[idx].areaId
 }
 const getAreaList = (idx) => {
-  selectAreaIndex = idx
-  areaList = cityList[idx].children ? cityList[idx].children : []
-  cityId = cityList[idx].areaId
+  selectAreaIndex.value = idx
+  areaList.value = cityList.value[idx].children ? cityList.value[idx].children : []
+  cityId.value = cityList.value[idx].areaId
 }
 
 const addOrUpdateRef = ref(null)
@@ -336,7 +259,7 @@ const addOrUpdateRef = ref(null)
  * 新增
  */
 const onAddOrUpdate = (areaId) => {
-  addOrUpdateVisible = true
+  addOrUpdateVisible.value = true
   nextTick(() => {
     addOrUpdateRef.value?.init(areaId)
   })

@@ -371,6 +371,8 @@ defineExpose({ handleValidate })
             }
             .right-select {
                 width: calc(100% - 70px);
+                padding-left:10px;
+                box-sizing: border-box;
             }
         }
     }

@@ -2,7 +2,6 @@
   <div class="app-container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
@@ -86,13 +85,11 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="getPage(true)"
             >
               查询
             </el-button>
             <el-button
-              icon="el-icon-delete"
               @click="onResetSearch(searchFormRef)"
             >
               {{ $t('table.reset') }}
@@ -100,7 +97,6 @@
           </el-form-item>
         </div>
       </el-form>
-      <!-- <el-button icon="el-icon-search" class="filter-item" @click="getPage()">{{ $t('table.search') }}</el-button> -->
     </div>
 
     <!-- 列表相关区域 -->
@@ -108,7 +104,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['platform:notice:save']"
-          icon="el-icon-plus"
           type="primary"
           class="filter-item"
           @click="onAddOrUpdate()"
@@ -186,14 +181,16 @@
             <template #default="{row}">
               <el-button
                 v-permission="['platform:notice:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.id)"
               >
                 {{ $t('table.edit') }}
               </el-button>
               <el-button
                 v-permission="['platform:notice:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row.id)"
               >
                 {{ $t('table.delete') }}
@@ -222,9 +219,10 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/platform/notice'
+import { ElMessage, ElMessageBox } from 'element-plus'
 // 表单
 const searchForm = reactive({
   title: ''
@@ -253,6 +251,10 @@ const getPage = () => {
   pageLoading.value = true
   api.page(searchParam).then(res => {
     pageVO.list = res.list
+    pageVO.list.forEach(item => {
+      const arr = item.types.split(',').map(el => ['', '商家端', '用户端', '供应商端'][el])
+      item.exhibition = arr.length ? `在${arr.join('/')}展示` : ''
+    })
     pageVO.pages = res.pages
     pageVO.total = res.total
     pageLoading.value = false
@@ -266,6 +268,24 @@ const onAddOrUpdate = (id) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
     addOrUpdateRef.value.init(id)
+  })
+}
+const onDelete = (id) => {
+  ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
+    confirmButtonText: $t('table.confirm'),
+    cancelButtonText: $t('table.cancel'),
+    type: 'warning'
+  }).then(() => deleteById(id))
+}
+
+const deleteById = (id) => {
+  api.deleteById(id).then(() => {
+    ElMessage({
+      message: $t('table.actionSuccess'),
+      type: 'success',
+      duration: 1500,
+      onClose: () => getPage()
+    })
   })
 }
 

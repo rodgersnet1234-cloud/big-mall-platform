@@ -178,7 +178,7 @@
               :placeholder="'选择日期'"
               value-format="YYYY-MM-DD"
               :disabled="oldStatus !== 0"
-              :picker-options="pickerOptions0"
+              :disabled-date="pickerOptions0.disabledDate"
             />
           </el-form-item>
         </div>

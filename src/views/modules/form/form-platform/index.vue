@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -52,7 +51,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['platform:form:save']"
-
           type="primary"
           @click="onAddOrUpdate()"
         >
@@ -149,7 +147,7 @@
 
 <script setup>
 import AddOrUpdate from '../add-or-update.vue'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import * as api from '@/api/form/form'
 import { ElMessageBox, ElMessage } from 'element-plus'
 let tempSearchForm = null // 保存上次点击查询的请求条件

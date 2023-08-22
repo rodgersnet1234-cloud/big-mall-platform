@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container shop-detail">
+  <div class="app-container page-shop-edit">
     <div class="head-title">
       商家详情
     </div>
@@ -81,7 +81,6 @@
         <!-- 信息 -->
         <div class="basic-info-list">
           <!-- 通联支付下平台开店且审核失败的店铺不可更改基本信息 -->
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-form
             ref="shopBasicInfoRef"
             :disabled="paySettlementType===1 && shopStatus.shopStatus===6 && !signingInfo.contractStartTime"
@@ -186,12 +185,12 @@
                       placeholder="请输入50字以内的详细地址"
                       maxlength="50"
                       style="width: 400px"
-                      @blur="mapLocation(true)"
+                      @blur="onMapLocation(true)"
                     >
                       <template #append>
                         <div
                           style="cursor: pointer;"
-                          @click="mapLocation"
+                          @click="onMapLocation()"
                         >
                           <i class="el-icon-location" />定位
                         </div>
@@ -200,31 +199,13 @@
                   </p>
                 </el-form-item>
                 <el-form-item>
-                  <baidu-map
-                    class="map"
-                    :scroll-wheel-zoom="false"
-                    :center="center"
-                    :zoom="zoom"
-                    @moving="syncCenterAndZoom"
-                    @moveend="syncCenterAndZoom"
-                    @zoomend="syncCenterAndZoom"
-                    @ready="handler"
-                  >
-                    <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT" />
-                    <bm-marker
-                      :position="center"
-                      :dragging="false"
-                      @click="infoWindowOpen"
-                    >
-                      <bm-info-window
-                        :show="show"
-                        @close="infoWindowClose"
-                        @open="infoWindowOpen"
-                      >
-                        店铺所在位置
-                      </bm-info-window>
-                    </bm-marker>
-                  </baidu-map>
+                  <div class="map">
+                    <tmap
+                      ref="tmapRef"
+                      :lat-lng="latLng"
+                      @change-lat-lng="onChangeLatLng"
+                    />
+                  </div>
                 </el-form-item>
               </div>
 
@@ -276,17 +257,14 @@
                   label="店铺简介"
                   prop="intro"
                 >
-                  <div class="business-license-box">
-                    <div class="license-content">
-                      <el-input
-                        v-model="shopBasicInfo.intro"
-                        type="textarea"
-                        :rows="4"
-                        maxlength="200"
-                        placeholder="请输入200字以内店铺简介"
-                      />
-                    </div>
-                  </div>
+                  <el-input
+                    v-model="shopBasicInfo.intro"
+                    type="textarea"
+                    :rows="4"
+                    style="width: 100%;"
+                    maxlength="200"
+                    placeholder="请输入200字以内店铺简介"
+                  />
                 </el-form-item>
               </div>
             </div>
@@ -301,7 +279,6 @@
         class="business-info-mod"
       >
         <!-- 开启通联支付后，平台只能修改没有签约日期的审核失败的自营店铺 -->
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           ref="companyInfoFormRef"
           :model="companyInfoForm"
@@ -381,10 +358,8 @@
                 class="capital-int"
                 prop="capital"
               >
-                <!-- native modifier has been removed, please confirm whether the function has been affected  -->
                 <el-input
-                  v-model="companyInfoForm.capital"
-                  type="number"
+                  v-model.number="companyInfoForm.capital"
                   style="width:200px"
                   @input="changeNum"
                   @keydown="channelInputLimit"
@@ -399,7 +374,7 @@
                   v-model="companyInfoForm.foundTime"
                   style="width:200px"
                   type="date"
-                  value-format="yyyy-MM-dd HH:mm:ss"
+                  value-format="YYYY-MM-DD HH:mm:ss"
                   placeholder="选择日期"
                   :picker-options="pickerOptions"
                 />
@@ -413,7 +388,7 @@
                     v-model="companyInfoForm.startTime"
                     style="width:170px;"
                     type="date"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="YYYY-MM-DD HH:mm:ss"
                     placeholder="开始日期"
                     :clearable="false"
                   />
@@ -424,7 +399,7 @@
                       v-model="companyInfoForm.endTime"
                       style="width:170px;"
                       type="date"
-                      value-format="yyyy-MM-dd HH:mm:ss"
+                      value-format="YYYY-MM-DD HH:mm:ss"
                       :placeholder="endTimeFlag && !companyInfoForm.endTime ? '' : '结束日期'"
                       clearable
                       @change="endTimeFlag = false"
@@ -464,7 +439,10 @@
                   <div class="license-content">
                     <img-upload v-model:value="companyInfoForm.businessLicense" />
                     <div class="example-box">
-                      <img src="@/assets/example-img/Business-license.png">
+                      <img
+                        src="@/assets/example-img/Business-license.png"
+                        alt
+                      >
                       <div class="tips">
                         示例
                       </div>
@@ -493,13 +471,19 @@
                   </div>
                   <div class="upload-example">
                     <div class="example-box">
-                      <img src="@/assets/example-img/idcard1.png">
+                      <img
+                        src="@/assets/example-img/idcard1.png"
+                        alt
+                      >
                       <div class="tips">
                         人像面示例
                       </div>
                     </div>
                     <div class="example-box">
-                      <img src="@/assets/example-img/idcard2.png">
+                      <img
+                        src="@/assets/example-img/idcard2.png"
+                        alt
+                      >
                       <div class="tips">
                         国徽面示例
                       </div>
@@ -592,12 +576,14 @@
                       :key="index"
                       class="tab-img"
                       :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
+                      preview-teleported
                       :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
                     >
                       <template #error>
                         <img
                           class="img-slot"
                           src="~@/assets/images/def.png"
+                          alt
                         >
                       </template>
                     </el-image>
@@ -680,12 +666,14 @@
                       v-if="scope.row.imgUrl"
                       class="tab-img"
                       :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
+                      preview-teleported
                       :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
                     >
                       <template #error>
                         <img
                           class="img-slot"
                           src="~@/assets/images/def.png"
+                          alt
                         >
                       </template>
                     </el-image>
@@ -706,6 +694,7 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
+                      preview-teleported
                       :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
                       :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
                     >
@@ -713,6 +702,7 @@
                         <img
                           class="img-slot"
                           src="~@/assets/images/def.png"
+                          alt
                         >
                       </template>
                     </el-image>
@@ -773,7 +763,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                value-format="yyyy-MM-dd HH:mm:ss"
+                value-format="YYYY-MM-DD HH:mm:ss"
                 :clearable="false"
                 @change="getContractTimeRange"
               />
@@ -814,22 +804,6 @@
         v-if="navStatus === 3"
         class="financial-info"
       >
-        <!-- <div class="tips">
-          <p class="tit"><span class="asterisk">*</span>结算日：</p>
-          <p class="txt week">已添加3个结算日，最多可添加5个结算日</p>
-        </div>
-        <div class="tips">
-          <p class="tit">每月：</p>
-          <p class="txt">
-            <span class="date-block">5</span>
-            <span class="date-block">15</span>
-            <span class="date-block">25</span>
-            日
-          </p>
-          <p class="txt week">
-            当月不包含所设日期时，将会顺延到下一个结算日
-          </p>
-        </div> -->
         <div class="table-data-title">
           <div class="text">
             <span class="stress">*</span>结算银行账户：
@@ -915,7 +889,6 @@
             </el-table-column>
           </el-table>
           <!-- 通联支付开启且平台开店审核失败则需要重新提交 -->
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-form
             v-if="shopStatus.shopStatus===6 && paySettlementType===1"
             ref="bankCartInfoFormRef"
@@ -1049,7 +1022,7 @@
     <div
       v-if="navStatus !== 3 && (paySettlementType !== 1 || (paySettlementType === 1 && (navStatus !== 1 || (navStatus===1 && shopStatus.shopStatus===6 && signingInfo.type===1 && !signingInfo.contractStartTime)) && ((navStatus===0 || navStatus===2)&&!(shopStatus.shopStatus===6&&!signingInfo.contractStartTime) || !(navStatus===0 || navStatus===2))))"
       class="footer"
-      style="z-index: 8;"
+      style="z-index: 1000;"
     >
       <div class="foot-box">
         <div
@@ -1080,11 +1053,10 @@ import * as addrApi from '@/api/delivery/transport'
 import { treeDataTranslate } from '@/utils'
 // import ImgUpload from '@/components/ImgUpload'
 import { isMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
-import categoryAddOrUpdate from './category-add-or-update.vue'
-import brandAddOrUpdate from './brand-add-or-update.vue'
+import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
+import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import moment from 'moment'
 import { useAllinpayStore } from '@/stores/modules/allinpay.js'
-import { BaiduMap, BmNavigation, BmMarker, BmInfoWindow } from 'vue-baidu-map-3x'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -1139,8 +1111,8 @@ const validateNotEmpty = (role, value, callback) => {
 }
 // eslint-disable-next-line no-unused-vars
 const validateNotEmptyRep = (role, value, callback) => {
-  this.companyInfoForm.representative = this.companyInfoForm.representative.trim()
-  if (this.companyInfoForm.representative === '' || this.companyInfoForm.representative.indexOf(' ') !== -1) {
+  companyInfoForm.value.representative = companyInfoForm.value.representative.trim()
+  if (companyInfoForm.value.representative === '' || companyInfoForm.value.representative.indexOf(' ') !== -1) {
     callback(new Error('法定代表人不能有空格'))
   } else {
     callback()
@@ -1208,21 +1180,11 @@ const shopBasicInfoRules = {
     { validator: validateNotEmpty, trigger: 'blur' }
   ]
 }
-// 省市区
-const currentAddr = ref([]) // 选中地址
 const addrList = ref([])
 const addrListTreeProps = reactive({
   value: 'areaId',
   label: 'areaName'
 })
-// 定位
-const show = ref(false)
-const center = reactive({
-  lng: 113.327955,
-  lat: 23.136783
-})
-const zoom = ref(18)
-const mapLocationType = ref('map') // 定位方式
 
 // 店铺工商信息
 const companyInfoForm = ref({
@@ -1317,8 +1279,6 @@ const companyInfoRule = reactive({
 const signCategoryList = ref([])
 // 平台品牌签约信息
 const signedBrands = ref([]) // 平台品牌+自定义品牌
-// 自增签约品牌信息
-const customizeBrandList = ref([])
 const cateAddOrUpdateVisible = ref(false)
 const brandAddOrUpdateVisible = ref(false)
 
@@ -1379,112 +1339,63 @@ onMounted(() => {
   getAddrList()
 })
 
-const handler = ({ BaiduMap, map }) => {
-  console.log('afafafs')
-  // 店铺审核状态
-  queryShopAuditStatus()
+// 腾讯地图
+const tmapRef = ref(null)
+const latLng = ref(null)
+const onMapLocation = (isTrue) => {
+  let address = ''
+  const { provinceId, province, cityId, city, areaId, area, detailAddress } = shopBasicInfo.value
+  if (isTrue) {
+    // 选择省市区时，定位地图
+    if (provinceId) {
+      address = province
+      tmapRef.value.onSetZoom(6)
+      if (cityId) {
+        address = address + city
+        tmapRef.value.onSetZoom(10)
+        if (areaId) {
+          address = address + area
+          tmapRef.value.onSetZoom(18)
+          if (detailAddress) {
+            // 详细地址
+            address = address + detailAddress
+            tmapRef.value.onSetZoom(18)
+          }
+        }
+      }
+    }
+    if (address) {
+      tmapRef.value.onGetLocation(address).then(res => {
+        onChangeLatLng(res)
+      })
+    }
+  } else {
+    if (!provinceId || !cityId || !areaId) {
+      shopBasicInfo.value.detailAddress = null
+      ElMessage({
+        message: $t('admin.selePCD'),
+        type: 'error',
+        duration: 1000
+      })
+      return
+    }
+    tmapRef.value.onGetAddress(latLng.value).then(res => {
+      shopBasicInfo.value.detailAddress = res.formatted_addresses?.recommend || res.address
+    })
+    tmapRef.value.onSetZoom(18)
+  }
 }
-// const setCenter = () => {
-//   center = null
-//   center = {
-//     lng: 113.327955,
-//     lat: 23.136783
-//   }
-//   zoom = 18
-// }
-/**
- * 获取地图移动后回调的位置参数
- */
-// const syncCenterAndZoom = (e) => {
-//   mapLocationType = 'map'
-//   setCenter()
-//   const { lng, lat } = e.target.getCenter()
-//   center.lng = lng
-//   center.lat = lat
-//   shopBasicInfo.shopLng = lng
-//   shopBasicInfo.shopLat = lat
-//   zoom = e.target.getZoom()
-// }
-/**
- * 关闭地图说明标签
- */
-// const infoWindowClose = () => {
-//   show = false
-// }
-/**
- * 打开地图说明标签
- */
-// const infoWindowOpen = () => {
-//   show = true
-// }
 
-// const shopAddressChange = () => {
-//   mapLocationType = 'address'
-//   mapLocation(true)
-// }
-// 定位地图
-// const mapLocation = (isTrue) => {
-//   console.log('定位')
-//   let area = ''
-//   const that = this
-//   if (isTrue === true) {
-//     // 选择省市区时，定位地图
-//     if (shopBasicInfo.provinceId) {
-//       area = shopBasicInfo.province
-//       zoom = 6
-//       if (shopBasicInfo.cityId) {
-//         area = area + shopBasicInfo.city
-//         zoom = 10
-//         if (shopBasicInfo.areaId) {
-//           area = area + shopBasicInfo.area
-//           zoom = 14
-//           if (shopBasicInfo.addr !== null) {
-//             // 详细地址
-//             area = shopBasicInfo.province + shopBasicInfo.city + shopBasicInfo.area + shopBasicInfo.detailAddress
-//             zoom = 18
-//           }
-//         }
-//       }
-//     }
-//     center = area
-//   } else {
-//     // center = null
-//     if (!shopBasicInfo.provinceId || !shopBasicInfo.cityId || !shopBasicInfo.areaId) {
-//       shopBasicInfo.detailAddress = null
-//       ElMessage({
-//         message: $t('admin.selePCD'),
-//         type: 'error',
-//         duration: 1000
-//       })
-//       return
-//     }
-//     const point = new BMap.Point(center.lng, center.lat)
-//     const gc = new BMap.Geocoder()
-//     if (mapLocationType === 'map') {
-//       gc.getLocation(point, function (rs) {
-//         if (rs) {
-//           let addrDetail = that.formatAddrDetail(rs.address)
-//           if (!addrDetail) {
-//             if (rs.surroundingPois && rs.surroundingPois.length > 0) {
-//               addrDetail = that.formatAddrDetail(rs.surroundingPois[0].address)
-//             }
-//           }
-//           addrDetail && (that.shopBasicInfo.detailAddress = addrDetail)
-//         }
-//         // that.shopBasicInfo.detailAddress = rs.address.replace(that.shopBasicInfo.province + that.shopBasicInfo.city + that.shopBasicInfo.area, '')
-//       })
-//     }
-//     area = shopBasicInfo.province + shopBasicInfo.city + shopBasicInfo.area + shopBasicInfo.detailAddress
-//     center = mapLocationType === 'address' ? area : center
-//     zoom = 18
-//   }
-// }
-// 格式化详细地址显示
-// const formatAddrDetail = (addrInfo) => {
-//   const rex = new RegExp(`[${shopBasicInfo.province}|${shopBasicInfo.city}|${shopBasicInfo.area}]`, 'g')
-//   const result = addrInfo.replace(rex, '')
-//   return result
-// }
+// 修改经纬度
+const onChangeLatLng = (latLngInfo) => {
+  const { lng, lat } = latLngInfo
+  latLng.value = {
+    lat,
+    lng
+  }
+  shopBasicInfo.value.shopLng = lng
+  shopBasicInfo.value.shopLat = lat
+}
 const switchNav = (value) => {
   navStatus.value = value
   if (value === 1) {
@@ -1525,10 +1436,10 @@ const queryShopAuditStatus = () => {
 const queryShopBasicInfo = () => {
   api.getManageDetail({ shopId: shopId.value }).then(data => {
     shopBasicInfo.value = data
-    // center = {
-    //   lng: data.shopLng,
-    //   lat: data.shopLat
-    // }
+    latLng.value = {
+      lat: data.shopLat,
+      lng: data.shopLng
+    }
     signingInfo.type = data.type
     if (data.contractStartTime && data.contractEndTime) {
       signingInfo.contractStartTime = data.contractStartTime
@@ -1540,11 +1451,8 @@ const queryShopBasicInfo = () => {
       data.cityId,
       data.areaId
     ]
-    // shopStatus.value = data
+    shopStatus.value = data
   })
-}
-const getShopLogoImgUrl = (imgUrl) => {
-  shopBasicInfo.value.shopLogo = imgUrl
 }
 /**
  * 省市区
@@ -1569,7 +1477,7 @@ const handleAddrChange = (value) => {
     shopBasicInfo.value.area = labels[2]
     shopBasicInfo.value.areaId = value[2]
   }
-  // mapLocation(true)
+  onMapLocation(true)
 }
 
 /**
@@ -1593,7 +1501,7 @@ const getauditInfor = () => {
     nextTick(() => {
       modifyInformation.value = { ...data.shopCompanyVO, ...data }
     })
-  }).catch(res => {
+  }).catch(() => {
   })
 }
 
@@ -1642,7 +1550,6 @@ const getSignBrandList = () => {
       item.parentName = parentName
     })
     signedBrands.value = data.platformBrandList
-    console.log('签约品牌列表', signedBrands.value)
     signedBrands.value.forEach(el => {
       el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
@@ -1680,14 +1587,6 @@ const closePopup = (val) => {
 }
 
 /**
- * 获取图片路径
- */
-const getImgUrl = (imgUrl, index) => {
-  const url = imgUrl[0]
-  signCategoryList.value[index].qualifications = signCategoryList.value[index].qualifications === '' ? url : signCategoryList.value[index].qualifications + ',' + url
-}
-
-/**
  * 查询财务信息
  */
 const queryShopFinancialInfo = () => {
@@ -1716,7 +1615,7 @@ const companyInfoFormRef = ref(null)
 /**
  * 更新店铺申请信息
  */
-const updateShopApplyInfo = (formName) => {
+const updateShopApplyInfo = () => {
   if (navStatus.value === 0) {
     // 基本信息
     shopBasicInfoRef.value?.validate((valid) => {
@@ -1744,14 +1643,13 @@ const updateShopApplyInfo = (formName) => {
 
 // 更新基本信息
 const updateShopBasicInfo = () => {
-  const that = this
-  api.updateBasicInfo(shopBasicInfo.value).then(data => {
+  api.updateBasicInfo(shopBasicInfo.value).then(() => {
     ElMessage({
       message: '基本信息更新成功！',
       type: 'success',
       duration: 1000,
       onClose: () => {
-        that.queryShopBasicInfo()
+        queryShopBasicInfo()
       }
     })
   })
@@ -1762,7 +1660,7 @@ const updateShopBasicInfo = () => {
  */
 const updateCompanyInfo = () => {
   companyInfoForm.value.shopId = shopId.value
-  api.updateCompanyInfo(companyInfoForm.value).then(data => {
+  api.updateCompanyInfo(companyInfoForm.value).then(() => {
     ElMessage({
       message: '工商信息更新成功！',
       type: 'success',
@@ -1777,7 +1675,7 @@ const updateCompanyInfo = () => {
  */
 const updateSigningInfo = () => {
   signingInfo.shopId = shopId.value
-  api.updateSigningInfo(signingInfo).then(res => {
+  api.updateSigningInfo(signingInfo).then(() => {
     ElMessage({
       message: '签约信息更新成功',
       type: 'success',
@@ -1830,476 +1728,5 @@ const toNextStep = () => {
 </script>
 
 <style lang="scss" scoped>
-.map{
-  width: 100%;
-  height: 300px;
-}
-.app-container {
-  margin-bottom: 30px;
-}
-.app-container.shop-detail {
-  font-size: 14px;
-  color: #333;
-  .head-title {
-    margin-bottom: 15px;
-  }
-
-  .red-tag-txt {
-    color: #ff4949;
-  }
-
-  // 导航栏
-  .nav-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    .nav {
-      position: relative;
-      display: inline-block;
-      display: flex;
-      white-space: nowrap;
-      .nav-item {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1em;
-        padding: 15px 20px;
-        color: #999;
-        cursor: pointer;
-      }
-      .nav-item.active {
-        color: #155bd4;
-        background: rgba(24,144,255, 0.06);
-        border-radius: 4px 4px 0 0;
-        border-bottom: 2px solid #155bd4;
-      }
-    }
-  }
-  .nav-box::before {
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    border-bottom: 1px solid #f0f0f0;
-    content: '';
-  }
-
-  .shop-info-box {
-    // 公共
-    p {
-      margin: 0;
-    }
-    p.tit {
-      display: inline-block;
-      text-align: right;
-    }
-    .asterisk {
-      color: red;
-      padding-right: 5px;
-    }
-    .table-box {
-      display: block;
-      width: 100%;
-      margin: 20px 0;
-      ::v-deep(.el-table th), .el-table td {
-        border-color: #f0f0f0;
-        height: 40px;
-        line-height: 40px;
-      }
-      ::v-deep(.el-table td) {
-        height: 56px;
-        line-height: 56px;
-      }
-      ::v-deep .el-table__row:last-child{
-        td {
-          border-bottom: 0;
-        }
-      }
-      ::v-deep(.el-table th) {
-        background: #fafafa;
-      }
-      ::v-deep(.el-table__body-wrapper) {
-        max-height: 245px;
-        overflow-y: scroll;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE 10+ */
-      }
-      ::v-deep(.el-table__body-wrapper::-webkit-scrollbar) {
-        display: none; /* Chrome Safari */
-      }
-      ::v-deep(.el-table__body) {
-        width: 100%;
-      }
-      .recipient-name{
-        display: flex;
-        align-items: center;
-        .tip {
-          font-size: 12px;
-          transform: scale(0.83,0.83);
-          border: 1px solid #155BD4;
-          color: #155BD4;
-          padding: 0 4px;
-          border-radius: 2px;
-          height: 17px;
-          line-height: 17px;
-          box-sizing: border-box;
-        }
-      }
-    }
-    .single-image-upload {
-      height: 120px;
-    }
-
-    // 表格上的标题
-    .table-data-title {
-      display: flex;
-      align-items: center;
-      .txt-bold {
-        color: #000;
-      }
-      .text {
-        font-size: 16px;
-        min-width: 80px;
-        .stress {
-          color: #FF2120;
-          margin-right: 5px;
-        }
-      }
-      .tips {
-        font-size: 12px;
-        color: #999;
-        margin-left: 10px;
-      }
-      .edit-btn {
-        width: 117px;
-        height: 30px;
-        line-height: 28px;
-        font-size: 14px;
-        color: #155bd4;
-        background: #FFFFFF;
-        text-align: center;
-        border: 1px solid #155bd4;
-        border-radius: 2px;
-        box-sizing: border-box;
-        margin-left: auto;
-        cursor: pointer;
-      }
-    }
-
-    // 基本信息模块
-    .basic-info-mod {
-      // 审核状态
-      .audit-status {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        background: #f5f5f5;
-        padding: 20px 40px;
-        line-height: 1em;
-        margin-top: 20px;
-        p.tit {
-          width: 95px;
-        }
-        p.txt {
-          ::v-deep(.el-input--mini .el-input__inner) {
-            width: 400px;
-          }
-        }
-        .week {
-          color: #666;
-        }
-      }
-      .bg-img {
-        display: flex;
-        justify-content: flex-start;
-        .business-license-box {
-          margin-right: 30px;
-          .img-tips {
-            display: block;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-            line-height: 1.5em;
-            margin-top: 8px;
-            p  {
-              margin: 0;
-              padding: 0;
-            }
-          }
-        }
-      }
-      // 信息
-      .basic-info-list {
-        margin: 20px 0;
-        .basic-info-box {
-          display: flex;
-          align-items: top;
-          justify-content: flex-start;
-          width: 100%;
-          .left-info {
-            width: 550px;
-            margin-right: 20px;
-            text-align: left;
-          }
-          .right-info {
-            width: 30%;
-            min-width: 420px;
-          }
-        }
-        .basic-info-item {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          padding: 20px 30px;
-        }
-        .upload-tips {
-          font-size: 12px;
-          color: #999;
-          height: 16px;
-          line-height: 20px;
-          margin-bottom: 10px;
-        }
-      }
-    }
-    // 工商信息
-    .business-info-mod {
-      display: flex;
-      // justify-content: center;
-      margin-top: 50px;
-      .ci-wrapper {
-        display: flex;
-        .left-info {
-          width: 504px;
-          .price-unit-text {
-            font-size: 14px;
-            color: #666;
-            margin-left: 15px;
-          }
-          .capital-int {
-            ::v-deep(.el-input__inner) {
-              padding-right: 0;
-            }
-          }
-          .btn-box {
-            display: flex;
-            margin-left: 134px;
-            margin-bottom: 40px;
-            .prev-btn {
-              margin-right: 13px;
-            }
-          }
-        }
-        .right-info {
-          width: 440px;
-          margin-left: 106px;
-          .business-license-box {
-            .license-content {
-              display: flex;
-            }
-          }
-          .id-box {
-            .upload-content {
-              .upload-img {
-                display: flex;
-                div {
-                  &:nth-child(2) {
-                    margin-left: 20px;
-                  }
-                }
-              }
-              .upload-example {
-                display: flex;
-                // margin-top: 15px;
-                margin-left: 134px;
-                .example-box {
-                  margin-left: 0;
-                  &:nth-child(2) {
-                    margin-left: 20px;
-                  }
-                }
-              }
-              .upload-tips {
-                margin-left: 134px;
-              }
-            }
-          }
-          .img-static {
-            display: block;
-            width: 120px;
-            height: 120px;
-          }
-          .img-static:not(:first-child) {
-            margin-left: 20px;
-          }
-
-          // 示例框
-          .example-box {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 120px;
-            height: 120px;
-            background: #FFFFFF;
-            border: 1px solid #EAEAEA;
-            border-radius: 3px;
-            box-sizing: border-box;
-            margin-left: 20px;
-            img {
-              display: block;
-              width: auto;
-              max-width: 100%;
-              height: auto;
-              max-height: 100%;
-            }
-            .tips {
-              position: absolute;
-              left: -1px;
-              bottom: 0;
-              width: 120px;
-              height: 20px;
-              line-height: 20px;
-              font-size: 12px;
-              color: #fff;
-              background: rgba(51, 51, 51, 0.5);
-              text-align: center;
-              border-radius: 0px 0px 3px 3px;
-            }
-          }
-
-          .upload-tips {
-            font-size: 12px;
-            color: #999;
-            height: 16px;
-            line-height: 20px;
-            margin-top: 13px;
-          }
-
-          // 图片上传框样式修改
-          ::v-deep .el-upload {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 120px;
-            height: 121px;
-            background: #FFFFFF;
-            border: 1px solid #EAEAEA;
-            border-radius: 3px;
-            box-sizing: border-box;
-            // img {
-            //   width: 120px;
-            // }
-            .el-icon-plus {
-              font-size: 22px;
-              color: #EAEAEA;
-            }
-          }
-        }
-      }
-    }
-    // 签约信息
-    .contract-info {
-      width: 100%;
-      margin-top: 20px;
-      margin-bottom: 80px;
-      .s-item {
-        .si-content {
-          margin-top: 12px;
-          .img-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            .tab-img {
-              width: 60px;
-              height: 60px;
-            }
-            .tab-img:not(:first-child) {
-              margin-left: 5px;
-            }
-          }
-        }
-      }
-      .s-brand-item {
-        margin: 39px 0 31px;
-      }
-      table {
-        .table-item {
-          .img-item {
-            img {
-              vertical-align: middle;
-              width: 38px;
-              height: 38px;
-              background: #EBF1FF;
-              border-radius: 19px;
-              margin: auto;
-            }
-          }
-        }
-      }
-      .btn-box {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 39px;
-        .prev-btn {
-          margin-right: 13px;
-        }
-      }
-    }
-    // 财务信息
-    .financial-info {
-      margin: 20px 0;
-      .table-box {
-        margin-top: 10px;
-        ::v-deep(.el-table__body-wrapper) {
-          height: auto;
-          max-height: 100%;
-        }
-      }
-    }
-
-  }
-
-  // 脚部
-  .footer {
-    z-index: 8;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    box-shadow: 4px 2px 5px 5px #eee;
-    background: #fff;
-    margin-left: -24px;
-    .foot-box {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      .btn {
-        padding: 10px 20px;
-        margin-right: 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-      }
-      .btn:first-child {
-        background: #155bd4;
-        color: #fff;
-      }
-      .btn:last-child {
-        border: 1px solid #d9d9d9;
-      }
-    }
-  }
-
-}
-.end-time {
-  position: relative;
-  .text {
-    position: absolute;
-    left: 30px;
-  }
-}
+@use "index";
 </style>

@@ -2,7 +2,6 @@
   <div class="app-container index-img">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -45,13 +44,11 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="search()"
             >
               查询
             </el-button>
             <el-button
-              icon="el-icon-delete"
               @click="clearSearchInfo()"
             >
               {{ $t('table.reset') }}
@@ -66,7 +63,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['platform:indexImg:save']"
-          icon="el-icon-plus"
           type="primary"
           class="filter-item"
           @click="onAddOrUpdate()"
@@ -151,14 +147,16 @@
             <template #default="{row}">
               <el-button
                 v-permission="['platform:indexImg:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.imgId)"
               >
                 {{ $t('table.edit') }}
               </el-button>
               <el-button
                 v-permission="['platform:indexImg:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row.imgId)"
               >
                 {{ $t('table.delete') }}
@@ -187,7 +185,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './components/add-or-update.vue'
 import * as api from '@/api/platform/index-img.js'
 import { ElMessageBox, ElMessage } from 'element-plus'

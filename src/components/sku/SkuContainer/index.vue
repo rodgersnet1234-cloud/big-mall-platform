@@ -21,7 +21,7 @@
           >
             <img-upload
               v-if="hasSkuImage"
-              v-model="item.imgUrl"
+              v-model:value="item.imgUrl"
               :show="!!view"
               class="spec-img"
               @input="handleUploadSuccess(item, $event)"
@@ -76,7 +76,10 @@
               />
             </el-select>
           </div>
-          <template #reference>
+          <template
+            v-if="view"
+            #reference
+          >
             <el-button
               type="primary"
               style="width: 20px;height: 20px;font-size: 13px"
@@ -158,6 +161,22 @@ const handleRemoveSkuLeaf = (index) => {
   props.onSkuLeafChange(skuPar.leaf)
 }
 
+const filterSkuOptions = (data) => {
+  const oldSellData = []
+  const addSelData = []
+  const skuOptionsPar = skuOptions.value
+  data.forEach(item => {
+    if (skuOptionsPar.find(skuItem => skuItem.id === item)) {
+      oldSellData.push(item)
+    } else {
+      addSelData.push(item)
+    }
+  })
+  return {
+    oldSellData, addSelData
+  }
+}
+
 const createSkuLeaf = (selVal) => {
   // 判断空格
   const idx = selVal.length - 1
@@ -176,13 +195,29 @@ const createSkuLeaf = (selVal) => {
   if (!curVal.trim()) {
     leafValue.value.splice(idx, 1)
   }
+  const { addSelData, oldSellData } = filterSkuOptions(selVal)
+  if (!addSelData.length) return
+  ease.onCreateSku({
+    data: addSelData,
+    id: props.sku[optionValue.value]
+  }).then((processedNewOptions) => {
+    if (processedNewOptions[0].text.length > 20) {
+      ElMessage({
+        message: '属性名长度不可超过20个字符',
+        duration: 1500
+      })
+      processedNewOptions = []
+    }
+    skuOptions.value.push(...processedNewOptions)
+    nextTick(() => {
+      leafValue.value = processedNewOptions.map(item => item.id).concat(oldSellData)
+    })
+  })
 }
 
 const handleSelectSku = () => {
   const skuPar = props.sku
-  const skuLeaf = skuOptions.value.filter(item => {
-    return leafValue.value.includes(item[optionValue.value])
-  })
+  const skuLeaf = skuOptions.value.filter(item => leafValue.value.indexOf(item[optionValue.value]) >= 0)
 
   skuLeaf.forEach(item => {
     item.is_show = props.hasSkuImage

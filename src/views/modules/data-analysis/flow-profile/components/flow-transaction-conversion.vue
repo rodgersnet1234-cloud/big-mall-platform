@@ -110,7 +110,7 @@
           sortable
         >
           <template #default="scope">
-            <span>{{ conversionPercentage(scope.row.userNums / totalUserNums) }}</span>
+            <span>{{ conversionPercentage(totalUserNums === 0? 0 : scope.row.userNums / totalUserNums) }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -198,10 +198,7 @@
 
 <script setup>
 import * as api from '@/api/data-analysis/flow-profile.js'
-import { checkPermission } from '@/directive/permission/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
-const vPermission = checkPermission
 
 const conversionPercentage = (val) => {
   if (val == null) {
@@ -231,6 +228,7 @@ const props = defineProps({
     }
   }
 })
+const emit = defineEmits(['setSysData'])
 
 const systemTypeName = reactive(['全部', 'PC', 'H5', '小程序', 'android', 'IOS']) // 0 1 2 3 4 5
 
@@ -274,7 +272,7 @@ watch(() => sumData.value, () => {
   changVisibles()
 }, { deep: true })
 
-watch(() => props.startTime, () => {
+watch(() => props.timeType, () => {
   init()
 }, { deep: true })
 
@@ -320,7 +318,7 @@ const tableData = ref([])
 const init = () => {
   totalUserNums.value = 0
   api.flowSour({
-    timeType: props.timeType,
+    dateType: props.timeType,
     startTime: props.startTime,
     endTime: props.endTime
   }).then(data => {
@@ -328,6 +326,10 @@ const init = () => {
       let name = null
       tableData.value = []
       for (let i = 0; i < data.length; i++) {
+        // 如果是全部，就跳出本次循环（“全部不显示在成交转换表格中”）
+        if (data[i].systemType === 0) {
+          continue
+        }
         if (!data[i].systemType) {
           name = '全部'
         } else {
@@ -342,6 +344,8 @@ const init = () => {
         tableData.value.push(data[i])
       }
     }
+    // 将数据传递给父组件
+    emit('setSysData', data)
   })
 }
 
@@ -360,7 +364,7 @@ const exportFrom = () => {
     }
     isSubmit = true
     const param = {
-      timeType: props.timeType,
+      dateType: props.timeType,
       startTime: props.startTime,
       endTime: props.endTime
     }

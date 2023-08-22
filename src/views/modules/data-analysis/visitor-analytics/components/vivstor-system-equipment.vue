@@ -46,10 +46,12 @@ watch(() => props.echartData, () => {
   })
 }, { immediate: true, deep: true })
 
-const plantPieChart = ref(null)
 const getChart = () => {
-  if (!plantPieChart.value) {
-    plantPieChart.value = $echarts.init(document.getElementById('plant-pie-mod'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let plantPieChart = $echarts.getInstanceByDom(document.getElementById('plant-pie-mod'))
+  // 如果不存在，就进行初始化
+  if (plantPieChart == null) {
+    plantPieChart = $echarts.init(document.getElementById('plant-pie-mod'))
   }
   const option = {
     title: {
@@ -75,6 +77,7 @@ const getChart = () => {
     series: [
       {
         type: 'pie',
+        name: '访客数',
         radius: ['70%', '30%'],
         avoidLabelOverlap: false,
         label: {
@@ -95,9 +98,9 @@ const getChart = () => {
       }
     ]
   }
-  option && plantPieChart.value.setOption(option)
+  option && plantPieChart.setOption(option)
   window.addEventListener('resize', function () {
-    plantPieChart.value.resize()
+    plantPieChart.resize()
   })
 }
 

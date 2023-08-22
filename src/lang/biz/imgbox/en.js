@@ -22,5 +22,6 @@ export default {
   remainder: 'There are also options',
   maxSelect: 'At present, you can only select at most',
   requestError: 'The server is dozing off^_^',
-  PicMaxQuantity: 'The maximum number of pictures is:'
+  PicMaxQuantity: 'The maximum number of pictures is:',
+  groupEmpty: 'Group name cannot be empty'
 }

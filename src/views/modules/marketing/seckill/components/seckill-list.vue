@@ -33,7 +33,7 @@
         />
         <el-button
           type="primary"
-          @click="onSearch(true)"
+          @click="onSearch()"
         >
           搜索
         </el-button>
@@ -250,13 +250,13 @@ onMounted(() => {
   getPageData()
 })
 
-const getPageData = (newData = false) => {
-  if (newData) {
+const getPageData = () => {
+  if (searchForm.specTime !== '') {
     searchForm.specTime = new Date(searchForm.specTime).getTime()
   }
   tempSearchForm = { ...searchForm }
   pageLoading.value = true
-  if (searchForm.type !== '2') {
+  if (searchForm.type !== 2) {
     api.listSeckill(tempSearchForm).then(data => {
       pageData.value.dataList = data.list
       pageData.value.pages = data.pages
@@ -273,9 +273,9 @@ const getPageData = (newData = false) => {
   }
 }
 
-const onSearch = (newData = false) => {
+const onSearch = () => {
   searchForm.pageNum = 1
-  getPageData(newData)
+  getPageData()
 }
 
 // 点击导航栏切换

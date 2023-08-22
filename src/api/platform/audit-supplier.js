@@ -286,3 +286,11 @@ export function reUploadIdCard (data) {
     data
   })
 }
+
+// 获取银行列表
+export function getBankList () {
+  return request({
+    url: '/mall4cloud_admin/ua/public_bank/list',
+    method: 'GET'
+  })
+}

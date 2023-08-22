@@ -24,7 +24,6 @@
         >
           <template #default="{row}">
             <div>
-              <!-- native modifier has been removed, please confirm whether the function has been affected  -->
               <el-radio
                 v-model="singleSelectCouponId"
                 :label="row.couponId"
@@ -98,7 +97,7 @@
 
 <script setup>
 import { pagePlatformCoupons } from '@/api/coupon/coupon'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 
 const emit = defineEmits(['refreshSelectCouponList'])
 

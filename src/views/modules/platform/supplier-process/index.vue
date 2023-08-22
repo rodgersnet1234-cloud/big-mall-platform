@@ -95,7 +95,6 @@
             class="shop-base-info"
           >
             <div class="company-info">
-              <!-- native modifier has been removed, please confirm whether the function has been affected  -->
               <el-form
                 ref="supplierDetailRef"
                 :model="supplierDetail"
@@ -113,6 +112,7 @@
                       <el-input
                         v-model="supplierDetail.supplierName"
                         placeholder="请输入10字以内的供应商名称"
+                        style="width: 230px;"
                         maxlength="10"
                       />
                     </el-form-item>
@@ -177,17 +177,14 @@
                       label="供应商简介"
                       prop="intro"
                     >
-                      <div class="business-license-box">
-                        <div class="license-content">
-                          <el-input
-                            v-model="supplierDetail.intro"
-                            type="textarea"
-                            :rows="4"
-                            maxlength="200"
-                            placeholder="请输入200字以内供应商简介"
-                          />
-                        </div>
-                      </div>
+                      <el-input
+                        v-model="supplierDetail.intro"
+                        type="textarea"
+                        style="width: 230px;"
+                        :rows="4"
+                        maxlength="200"
+                        placeholder="请输入200字以内供应商简介"
+                      />
                     </el-form-item>
                   </div>
                 </div>
@@ -200,7 +197,6 @@
             v-if="applyStep === 2"
             class="company-info"
           >
-            <!-- native modifier has been removed, please confirm whether the function has been affected  -->
             <el-form
               ref="supplierCompanyRef"
               :model="supplierCompany"
@@ -280,12 +276,10 @@
                     label="注册资本"
                     class="capital-int"
                   >
-                    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
                     <el-input
-                      v-model="supplierCompany.capital"
+                      v-model.number="supplierCompany.capital"
                       prop="capital"
-                      type="number"
-                      maxlength="10"
+                      maxlength="8"
                       style="width:200px"
                       @input="changeNum"
                       @keydown="channelInputLimit"
@@ -357,7 +351,10 @@
                           @input="imgChange(2, 'businessLicense')"
                         />
                         <div class="example-box">
-                          <img src="@/assets/example-img/Business-license.png">
+                          <img
+                            src="@/assets/example-img/Business-license.png"
+                            alt
+                          >
                           <div class="tips">
                             示例
                           </div>
@@ -394,13 +391,19 @@
                       </div>
                       <div class="upload-example">
                         <div class="example-box">
-                          <img src="@/assets/example-img/idcard1.png">
+                          <img
+                            src="@/assets/example-img/idcard1.png"
+                            alt
+                          >
                           <div class="tips">
                             人像面示例
                           </div>
                         </div>
                         <div class="example-box">
-                          <img src="@/assets/example-img/idcard2.png">
+                          <img
+                            src="@/assets/example-img/idcard2.png"
+                            alt
+                          >
                           <div class="tips">
                             国徽面示例
                           </div>
@@ -533,7 +536,6 @@
               <!-- 添加图表 -->
               <!-- 审核状态applyStatus 0 未审核 1已通过 -1未通过 -->
               <template v-if="paySettlementType!==1">
-                <!-- native modifier has been removed, please confirm whether the function has been affected  -->
                 <el-form
                   ref="bankCartInfoFormRef"
                   :model="bankCartInfoForm"
@@ -549,7 +551,7 @@
                     <el-table-column
                       type="index"
                       label="序号"
-                      width="50"
+                      width="90"
                     />
                     <el-table-column
                       prop="bankName"
@@ -603,7 +605,6 @@
                             placeholder="输入账号"
                             clearable
                           />
-                          <!-- <el-input v-model="scope.row.cardNo" maxlength="19" placeholder="不超过19个字符" clearable /> -->
                         </el-form-item>
                       </template>
                     </el-table-column>
@@ -627,18 +628,19 @@
                     </el-table-column>
                     <el-table-column width="50">
                       <template #default="scope">
-                        <i
+                        <el-icon
                           v-if="bankCartInfoForm.data.length > 1"
-                          class="el-icon-remove-outline"
+                          class="icon-remove-outline"
                           @click="deleteBankInfoItem(scope.$index)"
-                        />
+                        >
+                          <Remove />
+                        </el-icon>
                       </template>
                     </el-table-column>
                   </el-table>
                 </el-form>
               </template>
               <template v-else>
-                <!-- native modifier has been removed, please confirm whether the function has been affected  -->
                 <el-form
                   ref="allinpaySupplierBankCardFormRef"
                   :model="allinpaySupplierBankCardForm"
@@ -751,7 +753,6 @@
             class="content-wrapper"
           >
             <div class="register-info">
-              <!-- native modifier has been removed, please confirm whether the function has been affected  -->
               <el-form
                 ref="supplierUserRegisterInfoRef"
                 :model="supplierUserRegisterInfo"
@@ -771,10 +772,10 @@
                 </el-form-item>
                 <el-form-item
                   label="登陆密码"
-                  prop="password"
+                  prop="passwordPar"
                 >
                   <el-input
-                    v-model="supplierUserRegisterInfo.password"
+                    v-model="supplierUserRegisterInfo.passwordPar"
                     type="password"
                     maxlength="16"
                     placeholder="输入6-16位登录密码"
@@ -785,22 +786,20 @@
                   label="手机号"
                   prop="mobile"
                 >
-                  <div class="mobile-box">
-                    <el-input
-                      v-model="supplierUserRegisterInfo.mobile"
-                      maxlength="11"
-                      placeholder="输入11位手机号"
-                    >
-                      <template #append>
-                        <div
-                          class="mobile-btn"
-                          @click="getRegisterCode"
-                        >
-                          {{ showGetCodeBtn ? '获取验证码' : count + ' s' }}
-                        </div>
-                      </template>
-                    </el-input>
-                  </div>
+                  <el-input
+                    v-model="supplierUserRegisterInfo.mobile"
+                    maxlength="11"
+                    placeholder="输入11位手机号"
+                  >
+                    <template #append>
+                      <div
+                        class="mobile-btn"
+                        @click="getRegisterCode"
+                      >
+                        {{ showGetCodeBtn ? '获取验证码' : count + ' s' }}
+                      </div>
+                    </template>
+                  </el-input>
                 </el-form-item>
                 <el-form-item
                   label="验证码"
@@ -846,40 +845,22 @@
 </template>
 
 <script setup>
-// import imgUpload from '@/components/ImgUpload'
-import { ref, reactive, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import categoryAddOrUpdate from './category-add-or-update.vue'
-import brandAddOrUpdate from './brand-add-or-update.vue'
+import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
+import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-supplier'
 import { treeDataTranslate } from '@/utils'
 import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto'
-import { useAllinpayStore } from '@/stores/modules/allinpay.js'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 // 步骤: 1基本信息 2工商信息 3签约信息 4财务信息 5商家注册信息
 const applyStep = ref(1)
 
-// const supplierId = reactive(useRoute().query.supplierId || 0)
-// 图片资源地址（前缀）
-// const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
-const currentAddr = ref([]) // 选中地址
-const addrOpts = ref([]) // 地址数据
-const picturePreviewVisible = ref(false) // 预览图片弹窗
-
-// 分类弹窗显隐
-const cateAddOrUpdateVisible = ref(false)
-// 品牌弹窗显隐
-const brandAddOrUpdateVisible = ref(false)
-
-const applyStatus = ref(0) // 供应商申请状态 0：未审核 1：已通过 -1：未通过 -2：未提交过申请
-const isNotEdit = ref(false) // 是否不可以编辑信息, 当申请状态为待审核时不能编辑
-const auditingInfo = ref('') // 审核信息
+// 是否不可以编辑信息, 当申请状态为待审核时不能编辑
+const isNotEdit = ref(false)
 
 // 第一步---基本信息
 const addrList = ref([])
@@ -967,7 +948,7 @@ const vaildCreditCode = (rule, value, callback) => {
       supplierId: -1
     }).then(data => {
       if (data) {
-        callback(new Error(this.$t('该统一社会信用代码重复，请重新输入')))
+        callback(new Error('该统一社会信用代码重复，请重新输入'))
       } else {
         callback()
       }
@@ -1015,9 +996,9 @@ const validShopName = (rule, value, callback) => {
 
 // eslint-disable-next-line no-unused-vars
 const validateCardNo = (rule, value, callback) => {
-  if (this.bankCartInfoForm.data.length > 1) {
+  if (bankCartInfoForm.data.length > 1) {
     let flag = 0
-    for (const item of this.bankCartInfoForm.data) {
+    for (const item of bankCartInfoForm.data) {
       if (item.cardNo === value) {
         flag++
       }
@@ -1215,6 +1196,7 @@ const selectBank = ref('') // 选择的银行，通联
 const supplierUserRegisterInfo = reactive({
   username: '',
   password: '',
+  passwordPar: '',
   mobile: '',
   validCode: ''
 })
@@ -1232,7 +1214,7 @@ const shopUserRegisterRule = reactive({
     { required: true, message: '用户名不能为空', trigger: 'blur' },
     { validator: vaildUserName, trigger: 'blur' }
   ],
-  password: [
+  passwordPar: [
     { required: true, message: '登陆密码不能为空', trigger: 'blur' },
     { min: 6, max: 16, message: '登录密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
@@ -1247,7 +1229,8 @@ const shopUserRegisterRule = reactive({
   ]
 })
 
-const paySettlementType = useAllinpayStore().paySettlementType // 是否开启通联支付 1：开启 0：关闭
+const allinPayStore = useAllinpayStore()
+const paySettlementType = allinPayStore.paySettlementType // 是否开启通联支付 1：开启 0：关闭
 
 onMounted(() => {
   // 请求地址列表
@@ -1311,7 +1294,6 @@ const channelInputLimit = (e) => {
  * 获取签约分类列表
  */
 const getSignCategoryList = (categories) => {
-  console.log('选择的类目', categories)
   signCategoryList.value = categories
 }
 
@@ -1524,13 +1506,11 @@ const getRegisterCode = () => {
         }
       }, 1000)
     }
-  }).catch((e) => {
+  }).catch(() => {
     waitingReceive.value = false
   })
 }
-const bankCartIsRepeated = () => {
-  // console.log(bankCartInfoForm.data)
-}
+
 /**
  * 创建供应商
  */
@@ -1539,13 +1519,12 @@ const createStore = () => {
     if (!valid) {
       return
     }
-    let data = {}
-    supplierUserRegisterInfo.password = encrypt(supplierUserRegisterInfo.password)
-    data = {
+    supplierUserRegisterInfo.password = encrypt(supplierUserRegisterInfo.passwordPar)
+    const data = {
       // 供应商基本信息
-      supplierDetail: supplierDetail,
+      supplierDetail,
       // 供应商工商信息
-      supplierCompany: supplierCompany,
+      supplierCompany,
       // 签约分类列表
       categorySigningList: categorySigningList.value,
       // 签约品牌列表
@@ -1592,646 +1571,5 @@ const imgChange = (applyStep, prop) => {
 </script>
 
 <style lang="scss" scoped>
-.shop-process-container {
-  width: 100%;
-  // height: 100%;
-  // min-height: 100vh;
-  max-height: auto;
-  background: #fff;
-  padding-bottom: 50px;
-  .sp-wrapper {
-    width:90%;
-    margin: 0 auto;
-
-    /****** 当前页通用样式 ******/
-    .title {
-      width: 100%;
-      font-size: 22px;
-      text-align: center;
-      padding: 30px 0 15px;
-    }
-    .content {
-      width: 100%;
-      border: 1px solid #EAEAEA;
-      margin: auto;
-    }
-
-    .sbi-content.content {
-      border: none;
-      .footer-box {
-        margin-top: 30px;
-        margin-bottom: 30px;
-        text-align: center;
-      }
-    }
-
-    // 供应商申请状态
-    .status-tips {
-      width: 100%;
-      height: 38px;
-      line-height: 36px;
-      padding-left: 15px;
-      box-sizing: border-box;
-      .text {
-        font-size: 14px;
-        color: #666;
-        padding-left: 10px;
-      }
-    }
-    .submit-status-tips {
-      background: #FFF7DD;
-      border: 1px solid #FFD888;
-      margin-top: 20px;
-      .text-icon {
-        color: #ffa900;
-      }
-    }
-    // 失败提示
-    .fail-status-tips {
-      background: rgba(255, 33, 32, 0.05);
-      border: 1px solid #FF2120;
-      margin-top: 20px;
-      .text-icon {
-        color: #FF2120;
-      }
-    }
-    // 等待审核状态
-    .pedding-status-tips {
-      background: rgba(24, 144, 255, 0.08);
-      border: 1px solid #155bd4;
-      margin-top: 20px;
-      .text-icon {
-        color: #155bd4;
-      }
-    }
-
-    // 内容包裹
-    .content-wrapper {
-      display: block;
-      width: 90%;
-      margin: 50px auto;
-    }
-
-    // 进度条
-    .progress-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 860px;
-      overflow: hidden;
-      margin: 50px auto 0;
-
-      .step {
-        position: relative;
-        width: 315px;
-        .step-item {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 64px;
-          .step-num {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #fff;
-            background: #D2D2D2;
-            text-align: center;
-            border: 4px solid #EFEFEF;
-            border-radius: 50%;
-            margin: 0 auto;
-            z-index: 1;
-          }
-          .step-text {
-            width: 64px;
-            font-size: 16px;
-            color: #999;
-            margin-top: 18px;
-          }
-        }
-        &::after {
-          position: absolute;
-          top: 15px;
-          // left: -280px;
-          left: -184px;
-          content: '';
-          display: block;
-          // width: 300px;
-          width: 204px;
-          height: 6px;
-          background: #F2F2F2;
-        }
-        &:nth-child(1) {
-          &::after {
-            display: none;
-          }
-        }
-        &:nth-child(5) {
-          width: 64px;
-        }
-      }
-      .active-step {
-        .step-item {
-          .step-text {
-            color: #155bd4;
-          }
-          .step-num {
-            background: #155bd4;
-            border: 4px solid #DEEFFF;
-          }
-        }
-        &::after {
-          background: #C1E1FF;
-        }
-      }
-    }
-
-    // 表格上的标题
-    .table-data-title {
-      display: flex;
-      align-items: center;
-      .text {
-        font-size: 16px;
-        .stress {
-          color: #FF2120;
-          padding-right: 5px;
-        }
-      }
-      .tips {
-        font-size: 12px;
-        color: #999;
-        margin-left: 10px;
-        .txt-bold {
-          color: #333;
-        }
-      }
-      .edit-btn {
-        width: 117px;
-        height: 30px;
-        line-height: 28px;
-        font-size: 14px;
-        color: #155bd4;
-        background: #FFFFFF;
-        text-align: center;
-        border: 1px solid #155bd4;
-        border-radius: 2px;
-        box-sizing: border-box;
-        margin-left: auto;
-        cursor: pointer;
-      }
-    }
-
-    // 表格
-    table {
-      border-collapse:collapse;
-      width: 100%;
-      font-size: 14px;
-      .table-title {
-        height: 50px;
-        line-height: 50px;
-        background: #F5F5F5;
-        td {
-          width: 25%;
-          max-width: 0;
-          padding: 0;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          &:nth-child(1) {
-            padding-left: 25px;
-          }
-        }
-      }
-      .table-item {
-        height: 49px;
-        line-height: 49px;
-        border-bottom: 1px solid #EAEAEA;
-        td {
-          width: 25%;
-          padding: 0;
-          max-width: 0;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          &:nth-child(1) {
-            padding-left: 25px;
-          }
-        }
-        &:nth-child(2n+1) {
-          background: #FAFAFA;
-        }
-      }
-    }
-
-    // 上一步
-    .prev-btn {
-      width: 120px;
-      height: 40px;
-      line-height: 38px;
-      font-size: 14px;
-      text-align: center;
-      border: 1px solid #E8E9EC;
-      border-radius: 4px;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-
-    // 下一步
-    .next-btn {
-      width: 120px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-      color: #fff;
-      background: #155bd4;
-      text-align: center;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    /****** /当前页通用样式 ******/
-
-    // 0-协议部分
-    .shop-agreement {
-      .sa-title {
-        width: 100%;
-        font-size: 22px;
-        text-align: center;
-        margin: 30px 0 0;
-      }
-      .sa-content {
-        width: 100%;
-        height: 517px;
-        padding: 30px 33px 25px;
-        border: 1px solid #EAEAEA;
-        box-sizing: border-box;
-        overflow-y: scroll;
-        margin-top: 30px;
-        /* 谷歌隐藏滚动条 */
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        /* 隐藏滚动条，当IE下溢出，仍然可以滚动 */
-        /* IE隐藏滚动条 */
-        -ms-overflow-style: none;
-        /* 火狐隐藏滚动条 */
-        overflow: -moz-scrollbars-none;
-      }
-      .sa-checkbox {
-        display: flex;
-        justify-content: center;
-        margin-top: 30px;
-        cursor: pointer;
-        .text {
-          font-size: 14px;
-          color: #000;
-          .flag {
-            color: #57A3E9;
-          }
-        }
-      }
-      .next-btn {
-        height: 45px;
-        line-height: 45px;
-        font-size: 16px;
-        margin: 50px auto 0;
-      }
-    }
-
-    // 1-填写基本信息
-    .shop-base-info {
-      .ci-wrapper {
-        .left-info {
-          ::v-deep(.el-date-editor--daterange.el-input),
-          .el-date-editor--daterange.el-input__inner,
-          .el-date-editor--timerange.el-input,
-          .el-date-editor--timerange.el-input__inner {
-            width: 100%;
-          }
-        }
-      }
-    }
-    .btn {
-      display: block;
-      text-align: center;
-      margin-bottom: 30px;
-      margin-top: 20px;
-      .next-btn {
-        display: inline-block;
-      }
-    }
-    // 2-填写营业信息
-    .company-info {
-      display: flex;
-      justify-content: center;
-      margin-top: 50px;
-      .ci-wrapper {
-        display: flex;
-        .left-info {
-          width: 50%;
-          margin-left: 10px;
-          .price-unit-text {
-            font-size: 14px;
-            color: #666;
-            margin-left: 15px;
-          }
-          .capital-int {
-            ::v-deep(.el-input__inner) {
-              padding-right: 0;
-            }
-          }
-        }
-        .right-info {
-          width: 50%;
-          margin-left: 80px;
-          .business-license-box {
-            .license-content {
-              display: flex;
-              ::v-deep(.single-image-upload) {
-                height: 120px;
-              }
-            }
-          }
-          .id-box {
-            .upload-content {
-              .upload-img {
-                display: flex;
-                div {
-                  &:nth-child(2) {
-                    margin-left: 20px;
-                  }
-                }
-                .disabled-upload {
-                  ::v-deep(.el-upload) {
-                    background: #f5f7fa;
-                  }
-                }
-                .single-image-upload {
-                  height: 120px;
-                }
-              }
-              .upload-example {
-                display: flex;
-                // margin-top: 15px;
-                margin-left: 134px;
-                .example-box {
-                  margin-left: 0;
-                  &:nth-child(2) {
-                    margin-left: 20px;
-                  }
-                }
-              }
-              .upload-tips {
-                margin-left: 134px;
-              }
-            }
-          }
-          .img-static {
-            display: block;
-            width: 120px;
-            height: 120px;
-            cursor: pointer;
-          }
-          .img-static:not(:first-child) {
-            margin-left: 20px;
-          }
-
-          // 示例框
-          .example-box {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 120px;
-            height: 120px;
-            background: #FFFFFF;
-            border: 1px solid #EAEAEA;
-            border-radius: 3px;
-            box-sizing: border-box;
-            margin-left: 20px;
-            img {
-              display: block;
-              width: auto;
-              max-width: 100%;
-              height: auto;
-              max-height: 100%;
-            }
-            .tips {
-              position: absolute;
-              left: -1px;
-              bottom: 0;
-              width: 120px;
-              height: 20px;
-              line-height: 20px;
-              font-size: 12px;
-              color: #fff;
-              background: rgba(51, 51, 51, 0.5);
-              text-align: center;
-              border-radius: 0px 0px 3px 3px;
-            }
-          }
-
-          .upload-tips {
-            font-size: 12px;
-            color: #999;
-            height: 16px;
-            line-height: 20px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-          }
-
-          // 图片上传框样式修改
-          ::v-deep .el-upload {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 120px;
-            height: 121px;
-            background: #FFFFFF;
-            border: 1px solid #EAEAEA;
-            border-radius: 3px;
-            box-sizing: border-box;
-            img {
-              width: 120px;
-            }
-            .el-icon-plus {
-              font-size: 22px;
-              color: #EAEAEA;
-            }
-          }
-          // 背景图
-          .bg-img {
-            display: flex;
-            justify-content: flex-start;
-            .business-license-box {
-              margin-right: 30px;
-              .img-tips {
-                display: block;
-                text-align: center;
-                font-size: 12px;
-                color: #666;
-                line-height: 1.5em;
-                margin-top: 8px;
-                p  {
-                  margin: 0;
-                  padding: 0;
-                }
-              }
-            }
-          }
-        }
-      }
-      .footer {
-        display: block;
-        width: 100%;
-        .btn-box {
-          display: flex;
-          justify-content: center;
-          // margin-left: 134px;
-          margin-bottom: 30px;
-          margin-top: 10px;
-          .prev-btn {
-            margin-right: 13px;
-          }
-        }
-      }
-    }
-
-    // 3-选择签约信息
-    .signing-content {
-      .s-category-item {
-        margin-bottom: 30px;
-      }
-      .s-item {
-        .si-content {
-          margin-top: 12px;
-        }
-      }
-    }
-
-    // 4-财务信息
-    .finance-info {
-      .edit-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 80px;
-        box-sizing: border-box;
-        .plus {
-          font-size: 23px;
-          padding-right: 5px;
-        }
-      }
-      .fi-content {
-        position: relative;
-        min-height: 500px;
-        margin-top: 12px;
-        .add-bank-info-table {
-          // 去除表格线
-          ::v-deep(.el-table__row>td) {
-            border: none;
-          }
-          ::v-deep td.el-table_1_column_6 {
-            i {
-              font-size: 22px;
-              cursor: pointer;
-            }
-          }
-          ::v-deep(.el-form-item) {
-            margin-top: 16px;
-            margin-bottom: 16px;
-          }
-        }
-        // 去除表格下边框
-        ::v-deep(.el-table::before) {
-          height: 0;
-        }
-        .show-table {
-          tr {
-            border-bottom: 1px solid #EAEAEA;
-          }
-          .table-title,
-          .table-item {
-            td {
-              &:nth-child(1) {
-                width: 170px;
-              }
-              &:nth-child(2) {
-                width: 250px;
-              }
-              &:nth-child(3) {
-                width: 320px;
-              }
-              &:nth-child(4) {
-                width: 270px;
-              }
-              &:nth-child(5) {
-                width: 160px;
-                padding-right: 40px;
-                text-align: right;
-              }
-            }
-          }
-        }
-        .btn-box {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          bottom: -20px;
-          display: flex;
-          justify-content: center;
-          // margin-left: -126px;
-          .prev-btn:not(:last-child) {
-            margin-right: 15px;
-          }
-        }
-      }
-      ::v-deep(.el-table th) {
-        background: #F5F5F5;
-        height: 50px;
-      }
-      // ::v-deep .el-table td .el-form-item__error {
-      //   position: static;
-      // }
-      // ::v-deep .el-table td {
-      //   height: 60px;
-      // }
-      // 移除icon
-      .el-icon-remove-outline::before {
-        font-size: 20px;
-        cursor: pointer;
-      }
-    }
-
-    // 注册信息
-    .register-info {
-      display: block;
-      width: 450px;
-      height: 300px;
-      margin: 0 auto;
-      margin-top: 80px;
-      .mobile-box {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        color: #606266;
-        .mobile-btn {
-          cursor: pointer;
-        }
-        .mobile-btn:active {
-          background: #f2f2f2;
-        }
-      }
-    }
-
-  }
-}
-@media (max-width:1440px) {
-  .sp-wrapper {
-    width:100% !important
-  }
-}
+@use "index";
 </style>

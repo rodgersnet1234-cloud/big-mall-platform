@@ -4,7 +4,6 @@
     :title="$t('product.spuTag.updateProdTagSeq')"
     width="30%"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :model="dataForm"

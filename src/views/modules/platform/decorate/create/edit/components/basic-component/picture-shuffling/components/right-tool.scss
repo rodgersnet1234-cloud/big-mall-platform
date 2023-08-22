@@ -40,12 +40,24 @@
             position: relative;
           }
             .picture-text {
+              position: relative;
               margin-top: 10px;
               display: flex;
               justify-content: space-between;
               span {
                   display: flex;
                   align-items: center;
+              }
+               .title{
+                &:before {
+                  content: "";
+                  position: absolute;
+                  width: 3px;
+                  height: 15px;
+                  left: -10px;
+                  top: 7px;
+                  background: #155bd4;
+                 }
               }
 
             }

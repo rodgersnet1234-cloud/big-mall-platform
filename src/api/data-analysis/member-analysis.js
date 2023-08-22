@@ -47,9 +47,3 @@ export function getCustomerRetained (params) {
     params
   })
 }
-export function refreshRetainedData () {
-  return request({
-    url: '/mall4cloud_flow/mp/customer_analysis/refresh_retained_data',
-    method: 'get'
-  })
-}

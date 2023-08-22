@@ -43,7 +43,8 @@
           <template #default="{row}">
             <div class="table-btn-con">
               <el-button
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row)"
               >
                 删除
@@ -54,16 +55,14 @@
       </el-table>
     </el-form-item>
     <el-dialog
-      v-model:visible="dialogVisible"
+      v-model="dialogVisible"
       :title="`选择${name}`"
       append-to-body
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="searchParam"
         class="demo-form-inline"
-        size="small"
         @submit.prevent
       >
         <el-form-item :label="`${name}名称`">
@@ -149,7 +148,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import * as shopApi from '@/api/platform/audit-shop'
 import * as supplierApi from '@/api/platform/audit-supplier'
 import * as userApi from '@/api/user/user-manager'
@@ -220,7 +219,7 @@ onMounted(() => {
 
 const getPage = () => {
   pageLoading.value = true
-  api(searchParam).then(res => {
+  api.value(searchParam).then(res => {
     pageVO.list = res.list
     pageVO.total = res.total
     pageVO.pages = res.pages
@@ -235,13 +234,12 @@ const onSelectSome = (val) => {
 const onSubmit = () => {
   dialogVisible.value = false
   tableData.value = multipleSelection.value
-  const ids = tableData.value.map(item => item[idKey])
+  const ids = tableData.value.map(item => props.type === 1 ? item.shopId : props.type === 2 ? item.userId : item.supplierId)
   emit('getIds', ids)
 }
 // 清空搜索内容
 const clearSearchInfo = () => {
-  searchParam[propList[0]] = null
-  searchParam.pageNum = 1
+  searchParam[propList.value[0]] = null
   getPage()
 }
 const searchInfo = () => {

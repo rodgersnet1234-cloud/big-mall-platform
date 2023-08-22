@@ -1,7 +1,6 @@
 <template>
   <div class="app-container-10 container-f0f2f5 app-main feature-list-container">
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
@@ -23,14 +22,12 @@
           <el-button
             class="operation-btn"
             type="primary"
-            icon="el-icon-search"
             @click="onSearch()"
           >
             {{ $t('table.search') }}
           </el-button>
           <el-button
             class="operation-btn"
-            icon="el-icon-search"
             @click="onResetSearch()"
           >
             重置
@@ -91,6 +88,7 @@
             <template #default="scope">
               <div class="text-btn-con">
                 <el-button
+                  type="primary"
                   link
                   @click="handleSelect(scope.row)"
                 >
@@ -98,6 +96,7 @@
                 </el-button>
                 <el-button
                   v-permission="['platform:shopRenovation:updateMove']"
+                  type="primary"
                   link
                   @click="handleEdit(scope.row)"
                 >
@@ -105,6 +104,7 @@
                 </el-button>
                 <el-button
                   v-permission="['platform:shopRenovation:deleteMove']"
+                  type="primary"
                   link
                   @click="handleDelete(scope.row)"
                 >
@@ -112,6 +112,7 @@
                 </el-button>
                 <el-button
                   v-permission="['platform:shopRenovation:updateHomePageMove']"
+                  type="primary"
                   link
                   @click="handleSetHomePage(scope.row.renovationId)"
                 >
@@ -123,7 +124,6 @@
         </el-table>
       </div>
       <el-pagination
-        style="float: right;"
         :current-page="pageIndex"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="pageSize"

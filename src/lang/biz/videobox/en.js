@@ -22,5 +22,6 @@ export default {
   remainder: 'There are also options',
   maxSelect: 'At present, you can only select at most',
   requestError: 'The server is dozing off^_^',
-  VideoMaxQuantity: 'The maximum number of videos is:'
+  VideoMaxQuantity: 'The maximum number of videos is:',
+  pleaseSelectGroup: 'Please select video'
 }

@@ -2,8 +2,6 @@
   <div class="app-container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- <el-button icon="el-icon-search" @click="getPage()">{{ $t('table.search') }}</el-button> -->
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
@@ -22,7 +20,6 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="getPage(true)"
             >
               {{ $t('delivery.transport.query') }}
@@ -35,7 +32,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['rbac:role:save']"
-          icon="el-icon-plus"
           type="primary"
           @click="onAddOrUpdate()"
         >
@@ -101,14 +97,16 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['rbac:role:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.roleId)"
                 >
                   {{ $t('table.edit') }}
                 </el-button>
                 <el-button
                   v-permission="['rbac:role:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.roleId)"
                 >
                   {{ $t('table.delete') }}
@@ -138,7 +136,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/rbac/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -205,4 +203,8 @@ const deleteById = (roleId) => {
     })
   })
 }
+
+onMounted(() => {
+  getPage()
+})
 </script>

@@ -207,7 +207,6 @@
             <el-button
               class="operation-btn"
               type="primary"
-              icon="el-icon-search"
               @click="onSearch(true)"
             >
               {{ $t("order.order.query") }}
@@ -216,7 +215,6 @@
           <el-form-item>
             <el-button
               class="operation-btn"
-              icon="el-icon-document-checked"
               @click="onGetSoldExcel()"
             >
               {{ $t("table.export") }}
@@ -225,7 +223,6 @@
           <el-form-item>
             <el-button
               class="operation-btn"
-              icon="el-icon-delete"
               @click="onClear()"
             >
               {{ $t('table.reset') }}
@@ -369,7 +366,7 @@
                         <ImgShow :src="orderItem.pic" />
                       </div>
                       <div class="prod-name">
-                        <dir class="prod-con">
+                        <div class="prod-con">
                           <div class="prod-name-txt">
                             {{ orderItem.spuName + ' ' + (orderItem.skuName ? orderItem.skuName : '') }}
                           </div>
@@ -449,7 +446,7 @@
                               order.preSaleTime
                             }}
                           </div>
-                        </dir>
+                        </div>
                       </div>
                       <div class="prod-price">
                         <span>{{ formatPrice(orderItem.price, 1).toFixed(2) }}</span>
@@ -553,17 +550,8 @@
               >
                 <div class="item">
                   <div class="buyer-info">
-                    <div
-                      v-if="order.orderMold!==1"
-                      class="buyer-name"
-                    >
+                    <div class="buyer-name">
                       {{ order.consignee }}
-                    </div>
-                    <div
-                      v-else
-                      class="buyer-name"
-                    >
-                      {{ order.userName }}
                     </div>
                     <div
                       v-if="order.orderMold!==1"
@@ -605,13 +593,13 @@
                     >{{
                       $t("order.order.transactionFailed")
                     }}</span>
-                    <div
+                    <span
                       v-if="order.preSaleType === 1"
                       style="color: #999"
                     >
                       <span v-if="order.status === 1">(待付定金)</span>
                       <span v-if="order.status === 9">(待付尾款)</span>
-                    </div>
+                    </span>
                   </span>
                 </div>
               </el-col>
@@ -652,7 +640,8 @@
                   <div class="operate">
                     <el-button
                       v-permission="['order:order:info']"
-                      type="text"
+                      link
+                      type="primary"
                       @click="onAddOrUpdate(order.orderId)"
                     >
                       {{ $t("order.order.seeDetails") }}
@@ -660,7 +649,8 @@
                     <el-button
                       v-if="order.refundStatus"
                       v-permission="['order:order:refund:info']"
-                      type="text"
+                      link
+                      type="primary"
                       @click="onGoToRefund(order.orderId)"
                     >
                       {{ $t("order.order.refundInformation") }}
@@ -702,7 +692,7 @@ import * as api from '@/api/order/order'
 import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddOrUpdate from './components/order-info.vue'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 
 let orderId = null
 let oldPar = {}
@@ -774,6 +764,9 @@ const payType = [{
 }, {
   value: 3,
   label: $t('admin.balancePay')
+}, {
+  value: 0,
+  label: $t('order.order.pointsPayment')
 }]
 const refund = [{
   value: 0,
@@ -947,7 +940,7 @@ const onAddOrUpdate = (val) => {
 const router = useRouter()
 const onGoToRefund = (val) => {
   router.push({
-    path: '/order/refund_order',
+    path: '/order/refund-order',
     query: { orderId: val }
   })
 }

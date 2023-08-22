@@ -1,6 +1,5 @@
 <template>
   <div class="floor_container_config">
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="floorTitleFormRef"
       :model="floorTitleForm"

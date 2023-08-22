@@ -1,7 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-
     <el-form @submit.prevent>
       <el-form-item>
         <el-alert
@@ -134,8 +132,8 @@
               </div>
               <el-button
                 v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
+                link
+                type="primary"
                 @click="onAddOrUpdate(threeItem.categoryId, threeItem.level)"
               >
                 编辑
@@ -203,10 +201,10 @@ const getPage = () => {
     pageLoading.value = false
 
     // 分类反显
-    if (secondIndex !== '') {
-      getSecondList(secondIndex)
-      if (threeIndex !== '') {
-        getThreeList(threeIndex)
+    if (secondIndex.value !== '') {
+      getSecondList(secondIndex.value)
+      if (threeIndex.value !== '') {
+        getThreeList(threeIndex.value)
       }
     }
   }).catch(() => {

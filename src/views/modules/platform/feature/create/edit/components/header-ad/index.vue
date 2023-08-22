@@ -15,7 +15,6 @@
       class="design-editor-item design-hide-class"
     >
       <div class="design-config-editor">
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           ref="formRef"
           :model="formData"

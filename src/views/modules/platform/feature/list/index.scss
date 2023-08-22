@@ -13,6 +13,7 @@
     }
   }
 }
-.el-pagination {
+::v-deep(.el-pagination) {
   text-align: right;
+  justify-content: flex-end;
 }

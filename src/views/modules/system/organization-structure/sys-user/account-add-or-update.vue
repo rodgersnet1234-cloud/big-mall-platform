@@ -4,7 +4,6 @@
     :title="dataForm.hasAccount === 0 ? '设置账号' : dataForm.hasAccount === 1 ? '修改账号': $t('table.create')"
     :close-on-click-modal="false"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="rules"
@@ -88,14 +87,14 @@
 
 <script setup>
 import * as api from '@/api/platform/sys-user-account'
-import { MOBILE_REGEXP, USER_NAME_REGEXP, validEmail, validNoEmptySpace, noSpacesBothSides } from '@/utils/validate'
+import { MOBILE_REGEXP, USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides } from '@/utils/validate'
 import { encrypt } from '@/utils/crypto'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
-let dataForm = reactive({
+const dataForm = reactive({
   hasAccount: 0,
   userId: 0,
   email: null,
@@ -104,6 +103,15 @@ let dataForm = reactive({
   password: null,
   status: 1
 })
+const validPassword = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('密码不能全为空格'))
+  } else if (noSpacesBothSides(value)) {
+    callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else {
+    callback()
+  }
+}
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -134,7 +142,11 @@ const init = (userId, hasAccount) => {
     }
     api.get(userId).then(data => {
       if (data) {
-        dataForm = data
+        dataForm.userId = data.userId
+        dataForm.email = data.email
+        dataForm.phone = data.phone
+        dataForm.username = data.username
+        dataForm.password = data.password
         dataForm.hasAccount = hasAccount
       } else {
         dataForm.hasAccount = 0

@@ -33,7 +33,7 @@
               查询
             </el-button>
             <el-button
-              @click="onResetSearch(searchFormRef)"
+              @click="onResetSearch"
             >
               {{ $t('table.reset') }}
             </el-button>
@@ -147,8 +147,8 @@
           >
             <template #default="{row}">
               <el-button
-                icon="el-icon-view"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.seckillId)"
               >
                 {{ $t("table.view") }}
@@ -156,7 +156,8 @@
               <el-button
                 v-if="row.status > 0 && row.status < 2"
                 v-permission="['seckill:seckill:offline']"
-                type="text"
+                link
+                type="primary"
                 class="el-icon-bottom"
                 style="color:red"
                 @click="onOfflineManage(row, 'offline')"
@@ -166,7 +167,8 @@
               <el-button
                 v-if="row.status === 2 || row.status === 3"
                 v-permission="['seckill:seckill:audit']"
-                type="text"
+                link
+                type="primary"
                 class="el-icon-document-checked"
                 @click="onOfflineManage(row, 'offlineManage')"
               >
@@ -253,10 +255,10 @@ const getPageData = () => {
       pageData.value.dataList.forEach(data => {
         data.priceFee = new Big(data.priceFee).div(100).toFixed(2)
         data.seckillPrice = new Big(data.seckillPrice).div(100).toFixed(2)
-      }).catch(() => {
-        pageLoading.value = false
       })
     }
+  }).catch(() => {
+    pageLoading.value = false
   })
 }
 // 新增 / 修改
@@ -285,8 +287,9 @@ const onOfflineManage = (row, key) => {
 }
 
 const searchFormRef = ref(null)
-const onResetSearch = (formEl) => {
-  formEl.resetFields()
+const onResetSearch = () => {
+  searchFormRef.value.resetFields()
+  getPageData()
 }
 
 const dateFormat = (fmt, date) => {

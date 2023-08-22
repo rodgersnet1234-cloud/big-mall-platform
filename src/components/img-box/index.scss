@@ -1,17 +1,29 @@
-.upload-block {
-  .el-upload-list__item {
-    text-align: center;
-    line-height: 85px!important;
-  }
-  .el-upload-list--picture-card .el-upload-list__item-thumbnail {
-    display: inline-block;
-    width: auto;
-    max-width: 88px;
-    height: auto;
-    max-height: 88px;
-    vertical-align: middle;
+.component-img-box {
+  .upload-block {
+    .el-upload-list__item {
+      text-align: center;
+      line-height: 85px!important;
+    }
+    .el-upload-list--picture-card .el-upload-list__item-thumbnail {
+      display: inline-block;
+      width: auto;
+      max-width: 88px;
+      height: auto;
+      max-height: 88px;
+      vertical-align: middle;
+    }
   }
 }
+
+.gray-btn {
+  background-color: #8aadea;
+  border-color: #8aadea;
+  &:hover{
+    background-color: #8aadea;
+    border-color: #8aadea;
+  }
+}
+
 .elx-images {
   .el-upload-list__item,
   .el-upload--picture-card {
@@ -38,7 +50,6 @@
 
 .elx-imgbox-dialog {
   $bg: #f6f6f6;
-  // top: 100px;
 
   .el-badge {
     vertical-align: bottom;
@@ -46,15 +57,6 @@
 
   .el-dialog {
     width: 900px !important;
-
-    .el-dialog__header {
-      // border-bottom: 1px solid #e8e8e8;
-    }
-
-    .el-dialog__body {
-      // padding: 0;
-      // background: $bg;
-    }
   }
 
   .elx-foot {
@@ -107,7 +109,6 @@
               cursor: pointer;
             }
             .sidebar-operate {
-              // display: none;
               .el-icon-delete,
               .el-icon-edit {
                 margin-left: 10px;
@@ -118,9 +119,6 @@
           .group-item:hover,
           .group-item.active {
             background: #f2f3f5;
-            // .sidebar-operate {
-            //   display: block;
-            // }
           }
         }
       }
@@ -292,7 +290,7 @@
   }
 
   .upload-block {
-    .upload-img-preview {
+    :deep(.upload-img-preview) {
       padding: 20px;
 
       /* 上传图片预览改为使用背景图片按比例缩放方式 */
@@ -304,6 +302,8 @@
         line-height: 98px;
         background-size: cover;
         background-position: 50% 50%;
+        background-color: #fbfdff;
+        border: 1px dashed var(--el-border-color-darker);
       }
 
       .el-upload-list--picture-card .el-upload-list__item-status-label i {
@@ -335,7 +335,6 @@
 }
 
 .form {
-  // padding: 15px 0px 0px 20px;
   margin-left: 50px;
   .el-form-item {
     margin-bottom: 0;
@@ -353,4 +352,7 @@
   .el-upload--picture-card{
     display: none;
   }
+}
+:deep(.el-upload.el-upload--picture-card.el-list-move){
+  display: none;
 }

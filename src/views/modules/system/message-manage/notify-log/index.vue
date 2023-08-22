@@ -1,8 +1,6 @@
 <template>
   <div class="mod-notify-log">
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="dataForm"
@@ -43,7 +41,6 @@
           <el-button
             class="operation-btn"
             type="primary"
-            icon="el-icon-search"
             @click="onSearch(true)"
           >
             {{ $t('table.search') }}
@@ -163,7 +160,7 @@
 <script setup>
 import moment from 'moment'
 import * as api from '@/api/biz/notify-log.js'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 
 let tempSearchForm = null
 // 查询的参数

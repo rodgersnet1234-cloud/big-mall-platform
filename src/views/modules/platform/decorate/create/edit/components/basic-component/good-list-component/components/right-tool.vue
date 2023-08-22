@@ -66,7 +66,7 @@
         </div>
         <el-radio-group
           v-model="goodsForm.listType"
-          style="display: flex;margin-top: 15px;"
+          style="display: flex;margin: 15px 0 0 0;flex-wrap: nowrap;"
         >
           <el-radio
             :label="3"
@@ -104,12 +104,7 @@
           >
             {{ $t(`pcdecorate.goodsList.goodsName`) }}
           </el-checkbox>
-          <el-checkbox
-            label="1"
-            style="width: 33.3%;text-align: center"
-          >
-            {{ $t(`pcdecorate.goodsList.goodsDescription`) }}
-          </el-checkbox>
+
           <el-checkbox
             label="2"
             style="width: 33.3%;text-align: center"
@@ -163,7 +158,7 @@ const emit = defineEmits(['handleUpdateMessage'])
 
 const goodsForm = ref({
   listType: 3,
-  showContent: ['0', '1', '2'], // 显示内容
+  showContent: ['0', '2'], // 显示内容
   goodsList: [] // 商品列表
 })
 watch(() => goodsForm.value, (newVal) => { // 监听配置信息的改变
@@ -181,7 +176,7 @@ watch(() => props.currentItem, (newVal) => { // 监听组件回显
     } else {
       goodsForm.value = {
         listType: 3,
-        showContent: ['0', '1', '2'], // 显示内容
+        showContent: ['0', '2'], // 显示内容
         goodsList: [] // 商品列表
       }
     }
@@ -305,6 +300,9 @@ defineExpose({ handleValidate })
                 }
             }
         }
+    }
+    :deep(.el-radio) {
+      display: inline-block;
     }
 }
 </style>

@@ -82,17 +82,17 @@
         min-width: 100px;
         color: #606266;
         border-color: #dcdfe6;
-        padding-right: 22px;
+        justify-content: space-between;
       }
-      .el-tag--plain .el-tag__close {
+      :deep(.el-tag--plain) .el-tag__close {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         right: 4px;
         color: #606266;
-      }
-      .el-tag--plain .el-tag__close:hover {
-        background: #dcdfe6;
+        &:hover {
+          background: #dcdfe6;
+        }
       }
     }
     .add-spec-btn {

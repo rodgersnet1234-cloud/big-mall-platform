@@ -5,7 +5,7 @@
     </div>
     <el-form
       ref="dataFormRef"
-      :label-width="language == 'en' ? '240px' : '110px'"
+      :label-width="language === 'en' ? '240px' : '110px'"
       class="set-form"
       label-position="right"
       :model="dataForm"
@@ -45,6 +45,9 @@
           <el-radio :label="1">
             {{ '系统判定' }}
           </el-radio>
+          <el-radio :label="2">
+            {{ '无需审核' }}
+          </el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- 申请条件 -->
@@ -72,10 +75,10 @@
             <div
               v-for="(prod, index) in dataForm.spuVOList"
               :key="index"
-              style="margin: 5px 10px 0px 0px;float:left"
+              style="margin: 5px 10px 0 0;float:left"
             >
               <el-card
-                :body-style="{ padding: '0px' }"
+                :body-style="{ padding: '0' }"
                 style="height: 160px;width: 120px"
               >
                 <ImgShow
@@ -85,7 +88,8 @@
                 <div class="card-prod-bottom">
                   <span class="card-prod-name">{{ prod.spuName }}</span>
                   <el-button
-                    type="text"
+                    link
+                    type="primary"
                     class="card-prod-name-button"
                     @click="deleteProd(index)"
                   >
@@ -107,9 +111,8 @@
           </el-checkbox>
           <el-form-item prop="expenseNumber">
             <el-input
-              v-model="dataForm.expenseNumber"
+              v-model.number="dataForm.expenseNumber"
               class="input-checked"
-              type="number"
               min="1"
               :disabled="!isExpenseNumber"
               style="width:240px"
@@ -133,9 +136,8 @@
           </el-checkbox>
           <el-form-item prop="expenseAmount">
             <el-input
-              v-model="dataForm.expenseAmount"
+              v-model.number="dataForm.expenseAmount"
               class="input-checked"
-              type="number"
               min="0"
               style="width:240px"
               :disabled="!isExpenseAmount"
@@ -180,7 +182,9 @@
               placement="right"
               style="color: #155BD4;"
             >
-              <i class="el-icon-question" />
+              <el-icon>
+                <QuestionFilled />
+              </el-icon>
             </el-tooltip>
           </el-radio>
           <el-radio :label="2">
@@ -218,41 +222,44 @@
         </el-form-item>
         <!-- 提现频次 -->
         <el-form-item label="提现频次">
-          <el-select
-            v-model="dataForm.frequency"
-            placeholder="请选择"
-            style="display: inline-block"
-          >
-            <el-option
-              label="每天"
-              :value="1"
-            />
-            <el-option
-              label="每周"
-              :value="7"
-            />
-            <el-option
-              label="每月"
-              :value="30"
-            />
-            <el-option
-              label="无限制"
-              :value="-1"
-            />
-          </el-select>
-
-          <el-input
-            v-if="dataForm.frequency !== -1"
-            v-model.number="dataForm.number"
-            style="width: 180px; display: inline-block"
-            oninput="value=value.replace(/[^\d]/g,'')"
-            maxlength="10"
-            @change="dataForm.number < 1 ? dataForm.number = 1 : ''"
-          >
-            <template #append>
-              {{ '次' }}
-            </template>
-          </el-input>
+          <el-row>
+            <el-col :span="10">
+              <el-select
+                v-model="dataForm.frequency"
+                placeholder="请选择"
+              >
+                <el-option
+                  label="每天"
+                  :value="1"
+                />
+                <el-option
+                  label="每周"
+                  :value="7"
+                />
+                <el-option
+                  label="每月"
+                  :value="30"
+                />
+                <el-option
+                  label="无限制"
+                  :value="-1"
+                />
+              </el-select>
+            </el-col>
+            <el-col :span="10">
+              <el-input
+                v-if="dataForm.frequency !== -1"
+                v-model.number="dataForm.number"
+                oninput="value=value.replace(/[^\d]/g,'')"
+                maxlength="10"
+                @change="dataForm.number < 1 ? dataForm.number = 1 : ''"
+              >
+                <template #append>
+                  {{ '次' }}
+                </template>
+              </el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
         <!-- 提现说明 -->
         <el-form-item label="提现说明">
@@ -264,8 +271,12 @@
             maxlength="50"
             show-word-limit
           />
-          <br>
-          <span class="tips">{{ '提现说明填写后将于提现申请页面显示' }}</span>
+          <div
+            class="tips"
+            style="width: 100%;margin-left: 0"
+          >
+            {{ '提现说明填写后将于提现申请页面显示' }}
+          </div>
         </el-form-item>
         <!-- 提现设置end -->
       </template>
@@ -391,13 +402,13 @@ const onSubmit = () => {
       return
     }
     const spuIdList = []
-    if (dataForm.spuVOList && isProd) {
+    if (dataForm.spuVOList && isProd.value) {
       dataForm.spuVOList.forEach(element => {
         spuIdList.push(element.spuId)
       })
     }
     dataForm.spuIdList = spuIdList
-    if (isProd && dataForm.spuIdList.length <= 0) {
+    if (dataForm.autoCheck === 1 && isProd.value && dataForm.spuIdList.length <= 0) {
       ElMessage({
         message: '请选择商品',
         type: 'error',
@@ -405,13 +416,13 @@ const onSubmit = () => {
       })
       return
     }
-    if (!isProd) {
+    if (!isProd.value) {
       dataForm.spuIdList = []
     }
     if (dataForm.expenseNumber === '.' || dataForm.expenseNumber === '-' || dataForm.expenseAmount === '.' || dataForm.expenseAmount === '-') {
       return
     }
-    if (isExpenseNumber && !dataForm.expenseNumber) {
+    if (isExpenseNumber.value && !dataForm.expenseNumber) {
       ElMessage({
         message: '请输入整数',
         type: 'error',
@@ -419,7 +430,7 @@ const onSubmit = () => {
       })
       return
     }
-    if (isExpenseAmount && !dataForm.expenseAmount) {
+    if (isExpenseAmount.value && !dataForm.expenseAmount) {
       ElMessage({
         message: '请输入整数或保留2位小数点的整数',
         type: 'error',
@@ -428,7 +439,7 @@ const onSubmit = () => {
       return
     }
     if (dataForm.autoCheck === 1) {
-      if (!isExpenseNumber && !isProd && !isExpenseAmount) {
+      if (!isExpenseNumber.value && !isProd.value && !isExpenseAmount.value) {
         ElMessage({
           message: '系统判定至少选择一项申请条件',
           type: 'error',
@@ -437,8 +448,7 @@ const onSubmit = () => {
         return
       }
     }
-    const param = dataForm
-    api.save(param).then(() => {
+    api.save(dataForm).then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -516,6 +526,7 @@ const checkAmount = () => {
 .components-distribution-set {
   .condition-item {
     margin-bottom: 10px;
+    width: 100%;
   }
   .input-group{
     display: flex;
@@ -558,7 +569,6 @@ const checkAmount = () => {
     margin: 20px;
   }
 
-  // element
   :deep(el-checkbox__label,
   .el-radio__label){
     padding-left: 5px;
@@ -574,6 +584,13 @@ const checkAmount = () => {
   }
   :deep(.el-input__inner) {
     border-radius: 0;
+  }
+
+  .input-tips {
+    margin: 0 14px;
+  }
+  .tips {
+    margin-left: 14px;
   }
 }
 .gray-box {

@@ -49,12 +49,19 @@ const props = defineProps({
   disabled: {
     default: false,
     type: Boolean
+  },
+  show: {
+    default: true,
+    type: Boolean
   }
 })
 
 // 打开图片选择窗
 const elxImgboxRef = ref(null)
 const elxImgboxHandle = () => {
+  if (!props.show) {
+    return
+  }
   if (props.disabled) {
     openImg()
     return false

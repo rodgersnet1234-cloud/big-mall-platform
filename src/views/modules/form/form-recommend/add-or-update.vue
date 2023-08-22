@@ -4,7 +4,6 @@
     :title="!dataForm.formId ? $t('table.edit'): $t('table.create')"
     class="form-recommend-add-or-update"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :model="dataForm"

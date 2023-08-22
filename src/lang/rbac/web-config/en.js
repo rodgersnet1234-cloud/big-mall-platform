@@ -27,6 +27,7 @@ export default {
   pcTitleImg: 'Title img',
   pcLogoImgText: 'Logo img Text',
   pcWelcome: 'Navigation welcome message',
+  h5Welcome: 'Mall Welcome Message',
   activationStatus: 'Activation status',
   canNotBeEmpty: 'Cannot be empty',
   TopIcon: 'Menu bar top icon',

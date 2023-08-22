@@ -195,8 +195,8 @@
             <template #default="scope">
               <el-button
                 v-permission="['platform:webConfig:update']"
-
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(scope.row.id)"
               >
                 {{ $t("table.edit") }}
@@ -204,7 +204,8 @@
               <el-button
                 v-if="!scope.row.isActivity"
                 v-permission="['platform:webConfig:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(scope.row.id)"
               >
                 {{ $t("table.delete") }}
@@ -235,7 +236,7 @@
 <script setup>
 import AddOrUpdate from './webConfig-add-or-update.vue'
 import * as api from '@/api/rbac/web-config'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // loading
