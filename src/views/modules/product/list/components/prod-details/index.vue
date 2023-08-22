@@ -1,14 +1,16 @@
 <template>
   <el-dialog
     v-model="visible"
-    :close-on-click-modal="false"
-    :destroy-on-close="true"
+    destroy-on-close
     class="prod-det"
     width="1100px"
     title="商品详情"
     @close="closeDialog"
   >
-    <div class="mod-prod-info release-goods">
+    <div
+      v-if="visible"
+      class="mod-prod-info release-goods"
+    >
       <el-form
         ref="dataFormRef"
         class="part-form"
@@ -192,7 +194,7 @@
               <div class="part-form-item">
                 <!-- sku-组件 -->
                 <sku-block
-                  v-model="salesAttrs"
+                  v-model:salesAttrs="salesAttrs"
                   :save-sales-attrs="originalSalesAttrs"
                   :sku-tree="originalSkuTree"
                   :on-fetch-group="fetchSkuTree"
@@ -292,7 +294,9 @@
               <span class="part-tit-num">4</span><span class="part-tit-name">商品详情</span>
             </div>
             <div class="part-form-info">
-              <product-details :data-form="dataForm" />
+              <product-details
+                v-model:data-form="dataForm"
+              />
             </div>
           </div>
         </div>
@@ -321,8 +325,10 @@ import Big from 'big.js'
 import { ElMessage } from 'element-plus'
 
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
+
+const route = useRoute()
 const dataForm = ref({
-  spuId: useRoute().query.spuId || null, // 商品id
+  spuId: route.query.spuId || null, // 商品id
   categoryId: null, // 分类id
   shopCategoryId: null, // 店铺分类id
   nameZh: '', // 商品名称
@@ -352,12 +358,9 @@ const dataForm = ref({
 const salesAttrs = ref([]) // 销售规格列表
 const originalSkuTree = ref([]) // sku规格选项列表(不受改变影响)
 
+const appStore = useAppStore()
 const language = computed(() => {
-  return useAppStore().language === 'zh' ? 1 : 2
-})
-
-onMounted(() => {
-  init()
+  return appStore.language === 'zh' ? 1 : 2
 })
 
 const visible = ref(false)
@@ -368,14 +371,13 @@ const showCategorySelectBtn = ref(false) // '选择分类'按钮显隐
 const brandImgUrl = ref('') // 品牌logo
 const brandName = ref('') // 品牌名称
 const init = (spuId) => {
-  visible.value = true
   dataForm.value.spuId = spuId || ''
   nextTick(() => {
     dataFormRef.value?.resetFields()
     if (!spuId) {
       return
     }
-    api.getProdInfoPage(spuId).then(data => {
+    api.getProdInfoPage(spuId).then(async data => {
       data.virtualRemark = data.virtualRemark ? JSON.parse(data.virtualRemark) : []
       // 商品数据
       dataForm.value = data
@@ -415,7 +417,7 @@ const init = (spuId) => {
       dataForm.value.spuAttrValues.forEach(spuAttrValue => {
         if (spuAttrValue.spuAttrValueLangList && spuAttrValue.spuAttrValueLangList.length > 0) {
           spuAttrValue.spuAttrValueLangList.forEach(spuAttrValueLang => {
-            if (spuAttrValueLang.lang === language) {
+            if (spuAttrValueLang.lang === language.value) {
               spuAttrValue.attrName = spuAttrValueLang.attrName
               spuAttrValue.attrValueName = spuAttrValueLang.attrValueName
             }
@@ -424,7 +426,7 @@ const init = (spuId) => {
       })
       getAttrsByCategoryId(data.categoryId, dataForm.value.spuAttrValues)
       // sku回显
-      skuBackShow(data.skus) // 销售规格
+      await skuBackShow(data.skus) // 销售规格
       // 商品详情回显
       data.detailList?.forEach(el => {
         if (el.lang === 1) {
@@ -445,6 +447,7 @@ const init = (spuId) => {
       })
       // 运费模板
       getTransportData()
+      visible.value = true
     })
   })
 }
@@ -499,23 +502,18 @@ const getAttrsByCategoryId = (categoryId, spuAttrValues) => {
       })
     }
     basicAttrs.value = data
-    loadAttrsData(basicAttrs.value)
-  })
-}
-
-// 国际化数据筛选
-const loadAttrsData = (data) => {
-  data.forEach(attr => {
-    attr.attrLangList.forEach(attrLang => {
-      if (attrLang.lang === language) {
-        attr.name = attrLang.name
-      }
-    })
-    attr.attrValues.forEach(attrValue => {
-      attrValue.values.forEach(valueLang => {
-        if (valueLang.lang === language) {
-          attrValue.value = valueLang.value
+    basicAttrs.value.forEach(attr => {
+      attr.attrLangList.forEach(attrLang => {
+        if (attrLang.lang === language.value) {
+          attr.name = attrLang.name
         }
+      })
+      attr.attrValues.forEach(attrValue => {
+        attrValue.values.forEach(valueLang => {
+          if (valueLang.lang === language.value) {
+            attrValue.value = valueLang.value
+          }
+        })
       })
     })
   })
@@ -585,7 +583,7 @@ const skuBackShow = (skus) => {
       sku.spuSkuAttrValues?.forEach((attrInfo, idx) => {
         if (attrInfo.spuSkuAttrValueLangList) {
           attrInfo.spuSkuAttrValueLangList.forEach(spuSkuAttrValueLang => {
-            if (spuSkuAttrValueLang.lang === language || spuSkuAttrValueLang.lang === 0) {
+            if (spuSkuAttrValueLang.lang === language.value || spuSkuAttrValueLang.lang === 0) {
               attrInfo.attrName = spuSkuAttrValueLang.attrName
               attrInfo.attrValueName = spuSkuAttrValueLang.attrValueName
             }
@@ -812,6 +810,7 @@ const closeDialog = () => {
   brandName.value = '' // 品牌名称
   brandImgUrl.value = '' // 品牌logo
   selectedCategories.value = []
+  visible.value = false
 }
 
 // 精度运算-除法

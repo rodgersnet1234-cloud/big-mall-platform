@@ -3,7 +3,6 @@
     v-model="visible"
     :title="dataForm.sysUserId? $t('table.edit'): $t('table.create')"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="dataRule"
@@ -29,7 +28,7 @@
         prop="avatar"
         label-width="80px"
       >
-        <img-upload v-model="dataForm.avatar" />
+        <img-upload v-model:value="dataForm.avatar" />
       </el-form-item>
       <!-- 员工编号 -->
       <el-form-item
@@ -95,7 +94,7 @@ import { ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
-let dataForm = reactive({
+const dataForm = reactive({
   sysUserId: 0,
   shopId: null,
   nickName: null,
@@ -105,7 +104,7 @@ let dataForm = reactive({
   hasAccount: null,
   roleIds: []
 })
-let roleOpts = ref([])
+const roleOpts = ref([])
 const dataRule = {
   nickName: [
     { required: true, message: '昵称不能为空', trigger: 'blur' }
@@ -122,11 +121,19 @@ const init = (sysUserId) => {
   nextTick(() => {
     dataFormRef.value?.resetFields()
     roleApi.list().then(data => {
-      roleOpts = data
+      roleOpts.value = data
     })
     if (dataForm.sysUserId) {
       api.get(sysUserId).then(data => {
-        dataForm = data
+        dataForm.sysUserId = data.sysUserId
+        dataForm.shopId = data.shopId
+        dataForm.nickName = data.nickName
+        dataForm.avatar = data.avatar
+        dataForm.code = data.code
+        dataForm.phoneNum = data.phoneNum
+        dataForm.phoneNum = data.phoneNum
+        dataForm.hasAccount = data.hasAccount
+        dataForm.roleIds = data.roleIds
       })
     }
   })

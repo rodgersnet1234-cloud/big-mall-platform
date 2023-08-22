@@ -257,10 +257,11 @@ const menuHideOpts = [{
 }]
 let menuList = ref([])
 const selectedMenu = ref([])
-const menuListTreeProps = {
+const menuListTreeProps = reactive({
   value: 'id',
-  label: 'title'
-}
+  label: 'title',
+  checkStrictly: true
+})
 const dataFormRef = ref(null)
 watch(visible, (val) => {
   if (val === false) {

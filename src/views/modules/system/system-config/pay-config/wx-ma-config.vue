@@ -3,8 +3,6 @@
     <div class="title">
       {{ $t('platform.config.miniProgramsConfig') }}
     </div>
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       label-width="180px"
@@ -57,7 +55,7 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let dataForm = reactive({
+const dataForm = ref({
   // id: null,
   // paramKey: 'MA_CONFIG',
   appId: null,
@@ -83,7 +81,7 @@ const init = () => {
   nextTick(() => {
     api.get('MA_CONFIG').then(data => {
       if (data) {
-        dataForm = JSON.parse(data)
+        dataForm.value = JSON.parse(data)
       }
     })
     dataFormRef.value?.resetFields()
@@ -92,14 +90,14 @@ const init = () => {
 // 表单提交
 const onSubmit = () => {
   const obj = {}
-  obj.appId = dataForm.appId
-  obj.secret = dataForm.secret
+  obj.appId = dataForm.value.appId
+  obj.secret = dataForm.value.secret
 
   dataFormRef.value?.validate((valid) => {
     if (valid) {
       api.save({
         paramKey: 'MA_CONFIG',
-        paramValue: JSON.stringify(dataForm),
+        paramValue: JSON.stringify(dataForm.value),
         remark: $t('platform.config.miniProgramsConfig')
       }).then(data => {
         if (data) {

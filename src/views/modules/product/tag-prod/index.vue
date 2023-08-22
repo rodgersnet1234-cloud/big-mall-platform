@@ -2,7 +2,6 @@
   <div class="app-container">
     <!-- 1.条件筛选 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -31,29 +30,26 @@
     <div class="main-content">
       <div class="operation-bar">
         <el-button
-          icon="el-icon-arrow-left"
           type="primary"
           @click="goBackHandle()"
         >
           {{ $t("product.spuTag.returnTagManage") }}
         </el-button>
         <el-button
-          icon="el-icon-plus"
           type="primary"
           @click="selectProdHandle()"
         >
           {{ $t("table.addGood") }}
         </el-button>
         <el-button
-          type="primary"
+          :type="selectedProdList.length <= 0 ? '' : 'primary' "
           :disabled="selectedProdList.length <= 0"
           @click="onDelete()"
         >
           {{ $t("table.batchDelete") }}
         </el-button>
         <el-button
-          icon="el-icon-edit"
-          type="primary"
+          :type="selectedProdList.length <= 0 ? '' : 'primary'"
           :disabled="selectedProdList.length <= 0"
           @click="updateSeqHandle()"
         >
@@ -149,7 +145,8 @@
           >
             <template #default="{row}">
               <el-button
-                type="text"
+                link
+                type="primary"
                 :disabled="
                   (row.activityStatus === 2 || row.activityStatus > 5) &&
                     row.groupProdStatus === 1
@@ -191,7 +188,7 @@
 import ProdsSelect from './tag-select-prod.vue'
 import UpdateSeq from './update-prod-seq.vue'
 import * as api from '@/api/product/tag-prod'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 const dataList = ref([])

@@ -22,7 +22,6 @@
         >
           <el-input
             v-model.trim="dataForm.seckillName"
-            style="width: 200px"
             maxlength="36"
             show-word-limit
             :disabled="!!dataForm.seckillId"
@@ -70,17 +69,14 @@
           >
             {{ $t("seckill.openPurchaseLimit") }}
           </el-checkbox>
-          <span
-            v-show="hasMaxNum"
-            style="marginLeft: 8px"
-          >
+          <span v-show="hasMaxNum">
             {{ $t("seckill.canBePurcPer") }}
             <el-input-number
               v-model="dataForm.maxNum"
               controls-position="right"
               :min="1"
               :max="1000"
-              style="width: 100px;marginRight: 8px"
+              style="width: 100px;"
               :disabled="!!dataForm.seckillId"
             />{{ $t("unit.pieces") }}
           </span>
@@ -94,27 +90,21 @@
           >
             {{ $t("product.select") }}
           </el-button>
-          <el-alert
-            :title="$t('seckill.warning')"
-            type="warning"
-            :closable="false"
-            style="width: 310px; float: left; height: 60px; margin-left: 10px"
-          />
-        </el-form-item>
-        <el-form-item>
+
           <el-card
             v-if="spu != null"
             :body-style="{ padding: '0px' }"
             style="height: 160px; width: 120px"
           >
-            <ImgShow
+            <img-show
               :src="spu.mainImgUrl"
               :img-style="{height: '104px', width: '100%'}"
             />
             <div class="card-prod-bottom">
               <span class="card-prod-name">{{ spu.name }}</span>
               <el-button
-                type="text"
+                link
+                type="primary"
                 class="card-prod-name-button"
                 :disabled="!!dataForm.seckillId"
                 @click="deleteProd"
@@ -123,6 +113,11 @@
               </el-button>
             </div>
           </el-card>
+
+          <div class="warn-tip">
+            <el-icon><WarningFilled /></el-icon>
+            警告：秒杀商品采用独立库存，请合理安排！
+          </div>
         </el-form-item>
         <el-form-item v-if="skuList.length">
           <el-table
@@ -179,7 +174,8 @@
               <template #default="scope">
                 <el-button
                   v-if="!scope.row.status"
-                  type="text"
+                  link
+                  type="primary"
                   :disabled="!!dataForm.seckillId"
                   @click="changeSkuStatus(`${scope.$index}`)"
                 >
@@ -187,7 +183,8 @@
                 </el-button>
                 <el-button
                   v-else
-                  type="text"
+                  link
+                  type="primary"
                   :disabled="!!dataForm.seckillId"
                   @click="changeSkuStatus(`${scope.$index}`)"
                 >
@@ -519,25 +516,36 @@ const changeSkuStatus = (tagIndex) => {
 defineExpose({ init })
 </script>
 <style lang="scss" scoped>
-  .card-prod-bottom {
-    position: relative;
-    text-align: left;
-    top: -15px;
+.card-prod-bottom {
+  position: relative;
+  text-align: left;
+  top: -15px;
 
-    .card-prod-name {
-      margin: auto;
-      padding: 0 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 118px;
-      display: inline-block;
-    }
-
-    .card-prod-name-button {
-      position: absolute;
-      top: 30px;
-      right: 0;
-    }
+  .card-prod-name {
+    margin: auto;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 118px;
+    display: inline-block;
   }
+
+  .card-prod-name-button {
+    position: absolute;
+    top: 30px;
+    right: 0;
+  }
+}
+.warn-tip {
+  font-size: 12px;
+  color: #e6a23c;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  &:deep(.el-icon) {
+    font-size: 14px;
+    margin-right: 2px;
+  }
+}
 </style>

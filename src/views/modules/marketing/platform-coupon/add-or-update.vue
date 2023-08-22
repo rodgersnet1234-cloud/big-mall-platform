@@ -314,7 +314,7 @@
           content="最大不得超过10年，即3652天"
           placement="top"
         >
-          <i class="el-icon-info" />
+          <el-icon><InfoFilled /></el-icon>
         </el-tooltip>
       </el-form-item>
       <el-form-item
@@ -341,7 +341,7 @@
           content="最大不得超过10年，即3652天"
           placement="top"
         >
-          <i class="el-icon-info" />
+          <el-icon><InfoFilled /></el-icon>
         </el-tooltip>
       </el-form-item>
       <!-- 领取后生效数据 END -->
@@ -396,26 +396,34 @@
           v-if="dataForm.suitableProdType === 1"
           class="select-pro"
         >
-          <el-button @click="selectProds">
+          <el-button
+            style="margin-bottom: 10px;"
+            @click="selectProds"
+          >
             选择商品
           </el-button>
         </div>
-        <div v-if="dataForm.suitableProdType === 1 && dataForm.spuIds.length > 0">
+        <div
+          v-if="dataForm.suitableProdType === 1 && dataForm.spuIds.length > 0"
+          class="prod-box"
+        >
           <el-card
             v-for="(item,index) in dataForm.spus"
             :key="index"
             :body-style="{ padding: '0px' }"
+            class="prod-item"
             style="height: 160px;width: 120px"
           >
             <ImgShow
               :src="item.mainImgUrl"
               :img-style="{height: '104px', width: '100%'}"
             />
-            <div class="card-prod-bottom">
+            <div class="card-prod-bottom card-prod-d">
               <span class="card-prod-name">{{ item.spuName }}</span>
               <el-button
-                type="text"
-                class="card-prod-name-button"
+                link
+                type="primary"
+                class="card-prod-name-buttons"
                 @click="onDeleteCurrentProd(index)"
               >
                 删除
@@ -452,7 +460,7 @@
 
 <script setup>
 import * as api from '@/api/coupon/coupon'
-import ProdsSelect from '@/components/ProdsSelect'
+import ProdsSelect from '@/components/prods-select/index.vue'
 import Big from 'big.js'
 import { getDateTimeRange, getParseTime } from '@/utils/datetime'
 import { ElMessage } from 'element-plus'
@@ -825,6 +833,10 @@ const onSubmit = Debounce(function () {
 defineExpose({ init })
 </script>
 <style lang="scss" scoped>
+:deep(.el-form-item__content) {
+  width: 450px;
+  display: block;
+}
 .platform-coupon-manage {
   :deep(.el-dialog__body) {
     padding: 30px !important;
@@ -838,25 +850,29 @@ defineExpose({ init })
   .el-input-group > :deep(.el-input__inner) {
     padding-right: 0;
   }
-  // 商品
   .card-prod-bottom {
-    position: relative;
-    text-align: left;
-    top: -15px;
-    .card-prod-name {
-      margin: auto;
-      padding: 0 4px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 118px;
-      display: inline-block;
-    }
-    .card-prod-name-button {
-      position: absolute;
-      top: 30px;
-      right: 0;
-    }
+    display: flex;
+    justify-content: space-around;
+  }
+  .card-prod-bottom .card-prod-name {
+    margin: auto;
+    padding: 0 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 118px;
+    display: inline-block;
+  }
+  .card-prod-d .card-prod-name-buttons {
+    padding-right: 5px;
+  }
+  .prod-box {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .prod-item {
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 }
 </style>

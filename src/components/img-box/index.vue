@@ -1,10 +1,11 @@
 <template>
-  <div class="elx-imgbox">
+  <div class="component-img-box">
     <el-dialog
       v-model="visible"
       :title="$t('biz.imgbox.picManager')"
       class="elx-imgbox-dialog"
       top="9vh"
+      width="860px"
       :append-to-body="visible"
     >
       <div class="file-group">
@@ -36,7 +37,6 @@
             <el-form-item>
               <el-button
                 type="primary"
-                icon="el-icon-search"
                 @click="searchImg"
               >
                 {{ $t("biz.imgbox.query") }}
@@ -54,7 +54,7 @@
                   @click="clickOneGroup(0)"
                 >全部图片</span>
               </div>
-              <!-- <div
+              <div
                 v-for="(gItem, gIdx) in groupList"
                 :key="gIdx"
                 :class="['group-item', dataForm.attachFileGroupId===gItem.attachFileGroupId?'active':'']"
@@ -63,7 +63,8 @@
                   class="group-name"
                   @click="clickOneGroup(gItem.attachFileGroupId)"
                 >{{ gItem.name }}</span>
-              </div> -->
+                <span class="sidebar-operate" />
+              </div>
             </div>
           </div>
 
@@ -124,7 +125,7 @@
             </div>
 
             <el-pagination
-              layout="total, prev, pager, next"
+              layout="->, total, prev, pager, next"
               :current-page="page.current"
               :page-size="page.size"
               :total="page.total"
@@ -139,6 +140,7 @@
               >
                 <el-button
                   type="primary"
+                  :class="[images.length === 0 ? 'gray-btn' : '']"
                   :disabled="images.length === 0"
                   @click="onConfirm"
                 >
@@ -148,6 +150,7 @@
               <el-button
                 v-else
                 type="primary"
+                :class="[disabled ? 'gray-btn' : '']"
                 :disabled="disabled"
                 @click="onConfirm"
               >
@@ -174,6 +177,7 @@
               </div>
               <el-upload
                 ref="uploadRef"
+                :file-list="uploadFiles"
                 :class="['upload-img-preview',hideUpload?'upload-hide':'']"
                 list-type="picture-card"
                 accept=".jpg,.png,.gif,.jpeg"
@@ -190,7 +194,6 @@
                 :on-remove="onRemove"
                 :before-remove="beforeRemove"
               >
-                <!-- <i class="el-icon-plus" /> -->
                 <el-icon><Plus /></el-icon>
               </el-upload>
 
@@ -328,6 +331,7 @@ const page = reactive({
   total: 0
 })
 const hideUpload = ref(false) // 控制上传图片上传按钮显隐
+const uploadFiles = ref([])
 /**
  * 初始化
  * type 1：单图  2：多图
@@ -346,7 +350,7 @@ const init = (typePar, limitPar) => {
     type.value = false
     options.limit = limitPar
   }
-  uploadRef.value.uploadFiles = []
+  uploadFiles.value = []
   // 获取产品数据 - 第一页的数据
   page.current = 1
   loadImageGroup() // 分组
@@ -531,6 +535,7 @@ const groupFormSubmit = () => {
  * 点击上传图片按钮
  */
 const uploadFileBtn = () => {
+  uploadFiles.value = []
   options.activeTab = 'upload'
   // 设置所选分组为上传图片默认分组
   groupForm.attachFileGroupId = dataForm.attachFileGroupId || ''
@@ -562,7 +567,7 @@ const onClickListImage = (img) => {
       return
     }
   }
-  if (!type && images.value.length >= options.limit) {
+  if (!type.value && images.value.length >= options.limit) {
     message($t('biz.imgbox.superiorLimit'))
     return false
   }
@@ -605,7 +610,7 @@ const selectedImageIndex = (img) => {
 
 /**
  * 分页页面变化时刷新数据
- * @param page
+ * @param pagePar
  */
 const onPageNumChange = (pagePar) => {
   page.current = pagePar
@@ -619,7 +624,7 @@ let ossList = null
  * 获取上传图片数据
  */
 const onUploadConfirm = () => {
-  const fileNum = uploadRef.value?.uploadFiles?.length
+  const fileNum = uploadFiles.value.length
   if (fileNum === 0) {
     return ElMessage({
       message: '请选择图片上传',
@@ -717,7 +722,7 @@ const uploadNumberLimit = () => {
     return 1
   }
 
-  return options.limit - images.length
+  return options.limit - images.value.length
 }
 
 const uploadTypeTip = () => {
@@ -735,22 +740,23 @@ const uploadTips = () => {
     return tips.join('，')
   }
 
-  if (images.length > 0) {
-    tips.push($t('biz.imgbox.alreadyExist') + images.length + $t('biz.imgbox.unit'))
+  if (images.value.length > 0) {
+    tips.push($t('biz.imgbox.alreadyExist') + images.value.length + $t('biz.imgbox.unit'))
   }
-  // console.log(uploadRef.value, ' uploadRef.value.uploadFiles')
-  const uploadFileNum = uploadRef.value ? uploadRef.value.uploadFiles?.length : 0
+  const uploadFileNum = uploadFiles.value ? uploadFiles.value.length : 0
   if (uploadFileNum > 0) {
     tips.push($t('biz.imgbox.soonUpload') + uploadFileNum + $t('biz.imgbox.unit'))
   }
 
-  tips.push($t('biz.imgbox.remainder') + (options.limit - images.length - uploadFileNum) + $t('biz.imgbox.unit') + $t('biz.imgbox.upload'))
+  tips.push($t('biz.imgbox.remainder') + (options.limit - images.value.length - uploadFileNum) + $t('biz.imgbox.unit') + $t('biz.imgbox.upload'))
 
   return tips.join('，')
 }
 
-const handleAvatarChange = () => {
-  if (uploadRef.value.uploadFiles?.length >= 20) {
+// eslint-disable-next-line no-unused-vars
+const handleAvatarChange = (file, files) => {
+  uploadFiles.value = files
+  if (uploadFiles.value.length >= 20) {
     hideUpload.value = true
   }
 }
@@ -808,7 +814,7 @@ const onUploadSuccess = (response, file, fileList) => {
     loadListImage()
   })
   disabled.value = true
-  uploadRef.value.uploadFiles = []
+  uploadFiles.value = []
   page.current = 1
   groupForm.name = ''
   groupForm.attachFileGroupId = ''

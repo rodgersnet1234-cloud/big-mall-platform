@@ -198,7 +198,8 @@
             <div class="card-prod-bottom">
               <span class="card-prod-name">{{ item.spuName }}</span>
               <el-button
-                type="text"
+                link
+                type="primary"
                 class="card-prod-name-button"
                 :disabled="true"
               >

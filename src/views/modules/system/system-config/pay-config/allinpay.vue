@@ -20,11 +20,11 @@ import allinpay from './allinpay-config.vue'
 import userWithdraw from './user-withdraw-config.vue'
 import shopWithdraw from './shop-withdraw-config.vue'
 import supplierWithdraw from './supplier-withdraw-config.vue'
-import useStore from 'element-plus/es/components/table/src/store/index'
 
+const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联
 const paySettlementType = computed(() => {
-  return useStore.state.allinpay.paySettlementType
+  return useAllinpay.paySettlementType
 })
 
 </script>

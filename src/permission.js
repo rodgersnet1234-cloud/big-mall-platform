@@ -13,7 +13,6 @@ import { useUserStore } from '@/stores/modules/user.js'
 import { usePermissionStore } from '@/stores/modules/permission.js'
 
 const whiteList = ['/login'] // no redirect whitelist
-// eslint-disable-next-line no-unused-vars
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
   const permissionStore = usePermissionStore()
@@ -38,9 +37,13 @@ router.beforeEach(async (to, from, next) => {
           }
           const accessRoutes = await permissionStore.generateRoutes(menuIds)
           accessRoutes.forEach(route => {
+            if (route.path[0] !== '/') {
+              route.path = `/${route.path}`
+            }
             router.addRoute(route)
           })
           // eslint-disable-next-line require-atomic-updates
+          router.addRoute({ path: '/:pathMatch(.*)*', redirect: { path: '/404' } })
           router.options.isAddDynamicMenuRoutes = true
           next({ ...to, replace: true })
         } catch (error) {

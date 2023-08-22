@@ -9,13 +9,19 @@
       <!-- 柱状图 -->
       <div class="histogram-chart">
         <div class="chart-content">
-          <div id="access-depth-histogram-chart" />
+          <div
+            :id="eChart"
+            class="access-depth-histogram-chart"
+          />
         </div>
       </div>
       <!-- 环形图 -->
       <div class="pie-chart">
         <div class="chart-content">
-          <div id="access-depth-pie-chart" />
+          <div
+            :id="eChartTwo"
+            class="access-depth-pie-chart"
+          />
         </div>
       </div>
     </div>
@@ -40,6 +46,9 @@ const props = defineProps({
   }
 })
 
+const eChart = ref('eChart' + Date.now() + Math.random())
+const eChartTwo = ref('eChartTwo' + Date.now() + Math.random())
+
 const titleInfo = {
   title: '访问深度',
   content: '每个用户当天所有访问页面总和'
@@ -61,7 +70,12 @@ const refreshChart = () => {
 
 // 访问深度柱状图
 const getAccessDataHistogramChart = () => {
-  const histogramChart = $echarts.init(document.getElementById('access-depth-histogram-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let histogramChart = $echarts.getInstanceByDom(document.getElementById(eChart.value))
+  // 如果不存在，就进行初始化
+  if (histogramChart == null) {
+    histogramChart = $echarts.init(document.getElementById(eChart.value))
+  }
   const option = {
     tooltip: {
       trigger: 'axis'
@@ -105,7 +119,12 @@ const getAccessDataHistogramChart = () => {
 
 // 访问深度环形图
 const getAccessDataPieChart = () => {
-  const depthPieChart = $echarts.init(document.getElementById('access-depth-pie-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let depthPieChart = $echarts.getInstanceByDom(document.getElementById(eChartTwo.value))
+  // 如果不存在，就进行初始化
+  if (depthPieChart == null) {
+    depthPieChart = $echarts.init(document.getElementById(eChartTwo.value))
+  }
   const option = {
     title: {
       text: '访客数',
@@ -130,6 +149,7 @@ const getAccessDataPieChart = () => {
     series: [
       {
         type: 'pie',
+        name: '访客数',
         radius: ['72%', '28%'],
         avoidLabelOverlap: false,
         label: {
@@ -185,7 +205,7 @@ const getAccessDataPieChart = () => {
         display: block;
         width: 100%;
         height: 100%;
-        #access-depth-histogram-chart, #access-depth-pie-chart {
+        .access-depth-histogram-chart, .access-depth-pie-chart {
           width: 100%;
           height: 100%;
         }

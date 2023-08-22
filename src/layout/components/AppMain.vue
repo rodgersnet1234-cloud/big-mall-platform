@@ -10,7 +10,7 @@
 <template>
   <div
     class="Mall4j container"
-    :style="isDecorate? '':'margin-top: 40px;'"
+    :style="isDecorate || route.name === 'Dashboard' ? '' : 'margin-top: 40px;'"
   >
     <el-card
       v-if="route.meta && route.name !== 'Dashboard' && !isDecorate"

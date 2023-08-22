@@ -158,7 +158,8 @@
             <template #default="scope">
               <el-button
                 v-permission="['platform:webConfig:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(scope.row.id)"
               >
                 {{ $t("table.edit") }}
@@ -166,7 +167,8 @@
               <el-button
                 v-if="!scope.row.isActivity"
                 v-permission="['platform:webConfig:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(scope.row.id)"
               >
                 {{ $t("table.delete") }}
@@ -197,11 +199,11 @@
 <script setup>
 import AddOrUpdate from './webConfig-add-or-update.vue'
 import * as api from '@/api/rbac/web-config'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // loading
-let pageLoading = ref(true)
+const pageLoading = ref(true)
 // 查询的参数
 const pageQuery = reactive({
   pageSize: 10,
@@ -217,7 +219,7 @@ let addOrUpdateVisible = ref(false)
 const configType = ref(1) // 配置类型（1:平台端 2:商家端 3:PC端 4:h5端）
 
 const getPage = () => {
-  pageLoading = true
+  pageLoading.value = true
   api.page(pageQuery, configType).then(pageVO => {
     pageVO.list.forEach(item => {
       for (const key in item) {
@@ -229,7 +231,7 @@ const getPage = () => {
       }
     })
     // pageVO = pageVO
-    pageLoading = false
+    pageLoading.value = false
   })
 }
 const addOrUpdateRef = ref()

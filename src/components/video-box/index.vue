@@ -1,10 +1,11 @@
 <template>
-  <div class="elx-videobox">
+  <div class="component-video-box">
     <el-dialog
       v-model="visible"
       title="视频管理器"
       class="elx-videobox-dialog"
       top="9vh"
+      width="860px"
       :append-to-body="visible"
     >
       <div class="file-group">
@@ -38,7 +39,6 @@
             <el-form-item>
               <el-button
                 type="primary"
-                icon="el-icon-search"
                 @click="searchImg"
               >
                 {{ $t("biz.videobox.query") }}
@@ -119,7 +119,7 @@
             </div>
 
             <el-pagination
-              layout="total, prev, pager, next"
+              layout="->, total, prev, pager, next"
               :current-page="page.current"
               :page-size="page.size"
               :total="page.total"
@@ -134,6 +134,7 @@
               >
                 <el-button
                   type="primary"
+                  :class="[files.length === 0 ? 'gray-btn' : '']"
                   :disabled="files.length === 0"
                   @click="onConfirm"
                 >
@@ -143,6 +144,7 @@
               <el-button
                 v-else
                 type="primary"
+                :class="[disabled ? 'gray-btn' : '']"
                 :disabled="disabled"
                 @click="onConfirm"
               >
@@ -228,16 +230,16 @@
                   <div
                     class="avatar-uploader-popup"
                   >
-                    <i
-                      class="el-icon-delete"
-                      @click="preDeleteVideo(index)"
-                    />
+                    <el-icon @click="preDeleteVideo(index)">
+                      <Delete />
+                    </el-icon>
                   </div>
                 </div>
 
                 <el-upload
                   v-show="!uploadFileFlag"
                   ref="uploadRef"
+                  :file-list="uploadFiles"
                   class="upload-img-preview"
                   list-type="picture-card"
                   accept="video/*"
@@ -389,6 +391,7 @@ const fileIds = ref([]) // 已选视频的fileId
 const type = ref(2)
 let limit = null
 const uploadRef = ref(null)
+const uploadFiles = ref([])
 /**
  * 初始化
  * type 1：单图  2：多图
@@ -406,7 +409,7 @@ const init = (typePar, limitPar) => {
     limit = limitPar
   }
   if (uploadRef.value) {
-    uploadRef.value.uploadFiles = []
+    uploadFiles.value = []
   }
   // 获取产品数据 - 第一页的数据
   page.current = 1
@@ -571,16 +574,11 @@ const onConfirm = () => {
 
 let isSubmit = false
 // 视频预上传
-const handleAvatarChange = (file) => {
+const handleAvatarChange = (file, files) => {
+  uploadFiles.value = files
   if (!isSubmit) {
-    const showVideoList = document.getElementsByClassName('upShowVideo')
     const videoSrc = URL.createObjectURL(file.raw)
     videoList.value.push({ url: videoSrc, uid: file.uid })
-    showVideoList.forEach((item) => {
-      if (!item.paused) {
-        item.pause()
-      }
-    })
   }
 }
 
@@ -668,27 +666,27 @@ const selectedImageIndex = (img) => {
 
 /**
  * 分页页面变化时刷新数据
- * @param page
+ * @param pagePar
  */
-const onPageNumChange = (page) => {
-  page.current = page
+const onPageNumChange = (pagePar) => {
+  page.current = pagePar
   loadListImage()
 }
 
 let sizeFlag = 0
 const attachFiles = ref([])
-const resourcesActionType = ref(import.meta.env.VUE_APP_RESOURCES_TYPE)
+const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 let ossList = null
 /**
  * 获取上传视频数据
  */
 const onUploadConfirm = () => {
-  const fileNum = uploadRef.value?.uploadFiles.length
+  const fileNum = uploadFiles.value.length
   sizeFlag = 0
   attachFiles.value = []
   isSubmit = true
   ossInfo(fileNum).then(response => {
-    if (resourcesActionType.value === '0') {
+    if (resourcesActionType === '0') {
       dataForm.policy = response.policy
       dataForm.signature = response.signature
       dataForm.ossaccessKeyId = response.accessid
@@ -696,7 +694,7 @@ const onUploadConfirm = () => {
     }
     ossList = response.ossList
     nextTick(() => {
-      uploadRef.value?.submit()
+      uploadRef.value.submit()
       isSubmit = false
     })
   })

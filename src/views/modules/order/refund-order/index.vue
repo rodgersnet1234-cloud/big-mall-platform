@@ -159,14 +159,12 @@
           <el-button
             class="operation-btn"
             type="primary"
-            icon="el-icon-search"
             @click="onSearch(true)"
           >
             {{ $t("order.order.query") }}
           </el-button>
           <el-button
             class="operation-btn"
-            icon="el-icon-delete"
             @click="onClear()"
           >
             {{ $t('table.reset') }}
@@ -562,14 +560,16 @@
                   <div class="operate">
                     <el-button
                       v-permission="['order:refund:order:info']"
-                      type="text"
+                      link
+                      type="primary"
                       @click="onViewOrder(orderRefund.orderId)"
                     >
                       {{ $t("order.order.viewOrder") }}
                     </el-button>
                     <el-button
                       v-permission="['order:refund:info']"
-                      type="text"
+                      link
+                      type="primary"
                       @click="
                         refundHandle(orderRefund.refundId, orderRefund.shopId)
                       "
@@ -618,7 +618,7 @@ import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
 import AddOrUpdate from './components/refund-order-info.vue'
 import OrderInfo from '../order/components/order-info.vue'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 
 const options = [{
   value: 1,

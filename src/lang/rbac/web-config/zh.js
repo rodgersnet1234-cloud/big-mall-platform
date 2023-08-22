@@ -27,6 +27,7 @@ export default {
   pcTitleImg: '网站标题图标',
   pcLogoImgText: '图文Logo',
   pcWelcome: '导航欢迎语',
+  h5Welcome: '商城欢迎语',
   activationStatus: '激活状态',
   canNotBeEmpty: '不能为空',
   TopIcon: '菜单栏顶部图标',

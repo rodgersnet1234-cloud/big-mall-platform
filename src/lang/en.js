@@ -47,7 +47,8 @@ export default {
     input: 'please input'
   },
   navbar: {
-    logOut: 'Log Out'
+    logOut: 'Log Out',
+    changePassword: 'Change Password'
   },
   tagsView: {
     refresh: 'Refresh',
@@ -70,9 +71,22 @@ export default {
     logIn: 'Login',
     username: 'Username',
     password: 'Password',
+    oriPassword: 'Original password',
+    newPassword: 'New password',
+    conPassword: 'Confirm the password',
+    pawNoNull: 'Password cannot be empty',
+    passwordEmpty: 'The confirm password cannot be empty',
+    passwordTips: 'Please enter a new password',
     any: 'any',
     thirdparty: 'Or connect with',
     thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
+  },
+  resetPassword: {
+    passwordError: 'The confirmation password is inconsistent',
+    passwordTips3: 'The password length is 6-16 digits'
+  },
+  register: {
+    passwordErrorTips2: 'Spaces are not allowed as the beginning or end of a password'
   },
   unit: {
     dollar: 'yuan',

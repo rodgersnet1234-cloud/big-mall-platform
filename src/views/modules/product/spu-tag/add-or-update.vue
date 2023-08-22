@@ -4,8 +4,6 @@
     :title="dataForm.id? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :model="dataForm"

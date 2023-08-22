@@ -3,10 +3,9 @@
     v-model="visible"
     :title="dataForm.sysAccessKeyId? $t('table.edit'): $t('table.create')"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
-      v-model="dataForm"
+      :model="dataForm"
       :rules="dataRule"
       label-position="right"
       label-width="80px"
@@ -84,11 +83,13 @@ const dataForm = reactive({
   accessId: null,
   accessKey: null
 })
-const dataRule = reactive({
+
+const dataRule = {
   name: [
-    { required: true, message: '密钥名称不能为空', trigger: 'blur' }
+    { required: true, message: '请输入密钥名称', trigger: 'blur' }
   ]
-})
+}
+
 const dataFormRef = ref(null)
 const init = (sysAccessKeyId) => {
   dataForm.sysAccessKeyId = sysAccessKeyId || 0

@@ -262,7 +262,8 @@ const menuList = ref([])
 let selectedMenu = ref([])
 const menuListTreeProps = {
   value: 'id',
-  label: 'title'
+  label: 'title',
+  checkStrictly: true
 }
 const dataFormRef = ref()
 watch(visible, (val) => {

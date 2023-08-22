@@ -2,7 +2,6 @@
   <div class="app-container mod-spu-tag">
     <!-- 1.条件筛选 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -27,7 +26,6 @@
               {{ $t('table.search') }}
             </el-button>
             <el-button
-              icon="el-icon-delete"
               @click="clearSearchInfo()"
             >
               {{ $t('table.reset') }}
@@ -121,24 +119,24 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['product:spuTag:update']"
-                  type="text"
-                  icon="el-icon-edit"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.id)"
                 >
                   {{ $t("table.edit") }}
                 </el-button>
                 <el-button
                   v-permission="['product:spuTag:addProdForTag']"
-                  type="text"
-                  icon="el-icon-edit"
+                  link
+                  type="primary"
                   @click="prodHandle(row.id)"
                 >
                   {{ $t("product.spuTag.prodManage") }}
                 </el-button>
                 <el-button
                   v-permission="['product:spuTag:delete']"
-                  icon="el-icon-delete"
-                  type="text"
+                  link
+                  type="primary"
                   @click.stop="onDelete(row.id)"
                 >
                   {{ $t("table.delete") }}
@@ -173,7 +171,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/product/spu-tag'
 import { ElMessageBox, ElMessage } from 'element-plus'

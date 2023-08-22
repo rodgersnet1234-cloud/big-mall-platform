@@ -16,13 +16,15 @@
           </div>
           <div class="balance">
             <span
-              v-if="shopWalletInfo.settledAmount === null"
+              v-if="!shopWalletInfo|| shopWalletInfo.settledAmount === null"
               style="margin-right:20px"
-            > {{ '-' }}</span>
+            >0</span>
             <span
               v-else
               style="margin-right:20px"
-            >{{ amount(shopWalletInfo.settledAmount) }}</span>
+            >
+              {{ amount(shopWalletInfo.settledAmount) }}
+            </span>
           </div>
         </div>
         <div
@@ -41,7 +43,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.unsettledAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount):0 }}
+            </span>
           </div>
         </div>
         <div class="head-item">
@@ -57,7 +61,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.freezeAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount):0 }}
+            </span>
           </div>
         </div>
         <div class="head-item">
@@ -73,7 +79,9 @@
             </el-tooltip>
           </div>
           <div class="balance">
-            <span style="margin-right:30px">{{ amount(shopWalletInfo.totalSettledAmount) }}</span>
+            <span style="margin-right:30px">
+              {{ shopWalletInfo &&shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount):0 }}
+            </span>
           </div>
         </div>
       </div>
@@ -156,7 +164,6 @@
         <div class="export-btn">
           <el-button
             v-permission="['platform:shopWallet:export']"
-            icon="el-icon-download"
             @click="onExportFrom()"
           >
             导出

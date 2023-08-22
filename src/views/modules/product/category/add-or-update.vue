@@ -7,7 +7,6 @@
     width="750px"
     @closed="closeDialog"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="rules"
@@ -17,6 +16,35 @@
       class="category-form"
       @submit.prevent
     >
+      <!-- 上级分类 -->
+      <el-form-item
+        v-if="(dataForm.level
+          || (!dataForm.level && !dataForm.categoryId)) "
+        :label="$t('product.category.categoryParent')"
+      >
+        <template #label>
+          <label
+            class="el-form-item__label"
+            style="width: 90px;padding-left: 8.45px;"
+          >{{ $t('product.category.categoryParent') }}</label>
+        </template>
+        <div>
+          <category-group
+            :selected-categories="selectedCategories"
+            :show-category-select-btn="showCategorySelectBtn"
+            :is-create-category="showCategorySelectBtn"
+            :single="true"
+            @select-or-revise-category="()=>{selectOrReviseCategory(selectedCategories)}"
+            @delete-category-item-of-selected="deleteCategoryItemOfSelected"
+          />
+          <!-- 文字说明 -->
+          <div class="tips-text-part">
+            <p class="tips">
+              {{ $t('product.category.categoryParentTip') }}
+            </p>
+          </div>
+        </div>
+      </el-form-item>
       <!-- 分类名称 -->
       <el-form-item
         label="分类名称"
@@ -45,8 +73,10 @@
         :label="$t('product.category.imgUrl')"
         prop="imgUrl"
       >
-        <img-upload v-model:value="dataForm.imgUrl" />
-        <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>
+        <div>
+          <img-upload v-model:value="dataForm.imgUrl" />
+          <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>
+        </div>
       </el-form-item>
       <!-- 分类扣率-->
       <el-form-item
@@ -64,33 +94,6 @@
           :max="99.99"
         />
         %
-      </el-form-item>
-      <!-- 上级分类 -->
-      <el-form-item
-        v-if="(dataForm.level
-          || (!dataForm.level && !dataForm.categoryId)) "
-        :label="$t('product.category.categoryParent')"
-      >
-        <template #label>
-          <label
-            class="el-form-item__label"
-            style="width: 90px;padding-left: 8.45px;"
-          >{{ $t('product.category.categoryParent') }}</label>
-        </template>
-        <category-group
-          :selected-categories="selectedCategories"
-          :show-category-select-btn="showCategorySelectBtn"
-          :is-create-category="showCategorySelectBtn"
-          :single="true"
-          @select-or-revise-category="()=>{selectOrReviseCategory(selectedCategories)}"
-          @delete-category-item-of-selected="deleteCategoryItemOfSelected"
-        />
-        <!-- 文字说明 -->
-        <div class="tips-text-part">
-          <p class="tips">
-            {{ $t('product.category.categoryParentTip') }}
-          </p>
-        </div>
       </el-form-item>
       <!-- 排序 -->
       <el-form-item

@@ -105,7 +105,7 @@
                 </div>
               </div>
             </div>
-            <!-- native modifier has been removed, please confirm whether the function has been affected  -->
+
             <el-form
               v-if="formData.indicator === 2"
               ref="formDataRef"

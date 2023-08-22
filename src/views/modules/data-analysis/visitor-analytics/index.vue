@@ -4,21 +4,20 @@
     <!-- 第一模块 -->
     <div class="visitor-mod">
       <!-- 统计时间 -->
-      <path-analysis-header
+      <date-type-select
+        v-model:dateType="dateType"
         :date-options="dateOptions"
         @change-data="changeData"
       />
 
       <!-- 访问深度 -->
       <access-depth
-        v-if="accessDepthVisible"
         :echart-data="echartData"
       />
     </div>
 
     <!-- 访问地域分布 -->
     <geographical-distribution
-      v-if="areaDistributionVisible"
       :echart-data="echartData"
       :table-data="tableData2"
       @export-from="exportFrom"
@@ -26,7 +25,6 @@
 
     <!-- 系统设备 -->
     <system-equipment
-      v-if="systemPlantVisible"
       :echart-data="echartData"
     />
   </div>
@@ -34,7 +32,7 @@
 
 <script setup>
 import * as api from '@/api/data-analysis/visitor-analytics'
-import pathAnalysisHeader from '../public-components/path-analysis-header.vue'
+import dateTypeSelect from '../public-components/date-type-select.vue'
 import accessDepth from './components/visitor-access-depth.vue'
 import geographicalDistribution from './components/visitor-geographical-distribution.vue'
 import systemEquipment from './components/vivstor-system-equipment.vue'
@@ -63,11 +61,23 @@ const echartData = reactive({
 // 时间类型列表
 const dateOptions = [
   {
-    label: '近7天',
+    label: '自然日',
+    value: 1
+  },
+  {
+    label: '自然周',
+    value: 2
+  },
+  {
+    label: '自然月',
+    value: 3
+  },
+  {
+    label: '近 7 天',
     value: 5
   },
   {
-    label: '近30天',
+    label: '近 30 天',
     value: 6
   },
   {
@@ -83,18 +93,17 @@ watch(() => dateRange.value, () => {
   queryVisitorAnalysisData()
 })
 
+const dateType = ref(1)
 const changeData = (val) => {
   dateRange.value = val
 }
 
-// 时间类型 1:自然日 2:自然周 3:自然月 4:今日实时 5:近七天 6:近30天
-const timeType = 5
 /**
  * 查询访客分析数据
  */
 const queryVisitorAnalysisData = () => {
   const params = {
-    timeType,
+    dateType: dateType.value,
     startTime: dateRange.value ? parseTime(dateRange.value[0], '{y}-{m}-{d} {h}:{i}:{s}') : '',
     endTime: dateRange.value ? parseTime(dateRange.value[1], '{y}-{m}-{d} {h}:{i}:{s}') : ''
   }
@@ -107,9 +116,6 @@ const queryVisitorAnalysisData = () => {
     handleSystemPlantData(data)
   })
 }
-
-// 访问深度
-const accessDepthVisible = ref(false)
 /**
  * 处理访问深度数据
  * @param visitPageList 访问深度数据
@@ -153,7 +159,6 @@ const handleAccessDepthData = (visitPageList) => {
       echartData.depthData.seriesData2.push({ value: 0, name: visit })
     }
   }
-  accessDepthVisible.value = true
 }
 
 let isSubmit = false
@@ -169,7 +174,7 @@ const exportFrom = () => {
     }
     isSubmit = true
     const param = {
-      timeType,
+      dateType: dateType.value,
       startTime: dateRange.value ? parseTime(dateRange.value[0], '{y}-{m}-{d} {h}:{i}:{s}') : '',
       endTime: dateRange.value ? parseTime(dateRange.value[1], '{y}-{m}-{d} {h}:{i}:{s}') : ''
     }
@@ -199,7 +204,6 @@ const exportFrom = () => {
 
 // 访问地域分布
 const tableData2 = ref([])
-const areaDistributionVisible = ref(false)
 /**
  * 处理访问地域分布数据
  * @param visitUserList 访问地域分布数据
@@ -245,11 +249,8 @@ const handleAreaDistributionData = (visitUserList) => {
     echartData.regionData.seriesData2.push({ value: 0, name: '无' })
     tableData2.value.push({ seq: 0, provinceName: '无', visitNums: 0, visitUser: 0, prodVisitNums: 0, stopTime: 0 })
   }
-  areaDistributionVisible.value = true
 }
 
-// 系统设备
-const systemPlantVisible = ref(false)
 /**
  * 处理系统设备数据
  * @param data
@@ -266,7 +267,6 @@ const handleSystemPlantData = (data) => {
     { value: data.ios, name: 'ios' },
     { value: data.pc, name: 'pc' }
   )
-  systemPlantVisible.value = true
 }
 
 /**
@@ -288,7 +288,6 @@ const resetData = () => {
     seriesData: [],
     seriesData2: []
   }
-
   tableData2.value = []
 }
 

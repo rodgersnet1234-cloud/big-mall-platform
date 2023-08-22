@@ -60,7 +60,7 @@ export function updateOrderDeliveries (data) {
 // 导出订单excel
 export function soldExcel (param) {
   return excelRequest({
-    url: '/mall4cloud_order/p/order/sold_excel',
+    url: '/mall4cloud_search/p/order/search/sold_excel',
     method: 'GET',
     params: param
   })
@@ -69,7 +69,7 @@ export function soldExcel (param) {
 // 导出积分订单excel
 export function scoreSoldExcel (param) {
   return excelRequest({
-    url: '/mall4cloud_order/p/order/score_sold_excel',
+    url: '/mall4cloud_search/p/order/search/score_sold_excel',
     method: 'GET',
     params: param
   })

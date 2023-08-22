@@ -235,7 +235,8 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['shop:coupon:info']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.couponId)"
                 >
                   {{ $t("table.view") }}
@@ -244,7 +245,8 @@
                 <el-button
                   v-if="row.putonStatus < 2 && row.status === 1"
                   v-permission="['shop:coupon:offline']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offline')"
                 >
                   下线活动
@@ -252,7 +254,8 @@
                 <el-button
                   v-if="row.putonStatus === 2 && row.status === 1"
                   v-permission="['shop:coupon:offline:manage']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offlineManage')"
                 >
                   下线管理
@@ -260,7 +263,8 @@
                 <el-button
                   v-if="row.putonStatus === 3 && row.status === 1"
                   v-permission="['shop:coupon:audit']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offlineManage')"
                 >
                   审核申请
@@ -421,7 +425,7 @@ const onOrOffTheShelf = (data) => {
  */
 const onOfflineDataSubmit = (data) => {
   const param = {
-    handleId: couponId,
+    handleId: couponId.value,
     eventId: data.eventId,
     status: data.status, // 审核状态
     refuseReason: data.refuseReason // 拒绝理由

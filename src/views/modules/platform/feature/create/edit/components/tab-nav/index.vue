@@ -81,7 +81,6 @@
         <div class="tab-nav-set design-editor-component-container">
           <!-- 配置-->
           <div class="tab-set-box">
-            <!-- native modifier has been removed, please confirm whether the function has been affected  -->
             <el-form
               ref="formDataRef"
               class="edit-form"

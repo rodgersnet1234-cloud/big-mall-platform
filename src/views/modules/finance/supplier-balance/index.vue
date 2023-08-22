@@ -80,7 +80,6 @@
       </div>
 
       <div class="search-bar">
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           clearable
           :inline="true"
@@ -158,7 +157,6 @@
         <div class="export-btn">
           <el-button
             v-permission="['platform:supplierWallet:export']"
-            icon="el-icon-download"
             @click="onExportFrom()"
           >
             导出

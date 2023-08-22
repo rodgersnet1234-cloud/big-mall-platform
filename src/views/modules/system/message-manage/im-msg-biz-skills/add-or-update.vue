@@ -7,8 +7,6 @@
     width="780px"
     @close="dialogClose"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       class="dialog-form"
@@ -74,14 +72,15 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let visible = ref(false)
-let dataForm = reactive({
+const visible = ref(false)
+const dataFormRef = ref(null)
+const dataForm = reactive({
   id: null,
   keywords: '',
   content: '',
   remark: null
 })
-let isSubmit = ref(false)
+const isSubmit = ref(false)
 const dataRule = {
   keywords: [
     { required: true, message: '关键字不能为空', trigger: 'blur' }
@@ -91,32 +90,36 @@ const dataRule = {
   ]
 }
 
-const init = (id = null) => {
+const init = (id) => {
   dataForm.id = id || ''
-  visible = true
+  visible.value = true
   dialogClose()
-  isSubmit = false
+  isSubmit.value = false
   if (dataForm.id) {
     http.getSkills(id)
       .then((data) => {
         console.log(data)
-        dataForm = data
+        dataForm.id = data.id
+        dataForm.keywords = data.keywords
+        dataForm.content = data.content
+        dataForm.remark = data.remark
+        dataForm.id = data.id
       })
   }
 }
-const dataFormRef = ref(null)
+
 // 表单提交
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
-      if (isSubmit) {
+      if (isSubmit.value) {
         return false
       }
       const obj = JSON.parse(JSON.stringify(dataForm))
       if (!obj.id) {
         delete obj.id
       }
-      isSubmit = true
+      isSubmit.value = true
       http[dataForm.id ? 'putSkills' : 'postSkills'](obj)
         .then((data) => {
           ElMessage({
@@ -124,13 +127,14 @@ const onSubmit = () => {
             type: 'success',
             duration: 1500,
             onClose: () => {
-              visible = false
+              visible.value = false
               emit('refreshDataList')
               dataForm.content = ''
             }
           })
         }).catch((e) => {
-          isSubmit = false
+          console.log(e)
+          isSubmit.value = false
         })
     }
   })
@@ -141,7 +145,7 @@ const dialogClose = () => {
     dataFormRef.value?.resetFields()
   })
 }
-
+defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>

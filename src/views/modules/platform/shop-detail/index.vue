@@ -473,8 +473,6 @@
             >
               <span class="asterisk">*</span>法人身份证：
             </p>
-            <!-- <img v-if="businessInfo && businessInfo.identityCardFront" :src="resourcesUrl + businessInfo.identityCardFront" class="info-img" @click="picturePreview(businessInfo.identityCardFront)">
-            <img v-if="businessInfo && businessInfo.identityCardLater" :src="resourcesUrl + businessInfo.identityCardLater" class="info-img" @click="picturePreview(businessInfo.identityCardLater)"> -->
             <el-image
               v-if="businessInfo && businessInfo.identityCardFront"
               fit="contain"
@@ -597,6 +595,7 @@
                       style="width: 60px; height: 60px"
                       :src="img"
                       :preview-src-list="scope.row.imgs"
+                      preview-teleported
                     >
                       <template #error>
                         <img
@@ -673,8 +672,9 @@
                 <template #default="scope">
                   <el-image
                     v-if="scope.row.imgUrl"
+                    preview-teleported
                     class="tab-img"
-                    style="width: 60px; height: 60px"
+                    style="width: 60px; height: 60px;"
                     :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
                     :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
                   >
@@ -696,6 +696,7 @@
                     <el-image
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
+                      preview-teleported
                       class="tab-img"
                       style="width: 60px; height: 60px"
                       :src="img"
@@ -767,6 +768,7 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
+                      preview-teleported
                       style="width: 60px; height: 60px"
                       :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
                       :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
@@ -794,6 +796,7 @@
                       style="width: 60px; height: 60px"
                       :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
                       :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      preview-teleported
                     >
                       <template #error>
                         <img
@@ -857,7 +860,7 @@
                 <el-date-picker
                   v-model="contractTimeRange"
                   type="daterange"
-                  value-format="yyyy-MM-dd"
+                  value-format="YYYY-MM-DD"
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
@@ -901,22 +904,6 @@
         v-if="navStatus === 3"
         class="financial-info"
       >
-        <!-- <div class="tips">
-          <p class="tit"><span class="asterisk">*</span>结算日：</p>
-          <p class="txt weak">已添加3个结算日，最多可添加5个结算日</p>
-        </div>
-        <div class="tips">
-          <p class="tit">每月：</p>
-          <p class="txt">
-            <span class="date-block">5</span>
-            <span class="date-block">15</span>
-            <span class="date-block">25</span>
-            日
-          </p>
-          <p class="txt weak">
-            当月不包含所设日期时，将会顺延到下一个结算日
-          </p>
-        </div> -->
         <div class="table-box">
           <div class="tips">
             <p class="tit">
@@ -1022,20 +1009,21 @@
 
     <!-- 审核弹窗 -->
     <el-dialog
-      v-model:visible="auditDialogVisible"
+      v-model="auditDialogVisible"
       width="600px"
-      append-to-body
+
       :close-on-click-modal="false"
       destroy-on-close
       :show-close="false"
       class="audit-dialog"
     >
-      <div class="content">
+      <template #header>
         <div class="head">
           <span class="tit">商家审核</span>
           <span class="sub-tit">请补充签约信息</span>
         </div>
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
+      </template>
+      <div class="content">
         <el-form
           ref="auditformRef"
           label-width="100px"
@@ -1047,15 +1035,17 @@
             label="签约有效期"
             prop="date"
           >
-            <el-date-picker
-              v-model="auditform.date"
-              type="daterange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              @change="getContractDate"
-            />
+            <div>
+              <el-date-picker
+                v-model="auditform.date"
+                type="daterange"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                @change="getContractDate"
+              />
+            </div>
           </el-form-item>
           <el-form-item
             label="商家类型"
@@ -1086,10 +1076,9 @@
     <!-- 驳回弹窗 -->
     <el-dialog
       ref="reviewDialogRef"
-      v-model:visible="reviewDialogVisible"
+      v-model="reviewDialogVisible"
       title="请填写驳回原因"
       width="500px"
-      append-to-body
       :close-on-click-modal="false"
       destroy-on-close
       class="remarks"
@@ -1112,9 +1101,6 @@
         </span>
       </template>
     </el-dialog>
-
-    <!-- 图片预览 -->
-    <!-- <picture-preview v-if="picturePreviewVisible" ref="picturePreviewRef" /> -->
   </div>
 </template>
 
@@ -1125,10 +1111,10 @@ import { ElMessage } from 'element-plus'
 
 // 图片前缀
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
-const shopId = reactive(useRoute().query.shopId || 0)
+const route = useRoute()
+const shopId = route.query.shopId || 0
 // 页面类型 查看详情/审核申请
-const pageType = reactive(useRoute().query.pageType || '')
+const pageType = ref(route.query.pageType || '')
 // 导航切换
 const navStatus = ref(0)
 
@@ -1166,8 +1152,7 @@ const auditDialogVisible = ref(false)
 const contractStartTime = ref('')
 const contractEndTime = ref('')
 const contractTimeRange = ref([])
-// 商家类型
-const merchantType = ref(0)
+
 const auditformRules = reactive({
   date: [
     { required: true, message: '请选择签约有效期', trigger: 'change' }
@@ -1249,11 +1234,11 @@ const queryShopAuditStatus = () => {
 
 // 获取工商信息的审核信息
 const getauditInfor = () => {
-  api.getShopCompanyAuditingAuditInfo({ shopId: shopId }).then(data => {
+  api.getShopCompanyAuditingAuditInfo({ shopId }).then(data => {
     nextTick(() => {
       modifyInformation.value = { ...data.shopCompanyVO, ...data }
     })
-  }).catch(res => {
+  }).catch(() => {
   })
 }
 
@@ -1261,7 +1246,7 @@ const getauditInfor = () => {
  * 查询基本信息
  */
 const queryShopBasicInfo = () => {
-  api.getManageDetail({ shopId: shopId }).then(data => {
+  api.getManageDetail({ shopId }).then(data => {
     shopBasicInfo.value = data
     if (data.contractStartTime && data.contractEndTime) {
       contractTimeRange.value = [data.contractStartTime, data.contractEndTime]
@@ -1273,8 +1258,8 @@ const queryShopBasicInfo = () => {
  * 查询工商信息
  */
 const queryShopBusinessInfo = () => {
-  const params = { shopId: shopId }
-  if (pageType === 'toAudit') {
+  const params = { shopId }
+  if (pageType.value === 'toAudit') {
     params.status = 0
   }
   api.queryBusinessInfo(params).then(data => {
@@ -1286,7 +1271,7 @@ const queryShopBusinessInfo = () => {
  * 查询分类签约信息
  */
 const queryCategoryContractInfo = () => {
-  api.queryCategoryContract({ shopId: shopId, sysType: 1 }).then(data => {
+  api.queryCategoryContract({ shopId, sysType: 1 }).then(data => {
     categoryContract.value = data
     categoryContract.value.forEach(el => {
       const imgUrls = el.qualifications ? el.qualifications.split(',') : []
@@ -1303,7 +1288,7 @@ const queryCategoryContractInfo = () => {
  * 查询品牌签约信息
  */
 const queryBrandSigningInfo = () => {
-  api.queryBrandSigning({ shopId: shopId, sysType: 1 }).then(data => {
+  api.queryBrandSigning({ shopId, sysType: 1 }).then(data => {
     data.platformBrandList.forEach((item) => {
       let parentName = ''
       if (item.categories) {
@@ -1334,7 +1319,7 @@ const queryBrandSigningInfo = () => {
 
 const handleImgUrl = (imgUrls) => {
   const imgs = []
-  imgUrls.forEach((img, index) => {
+  imgUrls.forEach((img) => {
     if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
       const image = resourcesUrl + img
       imgs.push(image)
@@ -1349,7 +1334,7 @@ const handleImgUrl = (imgUrls) => {
  * 查询财务信息
  */
 const queryShopFinancialInfo = () => {
-  api.queryFinancialInfo({ shopId: shopId }).then(data => {
+  api.queryFinancialInfo({ shopId }).then(data => {
     settlementAccounts.value = data
   })
 }
@@ -1380,7 +1365,7 @@ const auditformRef = ref(null)
  */
 const reviewStoreApplications = (status) => {
   const param = ref({
-    shopId: shopId,
+    shopId,
     status // 0 未审核 1已通过 -1未通过 2平台下线 3 平台下线待审核
   })
   // 审核
@@ -1390,15 +1375,15 @@ const reviewStoreApplications = (status) => {
         return
       }
       param.value.shopType = auditform.shopType
-      param.value.contractStartTime = contractStartTime
-      param.value.contractEndTime = contractEndTime
+      param.value.contractStartTime = contractStartTime.value
+      param.value.contractEndTime = contractEndTime.value
       auditApply(status, param.value)
     })
     return
   }
   // 驳回，备注必填
   if (status === -1) {
-    if (!remarks.trim() || remarks.trim().length > 200) {
+    if (!remarks.value || !remarks.value.trim() || remarks.value.trim().length > 200) {
       ElMessage({
         message: '请填写200字以内的驳回原因！',
         type: 'error',
@@ -1406,13 +1391,13 @@ const reviewStoreApplications = (status) => {
       })
       return
     }
-    param.remarks = remarks.trim() // 驳回备注
-    auditApply(status, param)
+    param.value.remarks = remarks.value.trim() // 驳回备注
+    auditApply(status, param.value)
   }
 }
-
+const router = useRouter()
 const auditApply = (status, param) => {
-  api.auditData(param).then(data => {
+  api.auditData(param).then(() => {
     ElMessage({
       message: status === 1 ? '审核通过' : '申请已驳回',
       type: 'success',
@@ -1425,19 +1410,10 @@ const auditApply = (status, param) => {
       remarks.value = ''
     }
     reviewDialogVisible.value = false
-    useRouter().push('/platform/shop-manage?activeName=2')
+    router.push('/platform/shop-manage?activeName=2')
   })
 }
 
-/**
- * 图片预览
- */
-// picturePreview(imgUrl) {
-//   picturePreviewVisible = true
-//   nextTick(() => {
-//     picturePreviewRef.value?.init(imgUrl)
-//   })
-// }
 const businessInfoReuploadRef = ref(null)
 
 // 数据更新
@@ -1470,10 +1446,6 @@ const dataUpdate = Debounce(function () {
   font-size: 14px;
   color: #333;
   min-height: 852px;
-  .head-title {
-    margin-bottom: 15px;
-  }
-
   .red-tag-txt {
     color: #ff4949;
   }
@@ -1551,33 +1523,33 @@ const dataUpdate = Debounce(function () {
       display: block;
       width: 100%;
       margin: 20px 0;
-      ::v-deep(.el-table th), .el-table td {
+      :deep(.el-table th), :deep(.el-table td) {
         border-color: #f0f0f0;
         height: 40px;
         line-height: 40px;
       }
-      ::v-deep(.el-table td) {
+      :deep(.el-table td) {
         height: 56px;
         line-height: 56px;
       }
-      ::v-deep .el-table__row:last-child{
+      :deep(.el-table__row:last-child) {
         td {
           border-bottom: 0;
         }
       }
-      ::v-deep(.el-table th) {
+      :deep(.el-table th) {
         background: #fafafa;
       }
-      ::v-deep(.el-table__body-wrapper) {
+      :deep(.el-table__body-wrapper) {
         max-height: 245px;
         overflow-y: scroll;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
       }
-      ::v-deep(.el-table__body-wrapper::-webkit-scrollbar) {
+      :deep(.el-table__body-wrapper::-webkit-scrollbar) {
         display: none; /* Chrome Safari */
       }
-      ::v-deep(.el-table__body) {
+      :deep(.el-table__body) {
         width: 100%;
       }
     }
@@ -1616,9 +1588,6 @@ const dataUpdate = Debounce(function () {
     // 签约信息
     .contract-info {
       margin-top: 20px;
-      .take-down {
-        color: #ff4949;
-      }
     }
     // 财务信息
     .financial-info {
@@ -1630,22 +1599,11 @@ const dataUpdate = Debounce(function () {
         padding-bottom: 20px;
         .txt {
           margin-right: 5px;
-          .date-block {
-            display: inline-block;
-            padding: 5px 8px;
-            border: 1px solid #d9d9d9;
-            border-radius: 5px;
-            color: #155bd4;
-            font-weight: bold;
-          }
-          .date-block {
-            margin-right: 5px;
-          }
         }
       }
       .table-box {
         margin-top: 10px;
-        ::v-deep(.el-table__body-wrapper) {
+        :deep(.el-table__body-wrapper) {
           max-height: 504px;
         }
       }
@@ -1688,33 +1646,28 @@ const dataUpdate = Debounce(function () {
 
 }
 // 审核弹窗
-.audit-dialog.el-dialog__wrapper {
-  ::v-deep(.el-dialog__header) {
+.audit-dialog {
+  :deep(.el-dialog__header) {
     padding: 0;
     padding-bottom: 0;
   }
-  ::v-deep(.el-dialog__body) {
+  :deep(.el-dialog__body) {
     padding-top: 0;
     padding-bottom: 0;
   }
-  .content {
-    .head {
-      line-height: 1em;
-      font-size: 16px;
-      color: #333;
-      padding: 15px 0;
-      margin-bottom: 10px;
-      .sub-tit {
-        color: #999;
-        font-size: 12px;
-        margin-left: 10px;
-      }
-    }
-    ::v-deep(.el-form) {
-      margin-top: 20px;
+  .head {
+    line-height: 1em;
+    font-size: 16px;
+    color: #333;
+    .sub-tit {
+      color: #999;
+      font-size: 12px;
+      margin-left: 10px;
     }
   }
-
+  :deep(.el-form) {
+    margin-top: 20px;
+  }
 }
  // 信息 && 工商
   .business-info-list,
@@ -1796,7 +1749,6 @@ const dataUpdate = Debounce(function () {
     margin-right: 30px;
   }
   .business-info-list .basic-info-item  .tit {
-    // background-color: red;
     min-width: 140px;
     text-align: right;
   }

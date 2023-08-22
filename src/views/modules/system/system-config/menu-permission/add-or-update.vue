@@ -141,10 +141,11 @@ const dataRule = {
 }
 const menuList = ref([])
 const selectedMenu = ref([])
-const menuListTreeProps = {
+const menuListTreeProps = reactive({
   value: 'id',
-  label: 'title'
-}
+  label: 'title',
+  checkStrictly: true
+})
 const dataFormRef = ref(null)
 const init = (menuPermissionId) => {
   dataForm.value.menuPermissionId = menuPermissionId || 0

@@ -12,6 +12,7 @@
           type="index"
           label="序号"
           align="left"
+          width="90"
         />
         <el-table-column
           prop="shopName"
@@ -91,7 +92,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { pageShopWallet } from '@/api/merchant-balance'
 import Big from 'big.js'
 

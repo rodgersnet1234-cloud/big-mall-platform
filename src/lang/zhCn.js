@@ -54,7 +54,8 @@ export default {
     input: '请输入'
   },
   navbar: {
-    logOut: '退出登录'
+    logOut: '退出登录',
+    changePassword: '修改密码'
   },
   tagsView: {
     refresh: '刷新',
@@ -67,9 +68,22 @@ export default {
     logIn: '登录',
     username: '账号',
     password: '密码',
+    oriPassword: '原密码',
+    newPassword: '新密码',
+    conPassword: '确认密码',
+    pawNoNull: '密码不能为空',
+    passwordEmpty: '确认密码不能为空',
+    passwordTips: '请输入新密码',
     any: '随便填',
     thirdparty: '第三方登录',
     thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
+  },
+  resetPassword: {
+    passwordError: '确认密码不一致',
+    passwordTips3: '密码长度为6-16位'
+  },
+  register: {
+    passwordErrorTips2: '不允许使用空格作为密码的开头或结尾'
   },
   unit: {
     dollar: '元',

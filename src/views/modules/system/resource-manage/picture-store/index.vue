@@ -8,7 +8,7 @@
  版权所有，侵权必究！
 -->
 <template>
-  <div class="Mall4j pricture-store">
+  <div class="Mall4j page-pricture-store">
     <div class="file-group">
       <div class="upload-btn">
         <div class="up-btn">
@@ -16,22 +16,25 @@
             v-permission="['resource:img:uploadImg']"
             type="primary"
             plain
-            class="el-icon-top"
             @click="uploadFileBtn"
           >
+            <el-icon class="el-icon">
+              <Top />
+            </el-icon>
             上传图片
           </el-button>
           <el-button
             v-permission="['resource:img:saveImgGroup']"
             plain
-            class="el-icon-plus"
             @click="selectOrCreateGroup(1)"
           >
+            <el-icon class="el-icon">
+              <Plus />
+            </el-icon>
             新建分组
           </el-button>
         </div>
         <!-- 搜索 -->
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           :inline="true"
           :model="dataForm"
@@ -49,7 +52,6 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="searchImg(true)"
             >
               {{ $t("biz.imgbox.query") }}
@@ -77,16 +79,19 @@
                 @click="clickOneGroup(gItem.attachFileGroupId)"
               >{{ gItem.name }}</span>
               <span class="sidebar-operate">
-                <i
+                <el-icon
                   v-permission="['resource:img:editImgGroup']"
                   class="el-icon-edit"
                   @click="selectOrCreateGroup(1,gItem.attachFileGroupId,gIdx)"
-                />
-                <i
+                ><EditPen />
+                </el-icon>
+                <el-icon
                   v-permission="['resource:img:deleteImgGroup']"
                   class="el-icon-delete"
                   @click="onDeleteFileGroup(gItem.attachFileGroupId)"
-                />
+                >
+                  <Delete />
+                </el-icon>
               </span>
             </div>
           </div>
@@ -163,7 +168,8 @@
                 class="selected"
                 @click="onClickListImage(img)"
               >
-                <span class="icon el-icon-check" />
+                <el-icon class="icon"><Check /></el-icon>
+
               </span>
             </div>
             <div
@@ -175,10 +181,10 @@
           </div>
 
           <el-pagination
-            layout="total, prev, pager, next"
+            layout="->,total, prev, pager, next"
             :current-page="pageQuery.current"
             :page-size="pageQuery.size"
-            :total="page.total"
+            :total="pageQuery.total"
             @current-change="onPageNumChange"
           />
         </div>
@@ -198,8 +204,7 @@
               <el-select
                 v-model="groupForm.attachFileGroupId"
                 class="select-array"
-                :placeholder="选择图片分组"
-                style="marginTop: 35px"
+                placeholder="选择图片分组"
                 clearable
               >
                 <el-option
@@ -213,7 +218,8 @@
                 v-if="!selectGroupName"
                 v-permission="['resource:img:saveImgGroup']"
                 style="margin-left: 10px"
-                type="text"
+                link
+                type="primary"
                 @click="selectOrCreateGroup(1)"
               >
                 新建分组
@@ -241,7 +247,7 @@
               :on-remove="onRemove"
               :class="{hide: hideUploadEdit}"
             >
-              <i class="el-icon-plus" />
+              <el-icon><Plus /></el-icon>
             </el-upload>
 
             <div class="upload-tip">
@@ -270,7 +276,6 @@
         width="600px"
         class="group-box"
       >
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           ref="groupFormRef"
           :model="groupForm"
@@ -284,7 +289,6 @@
             :label="`分组名称`"
             prop="name"
           >
-            <!-- native modifier has been removed, please confirm whether the function has been affected  -->
             <el-input
               v-model="groupForm.name"
               :placeholder="`请输入分组名称`"
@@ -339,7 +343,6 @@
       width="500px"
       class="changebox"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         v-if="changeNameVisible"
         ref="imgDataFormRef"
@@ -404,7 +407,6 @@
       width="500px"
       class="changebox"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         v-if="changeNameVisible1"
         ref="imgDataFormRef"
@@ -427,7 +429,8 @@
           </el-select>
           <el-button
             style="margin-left:10px"
-            type="text"
+            link
+            type="primary"
             @click="selectOrCreateGroup(1)"
           >
             新建分组
@@ -461,9 +464,9 @@ import { batchDeleteImgs, batchMoveImgs } from '@/api/resource/picture-store'
 import imageCompression from 'browser-image-compression'
 import { Debounce } from '@/utils/debounce'
 
-let images = ref([]) // 已选图片
-let fileIds = ref([]) // 已选图片的fileId
-let sizeFlag = ref(0) // 避免错误提示重复弹出
+let images = [] // 已选图片
+let fileIds = [] // 已选图片的fileId
+let sizeFlag = 0 // 避免错误提示重复弹出
 const uploadRef = ref(null)
 const groupFormRef = ref(null)
 const dataForm = reactive({
@@ -477,12 +480,12 @@ const dataForm = reactive({
 })
 const groupList = ref([]) // 分组列表
 const hideUploadEdit = ref(false) // 上传按钮显示
-let attachFiles = ref([])
+let attachFiles = []
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 const showGroupVisible = ref(false) // 选择/创建分组弹窗
 const showGroupType = ref(0) // 0选择分组 1创建分组 2修改分组
-let groupForm = reactive({
+const groupForm = ref({
   attachFileGroupId: '', // 选择分组的值
   name: '' // 分组名称
 })
@@ -498,7 +501,7 @@ const options = reactive({
   callback: null
 })
 const newImgName = ref('')
-let ossList = ref([])
+let ossList = []
 const isTrue = ref(true)
 const changeNameVisible = ref(false)
 const changeNameVisible1 = ref(false)
@@ -512,7 +515,7 @@ const imgRes = ref([])
 const checkedAll = ref(false)
 const pageQuery = reactive({
   current: 1,
-  size: 18,
+  size: 30,
   total: 0
 })
 const fileNum = ref(0)
@@ -553,11 +556,11 @@ onMounted(() => {
 const loadImageGroup = () => {
   pageFileGroup({ type: fileType.value }).then((responeseData) => {
     groupList.value = responeseData
-    groupForm.attachFileGroupId = null
+    groupForm.value.attachFileGroupId = null
     if (changeNameVisible1.value || options.activeTab === 'upload') {
       responeseData.forEach(item => {
-        if (groupForm.name === item.name) {
-          groupForm.attachFileGroupId = item.attachFileGroupId
+        if (groupForm.value.name === item.name) {
+          groupForm.value.attachFileGroupId = item.attachFileGroupId
         }
       })
     }
@@ -580,8 +583,8 @@ const clickOneGroup = (id) => {
 const selectOrCreateGroup = (st, groupId, gIdx) => {
   showGroupType.value = st
   if (!groupId) {
-    groupForm.attachFileGroupId = ''
-    groupForm.name = ''
+    groupForm.value.attachFileGroupId = ''
+    groupForm.value.name = ''
   }
 
   // 修改分组
@@ -595,13 +598,13 @@ const selectOrCreateGroup = (st, groupId, gIdx) => {
       })
     }
     if (st === 1) {
-      groupForm.name = groupList[gIdx].name
-      groupForm.attachFileGroupId = groupId
+      groupForm.value.name = groupList.value[gIdx].name
+      groupForm.value.attachFileGroupId = groupId
       showGroupType.value = 2 // 修改分组名称
     }
   }
   if (st === 0) { // 选择分组
-    if (!groupList.length) {
+    if (!groupList.value.length) {
       ElMessage({
         message: '当前暂无分组可选择，请先创建分组',
         duration: 1500
@@ -620,7 +623,7 @@ const groupFormSubmit = () => {
     if (!valid) {
       return
     }
-    if (!groupForm.name.trim()) {
+    if (!groupForm.value.name.trim()) {
       ElMessage({
         message: '分组名称不能为空格',
         type: 'warning',
@@ -629,7 +632,7 @@ const groupFormSubmit = () => {
       return
     }
     if (showGroupType.value === 0) {
-      if (!groupForm.attachFileGroupId) {
+      if (!groupForm.value.attachFileGroupId) {
         ElMessage({
           message: '请选择分组',
           type: 'warning',
@@ -638,8 +641,8 @@ const groupFormSubmit = () => {
         return
       }
       groupList.value.forEach(el => {
-        if (groupForm.attachFileGroupId === el.attachFileGroupId) {
-          groupForm.name = el.name
+        if (groupForm.value.attachFileGroupId === el.attachFileGroupId) {
+          groupForm.value.name = el.name
           selectGroupName.value = el.name
         }
       })
@@ -647,7 +650,7 @@ const groupFormSubmit = () => {
       return
     }
     if (showGroupType.value !== 0) {
-      if (!groupForm.name) {
+      if (!groupForm.value.name) {
         ElMessage({
           message: '分组名称不能为空',
           type: 'warning',
@@ -656,9 +659,9 @@ const groupFormSubmit = () => {
         return
       }
       const flag = groupList.value.some(item => {
-        return item.name === groupForm.name
+        return item.name === groupForm.value.name
       })
-      if (flag && !groupForm.attachFileGroupId) {
+      if (flag && !groupForm.value.attachFileGroupId) {
         ElMessage({
           message: '分组已存在',
           type: 'warning',
@@ -671,14 +674,14 @@ const groupFormSubmit = () => {
       }
       creatingGroup.value = true
       const param = {
-        attachFileGroupId: groupForm.attachFileGroupId,
-        name: groupForm.name,
+        attachFileGroupId: groupForm.value.attachFileGroupId,
+        name: groupForm.value.name,
         type: fileType.value
       }
-      const request = groupForm.attachFileGroupId ? updateFileGroup(param) : saveFileGroup(param)
+      const request = groupForm.value.attachFileGroupId ? updateFileGroup(param) : saveFileGroup(param)
       request.then(() => {
         loadImageGroup()
-        groupForm.attachFileGroupId = ''
+        groupForm.value.attachFileGroupId = ''
         showGroupVisible.value = false
         ElMessage({
           message: $t('table.actionSuccess'),
@@ -708,7 +711,6 @@ const onDeleteFileGroup = (groupId) => {
     }
     deleteFileGroup(data).then(() => {
       dataForm.attachFileGroupId = 0
-      console.log(groupList)
       loadImageGroup()
       searchImg()
       ElMessage({
@@ -729,19 +731,13 @@ let tempSearchForm = null
  */
 const loadListImage = (newData = false) => {
   if (newData || !tempSearchForm) {
-    // tempSearchForm.pageNum = page.current ? page.current : 1
-    // tempSearchForm.pageSize = page.size
-    // tempSearchForm.fileName = fileName || null
-    // tempSearchForm.attachFileGroupId = dataForm.attachFileGroupId || ''
-    // tempSearchForm.fileType = fileType
-    // tempSearchForm.sysType = 3
     tempSearchForm = {
       pageNum: pageQuery.current ? pageQuery.current : 1,
       pageSize: pageQuery.size,
       fileName: fileName.value || null,
       attachFileGroupId: dataForm.attachFileGroupId || '',
-      type: fileType.value,
-      sysType: 3
+      type: fileType.value
+
     }
   } else {
     tempSearchForm.pageNum = pageQuery.current ? pageQuery.current : 1
@@ -753,23 +749,20 @@ const loadListImage = (newData = false) => {
   page(tempSearchForm).then(response => {
     imgRes.value = response.list
     checkedAll.value = true
-    if (imgRes.length === 0) {
+    if (imgRes.value.length === 0) {
       checkedAll.value = false
     }
     imgRes.value.forEach(img => {
-      // img.selected = false
       if (!isExist(img)) {
         img.selected = false
         checkedAll.value = false
       } else {
         img.selected = true
       }
-      // $set(img, 'selected', false)
     })
     pageQuery.pages = response.pages
     pageQuery.total = response.total
     isLoading.value = false
-    // AllImgs()
   })
 }
 
@@ -783,9 +776,9 @@ const changeName = (img) => {
   imageObject = img
   oriImgName = img.fileName
   if (img.attachFileGroupId) {
-    groupForm.attachFileGroupId = img.attachFileGroupId
+    groupForm.value.attachFileGroupId = img.attachFileGroupId
   } else {
-    groupForm.attachFileGroupId = ''
+    groupForm.value.attachFileGroupId = ''
   }
   newImgName.value = ''
 }
@@ -793,9 +786,6 @@ const changeName = (img) => {
  * 提交修改后的图片名称
  */
 const submitImgName = () => {
-  if (!newImgName.value || !newImgName.value.trim()) {
-    return ElMessage.error('图片名称不能为空！')
-  }
   if (!isTrue.value) {
     return false
   }
@@ -803,10 +793,10 @@ const submitImgName = () => {
   const data = {
     fileId: imageObject.fileId,
     fileName: newImgName.value || oriImgName,
-    attachFileGroupId: groupForm.attachFileGroupId,
-    sysType: 3
+    attachFileGroupId: groupForm.value.attachFileGroupId
+
   }
-  updateFileName(data).then(({ data }) => {
+  updateFileName(data).then(() => {
     newImgName.value = ''
     isTrue.value = true
     changeNameVisible.value = false
@@ -816,7 +806,7 @@ const submitImgName = () => {
       duration: 1500
     })
     loadListImage()
-  }).catch(({ e }) => {
+  }).catch(() => {
     isTrue.value = true
   })
 }
@@ -824,6 +814,8 @@ const submitImgName = () => {
  * 全选
  */
 const AllImgs = () => {
+  images = []
+  fileIds = []
   if (!checkedAll.value) {
     imgRes.value.forEach(img => {
       img.selected = false
@@ -832,8 +824,8 @@ const AllImgs = () => {
     fileIds = []
   } else {
     imgRes.value.forEach(img => {
-      images.value.push(JSON.parse(JSON.stringify(img)))
-      fileIds.value.push(img.fileId)
+      images.push(JSON.parse(JSON.stringify(img)))
+      fileIds.push(img.fileId)
       img.selected = true
     })
   }
@@ -856,15 +848,15 @@ const showMoveImgs = () => {
     return message('请选择图片')
   }
   changeNameVisible1.value = true
-  groupForm = {
+  groupForm.value = {
     attachFileGroupId: '', // 选择分组的值
     name: '' // 分组名称
   }
 }
 const MoveImgs = () => {
-  batchMoveImgs(groupForm.attachFileGroupId, fileIds.value).then(() => {
-    images.value = []
-    fileIds.value = []
+  batchMoveImgs(groupForm.value.attachFileGroupId, fileIds).then(() => {
+    imgRes.value = []
+    fileIds = []
     changeNameVisible1.value = false
     ElMessage.success($t('table.actionSuccess'))
     searchImg()
@@ -882,9 +874,9 @@ const delectImgs = () => {
     cancelButtonText: $t('table.cancel'),
     type: 'warning'
   }).then(() => {
-    batchDeleteImgs(fileIds.value).then(() => {
-      images.value = []
-      fileIds.value = []
+    batchDeleteImgs(fileIds).then(() => {
+      imgRes.value = []
+      fileIds = []
       ElMessage({
         message: '批量删除成功',
         type: 'success',
@@ -927,7 +919,7 @@ const uploadFileBtn = () => {
   images = []
   fileIds = []
   disabled.value = false
-  groupForm.attachFileGroupId = dataForm.attachFileGroupId || null
+  groupForm.value.attachFileGroupId = dataForm.attachFileGroupId || null
 }
 
 const instance = getCurrentInstance()
@@ -956,11 +948,11 @@ const onClickListImage = (img) => {
     return false
   }
 
-  images.value.push(JSON.parse(JSON.stringify(img)))
-  fileIds.value.push(img.fileId)
+  images.push(JSON.parse(JSON.stringify(img)))
+  fileIds.push(img.fileId)
 
   img.selected = true
-  if (images.length !== imgRes.length) {
+  if (images.length !== imgRes.value.length) {
     checkedAll.value = false
   } else {
     checkedAll.value = true
@@ -1011,9 +1003,9 @@ const onUploadConfirm = Debounce(() => {
   // 重置文件索引位置和完成文件记录数
   fileIndex.value = 0
   completeCount.value = 0
-  ossList.value = []
-  attachFiles.value = []
-  sizeFlag.value = 0
+  ossList = []
+  attachFiles = []
+  sizeFlag = 0
   if (fileNum.value === 0) {
     return ElMessage({
       message: $t('product.plePictureToUpload'),
@@ -1039,7 +1031,7 @@ const onUploadConfirm = Debounce(() => {
  * 上传图片
  */
 const httpRequest = (event) => {
-  if (sizeFlag.value !== 0) {
+  if (sizeFlag !== 0) {
     return
   }
   // 获取本次上传文件的位置
@@ -1089,16 +1081,14 @@ const httpRequest = (event) => {
     formdata.append('host', resourcesUrl)
     formdata.append('key', ossList[currentIndex].dir + ossList[currentIndex].fileName)
     formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata).then(response => {
-      console.log('上传文件成功data：', response)
-      attachFiles.value.push(attachFile)
+    aliImgUpdate(resourcesUrl, formdata).then(() => {
+      attachFiles.push(attachFile)
       completeCount.value++
       if (completeCount.value === ossList.length) {
         event.onSuccess()
       }
       uploadSuccess()
-    }).catch(error => {
-      console.log('上传文件失败error：', error)
+    }).catch(() => {
       completeCount.value++
       message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
       if (completeCount.value === ossList.length) {
@@ -1108,14 +1098,13 @@ const httpRequest = (event) => {
   } else if (resourcesActionType === '1') {
     attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
     minIoImgUpdate(ossList[currentIndex].actionUrl, file).then(() => {
-      attachFiles.value.push(attachFile)
+      attachFiles.push(attachFile)
       completeCount.value++
       if (completeCount.value === ossList.length) {
         event.onSuccess()
       }
       uploadSuccess()
-    }).catch(error => {
-      console.log(error)
+    }).catch(() => {
       message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
       completeCount.value++
       if (completeCount.value === ossList.length) {
@@ -1125,14 +1114,16 @@ const httpRequest = (event) => {
   }
 }
 // 图片预上传
+// eslint-disable-next-line no-unused-vars
 const onUploadChange = (file, fileList) => {
   if (fileList.length >= 20) {
     hideUploadEdit.value = true
   }
   fileNum.value = fileList.length
 }
+// eslint-disable-next-line no-unused-vars
 const onRemove = (file, fileList) => {
-  fileNum.value = fileList
+  fileNum.value = fileList.length
   const time = setTimeout(() => {
     hideUploadEdit.value = false
     clearTimeout(time)
@@ -1147,7 +1138,7 @@ const onRemove = (file, fileList) => {
     }, 1000)
   }
 }
-const beforeRemove = (file, fileList) => {
+const beforeRemove = () => {
   // 防止用户频繁点击导致删除过多
   return !uploadDisabled.value
 }
@@ -1223,7 +1214,7 @@ const uploadTips = () => {
  * @param file
  * @param fileList
  */
-const onUploadError = (err, file, fileList) => {
+const onUploadError = (err) => {
   message($t('biz.imgbox.requestError'), true)
   throw err
 }
@@ -1235,21 +1226,21 @@ const onUploadError = (err, file, fileList) => {
  * @param fileList
  * @returns {boolean}
  */
+// eslint-disable-next-line no-unused-vars
 const onUploadSuccess = (response, file, fileList) => {
   const filesNames = []
   fileList.forEach(file => {
     filesNames.push(file.name)
   })
   const uploadFile = []
-  attachFiles.value.forEach(file => {
+  attachFiles.forEach(file => {
     if (filesNames.indexOf(file.fileName) !== -1) {
-      file.sysType = 3
-      file.attachFileGroupId = groupForm.attachFileGroupId
+      file.attachFileGroupId = groupForm.value.attachFileGroupId
       uploadFile.push(file)
     }
   })
   if (uploadFile.length > 0) {
-    save(uploadFile).then(response => {
+    save(uploadFile).then(() => {
       attachFiles = []
       options.activeTab = 'pick'
       dataForm.attachFileGroupId = 0
@@ -1257,12 +1248,12 @@ const onUploadSuccess = (response, file, fileList) => {
     })
   }
   disabled.value = true
-  if (uploadRef) {
+  if (uploadRef.value) {
     uploadRef.value?.clearFiles()
   }
   pageQuery.current = 1
-  groupForm.name = ''
-  groupForm.attachFileGroupId = ''
+  groupForm.value.name = ''
+  groupForm.value.attachFileGroupId = ''
   selectGroupName.value = ''
   setTimeout(() => {
     hideUploadEdit.value = false
@@ -1277,7 +1268,6 @@ const onUploadExceedTip = () => {
   hideUploadEdit.value = false
 }
 const message = (msg, isInfo) => {
-  console.log('message')
   let type = 'error'
   if (isInfo) {
     type = 'info'
@@ -1291,380 +1281,5 @@ const message = (msg, isInfo) => {
 </script>
 
 <style lang="scss" scoped>
-.upload-block {
-  .el-upload-list__item {
-    text-align: center;
-    line-height: 85px!important;
-  }
-  .el-upload-list--picture-card .el-upload-list__item-thumbnail {
-    display: inline-block;
-    width: auto;
-    max-width: 88px;
-    height: auto;
-    max-height: 88px;
-    vertical-align: middle;
-  }
-}
-
-.el-badge {
-  vertical-align: bottom;
-}
-
-.group-box {
-  .el-dialog {
-    width: 820px;
-
-    .el-dialog__header {
-      border-bottom: 1px solid #e8e8e8;
-    }
-  }
-}
-
-.pricture-store {
-  .elx-images {
-    .el-upload-list__item,
-    .el-upload--picture-card {
-      width: 78px;
-      height: 78px;
-      line-height: 82px;
-      border-radius: 5px;
-    }
-  }
-  .changebox {
-    .el-form-item {
-      margin-bottom: 15px;
-    }
-    .changebox-img {
-      width: auto;
-      max-width: 350px;
-      height: 80px;
-    }
-    .old-name {
-      display: inline-block;
-      line-height: 1.5em;
-      word-break: break-word;
-    }
-  }
-}
-
-.pricture-store {
-  $bg: #f6f6f6;
-  // top: 100px;
-
-  .elx-foot {
-    padding: 15px 0 0 10px;
-    .el-button {
-      margin: 0 0 0 10px;
-    }
-  }
-
-  .file-group {
-    padding: 20px 20px;
-    .upload-btn {
-      display: flex;
-      align-items: center;
-      // justify-content: space-between;
-      padding: 0 10px;
-      margin-bottom: 15px;
-    }
-    .img-group-box {
-      display: flex;
-      // 左侧栏
-      .left-sidebar {
-        display: block;
-        height: 620px;
-        font-size: 13px;
-        color: #666;
-        .group-list {
-          height: 100%;
-          border-right: 1px solid #f2f3f5;
-          overflow-y: auto;
-          overflow-x: hidden;
-          padding: 10px;
-          .group-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 190px;
-            padding: 0 10px;
-            height: 38px;
-            line-height: 38px;
-            text-align: left;
-            box-sizing: border-box;
-            .group-name {
-              margin-right: 6px;
-              min-width: 100px;
-              max-width: 118px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              cursor: pointer;
-            }
-            .sidebar-operate {
-              // display: none;
-              .el-icon-delete,
-              .el-icon-edit {
-                margin-left: 10px;
-                cursor: pointer;
-              }
-            }
-          }
-          .group-item:hover,
-          .group-item.active {
-            background: #f2f3f5;
-            // .sidebar-operate {
-            //   display: block;
-            // }
-          }
-        }
-      }
-      // 图片列表
-      .pick-block {
-        position: relative;
-        width: 800px;
-        height: 620px;
-        .elx-img-list-loading {
-          position: absolute;
-          // top: 60px;
-          left: 0;
-          right: 0;
-          z-index: 9;
-          width: 100%;
-          height: 520px;
-          // 加载层高度
-          background: #fff;
-          text-align: center;
-
-          .el-icon-loading {
-            font-size: 50px;
-            color: #409eff;
-            line-height: 460px;
-          }
-        }
-
-        .elx-img-list {
-          padding: 10px;
-          // 图片列表高度
-          height: 570px;
-          width: 800px;
-          .img-item {
-            $imgSize: 100px;
-            $imgMiniSize: 98px;
-            $size: 104px;
-            float: left;
-            margin: 10px;
-            width: $imgSize;
-            cursor: pointer;
-            position: relative;
-            font-size: 12px;
-            .thumb-wp {
-              width: $imgSize;
-              height: $imgSize;
-              line-height: 97px;
-              display: block;
-              border: 1px solid #f6f6f6;
-              text-align: center;
-              box-sizing: border-box;
-            }
-            img {
-              display: inline-block;
-              width: auto;
-              max-width: $imgMiniSize;
-              height: auto;
-              max-height: $imgMiniSize;
-              vertical-align: middle;
-            }
-            .title {
-              line-height: 24px;
-              height: 24px;
-              display: block;
-              background: $bg;
-              padding: 0 5px;
-              overflow: hidden;
-              text-overflow:ellipsis;
-              white-space: nowrap;
-            }
-            .operate {
-              line-height: 24px;
-              height: 24px;
-              display: block;
-              overflow: hidden;
-              // background: $bg;
-              margin-top: 2px;
-              padding: 0 5px;
-              .edit {
-                float: left;
-                padding-left: 5px;
-              }
-              .del {
-                float: right;
-                padding-right: 5px;
-              }
-            }
-
-            .label {
-              position: absolute;
-              z-index: 9;
-              left: 0;
-              bottom: 24px;
-              width: 100%;
-              height: 21px;
-              line-height: 21px;
-              text-align: center;
-              color: #fff;
-
-              &:after {
-                content: " ";
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 21px;
-                background: #000;
-                opacity: 0.3;
-                z-index: -1;
-              }
-            }
-
-            .selected {
-              position: absolute;
-              right: -3px;
-              top: -3px;
-              width: $size;
-              height: 130px;
-              border: 3px solid #409eff;
-              border-radius: 3px;
-              text-align: right;
-              .icon {
-                background: #409eff;
-                text-align: center;
-                height: 24px;
-                width: 24px;
-                line-height: 24px;
-                display: inline-block;
-                font-size: 16px;
-                color: #fff;
-                border-radius: 0 0 0 3px;
-                position: absolute;
-                right: 0;
-                top: 0;
-              }
-            }
-          }
-
-          &::after {
-            content: " ";
-            display: table;
-            height: 0;
-            clear: both;
-            visibility: hidden;
-          }
-
-          .empty {
-            display: block;
-            width: 100%;
-            margin-top: 150px;
-            color: #bbb;
-            text-align: center;
-          }
-        }
-
-        .el-pagination {
-          background: #f9f9f9;
-          position: relative;
-          padding: 5px;
-          margin: 10px 24px 0 20px;
-          text-align: right;
-          float: none;
-
-          * {
-            background: none;
-          }
-        }
-      }
-    }
-  }
-  .batch {
-    margin-left: 10px;
-    background: #F7F7F7;
-    height: 40px;
-    width: 100%;
-    line-height: 40px;
-    .text {
-      color: #606266;
-      font-size: 14px;
-      margin-left: 7px;
-      cursor:pointer;
-    }
-  }
-  .upload-block {
-    .upload-img-preview {
-      padding: 20px;
-
-      /* 上传图片预览改为使用背景图片按比例缩放方式 */
-      .el-upload--picture-card,
-      .el-upload-list--picture-card .el-upload-list__item,
-      .el-upload-list--picture-card .el-upload-list__item .wp {
-        width: 90px;
-        height: 90px;
-        line-height: 98px;
-        background-size: cover;
-        background-position: 50% 50%;
-      }
-
-      .el-upload-list--picture-card .el-upload-list__item-status-label i {
-        margin-top: 12px;
-        vertical-align: top;
-      }
-    }
-
-    .upload-tip {
-      padding: 0 20px;
-      font-size: 13px;
-      color: #999;
-    }
-
-    .upload-title {
-      font-size: 16px;
-      color: #666;
-      padding: 20px 0 0 20px;
-    }
-
-    .file-gropu-btn {
-      font-size: 14px;
-      padding: 0 20px;
-      margin-bottom: 10px;
-      .sel-group-name {
-        margin-right: 15px;
-      }
-    }
-  }
-}
-
-.form {
-  // padding: 15px 0px 0px 20px;
-  margin-left: 50px;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-
-.el-upload-list__item-actions {
-  a {
-    i {
-      color: #fff;
-    }
-  }
-}
-
-.hide .el-upload--picture-card{
-  display: none;
-}
-
-// .hide ::v-deep .upload-block .el-upload-list__item{
-//   width: 200px;
-// }
-.el-message-box__message p {
-  word-break: break-word;
-}
+@use './index.scss';
 </style>

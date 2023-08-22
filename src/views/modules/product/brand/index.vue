@@ -2,7 +2,6 @@
   <div class="app-container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -26,12 +25,6 @@
               clearable
             />
           </el-form-item>
-          <!-- <el-form-item label="属性类型：">
-            <el-select v-model="pageQuery.attrType"  placeholder="请选择属性类型" :clearable="true">
-              <el-option label="销售属性" value="0" />
-              <el-option label="基本属性" value="1" />
-            </el-select>
-          </el-form-item> -->
           <el-form-item label="状态：">
             <el-select
               v-model="searchForm.status"
@@ -50,13 +43,11 @@
           </el-form-item>
           <el-button
             type="primary"
-            icon="el-icon-search"
             @click="getPage(true)"
           >
             查询
           </el-button>
           <el-button
-            icon="el-icon-delete"
             @click="onResetSearch()"
           >
             {{ $t('table.reset') }}
@@ -88,6 +79,7 @@
             :label="$t('product.brand.imgUrl')"
             prop="imgUrl"
             align="center"
+            min-width="100"
           >
             <template #default="{row}">
               <div class="table-cell-image">
@@ -180,7 +172,8 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['product:brand:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.brandId)"
                 >
                   {{ $t('table.edit') }}
@@ -188,7 +181,8 @@
                 <el-button
                   v-if="row.status === 0"
                   v-permission="['product:brand:updateStatus']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="enableOrDisable(row.brandId,row.status)"
                 >
                   <!-- 上架 -->
@@ -197,7 +191,8 @@
                 <el-button
                   v-if="row.status === 1"
                   v-permission="['product:brand:updateStatus']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="enableOrDisable(row.brandId,row.status)"
                 >
                   <!-- 下架 -->
@@ -205,7 +200,8 @@
                 </el-button>
                 <el-button
                   v-permission="['product:brand:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.brandId)"
                 >
                   {{ $t('table.delete') }}
@@ -235,7 +231,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/product/brand'
 import { ElMessageBox, ElMessage } from 'element-plus'
@@ -337,16 +333,7 @@ const onResetSearch = () => {
 </script>
 
 <style lang="scss" scoped>
-.el-table--enable-row-transition .el-table__body td {
-  height: 100px;
-  line-height: 100px;
-}
-.app-container {
-  .brand-logo-img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100px;
-  }
+.search-bar :deep(.el-button) {
+  margin-bottom: 18px;
 }
 </style>

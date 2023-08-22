@@ -30,7 +30,11 @@
     color: #AAAAAA;
     margin-left: 40px;
   }
-  .el-color-picker__trigger {
+  :deep(.el-color-picker__trigger) {
     width: 186px;
+    // 隐藏颜色选择器的icon
+    .el-color-picker__icon {
+      display: none;
+    }
   }
 }

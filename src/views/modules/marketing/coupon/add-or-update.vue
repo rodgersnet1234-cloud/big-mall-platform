@@ -290,36 +290,38 @@
         :label="$t('coupon.coupon.suitableProdType')"
         prop="suitableProdType"
       >
-        <el-radio-group
-          v-model="dataForm.suitableProdType"
-          disabled
-        >
-          <el-radio :label="0">
-            全部商品参与
-          </el-radio>
-          <el-radio :label="1">
-            指定商品参与
-          </el-radio>
-        </el-radio-group>
-        <div
-          v-if="dataForm.suitableProdType === 1 && dataForm.spuIds.length > 0"
-          class="prod-box"
-        >
-          <el-card
-            v-for="(item,index) in dataForm.spus"
-            :key="index"
-            :body-style="{ padding: '0px' }"
-            class="prod-item"
-            style="height: 160px;width: 120px"
+        <div>
+          <el-radio-group
+            v-model="dataForm.suitableProdType"
+            disabled
           >
-            <ImgShow
-              :src="item.mainImgUrl"
-              :img-style="{height: '104px', width: '100%'}"
-            />
-            <div class="card-prod-bottom">
-              <span class="card-prod-name">{{ item.spuName }}</span>
-            </div>
-          </el-card>
+            <el-radio :label="0">
+              全部商品参与
+            </el-radio>
+            <el-radio :label="1">
+              指定商品参与
+            </el-radio>
+          </el-radio-group>
+          <div
+            v-if="dataForm.suitableProdType === 1 && dataForm.spuIds.length > 0"
+            class="prod-box"
+          >
+            <el-card
+              v-for="(item,index) in dataForm.spus"
+              :key="index"
+              :body-style="{ padding: '0px' }"
+              class="prod-item"
+              style="height: 160px;width: 120px"
+            >
+              <ImgShow
+                :src="item.mainImgUrl"
+                :img-style="{height: '104px', width: '100%'}"
+              />
+              <div class="card-prod-bottom">
+                <span class="card-prod-name">{{ item.spuName }}</span>
+              </div>
+            </el-card>
+          </div>
         </div>
       </el-form-item>
     </el-form>

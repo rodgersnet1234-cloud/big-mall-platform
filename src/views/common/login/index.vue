@@ -8,14 +8,6 @@
         <div class="title">
           {{ webConfig.titleContentCn || 'Mall4j白洞版-平台端登录' }}
         </div>
-        <el-tag
-          v-if="errorLogin"
-          type="danger"
-        >
-          <el-icon>
-            <Warning />
-          </el-icon>&nbsp;{{ errorMsg }}
-        </el-tag>
         <div class="input-box">
           <el-form
             ref="dataFormRef"
@@ -115,8 +107,6 @@ const onSubmit = async formEl => {
   })
 }
 const router = useRouter()
-const errorMsg = ref('')
-const errorLogin = ref(false)
 const redirect = ref('')
 let otherQuery = reactive({})
 
@@ -146,8 +136,6 @@ const userStore = useUserStore()
 // 登录
 const onLogin = verifyResult => {
   loading.value = true
-  errorMsg.value = ''
-  errorLogin.value = false
   loginInfo.captchaVerification = verifyResult.captchaVerification
   const loginData = JSON.parse(JSON.stringify(loginInfo))
   loginData.passWord = encrypt(loginInfo.passWord)
@@ -164,8 +152,6 @@ const onLogin = verifyResult => {
     })
   }).catch((e) => {
     loading.value = false
-    errorMsg.value = e.msg
-    errorLogin.value = true
   })
 }
 

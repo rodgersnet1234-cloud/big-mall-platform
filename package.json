@@ -1,5 +1,5 @@
 {
-  "name": "mall4cloud-slipper",
+  "name": "mall4cloud-platform",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -29,7 +29,6 @@
     "pinia-plugin-persistedstate": "^3.1.0",
     "qs": "^6.11.2",
     "vue": "^3.2.47",
-    "vue-baidu-map-3x": "^1.0.34",
     "vue-cookies": "^1.8.3",
     "vue-draggable-next": "^2.2.1",
     "vue-i18n": "^9.2.2",

@@ -10,7 +10,7 @@ export function page (pageParam) {
 
 export function get (rightsId) {
   return request({
-    url: '/mall4cloud_user/p/user_rights/',
+    url: '/mall4cloud_user/p/user_rights',
     method: 'get',
     params: {
       rightsId
@@ -20,7 +20,7 @@ export function get (rightsId) {
 
 export function save (data) {
   return request({
-    url: '/mall4cloud_user/p/user_rights/',
+    url: '/mall4cloud_user/p/user_rights',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function save (data) {
 
 export function update (data) {
   return request({
-    url: '/mall4cloud_user/p/user_rights/',
+    url: '/mall4cloud_user/p/user_rights',
     method: 'put',
     data
   })
@@ -36,7 +36,7 @@ export function update (data) {
 
 export function remove (rightsId) {
   return request({
-    url: '/mall4cloud_user/p/user_rights/',
+    url: '/mall4cloud_user/p/user_rights',
     method: 'delete',
     params: {
       rightsId

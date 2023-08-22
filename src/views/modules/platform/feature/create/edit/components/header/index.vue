@@ -49,7 +49,6 @@
           {{ $t('shopFeature.header.pageName') }}
         </div>
         <div style="padding: 20px 0;background: #fff">
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-form
             ref="formDataRef"
             :model="formData"

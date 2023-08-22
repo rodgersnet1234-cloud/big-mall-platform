@@ -4,8 +4,6 @@
     :title="dataForm.menuId? $t('table.edit'): $t('table.create')"
   >
     <!-- 目录和菜单框 -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :model="dataForm"
@@ -265,7 +263,8 @@ const menuList = ref([])
 const selectedMenu = ref([])
 const menuListTreeProps = reactive({
   value: 'id',
-  label: 'title'
+  label: 'title',
+  checkStrictly: true
 })
 const dataFormRef = ref()
 watch(() => visible, (val) => {

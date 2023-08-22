@@ -20,7 +20,8 @@
           />
           <div
             v-if="disabled"
-            class="det det-qa-content"
+            class="det"
+            v-html="dataFormPar.detailZh"
           />
           <div
             v-if="disabled && !dataFormPar.detailZh"
@@ -62,20 +63,16 @@ const emit = defineEmits('update:dataForm')
 const activeName = ref('Zh')
 const dataFormPar = ref(props.dataForm)
 
-onBeforeMount(() => {
+onMounted(() => {
   dataFormPar.value.detailZh = props.dataForm.detailZh ? DOMPurify.sanitize(props.dataForm.detailZh) : ''
-  const elementCreate = document.createElement('div')
-  elementCreate.innerHTML = dataFormPar.value.detailZh
-  document.querySelector('.det-qa-content')?.replaceChildren()
-  document.querySelector('.det-qa-content')?.appendChild(elementCreate)
-
-  dataFormPar.value.detailEn = props.dataForm.detailEn ? DOMPurify.sanitize(props.dataForm.detailEn) : ''
 })
 
 const contentZhRef = ref(null)
 
 watch(() => props.dataForm, (newVal) => {
-  emit('update:dataForm', newVal)
+  if (!props.disabled) {
+    emit('update:dataForm', newVal)
+  }
 }, { deep: true })
 
 </script>

@@ -25,6 +25,16 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/im-box',
+    component: () => import('@/views/common/im-box/index.vue'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/common/error-page/401.vue'),
+    hidden: true
+  },
+  {
     path: '/404',
     component: () => import('@/views/common/error-page/404.vue'),
     hidden: true

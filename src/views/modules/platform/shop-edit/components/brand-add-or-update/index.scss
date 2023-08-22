@@ -1,0 +1,222 @@
+.component-shop-brand-dialog {
+  &:deep(.el-dialog) {
+    min-width: 950px;
+  }
+  .popup {
+    display: block;
+
+    .red-tag-txt {
+      color: #ff4949;
+    }
+
+    .text-blod {
+      color: #000;
+    }
+
+    // 表格上的标题
+    .title {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 60px;
+      border-bottom: 1px solid #EAEAEA;
+      .text {
+        height: 23px;
+        line-height: 21px;
+        font-size: 16px;
+        .stress {
+          color: #FF2120;
+        }
+      }
+      .tips {
+        height: 16px;
+        line-height: 16px;
+        font-size: 12px;
+        color: #999;
+        margin-left: 10px;
+      }
+      .close-btn {
+        font-size: 23px;
+        color: #DEDEDE;
+        margin-left: auto;
+        margin-right: 10px;
+        cursor: pointer;
+      }
+    }
+
+    // 内容
+    .content {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      .left-box {
+        width: 20%;
+        .search-box {
+          position: relative;
+          width: 100%;
+          height: 36px;
+          background: #FFFFFF;
+          border: 1px solid #E8E9EC;
+          box-sizing: border-box;
+          .search-input {
+            width: 100%;
+            height: 100%;
+            padding: 0 67px 0 12px;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+          }
+          input::-webkit-input-placeholder {
+            font-size: 14px;
+            color: #999;
+          }
+          .search-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 100%;
+            font-size: 20px;
+            color: #CBCED4;
+            border-left: 1px solid #E8E9EC;
+            cursor: pointer;
+          }
+        }
+        .brand-box {
+          width: 100%;
+          height: 540px;
+          border: 1px solid #E9EAEC;
+          box-sizing: border-box;
+          overflow-y: scroll;
+          margin-top: 14px;
+          .brand-list {
+            .brand-item {
+              width: 100%;
+              height: 47px;
+              line-height: 47px;
+              font-size: 14px;
+              padding-left: 14px;
+              overflow: hidden;
+              cursor: pointer;
+              margin-bottom: 3px;
+            }
+            .active {
+              background: rgba(24, 144, 255, 0.13);
+            }
+          }
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+      .right-box {
+        width: 80%;
+        margin-left: 21px;
+        .table-box {
+          border-left: 1px solid #E9EAEC;
+          border-right: 1px solid #E9EAEC;
+          box-sizing: border-box;
+          &:deep(.el-table__body-wrapper) {
+            max-height: 540px;
+            overflow-y: scroll;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
+          }
+          &:deep(.el-table__body-wrapper::-webkit-scrollbar) {
+            display: none; /* Chrome Safari */
+          }
+          &:deep(.el-table__body) {
+            width: 100%;
+          }
+          // 上传图片样式
+          .business-qual {
+            &:deep(.el-upload-list--picture-card .el-upload-list__item) {
+              width: 80px;
+              height: 80px;
+              margin-bottom: 0;
+            }
+            &:deep(.el-upload--picture-card) {
+              width: 80px;
+              height: 80px;
+              line-height: 80px;
+            }
+            ::v-deep .el-upload {
+              width: 80px;
+              height: 80px;
+              line-height: 80px;
+              .pic {
+                display: block;
+                width: 100%;
+                height: 100%;
+              }
+            }
+          }
+        }
+        .custom-box {
+          display: flex;
+          align-items: center;
+          width: 962px;
+          height: 60px;
+          font-size: 14px;
+          background: #FAFAFA;
+          border: 1px solid #EAEAEA;
+          box-sizing: border-box;
+          margin-top: 17px;
+          .text {
+            padding-left: 30px;
+          }
+          .add-btn {
+            width: 140px;
+            height: 36px;
+            line-height: 34px;
+            text-align: center;
+            background: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: 25px;
+            cursor: pointer;
+          }
+        }
+
+      }
+    }
+
+    // 按钮
+    .btn-box {
+      display: flex;
+      width: 202px;
+      margin: 16px auto 0;
+      padding-bottom: 30px;
+      .cancel-btn {
+        width: 91px;
+        height: 36px;
+        line-height: 34px;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #E2E2E2;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+      .confirm-btn{
+        width: 91px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        color: #fff;
+        background: #155bd4;
+        text-align: center;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    }
+  }
+}

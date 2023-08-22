@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model:visible="visible"
+    v-model="visible"
     :close-on-click-modal="false"
     top="0"
     :append-to-body="true"
@@ -21,12 +21,12 @@
 <script setup>
 
 const imgUrl = ref('')
-let visible = ref(false)
+const visible = ref(false)
 
 // eslint-disable-next-line no-unused-vars
 const init = (imgUrlPar) => {
   imgUrl.value = imgUrlPar
-  visible = true
+  visible.value = true
 }
 
 // 暴露组件方法

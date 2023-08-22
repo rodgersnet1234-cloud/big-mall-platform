@@ -127,14 +127,16 @@
             <template #default="{row}">
               <el-button
                 v-permission="['distribution:msg:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.msgId)"
               >
                 {{ $t('table.edit') }}
               </el-button>
               <el-button
                 v-permission="['distribution:msg:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row.msgId)"
               >
                 {{ $t('table.delete') }}

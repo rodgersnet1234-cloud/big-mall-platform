@@ -1,7 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-
     <el-form @submit.prevent>
       <el-form-item>
         <el-alert
@@ -14,7 +12,6 @@
     </el-form>
     <!-- 搜索相关区域 -->
     <div class="filter-container">
-      <!-- <el-button icon="el-icon-search" class="filter-item" @click="getPage()">{{ $t('table.search') }}</el-button> -->
       <el-button
         v-permission="['product:category:save']"
         type="primary"
@@ -68,8 +65,8 @@
               </div>
               <el-button
                 v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
+                link
+                type="primary"
                 @click="onAddOrUpdate(firstItem.categoryId, firstItem.level)"
               >
                 编辑
@@ -78,8 +75,8 @@
               <el-button
                 v-if="firstItem.status === 0"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
+                link
+                type="primary"
                 @click="enableOrDisable(firstItem.categoryId, firstItem.status, index)"
               >
                 {{ $t('action.putOnShelf') }}
@@ -88,16 +85,16 @@
               <el-button
                 v-if="firstItem.status === 1"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
+                link
+                type="primary"
                 @click="enableOrDisable(firstItem.categoryId, firstItem.status, index)"
               >
                 {{ $t('action.offShelf') }}
               </el-button>
               <el-button
                 v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
+                link
+                type="primary"
                 @click="onDelete(firstItem.categoryId)"
               >
                 删除
@@ -139,8 +136,8 @@
               </div>
               <el-button
                 v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
+                link
+                type="primary"
                 @click="onAddOrUpdate(secondItem.categoryId, secondItem.level)"
               >
                 编辑
@@ -149,25 +146,26 @@
               <el-button
                 v-if="secondItem.status === 0"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
+                link
+                type="primary"
                 @click="enableOrDisable(secondItem.categoryId, secondItem.status, secondIdx)"
               >
                 {{ $t('action.putOnShelf') }}
-              </el-button><!-- 下架 -->
+              </el-button>
+              <!-- 下架 -->
               <el-button
                 v-if="secondItem.status === 1"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
+                link
+                type="primary"
                 @click="enableOrDisable(secondItem.categoryId, secondItem.status, secondIdx)"
               >
                 {{ $t('action.offShelf') }}
               </el-button>
               <el-button
                 v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
+                link
+                type="primary"
                 @click="onDelete(secondItem.categoryId)"
               >
                 删除
@@ -206,8 +204,8 @@
               </div>
               <el-button
                 v-permission="['product:category:update']"
-                type="text"
-                icon="el-icon-edit"
+                link
+                type="primary"
                 @click="onAddOrUpdate(threeItem.categoryId, threeItem.level)"
               >
                 编辑
@@ -216,8 +214,8 @@
               <el-button
                 v-if="threeItem.status === 0"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-top"
+                link
+                type="primary"
                 @click="enableOrDisable(threeItem.categoryId, threeItem.status, threeIdx)"
               >
                 {{ $t('action.putOnShelf') }}
@@ -226,16 +224,16 @@
               <el-button
                 v-if="threeItem.status === 1"
                 v-permission="['product:category:updateStatus']"
-                type="text"
-                icon="el-icon-bottom"
+                link
+                type="primary"
                 @click="enableOrDisable(threeItem.categoryId, threeItem.status, threeIdx)"
               >
                 {{ $t('action.offShelf') }}
               </el-button>
               <el-button
                 v-permission="['product:category:delete']"
-                type="text"
-                icon="el-icon-delete"
+                link
+                type="primary"
                 @click="onDelete(threeItem.categoryId)"
               >
                 删除
@@ -305,10 +303,10 @@ const getPage = () => {
     pageLoading.value = false
 
     // 分类反显
-    if (secondIndex !== '') {
-      getSecondList(secondIndex)
-      if (threeIndex !== '') {
-        getThreeList(threeIndex)
+    if (secondIndex.value !== '') {
+      getSecondList(secondIndex.value)
+      if (threeIndex.value !== '') {
+        getThreeList(threeIndex.value)
       }
     }
   }).catch(() => {

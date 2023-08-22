@@ -3,8 +3,6 @@
     <div class="title">
       {{ $t("platform.config.weChatOfficialAccountConfiguration") }}
     </div>
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       label-width="240px"
@@ -59,7 +57,7 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let dataForm = reactive({
+const dataForm = ref({
   appId: null,
   secret: null
 })
@@ -81,7 +79,7 @@ const init = () => {
   nextTick(() => {
     api.get('MP_CONFIG').then(data => {
       if (data) {
-        dataForm = JSON.parse(data)
+        dataForm.value = JSON.parse(data)
       }
     })
     dataFormRef.value?.resetFields()
@@ -90,8 +88,8 @@ const init = () => {
 // 表单提交
 const onSubmit = () => {
   const obj = {}
-  obj.appId = dataForm.appId
-  obj.secret = dataForm.secret
+  obj.appId = dataForm.value.appId
+  obj.secret = dataForm.value.secret
   dataFormRef.value?.validate((valid) => {
     if (valid) {
       api.save({

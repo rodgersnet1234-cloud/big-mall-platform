@@ -2,17 +2,17 @@
   <div class="mod-notify">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
+        ref="searchFormRef"
         :inline="true"
         :model="searchParam"
         class="demo-form-inline"
         @submit.prevent
       >
         <div class="input-row">
-          <el-form-item label="消息类型">
+          <el-form-item label="消息类型" prop="sendType">
             <el-select
-              v-model="searchType"
+              v-model="searchParam.sendType"
               clearable
               placeholder="选择消息类型"
             >
@@ -24,9 +24,9 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="发送类型">
+          <el-form-item label="发送类型" prop="msgType">
             <el-select
-              v-model="searchTypeMessage"
+              v-model="searchParam.msgType"
               clearable
               placeholder="选择发送类型"
             >
@@ -38,9 +38,9 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="消息状态">
+          <el-form-item label="消息状态" prop="status">
             <el-select
-              v-model="status"
+              v-model="searchParam.status"
               clearable
               placeholder="消息状态"
             >
@@ -57,14 +57,12 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
-              @click="handleSift"
+              @click="getPage(true)"
             >
               查询
             </el-button>
             <el-button
-              icon="el-icon-delete"
-              @click="handleClearSift"
+              @click="onResetSearch(searchFormRef)"
             >
               {{ $t('table.reset') }}
             </el-button>
@@ -187,15 +185,17 @@
           >
             <template #default="{row}">
               <el-button
-                v-permission="['notify:notify:update']"
-                type="text"
+                v-permission="['notify:notif y:update']"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.templateId)"
               >
                 {{ $t('table.edit') }}
               </el-button>
               <el-button
                 v-permission="['notify:notify:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row.templateId)"
               >
                 {{ $t('table.delete') }}
@@ -224,13 +224,10 @@
 </template>
 <script setup>
 import AddOrUpdate from './add-or-update.vue'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import * as api from '@/api/biz/notify.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-let searchType = null
-let searchTypeMessage = null
-let status = null
 const searchTypesMessage = [
   { key: 1, name: '用户' },
   { key: 2, name: '商家' },
@@ -245,8 +242,14 @@ const pageQuery = reactive({
 // loading
 const pageLoading = ref(true)
 // 查询参数
-let searchParam = {
-}
+const searchParam = reactive({
+  pageSize: 10,
+  pageNum: 1,
+  sendType: null,
+  msgType: null,
+  status: null
+})
+
 const sendTypes = [{
   value: 0,
   label: $t('biz.notify.sendToCustom')
@@ -459,25 +462,27 @@ onMounted(() => {
   getPage()
 })
 
-// 过滤
-const handleSift = () => {
-  searchParam = { sendType: searchType || searchType === 0 ? searchType : null, msgType: searchTypeMessage || null, status: status || null }
-  getPage()
-}
+const searchFormRef = ref(null)
 // 清除过滤
-const handleClearSift = () => {
-  searchType = null
-  searchTypeMessage = null
-  status = null
-  searchParam = {}
+const onResetSearch = (formEl) => {
+  formEl.resetFields()
   getPage()
 }
-const getPage = () => {
+let tempSearchForm = null
+const getPage = (newData = false) => {
   pageLoading.value = true
-  api.page({ ...pageQuery, ...searchParam }).then(pageVO => {
+  if (newData || !tempSearchForm) {
+    tempSearchForm = { ...pageQuery, ...searchParam }
+  } else {
+    tempSearchForm.pageSize = pageQuery.pageSize
+    tempSearchForm.pageNum = pageQuery.pageNum
+  }
+  api.page(tempSearchForm).then(pageVO => {
     pageLoading.value = false
     if (pageVO != null) {
-      pageData = pageVO
+      pageData.list = pageVO.list
+      pageData.total = pageVO.total
+      pageData.pages = pageVO.pages
     } else {
       pageData = {
         list: [],

@@ -1,15 +1,7 @@
 <template>
-  <!-- <el-dialog
-    :title="!dataForm.id ? $t('table.create') : $t('table.edit')"
-    :close-on-click-modal="false"
-    top="10vh"
-    :visible.sync="visible"
-    class="el-dialog-body"
-  > -->
-  <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-  <!-- native modifier has been removed, please confirm whether the function has been affected  -->
   <el-form
     ref="dataFormRef"
+    class="page-webConfig-add-or-update"
     :model="dataForm"
     label-position="right"
     :rules="dataRule"
@@ -19,10 +11,6 @@
   >
     <!--后台相关配置-->
     <span v-if="dataForm.configType === 1 || dataForm.configType === 2 || dataForm.configType === 6">
-
-      <!-- <el-form-item :label="$t('rbac.webConfig.loginLogo')" prop="loginLogoImg">
-          <img-upload v-model="dataForm.loginLogoImg" :size="'380*96'" />
-        </el-form-item> -->
       <!-- 登录背景 -->
       <!-- 平台 -->
       <el-form-item
@@ -31,7 +19,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'380*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*560</span>
@@ -43,7 +31,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'560*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}560*560</span>
@@ -55,7 +43,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'626*594'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}626*594</span>
@@ -72,11 +60,6 @@
           show-word-limit
         />
       </el-form-item>
-
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsCopyright')+'-'+$t('rbac.webConfig.english')" prop="copyrightEn">
-        <el-input v-model="dataForm.copyrightEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.bsTitleContent')+'-'+$t('rbac.webConfig.chinese')"
         prop="titleContentCn"
@@ -88,16 +71,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-        <el-input v-model="dataForm.titleContentEn" maxlength="20" show-word-limit />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleImg')"
         prop="titleImg"
       >
         <img-upload
-          v-model="dataForm.titleImg"
+          v-model:value="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -108,7 +87,7 @@
         prop="bsTopBarIcon"
       >
         <img-upload
-          v-model="dataForm.bsTopBarIcon"
+          v-model:value="dataForm.bsTopBarIcon"
           :size="'160*48'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}160*48</span>
@@ -125,10 +104,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsMenuTitleOpen')+'-'+$t('rbac.webConfig.english')" prop="bsMenuTitleOpenEn">
-        <el-input v-model="dataForm.bsMenuTitleOpenEn" maxlength="20" show-word-limit />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.bsMenuTitleClose')+'-'+$t('rbac.webConfig.chinese')"
         prop="bsMenuTitleCloseCn"
@@ -140,9 +115,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsMenuTitleClose')+'-'+$t('rbac.webConfig.english')" prop="bsMenuTitleCloseEn">
-        <el-input v-model="dataForm.bsMenuTitleCloseEn" maxlength="6" show-word-limit />
-      </el-form-item> -->
     </span>
 
     <!--PC端相关配置-->
@@ -153,7 +125,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model="dataForm.loginLogoImg"
+          v-model:value="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -164,7 +136,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'1920*600'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}1920*600</span>
@@ -181,16 +153,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsCopyright')+'-'+$t('rbac.webConfig.english')" prop="copyrightEn">
-        <el-input v-model="dataForm.copyrightEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcQrcodeImg')"
         prop="pcQrcodeImg"
       >
         <img-upload
-          v-model="dataForm.pcQrcodeImg"
+          v-model:value="dataForm.pcQrcodeImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -205,10 +173,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcCompanyName')+'-'+$t('rbac.webConfig.english')" prop="pcCompanyNameEn">
-        <el-input v-model="dataForm.pcCompanyNameEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcCompanyInfo')+'-'+$t('rbac.webConfig.chinese')"
         prop="pcCompanyInfoCn"
@@ -219,10 +183,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcCompanyInfo')+'-'+$t('rbac.webConfig.english')" prop="pcCompanyInfoEn">
-        <el-input v-model="dataForm.pcCompanyInfoEn" type="textarea" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleContent')+'-'+$t('rbac.webConfig.chinese')"
         prop="titleContentCn"
@@ -232,16 +192,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-        <el-input v-model="dataForm.titleContentEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleImg')"
         prop="titleImg"
       >
         <img-upload
-          v-model="dataForm.titleImg"
+          v-model:value="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -251,7 +207,7 @@
         prop="pcLogoImgText"
       >
         <img-upload
-          v-model="dataForm.pcLogoImgText"
+          v-model:value="dataForm.pcLogoImgText"
           :size="'380*96'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*96</span>
@@ -266,9 +222,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcWelcome')+'-'+$t('rbac.webConfig.english')" prop="pcWelcomeEn">
-        <el-input v-model="dataForm.pcWelcomeEn" />
-      </el-form-item> -->
     </span>
 
     <!--H5端相关配置-->
@@ -278,7 +231,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model="dataForm.loginLogoImg"
+          v-model:value="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -291,9 +244,14 @@
           v-model="dataForm.titleContentCn"
         />
       </el-form-item>
-      <!-- <el-form-item :label="$t('rbac.webConfig.uniTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-        <el-input v-model="dataForm.titleContentEn" />
-      </el-form-item> -->
+      <el-form-item
+        :label="$t('rbac.webConfig.h5Welcome')+'-'+$t('rbac.webConfig.chinese')"
+        prop="h5WelcomeCn"
+      >
+        <el-input
+          v-model="dataForm.h5WelcomeCn"
+        />
+      </el-form-item>
     </span>
 
     <!--自提点端相关配置-->
@@ -303,20 +261,12 @@
         prop="stationLoginLogoImg"
       >
         <img-upload
-          v-model="dataForm.stationLoginLogoImg"
+          v-model:value="dataForm.stationLoginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
       </el-form-item>
     </span>
-
-    <!-- <el-form-item :label="$t('rbac.webConfig.activationStatus')" prop="isActivity">
-        <el-radio-group v-model="dataForm.isActivity">
-          <el-radio :label="0">{{ $t('rbac.webConfig.close') }}</el-radio>
-          <el-radio :label="1">{{ $t('rbac.webConfig.open') }}</el-radio>
-        </el-radio-group>
-      </el-form-item> -->
-
     <el-form-item>
       <el-button
         type="primary"
@@ -340,8 +290,8 @@ import useStore from 'element-plus/es/components/table/src/store/index'
 
 const emit = defineEmits(['refreshDataList'])
 
-let visible = ref(false)
-let dataForm = reactive({
+const visible = ref(false)
+const dataForm = ref({
   id: null,
   configType: null, // 配置类型（1:平台端 2:商家端 3:PC端 4:h5端 5:自提点端 6:供应商端）
   isActivity: 0,
@@ -379,9 +329,9 @@ const props = defineProps({
 const dataFormRef = ref(null)
 onMounted(() => {
   // dataForm.id = configId || 0
-  dataForm.configType = props.configType
+  dataForm.value.configType = props.configType
 
-  visible = true
+  visible.value = true
   nextTick(() => {
     dataFormRef.value?.resetFields()
     if (props.configType === 1) {
@@ -406,26 +356,12 @@ onMounted(() => {
   })
 })
 
-// init(configType, id) {
-//   dataForm.id = id || 0
-//   dataForm.configType = configType
-//   visible = true
-//   nextTick(() => {
-//     $refs['dataForm'].resetFields()
-//     if (dataForm.id) {
-//       api.get(dataForm.id).then(data => {
-//         dataForm = data
-//       })
-//     }
-//   })
-// },
-//
 // 获取表单数据接口
 const getFormData = (apiKey, configType, str) => {
   apis.getWebConfig(apiKey).then(data => {
     if (data) {
-      dataForm = JSON.parse(data)
-      dataForm.configType = configType
+      dataForm.value = JSON.parse(data)
+      dataForm.value.configType = configType
     }
   })
 }
@@ -437,88 +373,88 @@ const onSubmit = () => {
     }
 
     // 后台配置判断
-    if (dataForm.configType === 1 || dataForm.configType === 2 || dataForm.configType === 6) {
+    if (dataForm.value.configType === 1 || dataForm.value.configType === 2 || dataForm.value.configType === 6) {
       // if (!dataForm.loginLogoImg) {
       //   errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
       //   return
       // }
-      if (!dataForm.loginBgImg) {
+      if (!dataForm.value.loginBgImg) {
         errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.copyrightCn) {
+      if (!dataForm.value.copyrightCn) {
         errorMsg($t('rbac.webConfig.bsCopyright') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleContentCn) {
+      if (!dataForm.value.titleContentCn) {
         errorMsg($t('rbac.webConfig.bsTitleContent') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleImg) {
+      if (!dataForm.value.titleImg) {
         errorMsg($t('rbac.webConfig.pcTitleImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
       // TopIcon
-      if (!dataForm.bsTopBarIcon) {
+      if (!dataForm.value.bsTopBarIcon) {
         errorMsg($t('rbac.webConfig.TopIcon') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.bsMenuTitleOpenCn) {
+      if (!dataForm.value.bsMenuTitleOpenCn) {
         errorMsg($t('rbac.webConfig.bsMenuTitleOpen') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.bsMenuTitleCloseCn) {
+      if (!dataForm.value.bsMenuTitleCloseCn) {
         errorMsg($t('rbac.webConfig.bsMenuTitleClose') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
 
     // pc端配置判断
-    if (dataForm.configType === 3) {
-      if (!dataForm.loginLogoImg) {
+    if (dataForm.value.configType === 3) {
+      if (!dataForm.value.loginLogoImg) {
         errorMsg($t('rbac.webConfig.logo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.loginBgImg) {
+      if (!dataForm.value.loginBgImg) {
         errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.copyrightCn) {
+      if (!dataForm.value.copyrightCn) {
         errorMsg($t('rbac.webConfig.bsCopyright') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcQrcodeImg) {
+      if (!dataForm.value.pcQrcodeImg) {
         errorMsg($t('rbac.webConfig.pcQrcodeImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcCompanyNameCn) {
+      if (!dataForm.value.pcCompanyNameCn) {
         errorMsg($t('rbac.webConfig.pcCompanyName') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcCompanyInfoCn) {
+      if (!dataForm.value.pcCompanyInfoCn) {
         errorMsg($t('rbac.webConfig.pcCompanyInfo') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleContentCn) {
+      if (!dataForm.value.titleContentCn) {
         errorMsg($t('rbac.webConfig.pcTitleContent') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleImg) {
+      if (!dataForm.value.titleImg) {
         errorMsg($t('rbac.webConfig.pcTitleImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcLogoImgText) {
+      if (!dataForm.value.pcLogoImgText) {
         errorMsg($t('rbac.webConfig.pcLogoImgText') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcWelcomeCn) {
+      if (!dataForm.value.pcWelcomeCn) {
         errorMsg($t('rbac.webConfig.pcWelcome') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
     // h5端配置判断
-    if (dataForm.configType === 4) {
-      if (!dataForm.loginLogoImg) {
+    if (dataForm.value.configType === 4) {
+      if (!dataForm.value.loginLogoImg) {
         errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
@@ -526,36 +462,36 @@ const onSubmit = () => {
 
     // 自提点端配置判断
     if (dataForm.configType === 5) {
-      if (!dataForm.stationLoginLogoImg) {
+      if (!dataForm.value.stationLoginLogoImg) {
         errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
 
     if (props.configType === 1) {
-    // 平台端配置
+      // 平台端配置
       modifyFormData('PLATFROM_WEBSITE_CONFIG')
     } else if (props.configType === 2) {
-    // 商家端配置
+      // 商家端配置
       modifyFormData('MULTISHOP_WEBSITE_CONFIG')
     } else if (props.configType === 6) {
-    // 供应商端配置
+      // 供应商端配置
       modifyFormData('SUPPLIER_WEBSITE_CONFIG')
     } else if (props.configType === 3) {
-    // pc端配置
+      // pc端配置
       modifyFormData('PC_WEBSITE_CONFIG')
     } else if (props.configType === 4) {
-    // h5端配置
+      // h5端配置
       modifyFormData('H5_WEBSITE_CONFIG')
     } else if (props.configType === 5) {
-    // h5端配置
+      // h5端配置
       modifyFormData('STATION_WEBSITE_CONFIG')
     }
   })
 }
 // 修改更新接口
 const modifyFormData = (apiKey) => {
-  const newObj = Object.assign({}, dataForm)
+  const newObj = Object.assign({}, dataForm.value)
   if (newObj.configType) delete newObj.configType
   if (newObj.id || newObj.id === null) delete newObj.id
   if (newObj.isactive || newObj.isactive === null) delete newObj.isactive
@@ -570,7 +506,7 @@ const modifyFormData = (apiKey) => {
       duration: 1500,
       customClass: 'zZindex',
       onClose: () => {
-        visible = false
+        visible.value = false
         emit('refreshDataList')
       }
     })
@@ -588,7 +524,7 @@ const errorMsg = (message) => {
 
 // 更新网站配置信息
 const updateWebConfigData = () => {
-  if (dataForm.configType !== 1) {
+  if (dataForm.value.configType !== 1) {
     return
   }
   api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
@@ -600,35 +536,38 @@ const updateWebConfigData = () => {
 </script>
 
 <style lang="scss" scoped>
-.img-tip {
-  font-weight: 400;
-  position: absolute;
-  font-size: 12px;
-  line-height: 12px;
-  /* bottom: 0; */
-  padding: 0;
-  color: #3d3d3d;
-}
+.page-webConfig-add-or-update{
+  .img-tip {
+    font-weight: 400;
+    position: absolute;
+    font-size: 12px;
+    line-height: 12px;
+    bottom: 0;
+    padding: 0;
+    color: #3d3d3d;
+  }
 
-.single-image-upload {
-  height: 132px !important;
-}
+  ::v-deep(.single-image-upload) {
+    height: 132px !important;
+    margin-bottom: 20px;
+  }
 
-.el-form-item {
-  margin-bottom: 22px;
-}
+  ::v-deep(.el-form-item) {
+    margin-bottom: 22px;
+  }
 
-::v-deep(.el-form-item__label) {
-  text-align: right !important;
-}
-::v-deep(.el-input) {
-  width: 60%;
-}
-::v-deep(.el-textarea) {
-  width: 60%;
-}
-</style>
-<style lang="scss" scoped>
+  ::v-deep(.el-form-item__label) {
+    text-align: right !important;
+  }
+
+  ::v-deep(.el-input) {
+    width: 60%;
+  }
+
+  ::v-deep(.el-textarea) {
+    width: 60%;
+  }
+
   ::v-deep(.el-upload-list--picture-card .el-upload-list__item-thumbnail) {
     width: 100%;
     height: auto;
@@ -637,4 +576,5 @@ const updateWebConfigData = () => {
     bottom: 0;
     margin: auto 0;
   }
+}
 </style>

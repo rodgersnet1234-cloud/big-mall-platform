@@ -3,7 +3,7 @@
   <div class="page-flow-profile component-traffic-overview">
     <!-- 标题栏 -->
     <titleBar
-      :title="plateTitle"
+      title="流量总览"
       :show-time-screening="true"
       :show-export="true"
       :permission="'platform:analysisData:export'"
@@ -28,7 +28,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.all || 0 }}
+            {{ getUserNums(0) }}
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.pc }}
+            {{ getUserNums(1) }}
           </div>
         </div>
       </div>
@@ -64,7 +64,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.h5 }}
+            {{ getUserNums(2) }}
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.applets }}
+            {{ getUserNums(3) }}
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.android }}
+            {{ getUserNums(4) }}
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
         </div>
         <div class="bottom-data">
           <div class="num">
-            {{ sysData.ios }}
+            {{ getUserNums(5) }}
           </div>
         </div>
       </div>
@@ -487,6 +487,7 @@
 import * as api from '@/api/data-analysis/flow-profile.js'
 import titleBar from '../../public-components/title-bar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
 const props = defineProps({
   // 系统类型 0:全部 1:pc  2:h5  3:小程序 4:安卓  5:ios
   systemType: {
@@ -509,40 +510,50 @@ const props = defineProps({
   endTime: {
     type: String,
     default: ''
+  },
+  // flow-transaction-conversion.vue中mall4cloud_flow/p/flow_analysis/flow_sour请求获取的数据
+  sysData: {
+    type: Array,
+    default: () => []
   }
 })
 
 const emit = defineEmits(['switchSystemType', 'getDateTime'])
 
-const plateTitle = ref('流量总览')
-
 // 系统类型 0:全部 1:pc  2:h5  3:小程序 4:安卓  5:ios
 const curSystemType = ref(props.systemType)
 watch(() => props.systemType, () => {
   curSystemType.value = props.systemType
-  if (props.startTime && props.startTime !== '') {
+  if ([4, 5, 6].includes(props.timeType) || props.startTime) {
     init()
+  }
+})
+
+const getUserNums = computed(() => {
+  return (type) => {
+    const sysArr = props.sysData.find((item) => {
+      return item.systemType === type
+    })
+    if (sysArr) {
+      return sysArr.userNums
+    } else {
+      return 0
+    }
   }
 })
 
 // 流量总览
 const flowData = ref({})
-// 流量总览-系统用户数量
-const sysData = ref({})
 const init = () => {
   const params = {
     systemType: curSystemType.value || 0,
-    timeType: props.timeType,
+    dateType: props.timeType,
     startTime: props.startTime || '',
     endTime: props.endTime || ''
   }
   // 流量总览
   api.flowAll(params).then(data => {
     flowData.value = data
-  })
-  // 流量总览-系统用户数量
-  api.flowSystem(params).then(data => {
-    sysData.value = data
   })
 }
 
@@ -557,11 +568,11 @@ const exportFrom = () => {
   }).then(() => {
     const param = {
       systemType: curSystemType.value || 0,
-      timeType: props.timeType,
+      dateType: props.timeType,
       startTime: props.startTime || '',
       endTime: props.endTime || ''
     }
-    api.soldExcelSystem({ ...param }).then((data) => {
+    api.soldExcelSystem(param).then((data) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
       const fileName = '流量总览.xlsx'
       const elink = document.createElement('a')

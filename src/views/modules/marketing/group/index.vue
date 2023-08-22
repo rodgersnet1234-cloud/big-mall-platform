@@ -193,7 +193,8 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['marketing:group:info']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.groupActivityId)"
                 >
                   {{ $t('table.view') }}
@@ -201,7 +202,8 @@
                 <el-button
                   v-if="row.status < 2"
                   v-permission="['marketing:group:offline']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offline')"
                 >
                   下线活动
@@ -209,7 +211,8 @@
                 <el-button
                   v-if="row.status === 2 || row.status === 3"
                   v-permission="['marketing:group:audit']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offlineManage')"
                 >
                   {{ row.status === 2 ? '下线管理' : '审核申请' }}

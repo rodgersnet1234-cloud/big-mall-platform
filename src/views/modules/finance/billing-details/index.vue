@@ -60,24 +60,28 @@
           row-class-name="table-row"
           default-expand-all
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          scrollbar-always-on
         >
           <el-table-column
             prop="shopName"
             label="店铺名称"
             width="130"
             align="center"
+            fixed
           />
           <el-table-column
             :prop="+path===2?'supplierSpuName': 'spuName'"
             label="商品名称"
             width="130"
             align="center"
+            fixed
           />
           <el-table-column
             prop="categoryName"
             label="分类名称"
             width="130"
             align="center"
+            fixed
           />
 
           <el-table-column

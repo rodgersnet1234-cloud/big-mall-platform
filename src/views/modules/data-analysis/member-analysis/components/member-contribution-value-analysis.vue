@@ -185,7 +185,7 @@ const props = defineProps({
     default: ''
   },
   timeType: {
-    type: String,
+    type: [Number, String],
     default: ''
   },
   dateRange: {
@@ -248,7 +248,6 @@ watch(() => sumData.value, () => {
 onMounted(() => {
   dateType = props.timeType
   changVisibles()
-  getMemberContributeData()
 })
 
 const tableData5 = ref([])

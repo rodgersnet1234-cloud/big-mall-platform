@@ -1,8 +1,6 @@
 <template>
   <div class="app-container-10 container-f0f2f5 app-main feature-list-container">
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
@@ -25,14 +23,12 @@
           <el-button
             class="operation-btn"
             type="primary"
-            icon="el-icon-search"
             @click="onSearch()"
           >
             {{ $t('table.search') }}
           </el-button>
           <el-button
             class="operation-btn"
-            icon="el-icon-search"
             @click="onResetSearch(searchFormRef)"
           >
             重置

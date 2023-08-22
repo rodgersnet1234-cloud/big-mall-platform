@@ -183,14 +183,16 @@
             <el-button
               v-if="row.state === 0"
               v-permission="['distribution:auditing:update']"
-              type="text"
+              link
+              type="primary"
               @click="onAddOrUpdate(row, true)"
             >
               {{ '审核' }}
             </el-button>
             <el-button
               v-if="row.state !== 0"
-              type="text"
+              link
+              type="primary"
               @click="onAddOrUpdate(row, false)"
             >
               {{ '查看' }}

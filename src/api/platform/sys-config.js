@@ -10,7 +10,7 @@ export function getWebConfig (key) {
 }
 export function saveWebConfig (data) {
   return request({
-    url: '/mall4cloud_admin/p/web_config/save/',
+    url: '/mall4cloud_admin/p/web_config/save',
     method: 'post',
     data
   })
@@ -26,14 +26,14 @@ export function get (key) {
 }
 export function save (data) {
   return request({
-    url: '/mall4cloud_admin/p/sys_config/save/',
+    url: '/mall4cloud_admin/p/sys_config/save',
     method: 'post',
     data
   })
 }
 export function saveDeliveryConfig (data) {
   return request({
-    url: '/mall4cloud_admin/p/sys_config/saveDeliveryConfig/',
+    url: '/mall4cloud_admin/p/sys_config/saveDeliveryConfig',
     method: 'post',
     data
   })

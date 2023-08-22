@@ -253,14 +253,16 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['platform:coupon:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.couponId)"
                 >
                   {{ $t('table.edit') }}
                 </el-button>
                 <el-button
                   v-permission="['platform:coupon:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.couponId)"
                 >
                   {{ $t('table.delete') }}
@@ -336,7 +338,7 @@ const getPageData = (newData = false) => {
     tempSearchForm.pageSize = searchForm.pageSize
   }
   pageLoading.value = true
-  api.page(tempSearchForm).then(res => {
+  api.couponPage(tempSearchForm).then(res => {
     pageData.value.dataList = res.list
     pageData.value.pages = res.pages
     pageData.value.total = res.total

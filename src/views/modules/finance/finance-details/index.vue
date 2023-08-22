@@ -2,7 +2,6 @@
   <div class="page-finance-details">
     <div class="finance-details">
       <div class="search-bar">
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           clearable
           :inline="true"
@@ -238,7 +237,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import moment from 'moment'
 import { page, soldExcel } from '@/api/finance-details/index'
 import Big from 'big.js'

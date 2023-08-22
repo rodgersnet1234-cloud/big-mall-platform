@@ -11,8 +11,6 @@
         <i class="el-icon-question" />
       </el-tooltip>
     </div>
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       label-width="180px"
@@ -103,10 +101,12 @@
         v-if="dataForm.version === 3"
         :label="`商户apiclient_key.pem:`"
         style="width:640px"
-        prop="privateKeyPath"
+        prop="privateKeyContent"
       >
         <el-input
-          v-model="dataForm.privateKeyPath "
+          v-model="dataForm.privateKeyContent"
+          type="textarea"
+          rows="10"
           :placeholder="`商户apiclient_key.pem`"
           controls-position="right"
         />
@@ -115,10 +115,12 @@
         v-if="dataForm.version === 3"
         :label="`商户apiclient_cert.pem:`"
         style="width:640px"
-        prop="privateCertPath"
+        prop="privateCertContent"
       >
         <el-input
-          v-model="dataForm.privateCertPath"
+          v-model="dataForm.privateCertContent"
+          type="textarea"
+          rows="10"
           :placeholder="`商户apiclient_cert.pem`"
           controls-position="right"
         />
@@ -129,22 +131,16 @@
         {{ $t('platform.config.save') }}
       </el-button>
     </el-form>
-    <!-- <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-    </span>-->
   </div>
 </template>
 
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
-import useStore from 'element-plus/es/components/table/src/store/index'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let dataForm = reactive({
-  // id: null,
-  // paramKey: 'WXPAY_CONFIG',
+const dataForm = reactive({
   mchId: null,
   mchKey: null,
   keyPath: null,
@@ -153,10 +149,10 @@ let dataForm = reactive({
   apiv3Key: null,
   certSerialNo: null,
   privateKeyPath: null,
-  privateCertPath: null
-  // paramValue: null
+  privateKeyContent: null,
+  privateCertPath: null,
+  privateCertContent: null
 })
-const value = ref([])
 const dataRule = {
   mchId: [
     { required: true, message: `${$t('platform.config.wechatPay')} mchId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
@@ -173,17 +169,18 @@ const dataRule = {
   certSerialNo: [
     { required: true, message: '证书序列号不能为空', trigger: 'blur' }
   ],
-  privateKeyPath: [
+  privateKeyContent: [
     { required: true, message: '商户apiclient_key.pem不能为空', trigger: 'blur' }
   ],
-  privateCertPath: [
+  privateCertContent: [
     { required: true, message: '商户apiclient_cert.pem不能为空', trigger: 'blur' }
   ]
 }
 
+const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联
 const paySettlementType = computed(() => {
-  return useStore.state.allinpay.paySettlementType
+  return useAllinpay.paySettlementType
 })
 
 onMounted(() => {
@@ -192,11 +189,10 @@ onMounted(() => {
 
 const dataFormRef = ref()
 const init = () => {
-  // $refs['dataForm'].resetFields()
   nextTick(() => {
     api.get('WXPAY_CONFIG').then(data => {
       if (data) {
-        dataForm = JSON.parse(data)
+        Object.assign(dataForm, JSON.parse(data))
       }
     })
     dataFormRef.value?.resetFields()
@@ -205,13 +201,12 @@ const init = () => {
 // 表单提交
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
-    // dataForm.signType = JSON.stringify(value)
     if (valid) {
       api.save({
         paramKey: 'WXPAY_CONFIG',
         paramValue: JSON.stringify(dataForm),
         remark: $t('platform.config.paymentCertificatePath')
-      }).then(data => {
+      }).then(() => {
         init()
         ElMessage({
           message: $t('table.actionSuccess'),

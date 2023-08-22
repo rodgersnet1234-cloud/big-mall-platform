@@ -6,7 +6,6 @@
     top="5vh"
     class="natice-dialog"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="rules"
@@ -48,7 +47,7 @@
       >
         <el-date-picker
           v-model="dataForm.sendTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           type="datetime"
           placeholder="输入选择发送时间"
           :picker-options="pickerOptions"
@@ -287,16 +286,13 @@ const init = (id) => {
       dataForm.sendTime = data.sendTime
       dataForm.types = data.types
       dataForm.immediatelySend = data.immediatelySend
-      // dataForm.shopRange = data.shopRange
-      // dataForm.supplierRange = data.supplierRange
-      // dataForm.userRange = data.userRange
       dataForm.multiShopIds = data.multiShopIds
       dataForm.supplierIds = data.supplierIds
       dataForm.userIds = data.userIds
       dataForm.types = dataForm.types.split(',').map(Number)
-      dataForm.shopRange = 1
-      dataForm.supplierRange = 1
-      dataForm.userRange = 1
+      dataForm.shopDetailVOList = data.shopDetailVOList
+      dataForm.userDtailList = data.userDtailList
+      dataForm.supplierDetailList = data.supplierDetailList
       if (!dataForm.shopDetailVOList) {
         dataForm.shopDetailVOList = []
         dataForm.multiShopIds = []
@@ -398,7 +394,7 @@ const onSubmit = Debounce(() => {
     obj.supplierIds = obj.supplierIds.length > 0 ? obj.supplierIds.join(',') : null
     obj.userIds = obj.userIds.length > 0 ? obj.userIds.join(',') : null
     const request = dataForm.id ? api.update(obj) : api.save(obj)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -424,19 +420,10 @@ const LimitWordCount = () => {
     .replace(/&nbsp;/gi, '')
     .replace(/(\s)+/gi, '')
   // 限制不超过两万字
-  if (contentStr.length >= 20000) return false
-  return true
+  return contentStr.length < 20000
 }
 defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>
-.natice-dialog {
-  .el-dialog {
-    min-width: 740px;
-  }
-  .el-dialog__body {
-    padding: 10px 20px;
-  }
-}
 </style>

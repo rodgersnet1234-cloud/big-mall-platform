@@ -20,7 +20,7 @@ export function info (rechargeId) {
 
 export function save (data) {
   return request({
-    url: '/mall4cloud_user/p/user_recharge/',
+    url: '/mall4cloud_user/p/user_recharge',
     method: 'post',
     data
   })
@@ -28,7 +28,7 @@ export function save (data) {
 
 export function update (data) {
   return request({
-    url: '/mall4cloud_user/p/user_recharge/',
+    url: '/mall4cloud_user/p/user_recharge',
     method: 'put',
     data
   })
@@ -36,7 +36,7 @@ export function update (data) {
 
 export function remove (rechargeId) {
   return request({
-    url: '/mall4cloud_user/p/user_recharge/',
+    url: '/mall4cloud_user/p/user_recharge',
     method: 'delete',
     params: {
       rechargeId

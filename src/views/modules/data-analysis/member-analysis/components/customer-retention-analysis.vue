@@ -26,23 +26,6 @@
           <div class="date-display">
             {{ dateRange[0] }}{{ $t('date.tip') }}{{ dateRange[1] }}
           </div>
-          <el-button
-            link
-            @click="refreshRetainedData()"
-          >
-            刷新
-            <el-popover
-              placement="top"
-              width="300"
-              trigger="hover"
-              style="margin-left: 5px;"
-              content="拉取分析数据比较慢，请勿频繁刷新缓存数据"
-            >
-              <template #reference>
-                <i class="el-icon-question" />
-              </template>
-            </el-popover>
-          </el-button>
         </div>
       </div>
     </div>
@@ -183,38 +166,24 @@
 <script setup>
 import * as api from '@/api/data-analysis/member-analysis.js'
 import moment from 'moment'
-import { ElMessage } from 'element-plus'
 
-const props = defineProps({
-  dateRange: {
-    type: Array,
-    default: () => {
-      return []
-    }
-  }
-})
-const emit = defineEmits(['changeData'])
+const dateRange = ref([])
 
 const title = ref('客户留存分析')
 const rangeOptions = reactive([
   {
     label: '最近3个月',
-    value: 2
+    value: 1
   },
   {
     label: '最近6个月',
-    value: 3
+    value: 2
   },
   {
     label: '最近1年',
-    value: 4
+    value: 3
   }
 ])
-
-watch(() => props.dateRange, () => {
-  // 客户留存分析后台数据
-  getMemberRetentionData()
-}, { deep: true })
 
 const retainType = ref('1') // 1访问留存  2成交留
 watch(() => retainType.value, () => {
@@ -233,20 +202,18 @@ const typeValue = ref(1) // 1月留存 2周留存 暂时不统计周留存
 const dataList = ref([])
 const getMemberRetentionData = () => {
   if (rangeValue.value === 1) {
-    colLength.value = 1
-  } else if (rangeValue.value === 2) {
     colLength.value = 2
-  } else if (rangeValue.value === 3) {
+  } else if (rangeValue.value === 2) {
     colLength.value = 5
-  } else if (rangeValue.value === 4) {
+  } else if (rangeValue.value === 3) {
     colLength.value = 6
   }
   const param = {
     dateType: rangeValue.value, // 1最近1个月 2最近3个月 3最近6个月 4最近1年
     retainType: retainType.value, // 1访问留存  2成交留存
     dateRetainType: typeValue.value, // 1月留存 2周留存 暂时不统计周留存
-    startTime: props.dateRange[0], // yyyy-MM-dd HH:mm:ss
-    endTime: props.dateRange[1] // yyyy-MM-dd HH:mm:ss
+    startTime: dateRange.value[0], // yyyy-MM-dd HH:mm:ss
+    endTime: dateRange.value[1] // yyyy-MM-dd HH:mm:ss
   }
   api.getCustomerRetained(param).then(data => {
     if (data) {
@@ -257,40 +224,23 @@ const getMemberRetentionData = () => {
   })
 }
 
-// 刷新缓存数据
-const refreshRetainedData = () => {
-  api.refreshRetainedData().then(() => {
-    ElMessage({
-      message: $t('table.actionSuccess'),
-      type: 'success',
-      duration: 1000
-    })
-    getMemberRetentionData()
-  })
-}
-
 const setDateRange = (val) => {
   let startDay = null
-  let endDay = null
-  if (val === 2) {
+  if (val === 1) {
     startDay = -90
-    endDay = 0
+  }
+  if (val === 2) {
+    startDay = -180
   }
   if (val === 3) {
-    startDay = -180
-    endDay = 0
-  }
-  if (val === 4) {
     startDay = -360
-    endDay = 0
   }
   // 开始时间
-  const startTime = moment().add(startDay, 'days').format('YYYY-MM-DD HH:mm:ss')
+  const startTime = moment().add(startDay, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss')
   // 结束时间
-  const endTime = moment().add(endDay, 'days').format('YYYY-MM-DD HH:mm:ss')
-  nextTick(() => {
-    emit('changeData', [startTime, endTime])
-  })
+  const endTime = moment().add(-1, 'days').endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  dateRange.value = [startTime, endTime]
+  getMemberRetentionData()
 }
 
 </script>

@@ -2,7 +2,6 @@
   <div class="box">
     <div class="shop-billing">
       <div class="search-bar">
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           clearable
           :inline="true"
@@ -233,8 +232,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
-import { page } from '@/api/merchant-balance'
+import { page as pageApi } from '@/api/merchant-balance'
 import Big from 'big.js'
 
 const amount = (value) => {
@@ -313,7 +311,7 @@ const reason = [
     label: '超时未支付尾款'
   }
 ]
-let dataFrom = reactive({
+const dataFrom = reactive({
   shopIoType: '',
   amountType: '',
   orderId: '',
@@ -341,7 +339,7 @@ const getData = (newData = false) => {
   } else {
     tempSearchForm = { ...tempSearchForm, ...params.value }
   }
-  page(tempSearchForm).then(res => {
+  pageApi(tempSearchForm).then(res => {
     tableData.value = res.list
     total.value = res.total
   })
@@ -370,13 +368,12 @@ const handleDetail = (orderId, refundId) => {
 
 // 清空查询 的表单
 const clear = () => {
-  dataFrom = {
-    shopIoType: '',
-    amountType: '',
-    orderId: '',
-    refundId: '',
-    reason: ''
-  }
+  dataFrom.shopIoType = ''
+  dataFrom.amountType = ''
+  dataFrom.orderId = ''
+  dataFrom.refundId = ''
+  dataFrom.reason = ''
+  onSubmit(true)
 }
 
 </script>

@@ -4,7 +4,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['notify:notifyTemplateTag:save']"
-          icon="el-icon-plus"
           type="primary"
           class="filter-item"
           @click="onAddOrUpdate()"
@@ -96,22 +95,25 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['notify:notifyTemplateTag:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.templateId)"
                 >
                   {{ $t('table.edit') }}
                 </el-button>
                 <el-button
                   v-permission="['notify:notifyTemplateTag:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.templateId)"
                 >
                   {{ $t('table.delete') }}
                 </el-button>
                 <el-button
                   v-permission="['notify:notifyTemplateTag:sendMsg']"
-                  type="text"
-                  @click="sendTagMsg(row)"
+                  link
+                  type="primary"
+                  @click="onSendTagMsg(row)"
                 >
                   {{ '推送消息' }}
                 </el-button>
@@ -139,11 +141,86 @@
 </template>
 
 <script setup>
-import permission from '@/directive/permission/index.js'
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/biz/notify-template-tag'
+import { ElMessage, ElMessageBox } from 'element-plus'
+// loading
+const pageLoading = ref(true)
+const searchParam = {}
+// 查询的参数
+const pageQuery = reactive({
+  pageSize: 10,
+  pageNum: 1
+})
+// 返回参数
+const pageVO = reactive({
+  list: [], // 返回的列表
+  total: 0, // 一共多少条数据
+  pages: 0 // 一共多少页
+})
+const getPage = () => {
+  pageLoading.value = true
+  api.page({ ...pageQuery, ...searchParam }).then(res => {
+    pageVO.list = res.list
+    pageVO.total = res.total
+    pageVO.pages = res.pages
+    pageLoading.value = false
+  }).catch(() => {
+    pageLoading.value = false
+  })
+}
 
+const addOrUpdateRef = ref()
+const addOrUpdateVisible = ref(false)
+// 新增 / 修改
+const onAddOrUpdate = (id) => {
+  addOrUpdateVisible.value = true
+  nextTick(() => {
+    addOrUpdateRef.value?.init(id)
+  })
+}
+
+const onDelete = (templateId) => {
+  ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
+    confirmButtonText: $t('table.confirm'),
+    cancelButtonText: $t('table.cancel'),
+    type: 'warning'
+  }).then(() => deleteById(templateId))
+}
+const deleteById = (templateId) => {
+  api.deleteById(templateId).then(() => {
+    ElMessage({
+      message: $t('table.actionSuccess'),
+      type: 'success',
+      duration: 1500,
+      onClose: () => getPage()
+    })
+  })
+}
+const onSendTagMsg = (row) => {
+  if (!row.templateCode) {
+    ElMessage({
+      message: $t('table.tagListIsEmpty'),
+      type: 'error',
+      duration: 1500
+    })
+    return
+  }
+  api.sendMsg(row.templateId).then(data => {
+    ElMessage({
+      message: $t('table.actionSuccess'),
+      type: 'success',
+      duration: 1500,
+      onClose: () => getPage()
+    })
+  }).catch((e) => {
+    console.log(e)
+  })
+}
+onMounted(() => {
+  getPage()
+})
 </script>
 
 <style lang="scss" scoped>

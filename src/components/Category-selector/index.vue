@@ -1,67 +1,99 @@
 <template>
   <div class="category-selector">
     <el-dialog
-      :title="$t('components.selector.categorySelector')"
       v-model="visible"
+      :title="$t('components.selector.categorySelector')"
       :append-to-body="visible"
+      width="1000px"
       @close="closeDialog"
-      width="1000px">
+    >
       <div class="prod-category clearfix">
         <div class="category">
           <!-- 分类 -->
           <div class="category-box">
-            <el-input v-model="firstCategorys.name" :placeholder="$t('components.selector.chooseProdCateg')" :disabled="true"></el-input>
+            <el-input
+              v-model="firstCategorys.name"
+              :placeholder="$t('components.selector.chooseProdCateg')"
+              :disabled="true"
+            />
             <ul class="category-list">
               <li
+                v-for="(item,index) in firstCategorys.dataList"
+                :key="item.categoryId"
                 class="category-item"
                 :class="item.categoryId === firstCategorys.id?'active':''"
                 @click="selectfirstCategorys(item.categoryId, index)"
-                v-for="(item,index) in firstCategorys.dataList"
-                :key="item.categoryId"
-              ><div>{{item.name}}</div></li>
+              >
+                <div>{{ item.name }}</div>
+              </li>
             </ul>
           </div>
           <!-- 分类 -->
-          <div class="category-box" v-if="secondCategorys.dataList && secondCategorys.dataList.length && firstCategorys.id !== 0">
-            <el-input :placeholder="$t('components.selector.chooseProdCateg')" v-model="secondCategorys.name" :disabled="true"></el-input>
+          <div
+            v-if="secondCategorys.dataList && secondCategorys.dataList.length && firstCategorys.id !== 0"
+            class="category-box"
+          >
+            <el-input
+              v-model="secondCategorys.name"
+              :placeholder="$t('components.selector.chooseProdCateg')"
+              :disabled="true"
+            />
             <ul class="category-list">
               <li
+                v-for="(item,index) in secondCategorys.dataList"
+                :key="item.categoryId"
                 class="category-item"
                 :class="item.categoryId === secondCategorys.id?'active':''"
                 @click="selectSecondCategorys(item.categoryId,index)"
-                v-for="(item,index) in secondCategorys.dataList"
-                :key="item.categoryId"
-              ><div>{{item.name}}</div></li>
+              >
+                <div>{{ item.name }}</div>
+              </li>
             </ul>
           </div>
           <!-- 分类 -->
-          <div v-if="threeCategorys.dataList.length > 0 && secondCategorys.id !== 0" class="category-box">
-            <el-input v-model="threeCategorys.name" :placeholder="$t('components.selector.chooseProdCateg')" :disabled="true"></el-input>
+          <div
+            v-if="threeCategorys.dataList.length > 0 && secondCategorys.id !== 0"
+            class="category-box"
+          >
+            <el-input
+              v-model="threeCategorys.name"
+              :placeholder="$t('components.selector.chooseProdCateg')"
+              :disabled="true"
+            />
             <ul class="category-list">
               <li
+                v-for="(item,index) in threeCategorys.dataList"
+                :key="item.categoryId"
                 class="category-item"
                 :class="[isCreateCategory?'prohibit-sel':item.categoryId === threeCategorys.id?'active':'']"
                 @click="selectThreeCategorys(item.categoryId,index)"
-                v-for="(item,index) in threeCategorys.dataList"
-                :key="item.categoryId"
               >
-                <div>{{item.name}}</div>
+                <div>{{ item.name }}</div>
               </li>
             </ul>
           </div>
         </div>
         <!-- 当前选择 -->
         <div class="current-selected">
-          <span class="blod">{{$t("components.selector.currCho")}}：</span>
-          <span class="select-item">{{firstCategorys.name}}</span>
-          <span class="select-item" v-if="secondCategorys.id">&nbsp;>&nbsp;&nbsp;{{secondCategorys.name}}</span>
-          <span class="select-item" v-if="threeCategorys.id">&nbsp;>&nbsp;&nbsp;{{threeCategorys.name}}</span>
+          <span class="blod">{{ $t("components.selector.currCho") }}：</span>
+          <span class="select-item">{{ firstCategorys.name }}</span>
+          <span
+            v-if="secondCategorys.id"
+            class="select-item"
+          >&nbsp;>&nbsp;&nbsp;{{ secondCategorys.name }}</span>
+          <span
+            v-if="threeCategorys.id"
+            class="select-item"
+          >&nbsp;>&nbsp;&nbsp;{{ threeCategorys.name }}</span>
         </div>
         <!-- 确认 -->
         <div class="read-rule">
-          <div class="read-rule-txt"
-               :class="(!isCreateCategory && threeCategorys.id !== 0) || (isCreateCategory && firstCategorys.id !== 0)?'todo':''"
-               @click="optionsConfirm">{{$t("components.selector.haveReadFol")}}
+          <div
+            class="read-rule-txt"
+            :class="(!isCreateCategory && threeCategorys.id !== 0) || (isCreateCategory && firstCategorys.id !== 0)?'todo':''"
+            @click="optionsConfirm"
+          >
+            {{ $t("components.selector.haveReadFol") }}
           </div>
         </div>
       </div>
@@ -155,12 +187,6 @@ const init = (type, selectedCategories) => {
   })
   isCreateCategory.value = type && type === 1
 }
-const show = () => {
-  visible.value = true
-}
-const hide = () => {
-  visible.value = false
-}
 // 选中第一个分类
 const selectfirstCategorys = (categoryId, index) => {
   secondCategorys.value.dataList = allDataList.value.filter(item => item.parentId === categoryId)
@@ -213,7 +239,7 @@ const optionsConfirm = () => {
 defineExpose({ init })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .prod-category {
     .clearfix::after {
       display: block;
@@ -230,15 +256,6 @@ defineExpose({ init })
       padding: 0;
       list-style: none;
     }
-    .tips {
-      // display: inline-block;
-      float: right;
-      padding: 10px 12px;
-      background: #155bd4;
-      color: #fff;
-      font-size: 13px;
-      margin: 0;
-    }
     .category-box {
       box-sizing: border-box;
       width: 32%;
@@ -248,19 +265,6 @@ defineExpose({ init })
       padding: 20px;
       background: #fff;
       box-shadow: 0px 5px 8px -4px #e2e2e2;
-    }
-    .int {
-      width: 100%;
-      height: 2.5em;
-      line-height: 2.5em;
-      text-indent: 1em;
-      border: 1px solid #e2e2e2;
-      border-radius: 5px;
-      outline: none;
-      /* box-shadow: 0px 5px 8px -4px #e2e2e2; */
-    }
-    input.int::placeholder {
-      color: #bdbdbd;
     }
     .category-list {
       margin-top: 10px;
@@ -286,7 +290,6 @@ defineExpose({ init })
 
     .category-item:hover,
     .category-item.active {
-      // background: #e9f9ff;
       background: #f5f5f5;
       border-radius: 3px;
     }
@@ -314,28 +317,9 @@ defineExpose({ init })
       width: 50%;
       margin: 0 auto;
     }
-    .rule {
-      border: 1px solid #b9b9b9;
-      padding: 0 10px;
-      font-size: 13px;
-      color: #777;
-      margin-top: 20px;
-    }
-    .notice {
-      line-height: 3em;
-      border-bottom: 1px dashed #b9b9b9;
-      margin: 0;
-    }
     .blod {
       display: inline-block;
       font-weight: bold;
-    }
-    .rule-tit {
-      text-align: center;
-    }
-    .rule-txt {
-      line-height: 1.5em;
-      padding-bottom: 30px;
     }
     .todo {
       background: #155bd4;

@@ -3,7 +3,6 @@
     v-model="visible"
     :title="dataForm.roleId? $t('table.edit'): $t('table.create')"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="dataRule"

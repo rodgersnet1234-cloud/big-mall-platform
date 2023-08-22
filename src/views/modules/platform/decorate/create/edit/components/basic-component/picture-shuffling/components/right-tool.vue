@@ -80,10 +80,12 @@
             @handle-remove-selected="handleRemoveSelected( index)"
           />
         </div>
-        <i
+        <el-icon
           class="el-icon-delete"
           @click="handleRemovePic(index)"
-        />
+        >
+          <Delete />
+        </el-icon>
       </div>
       <div
         class="b-btns"

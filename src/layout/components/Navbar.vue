@@ -80,7 +80,6 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
-                v-if="isShowAnnouncement"
                 @click="changePassword"
               >
                 <span style="display: block">{{ $t("navbar.changePassword") }}</span>
@@ -117,7 +116,6 @@ const sidebar = computed(() => appStore.sidebar)
 const userStore = useUserStore()
 const name = computed(() => userStore.name)
 const userName = computed(() => userStore.userName)
-const isShowAnnouncement = computed(() => userStore.isPassShop)
 
 const toggleSideBar = () => {
   if (sessionStorage.getItem('cloudIsExpand') === '0' && !sidebar.value.opened) {

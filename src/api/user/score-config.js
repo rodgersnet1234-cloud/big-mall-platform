@@ -9,7 +9,7 @@ export function get (key) {
 
 export function save (data) {
   return request({
-    url: '/mall4cloud_admin/p/score_config/',
+    url: '/mall4cloud_admin/p/score_config',
     method: 'post',
     data
   })

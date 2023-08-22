@@ -88,6 +88,7 @@ const validateTittle = (rule, value, callback) => {
     callback()
   }
 }
+
 // eslint-disable-next-line no-unused-vars
 const validateContent = (rule, value, callback) => {
   if (isHtmlNull(value)) {
@@ -96,6 +97,7 @@ const validateContent = (rule, value, callback) => {
     callback()
   }
 }
+
 const dataRule = {
   title: [
     { required: true, message: '请输入标题', trigger: 'brue' },
@@ -107,8 +109,9 @@ const dataRule = {
     { validator: validateContent, trigger: 'change' }
   ]
 }
+
 const language = localStorage.getItem('cloudLanguage') || 'zh'
-const tinymceFlag = reactive(new Date() + 1)
+const tinymceFlag = ref(new Date() + 1)
 const dataFormRef = ref(null)
 const dataForm = reactive({
   state: 0,
@@ -116,10 +119,12 @@ const dataForm = reactive({
   title: '',
   content: ''
 })
+
 const tinyMceRef = ref(null)
 onMounted(() => {
   getData()
 })
+
 // keep-alive缓存的缘故 需调用钩子函数 设置key值不然编辑器无法使用
 onActivated(() => {
   tinymceFlag.value = new Date() + 1
@@ -133,6 +138,7 @@ const getData = () => {
     }
   })
 }
+
 // 设置数据
 const setDate = (data) => {
   dataForm.pic = data.pic
@@ -150,8 +156,7 @@ const deletePic = () => {
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
-      const param = dataForm
-      api.saveRecruit(param).then(() => {
+      api.saveRecruit(dataForm).then(() => {
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',

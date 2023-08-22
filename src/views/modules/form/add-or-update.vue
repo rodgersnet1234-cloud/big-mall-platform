@@ -66,6 +66,7 @@
       <el-form-item
         v-if="dataForm.timeFormat === 1"
         :label="'自定义时间'"
+        style="width:500px;"
         prop="time"
       >
         <el-date-picker
@@ -76,7 +77,7 @@
           range-separator="-"
           :start-placeholder="$t('date.start')"
           :end-placeholder="$t('date.end')"
-          :picker-options="pickerOptions"
+          :shortcuts="pickerOptions.shortcuts"
           :clearable="false"
           @input="dateRangeChange"
         />
@@ -88,18 +89,18 @@
           range-separator="-"
           :start-placeholder="$t('date.start')"
           :end-placeholder="$t('date.end')"
-          :picker-options="pickerOptions"
+          :shortcuts="pickerOptions.shortcuts"
           :clearable="false"
           @input="dateRangeChange"
         />
+
         <el-date-picker
           v-else-if="dataForm.timeType === 2"
           v-model="dateWeek"
-          :picker-options="{'firstDayOfWeek': 1}"
           type="week"
-          format="yyyy 第 WW 周"
+          format="YYYY [年第] ww [周]"
           :clearable="false"
-          :placeholder="'选择周'"
+          placeholder="选择周"
           @change="Week"
         />
       </el-form-item>
@@ -154,7 +155,7 @@
             <el-col
               v-for="item in formItemList"
               :key="item.id"
-              :span="language === 'zh' ? 8 : 4"
+              :span="8"
             >
               <el-link
                 v-if="!item.select"
@@ -214,7 +215,7 @@ import { ElMessage } from 'element-plus'
 import * as api from '@/api/form/form'
 import moment from 'moment'
 import { Debounce } from '@/utils/debounce'
-const language = useAppStore().language || 'zh'
+
 const emit = defineEmits(['refreshDataList'])
 const dataForm = ref({
   formId: 0,
@@ -225,37 +226,37 @@ const dataForm = ref({
   startTime: '',
   endTime: '',
   timeRange: 1,
-  time: '',
+  time: [],
   seq: 1
 })
 const dateWeek = ref('')
-const pickerOptions = {
+const pickerOptions = reactive({
   shortcuts: [{
     text: '最近一周',
-    onClick (picker) {
+    value: () => {
       const end = new Date()
       const start = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-      picker.$emit('pick', [start, end])
+      return [start, end]
     }
   }, {
     text: '最近一个月',
-    onClick (picker) {
+    value: () => {
       const end = new Date()
       const start = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      picker.$emit('pick', [start, end])
+      return [start, end]
     }
   }, {
     text: '最近三个月',
-    onClick (picker) {
+    value: () => {
       const end = new Date()
       const start = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-      picker.$emit('pick', [start, end])
+      return [start, end]
     }
   }]
-}
+})
 const formItemList = ref([])
 const formItemListSelect = ref([])
 let isSubmit = true
@@ -412,7 +413,7 @@ const onSubmit = Debounce(() => {
         return
       }
       if (dataForm.value.timeFormat === 1) {
-        if ((dataForm.value.timeType === 1 || dataForm.value.timeType === 3) && !dataForm.value.time) {
+        if ((dataForm.value.timeType === 1 || dataForm.value.timeType === 3) && dataForm.value.time.length === 0) {
           ElMessage.error('请选择时间')
           return
         }
@@ -468,9 +469,8 @@ defineExpose({ onInit })
 <style lang="scss" scoped>
 .form-add-or-update{
   .tag {
-  margin: 0 10px;
-}
-
+    margin: 0 10px 5px;
+  }
 }
 
 </style>

@@ -58,13 +58,6 @@ watch(
     }
   }
 )
-
-const language = computed(() => {
-  return useAppStore().language || 'zh_CN'
-})
-watch(language, () => {
-  destroyTinymce()
-})
 const emit = defineEmits(['update:modelValue'])
 const isLoaded = ref(false)
 const init = reactive({
@@ -82,7 +75,7 @@ const init = reactive({
   elementpath: false, // 是否展示编辑层级  > p span
   advlist_bullet_styles: 'square',
   resize: true, // 调整宽高 > true 调整高 | false 不可调整宽高 | both 宽高可调
-  language, // 中文
+  language: 'zh_CN', // 中文
   init_instance_callback: editor => {
     isLoaded.value = true
     if (props.modelValue) {
@@ -118,19 +111,6 @@ const handleFullScreenStateChange = (isFullscreen) => {
     addOrupload.forEach(v => {
       v.style.zIndex = 10
     })
-  }
-}
-const destroyTinymce = () => {
-  const tinymce = window.tinymce?.get(props.id)
-  if (toxFullscreen.value) {
-    tinymce.execCommand('mceFullScreen')
-  }
-  onUnmounted(() => {
-    destroyTinymce()
-  })
-
-  if (tinymce) {
-    tinymce.destroy()
   }
 }
 const imageSuccessCBK = (arr) => {
