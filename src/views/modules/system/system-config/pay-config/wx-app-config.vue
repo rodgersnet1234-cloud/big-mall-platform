@@ -30,11 +30,6 @@
         {{ $t('platform.config.save') }}
       </el-button>
     </el-form>
-    <template>
-      <span class="dialog-footer">
-      <!-- <el-button @click="visible = false">取消</el-button> -->
-      </span>
-    </template>
   </div>
 </template>
 

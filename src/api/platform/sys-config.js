@@ -26,7 +26,7 @@ export function get (key) {
 }
 export function save (data) {
   return request({
-    url: '/mall4cloud_admin/p/sys_config/save/',
+    url: '/mall4cloud_admin/p/sys_config/save',
     method: 'post',
     data
   })
@@ -44,5 +44,13 @@ export function getPaySettlementType () {
   return request({
     url: '/mall4cloud_admin/p/ua/sys_config/pay_settlement_type',
     method: 'get'
+  })
+}
+// 下载代码包
+export function onDownloadZip () {
+  return request({
+    url: '/mall4cloud_biz/ua/oss/download',
+    method: 'get',
+    responseType: 'blob'
   })
 }

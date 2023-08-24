@@ -93,102 +93,6 @@
             </tr>
           </table>
         </div>
-        <!-- 配置小程序 -->
-        <div>
-          <div class="title-tips">
-            <div>
-              <div>
-                • 下载之后需使用微信开发者工具上传代码，微信开发者工具下载地址：xxxxxx
-              </div>
-              <div>
-                • 上传之后登录微信公众平台，在版本管理中选择刚上传的版本提交审核，审核通过之后即可发布小程序。
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content: space-between;">
-            <div class="top-message">
-              <div class="text">
-                <span>小程序信息</span>
-                <el-button
-                  type="primary"
-                  link
-                >
-                  编辑信息
-                </el-button>
-              </div>
-              <div
-                class="applet-message-left"
-              >
-                <img-show style="width:160px;height:160px;margin:82px 0 50px 0" />
-                <table>
-                  <tr
-                    class="table-title"
-                  >
-                    <td
-                      class="tt-item-left"
-                    >
-                      {{ '小程序名称' }}
-                    </td>
-
-                    <td
-                      class="tt-item"
-                    >
-                      {{ '超级无敌大boss' }}
-                    </td>
-                  </tr>
-                  <tr class="table-title">
-                    <td
-                      class="tt-item-left"
-                    >
-                      {{ '小程序appid' }}
-                    </td>
-                    <td
-                      class="tt-item"
-                    >
-                      {{ 'kfcvme50898565' }}
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div
-              class="top-message"
-              style="width:885px"
-            >
-              <div class="text">
-                <span>源码下载</span>
-              </div>
-              <div
-                class="applet-message-right"
-              >
-                <el-steps
-                  :active="1"
-                  align-center
-                  process-status="wait"
-                >
-                  <el-step
-                    title="下载小程序代码包"
-                    :icon="Download"
-                  />
-                  <el-step
-                    title="上传代码"
-                    :icon="Upload"
-                  />
-                  <el-step
-                    title="发布小程序"
-                    :icon="Promotion"
-                  />
-                </el-steps>
-                <el-button
-                  type="primary"
-                  style="display: block;margin: 111px auto 0;border-radius: 2px"
-                >
-                  下载小程序代码包
-                </el-button>
-              </div>
-            </div>
-          </div>
-        </div>
       </el-tab-pane>
       <el-tab-pane
         label="微信公众号"
@@ -238,64 +142,16 @@
             </tr>
           </table>
         </div>
-        <div class="official-accounts">
-          <div class="top-message">
-            <div class="text">
-              <span>公众号信息</span>
-              <el-button
-                type="primary"
-                link
-              >
-                编辑信息
-              </el-button>
-            </div>
-            <div
-              class="applet-message-left"
-            >
-              <img-show style="width:160px;height:160px;margin:82px 0 50px 0" />
-              <table>
-                <tr
-                  class="table-title"
-                >
-                  <td
-                    class="tt-item-left"
-                  >
-                    {{ '公众号名称：' }}
-                  </td>
-
-                  <td
-                    class="tt-item"
-                  >
-                    {{ '超级无敌大boss' }}
-                  </td>
-                </tr>
-                <tr class="table-title">
-                  <td
-                    class="tt-item-left"
-                  >
-                    {{ '公众号appid' }}
-                  </td>
-                  <td
-                    class="tt-item"
-                  >
-                    {{ 'kfcvme50898565' }}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script setup>
-import { Download, Promotion, Upload } from '@element-plus/icons-vue'
-const afterEmpower = ref(true)
+const afterEmpower = ref(false)
 const activeName = ref('first')
 const handleClick = (tab, event) => {
-  console.log(tab, event)
+  console.log(123)
 }
 // 去授权
 const toEmpower = () => {
@@ -313,6 +169,14 @@ const onUnbinding = () => {
 const onRevise = () => {
   console.log('重新授权')
 }
+</script>
+<script>
+// export default defineComponent({
+//   beforeRouteEnter (to, from, next) {
+//     console.log(to, from, '111')
+//     next()
+//   }
+// })
 </script>
 <style lang="scss" scoped>
 .page-content-manage{
@@ -397,57 +261,6 @@ const onRevise = () => {
     }
   }
 
-  .top-message{
-    position: relative;
-    width: 685px;
-    height: 460px;
-    border-radius: 2px ;
-    border: 1px solid #DCDFE6;
-    padding: 20px;
-
-    .text{
-      display:flex;
-      justify-content: space-between;
-      margin-left: 10px;
-      :deep(.el-button){
-        border: 0;
-  }
-    }
-    &::before{
-        content: "";
-        display: inline-block;
-        position: absolute;
-        margin-right: 10px;
-        width: 4px;
-        height: 19px;
-        background: #155BD4;
-        border-radius: 2px;
-      }
-      .applet-message-left{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .applet-message-right{
-        margin: 119px 15px 0;
-        :deep(.el-icon.el-step__icon-inner){
-          font-size: 45px;
-        }
-
-        :deep(.el-step.is-horizontal .el-step__line) {
-         border: 1px dashed #DCDFE6;
-         background-color:rgba(0, 0, 0, 0);
-}
-      }
-  }
-  .official-accounts{
-    margin-top:60px ;
-    width: 685px;
-    height: 460px;
-    border-radius: 2px 2px 2px 2px;
-    border: 1px solid #DCDFE6;
-  }
 }
 
 </style>

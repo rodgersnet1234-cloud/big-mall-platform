@@ -74,7 +74,6 @@
 </template>
 <script setup>
 const { query } = useRoute()
-console.log(query.type == 'subject' || query.type == 'notSubject', '11111')
 </script>
 <style lang="scss" scoped>
 .page-information-config{

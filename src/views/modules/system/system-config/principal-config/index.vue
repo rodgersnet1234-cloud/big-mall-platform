@@ -31,16 +31,19 @@
           供应商进行线下结算
         </div>
 
-        <router-link :to="{path:'information-config',query:{type:'subject'}}">
-          <el-button
-            type="primary"
+        <div>
+          <router-link
+            :to="{path:'information-config',query:{type:'subject'}}"
           >
-            立即认证
-          </el-button>
-        </router-link>
+            <el-button
+              type="primary"
+            >
+              {{ state==='a'?'继续编辑':'立即认证' }}
+            </el-button>
+          </router-link>
+        </div>
       </div>
       <!-- 非主体认证 -->
-
       <div class="card-content">
         <div
           v-if="'b'===state"

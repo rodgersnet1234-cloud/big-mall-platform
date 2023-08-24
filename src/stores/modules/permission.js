@@ -25,6 +25,7 @@ const Layout = () => import('@/layout/index.vue')
  */
 const filterAsyncRoutes = (routes, menuIds) => {
   const res = []
+
   routes.forEach(route => {
     if (menuIds.indexOf(route.id) > -1) {
       res.push(route)
