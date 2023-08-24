@@ -70,7 +70,7 @@
       :modal="modal"
       top="7vh"
     >
-      <ImgShow :src="dialogImageUrl" />
+      <img-show :src="dialogImageUrl" />
     </el-dialog>
   </div>
 </template>
@@ -117,12 +117,12 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-watch(Data.imageList, () => {
+watch(() => Data.imageList, () => {
   const pics = Data.imageList.map(file => {
     return file.response
   }).join(',')
   emit('update:modelValue', pics)
-})
+}, { deep: true })
 
 watch(() => props.modelValue, () => {
   getImgArr()
@@ -183,6 +183,8 @@ const onDragEnd = (e) => {
 // 打开图片选择窗
 const elxImgboxRef = ref(null)
 const elxImgboxHandle = () => {
+  console.log('props.limit', props.limit)
+  console.log('Data.imageList.length', Data.imageList.length)
   const num = props.limit - Data.imageList.length
   if (num < 1) {
     ElMessage.error($t('components.imgsUpload.maximumPic'))
@@ -227,8 +229,11 @@ const refreshPic = (imagePath) => {
     line-height: 120px;
     text-align: center;
   }
-  .el-upload-list__item-actions {
-    display: none;
+  // eslint-disable-next-line vue-scoped-css/no-unused-selector
+  .hideShadow {
+    .el-upload-list__item-actions {
+      display: none;
+    }
   }
   .el-icon-check {
     color: #fff;

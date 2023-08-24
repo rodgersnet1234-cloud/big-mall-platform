@@ -22,5 +22,6 @@ export default {
   remainder: '还可以选择',
   maxSelect: '当前最多只能选择',
   requestError: '服务器打了个盹^_^',
-  PicMaxQuantity: '图片最大数量为：'
+  PicMaxQuantity: '图片最大数量为：',
+  groupEmpty: '分组名称不能为空'
 }

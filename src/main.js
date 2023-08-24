@@ -16,6 +16,8 @@ import '@/permission.js'
 import { setupDirective } from '@/directive'
 import { setupDirectiveDrag } from '@/views/modules/platform/feature/create/edit/directive/index'
 import moment from 'moment'
+// 自定义插件
+import plugins from '@/plugins/index.js'
 
 // element-plus 图标
 const app = createApp(App)
@@ -28,6 +30,8 @@ for (const [key, component] of Object.entries(
 app.use(setupI18n)
 // router
 app.use(router)
+// plugin
+app.use(plugins)
 // 状态管理
 setupStore(app)
 // 注册指令(directive)

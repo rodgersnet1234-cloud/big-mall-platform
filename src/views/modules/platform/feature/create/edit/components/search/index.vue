@@ -11,7 +11,9 @@
           class="micro-search-bar"
           :style="{height: formData.boxHeight + 'px',background:formData.boxColor, color: formData.textColor, borderRadius: formData.boxRadio+ 'px', justifyContent: formData.textAlgin }"
         >
-          <el-icon style="top: 1px"><Search /></el-icon>
+          <el-icon style="top: 1px">
+            <Search />
+          </el-icon>
           <div class="tit-text">
             {{ $t('shopFeature.searchBar.search') }}
           </div>
@@ -27,7 +29,6 @@
         <div class="design-editor-component-title">
           {{ formData.title }}
         </div>
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           ref="formDataRef"
           label-width="100px"

@@ -39,7 +39,9 @@ module.exports = {
         args: 'all',
         caughtErrors: 'none',
         ignoreRestSiblings: true,
-        vars: 'all'
+        vars: 'all',
+        // 符合规则的参数名将会忽略
+        argsIgnorePattern: '^[rule, value, i, to, from]'
       }
     ],
     // 关闭名称校验

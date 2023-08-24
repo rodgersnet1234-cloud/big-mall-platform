@@ -60,7 +60,8 @@ const dataForm = reactive({
   unsettledAmount: null,
   settledAmount: null,
   invalidAmount: null,
-  accumulateAmount: null
+  accumulateAmount: null,
+  changeAmount: null
 })
 const dataFormRef = ref(null)
 const oldSettledAmount = ref(0)
@@ -105,7 +106,11 @@ const init = (row) => {
   visible.value = true
   nextTick(() => {
     dataFormRef.value?.resetFields()
+    dataForm.walletId = row.walletId
     dataForm.settledAmount = conversionActual(row.settledAmount)
+    dataForm.unsettledAmount = conversionActual(row.unsettledAmount)
+    dataForm.invalidAmount = conversionActual(row.invalidAmount)
+    dataForm.accumulateAmount = conversionActual(row.accumulateAmount)
     // 保存原先的可提现金额
     oldSettledAmount.value = dataForm.settledAmount
   })
@@ -116,7 +121,7 @@ const onSubmit = () => {
     if (!valid) {
       return
     }
-    const changeAmount = parseFloat(new Big(dataForm.settledAmount).minus(oldSettledAmount).times(100))
+    const changeAmount = parseFloat(new Big(dataForm.settledAmount).minus(oldSettledAmount.value).times(100))
     dataForm.changeAmount = changeAmount
     api.update(dataForm).then(() => {
       ElMessage({

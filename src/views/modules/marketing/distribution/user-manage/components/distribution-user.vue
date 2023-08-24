@@ -201,7 +201,8 @@
           >
             <template #default="{row}">
               <el-button
-                type="text"
+                link
+                type="primary"
                 @click="onGetInfo(row)"
               >
                 查看
@@ -209,7 +210,8 @@
               <el-button
                 v-if="row.state !== -1"
                 v-permission="['distribution:user-manage:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row)"
               >
                 修改状态

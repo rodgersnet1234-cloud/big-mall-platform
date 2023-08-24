@@ -2,7 +2,6 @@
   <div class="app-container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         v-model="pageQuery"
         :inline="true"
@@ -27,7 +26,6 @@
           <el-form-item>
             <el-button
               type="primary"
-              icon="el-icon-search"
               @click="getPage(true)"
             >
               {{ $t('table.search') }}
@@ -41,7 +39,6 @@
       <div class="operation-bar">
         <el-button
           v-permission="['admin:sysAccessKey:save']"
-          icon="el-icon-plus"
           type="primary"
           @click="onAddOrUpdate()"
         >
@@ -96,21 +93,24 @@
             <template #default="{row}">
               <el-button
                 v-permission="['admin:sysAccessKey:update']"
-                type="text"
+                link
+                type="primary"
                 @click="onAddOrUpdate(row.sysAccessKeyId)"
               >
                 {{ $t('table.edit') }}
               </el-button>
               <el-button
                 v-permission="['admin:sysAccessKey:reset']"
-                type="text"
+                link
+                type="primary"
                 @click="reset(row.sysAccessKeyId)"
               >
                 {{ $t('table.reset') }}
               </el-button>
               <el-button
                 v-permission="['admin:sysAccessKey:delete']"
-                type="text"
+                link
+                type="primary"
                 @click="onDelete(row.sysAccessKeyId)"
               >
                 {{ $t('table.delete') }}
@@ -137,7 +137,7 @@
   </div>
 </template>
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/rbac/sys-access-key'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -215,4 +215,8 @@ const reset = (sysAccessKeyId) => {
     })
   })
 }
+
+onMounted(() => {
+  getPage()
+})
 </script>

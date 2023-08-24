@@ -2,7 +2,7 @@
   <div class="ease-sku-table">
     <!-- 批量设置 -->
     <div
-      v-if="lists[0] && lists[0].spuSkuAttrValues"
+      v-if="lists[0] && lists[0].spuSkuAttrValues && lists.length > 1"
       class="batch-settings"
     >
       <div
@@ -404,11 +404,11 @@ const lists = ref([])
 const genLists = (filterPar, flattenPar) => {
   const baseData = {
     stock: 0, // 库存
-    marketPriceFee: null, // 市场价
+    marketPriceFee: 0, // 市场价
     priceFee: 0.01, // 销售价
     scoreFee: 1, // 积分价
-    volume: null, // 体积
-    weight: null, // 重量
+    volume: 0, // 体积
+    weight: 0, // 重量
     partyCode: null, // 商品编码
     modelId: null, // 条形码
     status: 1 // 状态
@@ -451,9 +451,9 @@ const computeRowspan = () => {
 
 const columns = ref([])
 const elTableRef = ref(null)
-watch(() => filter.value, (newVal) => {
+watch(() => filter.value, async (newVal) => {
   columns.value = newVal.map(item => item[props.optionText])
-  lists.value = genLists(filter.value, props.flatten)
+  lists.value = await genLists(filter.value, props.flatten)
   elTableRef.value?.doLayout()
   computeRowspan()
 }, { immediate: true })
@@ -479,6 +479,14 @@ watch(() => props.flatten, () => {
       }
       lists.value = [baseData]
     })
+  }
+}, { deep: true, immediate: true })
+
+watch(() => lists.value, (newVal) => {
+  if (props.spuId && props.isNoSkuValue) { // 有skuId，未选择属性
+    originList = JSON.parse(JSON.stringify(props.flatten))
+  } else {
+    originList = JSON.parse(JSON.stringify(newVal))
   }
 })
 
@@ -546,8 +554,8 @@ const changeScorePrice = (row) => {
   const obj = row.row
   if (!row.row.scoreFee) {
     obj.scoreFee = 1
-    lists[row.$index] = obj
-    lists[row.$index].scoreFee = 1
+    lists.value[row.$index] = obj
+    lists.value[row.$index].scoreFee = 1
   }
 }
 
@@ -566,14 +574,14 @@ const stockValidAndChange = (scope) => {
 
   /** 有属性 */
   const spuSkuAttrValues = row.spuSkuAttrValues || []
-  const currentAttrValIds = (spuSkuAttrValues?.map(item => item.attrValueId))?.filter(id => id)
+  const currentAttrValIds = (spuSkuAttrValues.map(item => item.attrValueId))?.filter(id => id)
   // 当前无输入，赋值0（默认值）
   if (!lists.value[$index].stock) {
     lists.value[$index].stock = 0
   }
   const originSku = originList?.find(item => {
-    const orginSpuSkuAttrValues = item?.spuSkuAttrValues
-    const originAttrValIds = (orginSpuSkuAttrValues?.map(val => val.attrValueId))?.filter(id => id)
+    const orginSpuSkuAttrValues = item.spuSkuAttrValues || []
+    const originAttrValIds = (orginSpuSkuAttrValues.map(val => val.attrValueId))?.filter(id => id)
     return isEqualArrays(currentAttrValIds, originAttrValIds)
   })
   // 匹配失败, 无相同sku
@@ -592,9 +600,9 @@ const isEqualArrays = (arr1, arr2) => {
   return arr1.length === arr2.length && arr1.every(val1 => !!arr2?.find(val2 => String(val1) === String(val2)))
 }
 
-const { ctx } = getCurrentInstance()
+const { proxy } = getCurrentInstance()
 const changeValue = () => {
-  ctx.$forceUpdate() // 刷新
+  proxy.$forceUpdate() // 刷新
 }
 
 const stockIntVal = ref(null) // 库存
@@ -617,7 +625,7 @@ const setNow = () => {
   const scorePriceIntValPar = parseFloat(scorePriceIntVal.value)
   const skuCodeIntValPar = parseInt(skuCodeIntVal.value)
   const barCodeIntValPar = parseInt(barCodeIntVal.value)
-  const volumeIntValPar = parseInt(volumeIntVal).value
+  const volumeIntValPar = parseInt(volumeIntVal.value)
   const weightIntValPar = parseInt(weightIntVal.value)
 
   const vaildSkuValArr = []

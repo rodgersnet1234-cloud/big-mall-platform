@@ -3,7 +3,6 @@
   <div class="container">
     <!-- 搜索相关区域 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="pageQuery"
@@ -193,7 +192,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/rbac/menu-permission.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
@@ -261,7 +260,7 @@ const addOrUpdateRef = ref(null)
 const onAddOrUpdate = (menuPermissionId) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdateRef.init(menuPermissionId)
+    addOrUpdateRef.value?.init(menuPermissionId)
   })
 }
 const onDelete = (menuPermissionId) => {

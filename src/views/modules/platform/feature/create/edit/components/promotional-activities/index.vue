@@ -97,7 +97,6 @@
         <div class="design-editor-component-title">
           {{ $t('shopFeature.promotionalActivities.promotionalActivity') }}
         </div>
-        <!-- native modifier has been removed, please confirm whether the function has been affected  -->
         <el-form
           ref="formDataRef"
           :model="formData"

@@ -152,7 +152,6 @@
         </div>
         <!--选择商品-->
         <div class="design-editor-component-container">
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-form
             ref="formDataRef"
             :model="formData"

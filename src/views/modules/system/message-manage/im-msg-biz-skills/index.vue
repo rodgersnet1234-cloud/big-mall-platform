@@ -1,7 +1,6 @@
 <template>
   <div class="mod-shop-notice">
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="searchFormRef"
         :inline="true"
@@ -39,7 +38,7 @@
               搜索
             </el-button>
             <el-button
-              @click="resetForm('searchForm')"
+              @click="onResetSearch(searchFormRef)"
             >
               重置
             </el-button>
@@ -95,7 +94,7 @@
             label="备注"
             width="300"
           >
-            <template #default="row">
+            <template #default="{row}">
               {{ row.remark||'-' }}
             </template>
           </el-table-column>
@@ -104,18 +103,20 @@
             label="操作"
             width="230"
           >
-            <template #default="row">
+            <template #default="{row}">
               <div class="text-btn-con">
                 <el-button
                   v-permission="['platform:imMsgBizSkills:update']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onAddOrUpdate(row.id)"
                 >
                   编辑
                 </el-button>
                 <el-button
                   v-permission="['platform:imMsgBizSkills:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="onDelete(row.id)"
                 >
                   删除
@@ -125,7 +126,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
+      <pagination
         v-if="dataList.length"
         class="pagination-container"
         :current-page="page.currentPage"
@@ -154,7 +155,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 let tempSearchForm = null // 保存上次点击查询的请求条件
 let theParams = null // 保存上次点击查询的请求条件
-let dataList = ref([])
+const dataList = ref([])
 const page = reactive({
   total: 0, // 总页数
   currentPage: 1, // 当前页数
@@ -164,16 +165,13 @@ const searchForm = reactive({
   keywords: '',
   content: ''
 })
+const searchFormRef = ref(null)
 const dateRange = ref([])
-let dataListLoading = ref(false)
+const dataListLoading = ref(false)
 
 const dataForm = reactive({})
-const addOrUpdateVisible = ref(false)
-
 onMounted(() => {
   getDataList(page)
-  // let title = $t('notice.plaNotice')
-  // $store.commit('common/replaceSelectMenu', title)
 })
 
 const getDataList = (pageParam, newData = false) => {
@@ -188,29 +186,25 @@ const getDataList = (pageParam, newData = false) => {
     tempSearchForm.pageSize = page == null ? page.pageSize : page.pageSize
   }
   http.getList(Object.assign(tempSearchForm, theParams)).then((data) => {
-    dataList = data.list
+    dataList.value = data.list
     page.total = data.total
-    dataListLoading = false
+    dataListLoading.value = false
   })
 }
-// 查看
-// const viewNotice = (id) => {
-//   viewDialog = true
-//   nextTick(() => {
-//     init(id)
-//   })
-// }
+
+const addOrUpdateVisible = ref(false)
+const addOrUpdateRef = ref()
 // 新增 / 修改
 const onAddOrUpdate = (id) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdate.value?.init(id)
+    addOrUpdateRef.value.init(id)
   })
 }
 const dataListSelections = ref([])
 // 删除
 const onDelete = (id) => {
-  const ids = id ? [id] : dataListSelections.map(item => {
+  const ids = id ? [id] : dataListSelections.value.map(item => {
     return item.id
   })
   ElMessageBox.confirm('确定进行删除操作?', '提示', {
@@ -219,7 +213,7 @@ const onDelete = (id) => {
     type: 'warning'
   }).then(() => {
     http.delSkills(id)
-      .then((data) => {
+      .then(() => {
         if (dataList.length === 1 && page.currentPage > 1) {
           page.currentPage--
         }
@@ -235,10 +229,7 @@ const onDelete = (id) => {
       })
   }).catch(() => { })
 }
-// 清空自定义数据
-const searchReset = () => {
-  dateRange.value = []
-}
+
 // 刷新回调用
 const refreshChange = () => {
   getDataList(page)
@@ -256,7 +247,7 @@ const onPageChange = (val) => {
   page.currentPage = val
   getDataList()
 }
-const resetForm = (formName) => {
+const onResetSearch = (formName) => {
   formName.resetFields()
   dateRange.value = []
 }

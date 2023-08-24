@@ -876,32 +876,6 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: true
 
-  /bmaplib.curveline@1.0.0:
-    resolution: {integrity: sha512-9wcFMVhiYxNPqpvsLDAADn3qDhNzXp2mA6VyHSHg2XOAgSooC7ZiujdFhy0sp+0QYjTfJ/MjmLuNoUg2HHxH4Q==}
-    dev: false
-
-  /bmaplib.distancetool@1.0.2:
-    resolution: {integrity: sha512-EvxMnQRH6xM036zx5OLPyTg5tMCTbFBuGTTHOtExLy2/T0X6v5Va0YE7c3IPm/a/Eo5V/ynYpOLOLZbRY8ccyA==}
-    dev: false
-
-  /bmaplib.heatmap@1.0.4:
-    resolution: {integrity: sha512-rmhqUARBpUSJ9jXzUI2j7dIOqnc38bqubkx/8a349U2qtw/ulLUwyzRD535OrA8G7w5cz4aPKm6/rNvUAarg/Q==}
-    dev: false
-
-  /bmaplib.lushu@1.0.7:
-    resolution: {integrity: sha512-LVvgpESPii6xGxyjnQjq8u+ic4NjvhdCPV/RiSS/PGTUdZKeTDS7prSpleJLZH3ES0+oc0gYn8bw0LtPYUSz2w==}
-    dev: false
-
-  /bmaplib.markerclusterer@1.0.13:
-    resolution: {integrity: sha512-VrLyWSiuDEVNi0yUfwOhFQ6z1oEEHS4w36GNu3iASu6p52QIx9uAXMUkuSCHReNR0bj2Cp9SA1dSx5RpojXajQ==}
-    dependencies:
-      bmaplib.texticonoverlay: 1.0.2
-    dev: false
-
-  /bmaplib.texticonoverlay@1.0.2:
-    resolution: {integrity: sha512-4ZTWr4ZP3B6qEWput5Tut16CfZgII38YwM3bpyb4gFTQyORlKYryFp9WHWrwZZaHlOyYDAXG9SX0hka43jTADg==}
-    dev: false
-
   /boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
     dev: true

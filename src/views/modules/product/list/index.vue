@@ -1,8 +1,7 @@
 <template>
-  <div class="mod-prod-list app-container">
+  <div class="app-container page-product-list">
     <!-- 1.条件筛选 -->
     <div class="search-bar">
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         :inline="true"
         :model="dataForm"
@@ -27,10 +26,6 @@
               clearable
             />
           </el-form-item>
-          <!-- 商品ID -->
-          <!-- <el-form-item label="商品ID：">
-            <el-input v-model="dataForm.prodId" type="number" placeholder="商品ID"  />
-          </el-form-item> -->
           <!-- 商品编码 -->
           <el-form-item label="商品编码：">
             <el-input
@@ -101,16 +96,14 @@
           <el-form-item label="实际销量：">
             <div class="cumulative-sales range-box">
               <el-input
-                v-model="dataForm.saleBeginInp"
+                v-model.number="dataForm.saleBeginInp"
                 min="0"
-                type="number"
                 @change="checkMaxValue(dataForm.saleBeginInp, 1)"
               />
               <span class="interval-line">-</span>
               <el-input
-                v-model="dataForm.saleEndInp"
+                v-model.number="dataForm.saleEndInp"
                 min="0"
-                type="number"
                 @change="checkMaxValue(dataForm.saleEndInp, 2)"
               />
             </div>
@@ -119,16 +112,14 @@
           <el-form-item label="当前价：">
             <div class="current-pirce range-box">
               <el-input
-                v-model="dataForm.currentPriceBeginInp"
+                v-model.number="dataForm.currentPriceBeginInp"
                 min="0"
-                type="number"
                 @change="checkMaxValue(dataForm.currentPriceBeginInp, 3)"
               />
               <span class="interval-line">-</span>
               <el-input
-                v-model="dataForm.currentPriceEndInp"
+                v-model.number="dataForm.currentPriceEndInp"
                 min="0"
-                type="number"
                 @change="checkMaxValue(dataForm.currentPriceEndInp, 4)"
               />
             </div>
@@ -138,14 +129,12 @@
             <el-button
               class="operation-btn"
               type="primary"
-              icon="el-icon-search"
-              @click="conditionSearch(true)"
+              @click="onSearch(true)"
             >
               查询
             </el-button>
             <el-button
-              icon="el-icon-delete"
-              @click="clearSearchInfo()"
+              @click="onResetSearch()"
             >
               {{ $t('table.reset') }}
             </el-button>
@@ -177,10 +166,6 @@
             已下架
           </el-radio-button>
         </el-radio-group>
-
-      <!-- <div class="release-prod-btn">
-        <el-button type="primary" @click="toReleaseProdPage(-1)">发布新商品</el-button>
-      </div> -->
       </div>
       <div class="operation-bar">
         <el-checkbox
@@ -195,7 +180,7 @@
         <el-button
           v-if="prodStatusRadio === 0 || prodStatusRadio !== 3"
           v-permission="['product:spu:offline']"
-          @click="changeProdStatus('offTheShelf')"
+          @click="changeProdStatus()"
         >
           违规下架
         </el-button>
@@ -243,11 +228,8 @@
             <template #default="scope">
               <div class="table-cell-con">
                 <div class="table-cell-image">
-                  <!-- <img v-if="scope.row.mainImgUrl" :src="(scope.row.mainImgUrl).indexOf('http')===-1 ? resourcesUrl + scope.row.mainImgUrl : scope.row.mainImgUrl">
-                  <img v-if="!scope.row.mainImgUrl" src="~@/assets/images/def.png"> -->
                   <ImgShow :src="scope.row.mainImgUrl" />
                 </div>
-<!--                <template #reference>-->
                 <div class="table-cell-text">
                   {{ scope.row.spuName }}
                   <el-popover
@@ -256,7 +238,6 @@
                     :content="scope.row.spuName"
                   />
                 </div>
-<!--                </template>-->
               </div>
             </template>
           </el-table-column>
@@ -284,9 +265,7 @@
             width="100"
           >
             <template #default="scope">
-<!--              <template #reference>-->
               <span class="name">{{ scope.row.priceFee }}</span>
-<!--              </template>-->
             </template>
           </el-table-column>
           <!-- 市场价 -->
@@ -318,13 +297,11 @@
           >
             <template #default="scope">
               <div class="water-sold-con">
-<!--                <template #reference>-->
                 <span>{{ scope.row.waterSoldNum }}</span>
-<!--                </template>-->
                 <el-popover
                   placement="bottom"
                   trigger="click"
-                  style="width: 150px !important;"
+                  :width="175"
                   @after-enter="getCurrentSpuId(scope.row.spuId, 'waterSoldNum')"
                   @hide="initProdInf(scope.row.spuId)"
                 >
@@ -355,11 +332,12 @@
                     </div>
                   </div>
                   <template #reference>
-                    <i
+                    <el-icon
                       v-show="scope.row.spuId===currentMoveSpuId || (scope.row.spuId===currentClickSpuId && currentShowPopover==='waterSoldNum')"
                       v-permission="['product:spu:editWaterSoldNum']"
-                      class="el-icon-edit"
-                    />
+                    >
+                      <EditPen />
+                    </el-icon>
                   </template>
                 </el-popover>
               </div>
@@ -374,9 +352,7 @@
             align="center"
           >
             <template #default="scope">
-<!--              <template #reference>-->
               <span class="name">{{ scope.row.stock }}</span>
-<!--              </template>-->
             </template>
           </el-table-column>
           <!-- 序号 -->
@@ -389,9 +365,7 @@
           >
             <template #default="scope">
               <div class="seq-box can-edit-item is-center">
-<!--                <template #reference>-->
                 <span class="name">{{ scope.row.exhibitionSeq }}</span>
-<!--                </template>-->
               </div>
             </template>
           </el-table-column>
@@ -450,14 +424,16 @@
               <div class="table-btn-con">
                 <el-button
                   v-permission="['product:spu:view']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="toReleaseProdPage(row.spuId)"
                 >
                   详情
                 </el-button>
                 <el-button
                   v-if="row.spuStatus === 4"
-                  type="text"
+                  link
+                  type="primary"
                   @click="offlineManageHandle(row, 'showProductReview')"
                 >
                   待审核
@@ -465,7 +441,8 @@
                 <el-button
                   v-if="row.spuStatus === 1 || row.spuStatus === 0"
                   v-permission="['product:spu:offline']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="offlineManageHandle(row, 'offline')"
                 >
                   违规下架
@@ -473,7 +450,8 @@
                 <el-button
                   v-if="row.spuStatus === 2 || row.spuStatus === 3"
                   v-permission="['product:spu:audit']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="offlineManageHandle(row, 'offlineManage')"
                 >
                   下架管理
@@ -481,7 +459,8 @@
                 <el-button
                   v-if="!row.isTop"
                   v-permission="['product:spu:top']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="clickIsTop(row.spuId,row.isTop)"
                 >
                   置顶
@@ -489,14 +468,16 @@
                 <el-button
                   v-else
                   v-permission="['product:spu:unTop']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="clickIsTop(row.spuId,row.isTop)"
                 >
                   取消置顶
                 </el-button>
                 <el-button
                   v-permission="['product:spu:delete']"
-                  type="text"
+                  link
+                  type="primary"
                   @click="prodDelete(row.spuId)"
                 >
                   删除
@@ -519,7 +500,7 @@
           <el-button
             v-if="prodStatusRadio !== 0 && prodStatusRadio !== 3"
             v-permission="['product:spu:offline']"
-            @click="changeProdStatus('offTheShelf')"
+            @click="changeProdStatus()"
           >
             下架
           </el-button>
@@ -535,14 +516,13 @@
           :current-page="pageQuery.pageNum"
           :page-size="pageQuery.pageSize"
           :total="page.total"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="->,total, sizes, prev, pager, next, jumper"
           @size-change="sizeChangeHandle"
           @current-change="currentChangeHandle"
         />
       </div>
     </div>
     <prod-details
-      v-if="prodDetailsVisible"
       ref="prodDetailsRef"
     />
 
@@ -570,7 +550,6 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 
 let tempSearchForm = null // 保存上次点击查询的请求条件
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const dataForm = reactive({
   shopName: '',
   prodName: '',
@@ -590,8 +569,7 @@ const categoryListTreeProps = reactive({
   label: 'name'
 })
 const prodStatusRadio = ref(0)
-// 商品表格数据
-const tableData = ref([])
+
 const currentMoveSpuId = ref('') // 移入项的spuId
 const currentClickSpuId = ref('') // 点击项的spuId
 const currentShowPopover = ref('') // 当前展示的弹窗
@@ -617,8 +595,6 @@ const oldPageVo = ref([]) // 原始数据列表
 // loading
 const pageLoading = ref(true)
 const isSubmit = ref(true)
-const currentModifyProdSkuList = ref([]) // 当前准备修改的商品的规格列表
-const prodDetailsVisible = ref(false) // 商品详情
 
 let spuId = null // 商品id
 const operateDialogVisible = ref(false) // 商品违规下架弹窗
@@ -631,9 +607,9 @@ onMounted(() => {
 })
 
 // 条件搜索
-const conditionSearch = (newData = false) => {
+const onSearch = (newData = false) => {
   pageQuery.pageNum = 1
-  searchParam.dataType = dataForm.dataType
+  searchParam.dataType = dataForm.dataType || searchParam.dataType
   searchParam.spuId = dataForm.prodId || undefined
   searchParam.partyCodes = dataForm.prodCode || undefined
   searchParam.shopName = dataForm.shopName || undefined
@@ -650,17 +626,6 @@ const conditionSearch = (newData = false) => {
   searchParam.isCompose = dataForm.currentyuPreSaleStatus === '' ? undefined : dataForm.currentyuPreSaleStatus
   searchParam.sort = searchParam.sort || undefined
   getDataList(newData)
-}
-const { proxy } = getCurrentInstance()
-// 注水销量失去焦点事件
-const changeWaterSoldNum = (id) => {
-  const findex = oldPageVo.value.findIndex(item => {
-    return item.spuId === id
-  })
-  if (findex !== -1) {
-    page.list[findex].waterSoldNum = oldPageVo.value[findex].waterSoldNum
-    proxy.$forceUpdate()
-  }
 }
 
 const route = useRoute()
@@ -713,11 +678,8 @@ const handleSelectCategoryChange = (val) => {
   } else if (val.length === 3) { // 长度为3，表明当前选择的是三级分类（点击了三级分类）
     dataForm.categoryId = val[2] // 平台三级分类id
   }
-  // dataForm.categoryId = val[val.length - 1]
-  // if (dataForm.categoryId === undefined) {
-  //   dataForm.categoryId = 0
-  // }
 }
+
 // 切换不同状态的商品展示
 // 0：代表全部商品
 // 1：在售中的商品
@@ -728,38 +690,15 @@ const switchProdList = () => {
   checkAll.value = false
   pageQuery.pageNum = 1
   searchParam.dataType = dataType
-  // searchParam = {
-  //   ...searchParam,
-  //   dataType
-  // }
   getDataList(true)
 }
-/**
- * 鼠标移入单元格
- */
-const cellMouseEnter = (row) => {
-  currentMoveSpuId.value = row.spuId
-}
-/**
- * 鼠标移出单元格
- */
-const cellMouseLeave = () => {
-  currentMoveSpuId.value = ''
-}
+
 const prodDetailsRef = ref(null)
 // 跳转发布商品页
 const toReleaseProdPage = (spuId) => {
-  prodDetailsVisible.value = true
-  nextTick(() => {
-    prodDetailsRef.value.init(spuId)
-  })
+  prodDetailsRef.value.init(spuId)
 }
-// 更新es中的商品数据
-const updateEsSpu = () => {
-  api.updateEsSpu().then(() => {
-    ElMessage.success('数据刷新需要几分钟，请耐心等待后刷新页面')
-  })
-}
+
 // 监听表格选中
 const onSelectSome = (value) => {
   const count = value.length
@@ -781,6 +720,7 @@ const handleCheckAllChange = () => {
   prodInfTableRef.value.toggleAllSelection()
   isIndeterminate.value = false
 }
+
 // 条件排序
 // priceFee:当前价       5-正序 4-倒序
 // marketPriceFee:市场价 8-正序 7-倒序
@@ -816,11 +756,7 @@ const conditionSort = (column) => {
     default:
       break
   }
-  searchParam.dataType = sort
-  // searchParam = {
-  //   ...searchParam,
-  //   sort
-  // }
+  searchParam.sort = sort
   getDataList(true)
 }
 const offlineDataRef = ref(null)
@@ -928,14 +864,11 @@ const clickIsTop = (spuId, isTop) => {
 }
 // 下线
 const onOrOffTheShelf = (data, batchOffile) => {
-  let spuIds = []
+  let spuIds
   if (batchOffile) {
-    // console.log('selectedProdList', selectedProdList)
-    // operateDialogVisible = false
     spuIds = selectedProdList.value
-    // return
   } else {
-    spuIds = [spuId.value]
+    spuIds = [spuId]
   }
   const param = {
     handleIds: spuIds,
@@ -957,7 +890,7 @@ const onOrOffTheShelf = (data, batchOffile) => {
       }
     })
     isSubmit.value = false
-  }).catch(e => {
+  }).catch(() => {
     isSubmit.value = false
   })
 }
@@ -982,12 +915,11 @@ const offlineDataSubmit = (data) => {
       duration: 1000,
       onClose: () => {
         operateDialogVisible.value = false
-        // showOfflineManage = false
         getDataList()
       }
     })
     isSubmit.value = false
-  }).catch(e => {
+  }).catch(() => {
     isSubmit.value = false
   })
 }
@@ -1015,7 +947,7 @@ const auditOnlineSubmit = (data) => {
       }
     })
     isSubmit.value = false
-  }).catch(e => {
+  }).catch(() => {
     isSubmit.value = false
   })
 }
@@ -1039,7 +971,7 @@ const prodDelete = (spuId) => {
       })
     })
     isSubmit.value = false
-  }).catch(e => {
+  }).catch(() => {
     isSubmit.value = false
   })
 }
@@ -1061,48 +993,21 @@ const clearShowPopoverInf = () => {
   currentClickSpuId.value = ''
   currentShowPopover.value = ''
 }
-// 获取商品详情
-const getProdDetail = (spuId, currentShowPopover) => {
-  api.get(spuId).then(data => {
-    currentModifyProdSkuList.value = data.skus
-    currentModifyProdSkuList.value.forEach(item => {
-      item.originalStock = item.stock
-      // item.priceFee = parseFloat(bigActualTotal(parseFloat(item.priceFee), 100))
-      item.priceFee = accuracyCount(item.priceFee, 100, 3)
-      item.oldPriceFee = item.priceFee
-      // item.marketPriceFee = parseFloat(bigActualTotal(parseFloat(item.marketPriceFee), 100))
-      item.marketPriceFee = accuracyCount(item.marketPriceFee, 100, 3)
-    })
-  })
-}
-
-// 精度运算-乘法
-const bigProductTotalAmount = (a, b) => {
-  return new Big(a).times(b).valueOf()
-}
-// 精度运算-除法
-const bigActualTotal = (a, b) => {
-  if (a == null) {
-    return ''
-  }
-  return new Big(a).div(b).valueOf()
-}
 
 // 关闭弹窗后,初始化数据
 const initProdInf = (id) => {
-  // row.waterSoldNum = row.waterSoldNum
   if (!waterSoldNumBtn.value) {
     const findex = oldPageVo.value.findIndex(item => {
       return item.spuId === id
     })
     if (findex !== -1) {
       page.list[findex].waterSoldNum = oldPageVo.value[findex].waterSoldNum
-      proxy.$forceUpdate()
     }
   }
   waterSoldNumBtn.value = false
   clearShowPopoverInf()
 }
+
 const closepopoverRef = ref(null)
 // 关闭popover弹窗
 const closePopover = () => {
@@ -1112,9 +1017,9 @@ const closePopover = () => {
 // 改变商品状态
 // onTheShelf:上架
 // offTheShelf:下架
-const changeProdStatus = (status) => {
+const changeProdStatus = () => {
   // 如果没选商品，提示选择商品
-  if (selectedProdList.length <= 0) {
+  if (selectedProdList.value.length <= 0) {
     ElMessage({
       message: '请选择商品',
       type: 'warning'
@@ -1126,12 +1031,6 @@ const changeProdStatus = (status) => {
   nextTick(() => {
     offlineDataRef.value.init('offline', true)
   })
-
-  // if (status === 'onTheShelf') {
-  //   prodSale(selectedProdList)
-  // } else if (status === 'offTheShelf') {
-  //   prodNotSale(selectedProdList)
-  // }
 }
 const exportFrom = () => {
   if (page.total === 0) {
@@ -1151,7 +1050,7 @@ const exportFrom = () => {
     }
     isSubmit.value = true
     searchParam.dataType = dataForm.dataType
-    searchParam.spuIds = selectedProdList || []
+    searchParam.spuIds = selectedProdList.value || []
     searchParam.spuId = spuId || undefined
     searchParam.partyCodes = dataForm.prodCode || undefined
     searchParam.shopName = dataForm.shopName || undefined
@@ -1169,7 +1068,6 @@ const exportFrom = () => {
     searchParam.sort = searchParam.sort || undefined
     api.soldPlatformExcel({ ...searchParam }).then((data) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-      // var blob = data
       const fileName = '商品信息.xlsx'
       const elink = document.createElement('a')
       if ('download' in elink) { // 非IE下载
@@ -1228,7 +1126,7 @@ const accuracyCount = (a, b, countMode) => {
 /**
  * 清空
  */
-const clearSearchInfo = () => {
+const onResetSearch = () => {
   dataForm.saleBeginInp = undefined
   dataForm.saleEndInp = undefined
   dataForm.currentPriceBeginInp = undefined
@@ -1247,66 +1145,5 @@ const clearSearchInfo = () => {
 </script>
 
 <style lang="scss" scoped>
-.mod-prod-list {
-  .search-bar {
-    .input-row {
-      .range-box {
-        display: flex;
-        .interval-line {
-          margin: 0 10px;
-        }
-        .el-input--small .el-input__inner {
-          padding: 0;
-          padding-left: 12px;
-          text-overflow: ellipsis;
-          -o-text-overflow: ellipsis;
-          -webkit-text-overflow: ellipsis;
-          -moz-text-overflow: ellipsis;
-          word-break: break-word;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      }
-    }
-  }
-  .main-content {
-    .operation-bar {
-      .all-check-btn {
-        margin-left: 18px;
-      }
-    }
-    .table-con {
-      .operation-bar {
-        margin: 10px 0;
-        .all-check-btn {
-          margin-right: 10px;
-        }
-      }
-      .water-sold-con {
-        .el-input--small .el-input__inner {
-          padding: 0;
-          padding-left: 12px;
-          text-overflow: ellipsis;
-          -o-text-overflow: ellipsis;
-          -webkit-text-overflow: ellipsis;
-          -moz-text-overflow: ellipsis;
-          word-break: break-word;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      }
-    }
-  }
-}
-.popover-bottom {
-  margin-top: 10px;
-  text-align: right;
-}
-.pagination{
-  text-align: right;
-}
+@use "index";
 </style>

@@ -89,7 +89,6 @@
       :title="$t('pcdecorate.decorateNavbar.templateInfo')"
       width="30%"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :model="dataForm"
@@ -103,7 +102,6 @@
           prop="name"
           :label-width="labelWidth"
         >
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-input
             v-model="dataForm.name"
             maxlength="20"

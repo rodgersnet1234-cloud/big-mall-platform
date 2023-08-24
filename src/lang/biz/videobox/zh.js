@@ -22,5 +22,6 @@ export default {
   remainder: '还可以选择',
   maxSelect: '当前最多只能选择',
   requestError: '服务器打了个盹^_^',
-  VideoMaxQuantity: '视频最大数量为：'
+  VideoMaxQuantity: '视频最大数量为：',
+  pleaseSelectGroup: '请选择视频'
 }

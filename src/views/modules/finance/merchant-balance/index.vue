@@ -18,7 +18,7 @@
             <span
               v-if="!shopWalletInfo|| shopWalletInfo.settledAmount === null"
               style="margin-right:20px"
-            > {{ '-' }}</span>
+            >0</span>
             <span
               v-else
               style="margin-right:20px"
@@ -43,7 +43,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo &&shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount):'-' }}
             </span>
           </div>
         </div>
@@ -61,7 +61,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo &&shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount):'-' }}
             </span>
           </div>
         </div>
@@ -79,7 +79,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo &&shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount):'-' }}
             </span>
           </div>
         </div>
@@ -163,7 +163,6 @@
         <div class="export-btn">
           <el-button
             v-permission="['platform:shopWallet:export']"
-            icon="el-icon-download"
             @click="onExportFrom()"
           >
             导出

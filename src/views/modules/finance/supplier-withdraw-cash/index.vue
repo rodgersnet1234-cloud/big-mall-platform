@@ -72,15 +72,11 @@
             style="width: 100%"
           >
             <el-table-column
-              prop="index"
+              type="index"
               label="序号"
               align="center"
               width="90"
-            >
-              <template #default="scope">
-                <span>{{ scope.row.index+1 }}</span>
-              </template>
-            </el-table-column>
+            />
             <el-table-column
               prop="supplierName"
               label="供应商名称"
@@ -179,7 +175,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import SetUp from './components/setUp.vue'
 import AddOrUpdate from './add-or-update.vue'
 import { page } from '@/api/supplier-withdraw-cash'

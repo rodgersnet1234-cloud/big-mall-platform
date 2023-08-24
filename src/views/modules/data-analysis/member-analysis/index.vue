@@ -3,20 +3,19 @@
   <div class="data-analysis page-member-analysis">
     <div class="board">
       <!-- 统计时间 -->
-      <path-analysis-header
-        :date-options="dateOptions"
-        :time-type-par="timeType"
-        @change-data="changeData"
-      />
+      <div class="date-type-select-box">
+        <date-type-select
+          v-model:dateType="dateType"
+          @change-data="changeData"
+        />
+      </div>
 
       <!-- 会员概览 -->
       <membership-overview
         ref="overviewRef"
         :board-type="'overview'"
-        :time-type="timeTypePar"
+        :time-type="dateType"
         :date-range="dateRange"
-        :start-time-par="startTime"
-        :end-time-par="endTime"
       />
     </div>
 
@@ -25,10 +24,8 @@
       <membership-overview
         ref="numTrendsRef"
         :board-type="'numTrends'"
-        :time-type="timeTypePar"
+        :time-type="dateType"
         :date-range="dateRange"
-        :start-time-par="startTime"
-        :end-time-par="endTime"
       />
     </div>
 
@@ -37,10 +34,8 @@
       <membership-overview
         ref="percentageTrendRef"
         :board-type="'percentageTrend'"
-        :time-type="timeTypePar"
+        :time-type="dateType"
         :date-range="dateRange"
-        :start-time-par="startTime"
-        :end-time-par="endTime"
       />
     </div>
 
@@ -51,7 +46,7 @@
         :date-range="dateRange"
         :end-time-par="endTime"
         :start-time-par="startTime"
-        :time-type="timeType"
+        :time-type="dateType"
       />
     </div>
 
@@ -59,7 +54,7 @@
       <!-- 新老会员成交分析 -->
       <transaction-analysis
         ref="transactionRef"
-        :time-type="timeType"
+        :time-type="dateType"
         :start-time-par="startTime"
         :end-time-par="endTime"
         :date-range="dateRange"
@@ -78,48 +73,16 @@
 </template>
 
 <script setup>
-import pathAnalysisHeader from '../public-components/path-analysis-header.vue'
 import membershipOverview from './components/membership-overview.vue'
 import memberContributionValueAnalysis from './components/member-contribution-value-analysis.vue'
 import transactionAnalysis from './components/transaction-analysis.vue'
 import customerRetentionAnalysis from './components/customer-retention-analysis.vue'
+import dateTypeSelect from '../public-components/date-type-select.vue'
 
-// eslint-disable-next-line no-unused-vars
-const props = defineProps({
-  timeType: {
-    type: Number,
-    default: null
-  }
-})
-
-const emit = defineEmits(['update:timeType'])
+const dateType = ref(4)
 
 const startTime = ref('')
 const endTime = ref('')
-
-// 时间类型列表
-const dateOptions = [
-  {
-    label: '今日实时',
-    value: 4
-  },
-  {
-    label: '自然日',
-    value: 1
-  },
-  {
-    label: '自然月',
-    value: 3
-  },
-  {
-    label: '近 7 天',
-    value: 5
-  },
-  {
-    label: '近 30 天',
-    value: 6
-  }
-]
 
 const overviewRef = ref(null)
 const numTrendsRef = ref(null)
@@ -127,11 +90,7 @@ const percentageTrendRef = ref(null)
 const memberContributionRef = ref(null)
 const transactionRef = ref(null)
 const retentionRef = ref(null)
-const timeTypePar = ref(0)
 const dateRange = ref([])
-watch(() => dateRange.value, () => {
-  emit('update:timeType', timeTypePar.value)
-})
 
 const changeData = (val) => {
   dateRange.value = val
@@ -144,6 +103,11 @@ const changeData = (val) => {
   display: block;
   width: 100%;
   background: #f1f4f5;
+  .date-type-select-box{
+    padding: 10px;
+    background-color: #f7f8fa;
+    margin-bottom: 16px;
+  }
   :deep(.board) {
     display: block;
     background: #fff;

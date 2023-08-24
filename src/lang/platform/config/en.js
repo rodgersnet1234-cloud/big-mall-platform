@@ -98,5 +98,13 @@ export default {
   paymentCertificatePath: 'Payment certificate path',
   sensitiveConfiguration: 'Sensitive words configuration',
   sensitiveWord: 'Sensitive words',
-  sensitiveAlert: 'Each sensitive word is separated by a Chinese comma, only Chinese and Chinese commas can be entered, please fill in carefully, this configuration takes about five minutes to work.'
+  sensitiveAlert: 'Each sensitive word is separated by a Chinese comma, only Chinese and Chinese commas can be entered, please fill in carefully, this configuration takes about five minutes to work.',
+  aliLiveConfig: 'Live Configuration',
+  pushDomain: 'Catalogue Of Names',
+  pullDomain: 'Broadcast Area Name',
+  appName: 'Application Name',
+  pushAuthKey: 'Push Stream Auth Key',
+  pullAuthKey: 'Pull Stream Auth Key',
+  isHttps: 'Whether to enable https configuration',
+  liveTip2: 'Application names only support numbers, upper and lower case letters, underscores (-), underscores (_), and equals signs (=).'
 }

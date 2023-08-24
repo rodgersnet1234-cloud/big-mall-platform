@@ -9,7 +9,6 @@
       width="750px"
       @close="closeDialog"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :rules="rules"
@@ -28,7 +27,10 @@
             v-model="dataForm.imgUrl"
             :limit="1"
           />
-          <div class="">
+          <div
+            class=""
+            style="width: 100%"
+          >
             建议图片尺寸为{{ dataForm.imgType ? ' 1920*450': ' 750*400' }}
           </div>
         </el-form-item>
@@ -78,10 +80,12 @@
             :min="0"
             controls-position="right"
             :precision="0"
+            @blur="seqChange"
           />
         </el-form-item>
         <!-- 类型 -->
         <el-form-item
+          class="type-box"
           label="类型"
           prop=""
         >
@@ -112,7 +116,8 @@
               <div class="card-prod-bottom">
                 <span class="card-prod-name">{{ dataForm.spu.spuName || dataForm.spu.name }}</span>
                 <el-button
-                  type="text"
+                  link
+                  type="primary"
                   class="card-prod-name-button"
                   @click="deleteCurrentProd"
                 >
@@ -218,6 +223,12 @@ const init = (imgId) => {
   })
 }
 
+const seqChange = () => {
+  if (!dataForm.seq) {
+    dataForm.seq = 0
+  }
+}
+
 defineExpose({
   init
 })
@@ -303,6 +314,13 @@ const onSubmit = Debounce(() => {
 
 <style lang="scss" scoped>
 .index-img {
+
+  .type-box{
+    :deep(.el-form-item__content){
+      display: block;
+
+    }
+  }
   .el-form--label-left {
     .el-form-item__label {
       text-align: right !important;
@@ -310,6 +328,7 @@ const onSubmit = Debounce(() => {
   }
   .select-pro {
     margin-top: 10px;
+    width: 100%;
   }
   .card-prod-bottom {
     position: relative;

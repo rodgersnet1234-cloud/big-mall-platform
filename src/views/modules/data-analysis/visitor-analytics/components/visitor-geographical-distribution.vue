@@ -14,13 +14,19 @@
       <!-- 左-地图 -->
       <div class="maps-chart">
         <div class="chart-content">
-          <div id="geo-maps-mod" />
+          <div
+            :id="eChart"
+            class="geo-maps-mod"
+          />
         </div>
       </div>
       <!-- 右-饼图 -->
       <div class="pie-chart">
         <div class="chart-content">
-          <div id="geo-pie-mod" />
+          <div
+            :id="eChartTwo"
+            class="geo-pie-mod"
+          />
         </div>
       </div>
     </div>
@@ -151,6 +157,9 @@ const props = defineProps({
 
 const emit = defineEmits(['exportFrom'])
 
+const eChart = ref('eChart' + Date.now() + Math.random())
+const eChartTwo = ref('eChartTwo' + Date.now() + Math.random())
+
 const titleInfo = reactive({
   title: '访问地域分布',
   content: '用户所在地域'
@@ -225,13 +234,15 @@ const mapsDate = () => {
   oldDataList = oldDataListPar
 }
 
-const mapsChart = ref(null)
 // 地域分布-地图
 const getGeographicalData = async () => {
   await mapsDate()
   $echarts.registerMap('china', chinaMap)
-  if (!mapsChart.value) {
-    mapsChart.value = $echarts.init(document.getElementById('geo-maps-mod'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let mapsChart = $echarts.getInstanceByDom(document.getElementById(eChart.value))
+  // 如果不存在，就进行初始化
+  if (mapsChart == null) {
+    mapsChart = $echarts.init(document.getElementById(eChart.value))
   }
   const option = {
     tooltip: {
@@ -273,6 +284,7 @@ const getGeographicalData = async () => {
     series: [
       {
         type: 'map',
+        name: '访客数',
         map: 'china',
         geoIndex: 0,
         label: {
@@ -282,21 +294,19 @@ const getGeographicalData = async () => {
       }
     ]
   }
-  setTimeout(() => {
-    try {
-      mapsChart.value.setOption(option)
-      window.addEventListener('resize', function () {
-        mapsChart.value.resize()
-      })
-    } catch (error) {}
-  }, 1000)
+  mapsChart.setOption(option)
+  window.addEventListener('resize', function () {
+    mapsChart.resize()
+  })
 }
 
-const pieChart = ref(null)
 // 地域分布-环形图
 const getGeographicalPieData = () => {
-  if (!pieChart.value) {
-    pieChart.value = $echarts.init(document.getElementById('geo-pie-mod'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let pieChart = $echarts.getInstanceByDom(document.getElementById(eChartTwo.value))
+  // 如果不存在，就进行初始化
+  if (pieChart == null) {
+    pieChart = $echarts.init(document.getElementById(eChartTwo.value))
   }
   const option = {
     title: {
@@ -323,6 +333,7 @@ const getGeographicalPieData = () => {
     series: [
       {
         type: 'pie',
+        name: '访客数',
         radius: ['72%', '28%'],
         avoidLabelOverlap: false,
         label: {
@@ -343,9 +354,9 @@ const getGeographicalPieData = () => {
       }
     ]
   }
-  option && pieChart.value.setOption(option)
+  option && pieChart.setOption(option)
   window.addEventListener('resize', function () {
-    pieChart.value.resize()
+    pieChart.resize()
   })
 }
 
@@ -378,7 +389,7 @@ const getGeographicalPieData = () => {
       .chart-content {
         width: 100%;
         height: 100%;
-        #geo-maps-mod, #geo-pie-mod {
+        .geo-maps-mod, .geo-pie-mod {
           width: 100%;
           height: 100%;
         }

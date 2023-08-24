@@ -31,14 +31,14 @@ import seckillTime from './components/seckill-time-config.vue'
 import seckillCategory from './components/seckill-category.vue'
 import * as api from '@/api/seckill/seckill'
 
-let num = ref(0)
+const num = ref(0)
 onMounted(() => {
   getData()
 })
 
 const getData = () => {
   api.getJoinSeckillMerchantNum({}).then(data => {
-    num = data
+    num.value = data
   })
 }
 

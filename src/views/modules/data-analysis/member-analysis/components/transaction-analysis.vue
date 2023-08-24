@@ -257,17 +257,20 @@ const switchSixEchart = (trendType) => {
   getChartData()
 }
 
-let radio6AllTitilArray = []
 // 柱状图数据
 const getChartData = () => {
-  radio6AllTitilArray = radio6BNewTitilArray.concat(radio6BOldTitilArray)
-  const myChart = $echarts.init(document.getElementById('membership-transaction-analysis-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let myChart = $echarts.getInstanceByDom(document.getElementById('membership-transaction-analysis-chart'))
+  // 如果不存在，就进行初始化
+  if (myChart == null) {
+    myChart = $echarts.init(document.getElementById('membership-transaction-analysis-chart'))
+  }
   const option = {
     tooltip: {
       trigger: 'axis'
     },
     legend: {
-      data: radio6AllTitilArray
+      data: [radio6BNewTitil, radio6BOldTitil]
     },
     grid: {
       left: 30,
@@ -289,10 +292,8 @@ const getChartData = () => {
         type: 'bar',
         data: trendNewArray,
         itemStyle: {
-          normal: {
-            // 定制显示
-            color: '#155bd4'
-          }
+          // 定制显示
+          color: '#155bd4'
         }
       },
       {
@@ -300,10 +301,8 @@ const getChartData = () => {
         type: 'bar',
         data: trendOldArray,
         itemStyle: {
-          normal: {
-            // 定制显示
-            color: '#3DD86B'
-          }
+          // 定制显示
+          color: '#3DD86B'
         }
       }
     ]

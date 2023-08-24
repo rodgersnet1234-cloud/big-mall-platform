@@ -7,6 +7,7 @@
       :time-type="timeType"
       :start-time="startTime"
       :end-time="endTime"
+      :sys-data="sysData"
       @switch-system-type="switchSystemType"
       @get-date-time="getDateTime"
     />
@@ -25,6 +26,7 @@
       :time-type="timeType"
       :start-time="startTime"
       :end-time="endTime"
+      @set-sys-data="onSetSysData"
     />
   </div>
 </template>
@@ -54,6 +56,15 @@ const getDateTime = (data) => {
   endTime.value = data.endTime
 }
 
+const sysData = ref([])
+const onSetSysData = (data) => {
+  if (data && data.length) {
+    data.sort((a, b) => a.systemType - b.systemType)
+    sysData.value = data
+  } else {
+    sysData.value = []
+  }
+}
 </script>
 
 <style lang="scss" scoped>

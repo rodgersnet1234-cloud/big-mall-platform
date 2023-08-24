@@ -214,16 +214,18 @@ const oneEchartCurrentName = ref('') // 会员概览数据图下的所选中的�
 let dataArray = []
 // 会员概览图表
 const getOverviewDataChart = () => {
-  const myChart = $echarts.init(document.getElementById('membership-overview-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let myChart = $echarts.getInstanceByDom(document.getElementById('membership-overview-chart'))
+  // 如果不存在，就进行初始化
+  if (myChart == null) {
+    myChart = $echarts.init(document.getElementById('membership-overview-chart'))
+  }
   const option = {
-    // title: {
-    //   text: '折线图堆叠'
-    // },
     tooltip: {
       trigger: 'axis'
     },
     legend: {
-      data: oneEchartAllName.value
+      data: [oneEchartCurrentName.value]
     },
     grid: {
       left: 30,
@@ -246,13 +248,11 @@ const getOverviewDataChart = () => {
         type: 'line',
         smooth: true,
         itemStyle: {
-          normal: {
-            lineStyle: {
-              color: '#155bd4'
-            },
-            // 点的颜色
+          lineStyle: {
             color: '#155bd4'
-          }
+          },
+          // 点的颜色
+          color: '#155bd4'
         },
         areaStyle: {
           color: new $echarts.graphic.LinearGradient(0, 0, 0, 1, [{
@@ -348,11 +348,12 @@ const getMemberNumTrendsData = () => {
   })
 }
 
+let dataList = []
 const updateEchart = (index) => {
+  oneEchartCurrentName.value = oneEchartAllName.value[index]
   updateOneEchart(dataList, index)
 }
 
-let dataList = []
 // 更新会员概览Echart数据图的数据
 const updateOneEchart = (data, echartType) => {
   dataList = data
@@ -418,7 +419,12 @@ const updateOneEchart = (data, echartType) => {
 
 // 会员人数趋势图表
 const getNumTrendsDataChart = () => {
-  const myChart = $echarts.init(document.getElementById('membership-num-trends-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let myChart = $echarts.getInstanceByDom(document.getElementById('membership-num-trends-chart'))
+  // 如果不存在，就进行初始化
+  if (myChart == null) {
+    myChart = $echarts.init(document.getElementById('membership-num-trends-chart'))
+  }
   const option = {
     tooltip: {
       trigger: 'axis'
@@ -443,16 +449,15 @@ const getNumTrendsDataChart = () => {
     },
     series: [
       {
+        name: '注册会员数',
         type: 'line',
         smooth: true,
         itemStyle: {
-          normal: {
-            lineStyle: {
-              color: '#155bd4'
-            },
-            // 点的颜色
+          lineStyle: {
             color: '#155bd4'
-          }
+          },
+          // 点的颜色
+          color: '#155bd4'
         },
         areaStyle: {
           color: new $echarts.graphic.LinearGradient(0, 0, 0, 1, [{
@@ -483,7 +488,12 @@ const formatDate = (date) => {
 
 // 会员占比趋势图表
 const getPercentageTrendDataChart = () => {
-  const myChart = $echarts.init(document.getElementById('membership-percentage-trend-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let myChart = $echarts.getInstanceByDom(document.getElementById('membership-percentage-trend-chart'))
+  // 如果不存在，就进行初始化
+  if (myChart == null) {
+    myChart = $echarts.init(document.getElementById('membership-percentage-trend-chart'))
+  }
   const option = {
     color: ['red'],
     tooltip: {
@@ -514,14 +524,14 @@ const getPercentageTrendDataChart = () => {
     },
     series: [
       {
-
+        name: '注册会员数',
         type: 'bar',
         itemStyle: {
-          normal: {
-            color: '#d8effb',
-            barBorderRadius: [15, 15, 0, 0]
-          },
-          emphasis: {
+          color: '#d8effb',
+          borderRadius: [15, 15, 0, 0]
+        },
+        emphasis: {
+          itemStyle: {
             color: '#155bd4'
           }
         },

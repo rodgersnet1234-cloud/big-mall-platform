@@ -1,23 +1,4 @@
-.elx-videobox-dialog {
-  .el-badge {
-    vertical-align: bottom;
-  }
-
-  .el-dialog {
-    width: 850px;
-
-    .el-dialog__header {
-      // border-bottom: 1px solid #e8e8e8;
-    }
-
-    .el-dialog__body {
-      // padding: 0;
-      // background: $bg;
-    }
-  }
-}
-
-.elx-videobox {
+.component-video-box {
   .el-upload-list__item,
   .el-upload--picture-card {
     width: 78px;
@@ -54,12 +35,28 @@
     }
   }
 
+  .elx-videobox-dialog {
+    .el-badge {
+      vertical-align: bottom;
+    }
+
+    .el-dialog {
+      width: 850px;
+    }
+  }
+}
+
+.gray-btn {
+  background-color: #8aadea;
+  border-color: #8aadea;
+  &:hover{
+    background-color: #8aadea;
+    border-color: #8aadea;
+  }
 }
 
 .elx-videobox-dialog {
   $bg: #f6f6f6;
-  // top: 100px;
-
   .elx-foot {
     padding: 15px 0 0 10px;
     .el-button {
@@ -299,9 +296,8 @@
   }
 
   .upload-block {
-    .upload-img-preview {
-      padding: 20px;
-      padding-top: 10px;
+    :deep(.upload-img-preview) {
+      padding: 10px 20px 20px;
 
       /* 上传视频预览改为使用背景视频按比例缩放方式 */
       .el-upload--picture-card,
@@ -312,6 +308,8 @@
         line-height: 98px;
         background-size: cover;
         background-position: 50% 50%;
+        background-color: #fbfdff;
+        border: 1px dashed var(--el-border-color-darker);
       }
 
       .el-upload-list--picture-card .el-upload-list__item-status-label i {
@@ -347,7 +345,6 @@
 }
 
 .form {
-  // padding: 15px 0px 0px 20px;
   margin-left: 50px;
   .el-form-item {
     margin-bottom: 0;

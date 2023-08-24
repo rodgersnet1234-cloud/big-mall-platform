@@ -96,7 +96,8 @@
       >
         <el-button
           v-permission="['distribution:distributionUser:update']"
-          type="text"
+          link
+          type="primary"
           @click="info()"
         >
           点击查看

@@ -3,7 +3,6 @@
     v-model="visible"
     :title="dataForm.templateId? $t('table.edit'): $t('table.create')"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="dataRule"
@@ -75,10 +74,10 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let visible = ref(false)
-let isCheck = ref(false)
-let isConfirm = ref(false)
-let dataForm = reactive({
+const visible = ref(false)
+const isCheck = ref(false)
+const isConfirm = ref(false)
+const dataForm = reactive({
   templateId: null,
   sendType: null,
   templateTypeList: [],
@@ -88,8 +87,7 @@ let dataForm = reactive({
   createTime: null,
   tagIds: []
 })
-const tagIds = ref([])
-let tagList = ref([])
+const tagList = ref([])
 const dataRule = {
   message: [
     { required: true, message: $t('biz.notify.notifyContenNoNull'), trigger: 'blur' }
@@ -97,19 +95,25 @@ const dataRule = {
 }
 const dataFormRef = ref()
 const init = (templateId) => {
-  isConfirm = false
-  isCheck = false
+  isConfirm.value = false
+  isCheck.value = false
   dataForm.templateTypeList = []
   dataForm.templateId = templateId || 0
   dataForm.tagIds = []
-  visible = true
+  visible.value = true
   nextTick(() => {
     dataFormRef.value?.resetFields()
     if (!dataForm.templateId) {
       return
     }
     api.get(templateId).then(data => {
-      dataForm = data
+      dataForm.templateId = data.templateId
+      dataForm.sendType = data.sendType
+      dataForm.templateTypeList = data.templateTypeList
+      dataForm.mpCode = data.mpCode
+      dataForm.createTime = data.createTime
+      dataForm.tagIds = data.tagIds
+      dataForm.message = data.message
     })
   })
   getTags()
@@ -117,7 +121,7 @@ const init = (templateId) => {
 // 获取标签列表
 const getTags = () => {
   getTagList().then(data => {
-    tagList = data
+    tagList.value = data
   })
 }
 // 表单提交
@@ -126,8 +130,8 @@ const onSubmit = () => {
     if (!valid) {
       return
     }
-    isCheck = false
-    if (isCheck || isConfirm) {
+    isCheck.value = false
+    if (isCheck.value || isConfirm.value) {
       return
     }
     const checkData = dataForm.tagIds === null || dataForm.tagIds === undefined || dataForm.tagIds.length < 1
@@ -135,7 +139,7 @@ const onSubmit = () => {
       ElMessage({ message: '请至少选择一个标签', type: 'error', duration: 1500 })
       return
     }
-    isConfirm = true
+    isConfirm.value = true
     const request = dataForm.templateId ? api.update(dataForm) : api.save(dataForm)
     request.then(data => {
       ElMessage({
@@ -143,13 +147,13 @@ const onSubmit = () => {
         type: 'success',
         duration: 1500,
         onClose: () => {
-          visible = false
+          visible.value = false
           emit('refreshDataList')
           dataFormRef.value?.resetFields()
         }
       })
     }).catch(() => {
-      isConfirm = false
+      isConfirm.value = false
     })
   })
 }
@@ -161,7 +165,7 @@ const isEn = () => {
     return false
   }
 }
-
+defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>

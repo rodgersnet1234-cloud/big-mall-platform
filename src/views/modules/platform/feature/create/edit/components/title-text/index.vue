@@ -38,7 +38,6 @@
           {{ $t('shopFeature.titText.titText') }}
         </div>
         <div class="design-editor-component-container">
-          <!-- native modifier has been removed, please confirm whether the function has been affected  -->
           <el-form
             ref="formDataRef"
             class="edit-form"

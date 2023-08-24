@@ -116,11 +116,8 @@
 
 <script setup>
 import * as api from '@/api/data-analysis/flow-profile.js'
-import { checkPermission } from '@/directive/permission/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import * as $echarts from 'echarts'
-
-const vPermission = checkPermission
 
 const props = defineProps({
   // 系统类型 0:全部 1:pc  2:h5  3:小程序 4:安卓  5:ios
@@ -160,7 +157,7 @@ watch(() => props.systemType, () => {
   init()
 })
 
-watch(() => props.startTime, () => {
+watch(() => props.timeType, () => {
   init()
 })
 
@@ -187,7 +184,7 @@ const init = () => {
   currEchartTitle = eChartTitleArray[0]
   // 流量趋势
   api.flowTrend({
-    timeType: props.timeType,
+    dateType: props.timeType,
     startTime: props.startTime || '',
     endTime: props.endTime || '',
     systemType: curSystemType.value || 0
@@ -212,7 +209,7 @@ const exportFrom = () => {
     }
     isSubmit = true
     const param = {
-      timeType: props.timeType,
+      dateType: props.timeType,
       startTime: props.startTime || '',
       endTime: props.endTime || '',
       systemType: curSystemType.value || 0
@@ -284,7 +281,12 @@ const handleFlowTrendData = (flowType) => {
 
 // 获取流量趋势图表
 const getRealTimeDataChart = () => {
-  const myChart = $echarts.init(document.getElementById('real-time-data-chart'))
+  // 有的话就获取已有echarts实例的DOM节点
+  let myChart = $echarts.getInstanceByDom(document.getElementById('real-time-data-chart'))
+  // 如果不存在，就进行初始化
+  if (myChart == null) {
+    myChart = $echarts.init(document.getElementById('real-time-data-chart'))
+  }
   const option = {
     tooltip: {
       trigger: 'axis'
@@ -333,13 +335,11 @@ const getRealTimeDataChart = () => {
         type: 'line',
         smooth: true,
         itemStyle: {
-          normal: {
-            lineStyle: {
-              color: '#155bd4'
-            },
-            // 点的颜色
+          lineStyle: {
             color: '#155bd4'
-          }
+          },
+          // 点的颜色
+          color: '#155bd4'
         },
         areaStyle: {
           color: new $echarts.graphic.LinearGradient(0, 0, 0, 1, [{

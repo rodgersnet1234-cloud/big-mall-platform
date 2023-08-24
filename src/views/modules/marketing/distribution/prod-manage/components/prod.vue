@@ -168,8 +168,8 @@
             <template #default="{ row }">
               <div class="table-btn-con">
                 <el-button
-                  type="text"
-                  icon="el-icon-edit"
+                  link
+                  type="primary"
                   @click="onProdInfo(row)"
                 >
                   {{ $t("table.view") }}
@@ -177,8 +177,8 @@
                 <el-button
                   v-if="row.distributionInfo.state <= 1"
                   v-permission="['marketing:distributionSpu:offShelf']"
-                  type="text"
-                  icon="el-icon-delete"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offline')"
                 >
                   下架
@@ -186,16 +186,16 @@
                 <el-button
                   v-if="row.distributionInfo.state >= 2"
                   v-permission="['marketing:distributionSpu:moderated']"
-                  type="text"
-                  icon="el-icon-delete"
+                  link
+                  type="primary"
                   @click="onOfflineManage(row, 'offlineManage')"
                 >
                   下线管理
                 </el-button>
                 <el-button
                   v-permission="['marketing:distributionSpu:delete']"
-                  type="text"
-                  icon="el-icon-delete"
+                  link
+                  type="primary"
                   @click="onDelete(row)"
                 >
                   删除

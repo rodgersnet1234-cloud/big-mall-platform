@@ -1,12 +1,10 @@
 <template>
-  <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-  <!-- native modifier has been removed, please confirm whether the function has been affected  -->
   <el-form
     ref="dataFormRef"
+    class="page-webConfig-add-or-update"
     :model="dataForm"
     label-position="right"
     :rules="dataRule"
-    class="page-webConfig-add-or-update"
     label-width="142px"
     @submit.prevent
     @keyup.enter="onSubmit()"
@@ -25,7 +23,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'380*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*560</span>
@@ -52,7 +50,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'626*594'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}626*594</span>
@@ -94,7 +92,7 @@
         prop="titleImg"
       >
         <img-upload
-          v-model="dataForm.titleImg"
+          v-model:value="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -105,7 +103,7 @@
         prop="bsTopBarIcon"
       >
         <img-upload
-          v-model="dataForm.bsTopBarIcon"
+          v-model:value="dataForm.bsTopBarIcon"
           :size="'160*48'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}160*48</span>
@@ -149,7 +147,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model="dataForm.loginLogoImg"
+          v-model:value="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -160,7 +158,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model="dataForm.loginBgImg"
+          v-model:value="dataForm.loginBgImg"
           :size="'1920*600'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}1920*600</span>
@@ -177,16 +175,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsCopyright')+'-'+$t('rbac.webConfig.english')" prop="copyrightEn">
-        <el-input v-model="dataForm.copyrightEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcQrcodeImg')"
         prop="pcQrcodeImg"
       >
         <img-upload
-          v-model="dataForm.pcQrcodeImg"
+          v-model:value="dataForm.pcQrcodeImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -201,10 +195,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcCompanyName')+'-'+$t('rbac.webConfig.english')" prop="pcCompanyNameEn">
-        <el-input v-model="dataForm.pcCompanyNameEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcCompanyInfo')+'-'+$t('rbac.webConfig.chinese')"
         prop="pcCompanyInfoCn"
@@ -215,10 +205,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcCompanyInfo')+'-'+$t('rbac.webConfig.english')" prop="pcCompanyInfoEn">
-        <el-input v-model="dataForm.pcCompanyInfoEn" type="textarea" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleContent')+'-'+$t('rbac.webConfig.chinese')"
         prop="titleContentCn"
@@ -228,16 +214,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-        <el-input v-model="dataForm.titleContentEn" />
-      </el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleImg')"
         prop="titleImg"
       >
         <img-upload
-          v-model="dataForm.titleImg"
+          v-model:value="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -247,7 +229,7 @@
         prop="pcLogoImgText"
       >
         <img-upload
-          v-model="dataForm.pcLogoImgText"
+          v-model:value="dataForm.pcLogoImgText"
           :size="'380*96'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*96</span>
@@ -262,9 +244,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.pcWelcome')+'-'+$t('rbac.webConfig.english')" prop="pcWelcomeEn">
-        <el-input v-model="dataForm.pcWelcomeEn" />
-      </el-form-item> -->
     </span>
 
     <!--H5端相关配置-->
@@ -274,7 +253,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model="dataForm.loginLogoImg"
+          v-model:value="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -299,20 +278,12 @@
         prop="stationLoginLogoImg"
       >
         <img-upload
-          v-model="dataForm.stationLoginLogoImg"
+          v-model:value="dataForm.stationLoginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
       </el-form-item>
     </span>
-
-    <!-- <el-form-item :label="$t('rbac.webConfig.activationStatus')" prop="isActivity">
-        <el-radio-group v-model="dataForm.isActivity">
-          <el-radio :label="0">{{ $t('rbac.webConfig.close') }}</el-radio>
-          <el-radio :label="1">{{ $t('rbac.webConfig.open') }}</el-radio>
-        </el-radio-group>
-      </el-form-item> -->
-
     <el-form-item>
       <el-button
         type="primary"
@@ -394,6 +365,20 @@ onMounted(() => {
   })
 })
 
+// init(configType, id) {
+//   dataForm.id = id || 0
+//   dataForm.configType = configType
+//   visible = true
+//   nextTick(() => {
+//     $refs['dataForm'].resetFields()
+//     if (dataForm.id) {
+//       api.get(dataForm.id).then(data => {
+//         dataForm = data
+//       })
+//     }
+//   })
+// },
+//
 // 获取表单数据接口
 const getFormData = (apiKey, configType) => {
   apis.getWebConfig(apiKey).then(data => {

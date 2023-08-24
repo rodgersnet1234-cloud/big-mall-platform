@@ -172,7 +172,8 @@
               <el-button
                 v-if="row.state === 0"
                 v-permission="['distribution:distributionWithdrawCash:updateToSuccess']"
-                type="text"
+                link
+                type="primary"
                 @click="onUpdate(row.withdrawCashId)"
               >
                 {{ '设为已提现' }}

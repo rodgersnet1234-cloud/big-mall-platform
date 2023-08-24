@@ -8,7 +8,6 @@
       width="650px"
       @close="closeDialog"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :rules="rules"
@@ -33,7 +32,7 @@
         <el-form-item
           class="addr-item"
           label="上级地区"
-          prop=""
+          prop="parentId"
         >
           <el-cascader
             v-model="selectedOptions"
@@ -43,7 +42,7 @@
             change-on-select
             filterable
             clearable
-            @change="handleChange"
+            @change="onChange"
           />
         </el-form-item>
       </el-form>
@@ -73,20 +72,21 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 
-let visible = ref(false)
-let dataForm = reactive({
+const visible = ref(false)
+const dataForm = reactive({
   areaId: '',
   areaName: null,
   parentId: null,
   level: null
 })
-let areaList = ref([])
+const dataFormRef = ref(null)
+const areaList = ref([])
 const categoryTreeProps = reactive({
+  checkStrictly: true,
   value: 'areaId',
   label: 'areaName'
 })
-let selectedOptions = ref([])
-const value = ref('')
+const selectedOptions = ref([])
 const rules = {
   name: [
     { required: true, message: '请填写地区名称', trigger: 'blur' }
@@ -94,18 +94,21 @@ const rules = {
 }
 const isSubmit = ref(false)
 const init = (areaId) => {
-  visible = true
+  visible.value = true
   dataForm.areaId = areaId || 0
-  visible = true
+  visible.value = true
   isSubmit.value = false
-  selectedOptions = []
+  selectedOptions.value = []
   nextTick(() => {
     dataFormRef.value?.resetFields()
     if (dataForm.areaId) {
       api.get(areaId).then((data) => {
-        dataForm = data
-        // selectedOptions.push(dataForm.parentId)
-        selectedOptions = dataForm.parentId
+        dataForm.areaId = data.areaId
+        dataForm.areaName = data.areaName
+        dataForm.parentId = data.parentId
+        dataForm.level = data.level
+
+        selectedOptions.value = dataForm.parentId
         categoryTreeProps.areaId = dataForm.areaId
         categoryTreeProps.areaName = dataForm.areaName
       })
@@ -118,25 +121,23 @@ const init = (areaId) => {
           d.push(el)
         }
       })
-      areaList = treeDataTranslate(d, 'areaId', 'parentId')
+      areaList.value = treeDataTranslate(d, 'areaId', 'parentId')
     })
   })
 }
 
-const handleChange = (val) => {
+const onChange = (val) => {
   dataForm.parentId = val[val.length - 1]
 }
 
 // 关闭弹窗时
 const closeDialog = () => {
-  dataForm = {
-    areaId: '',
-    areaName: null,
-    parentId: null,
-    level: null
-  }
+  dataForm.areaId = ''
+  dataForm.areaName = null
+  dataForm.parentId = null
+  dataForm.level = null
 }
-const dataFormRef = ref(null)
+
 /**
  * 表单提交
  */
@@ -156,8 +157,8 @@ const onSubmit = () => {
     if (!dataForm.parentId) {
       dataForm.parentId = 0
       dataForm.level = 0
-    } else if (selectedOptions.length) {
-      dataForm.level = selectedOptions.length
+    } else if (selectedOptions.value.length) {
+      dataForm.level = selectedOptions.value.length
     }
     const request = dataForm.areaId ? api.update(dataForm) : api.save(dataForm)
     request.then(data => {
@@ -166,7 +167,7 @@ const onSubmit = () => {
         type: 'success',
         duration: 1500,
         onClose: () => {
-          visible = false
+          visible.value = false
           emit('refreshDataList')
           dataFormRef.value?.resetFields()
         }
@@ -175,6 +176,7 @@ const onSubmit = () => {
   })
 }
 
+defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>

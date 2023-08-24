@@ -491,6 +491,9 @@ div :deep(.site-navbar__menu--right:not(:first-child)::after) {
   margin-bottom: 22px;
 }
 :deep(.el-dialog){
-  padding: 30px 20px
+  padding: 30px 20px;
+  .el-dialog__body {
+    padding: 30px 0;
+  }
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div class="component-upload-container">
     <el-button
-      icon="el-icon-upload"
       type="primary"
       @click="clickUpload()"
     >

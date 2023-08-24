@@ -22,7 +22,7 @@ export function get (userLevelId) {
 
 export function save (data) {
   return request({
-    url: '/mall4cloud_user/p/user_level/',
+    url: '/mall4cloud_user/p/user_level',
     method: 'post',
     data
   })
@@ -30,7 +30,7 @@ export function save (data) {
 
 export function update (data) {
   return request({
-    url: '/mall4cloud_user/p/user_level/',
+    url: '/mall4cloud_user/p/user_level',
     method: 'put',
     data
   })
@@ -53,7 +53,7 @@ export function updateRecruitStatus (data) {
 
 export function remove (userLevelId) {
   return request({
-    url: '/mall4cloud_user/p/user_level/',
+    url: '/mall4cloud_user/p/user_level',
     method: 'delete',
     params: {
       userLevelId

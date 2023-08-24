@@ -3,7 +3,6 @@
     <div class="main-content">
       <!-- 搜索相关区域 -->
       <div class="operation-bar">
-        <!-- <el-button icon="el-icon-search" @click="getPage()">{{ $t('table.search') }}</el-button> -->
         <el-button
           v-permission="['rbac:menu:save']"
           type="primary"

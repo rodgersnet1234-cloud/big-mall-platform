@@ -8,7 +8,6 @@
     width="900px"
     @close="closeDialog"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="rules"
@@ -75,7 +74,7 @@
       <!-- 选择分类 -->
       <el-form-item
         :label="$t('product.category.categoryParent')"
-        prop="selectedCategories"
+        prop="categoryIds"
         class="classify"
       >
         <category-group
@@ -154,7 +153,7 @@ const dataForm = reactive({
   isTop: false,
   firstLetter: null,
   categoryIds: [], // 分类id列表
-  seq: null,
+  seq: 0,
   selectedCategories: []
   // status: 1
 })
@@ -179,8 +178,8 @@ const rules = {
   imgUrl: [
     { required: true, message: '请选择品牌logo', trigger: 'blur' }
   ],
-  selectedCategories: [
-    { required: true, message: '请选择品牌分类', trigger: 'blur' }
+  categoryIds: [
+    { required: true, message: '请选择分类', trigger: 'blur' }
   ]
 }
 const language = computed(() => {
@@ -296,7 +295,11 @@ const getCategorySelected = (selectedCategoryList, categoryId) => {
   console.log('categoryId', categoryId)
   dataForm.categoryIds.push(categoryId)
   selectedCategories.value.push(categoryObj)
-  dataForm.selectedCategories.push(categoryObj)
+  if (dataForm.selectedCategories) {
+    dataForm.selectedCategories.push(categoryObj)
+  } else {
+    dataForm.selectedCategories = categoryObj
+  }
 }
 
 // 删除选中的某一项分类
@@ -314,7 +317,7 @@ const closeDialog = () => {
   dataForm.imgUrl = null
   dataForm.firstLetter = null
   dataForm.categoryIds = []
-  dataForm.seq = null
+  dataForm.seq = 0
   selectedCategories.value = []
   console.log(22)
 }
@@ -372,7 +375,7 @@ p{
 </style>
 <style scoped>
 @media (max-width: 1440px) {
-  .brand-add-upd >>> .el-dialog{
+  .brand-add-upd ::v-deep(.el-dialog){
     margin-top: 160px !important;
   }
 }

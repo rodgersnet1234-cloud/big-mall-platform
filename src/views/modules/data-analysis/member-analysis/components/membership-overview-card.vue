@@ -385,7 +385,6 @@ const indexSwitch = ref(0)
 const switchCards = (index, e) => {
   curSelected.value = index
   indexSwitch.value = index
-  emit('update:oneEchartCurrentName', e.currentTarget.getElementsByClassName('week-txt')[0].innerText)
   emit('updateEchart', index)
 }
 
@@ -436,6 +435,10 @@ const nextPart = () => {
     }
   }
 }
+
+defineExpose({
+  indexSwitch: indexSwitch.value
+})
 
 </script>
 

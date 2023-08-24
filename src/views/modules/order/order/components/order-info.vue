@@ -708,7 +708,7 @@
                       {{ $t("order.order.discountedPrice") }}:
                     </div>
                     <div class="number">
-                      ￥{{ onFormatDiscountedPrice(dataForm.reduceAmount,dataForm.platformFreeFreightAmount) }}
+                      ￥{{ onFormatDiscountedPrice(dataForm.reduceAmount, dataForm.platformFreeFreightAmount) }}
                     </div>
                   </div>
                   <div class="item">
@@ -799,7 +799,11 @@ import * as api from '@/api/order/order'
 import { deliveryOrder } from '@/api/delivery/delivery-company'
 import { formatPrice } from '@/utils/index.js'
 
-const visible = ref(false)
+const carouserRef = ref()
+const deliveryExpress = ref('')
+const indexs = ref(0)
+const loadingDelivery = ref(false)
+const offsetCount = ref(0) // 偏移量
 const dataForm = reactive({
   orderId: '',
   remarks: '',
@@ -821,16 +825,10 @@ const dataForm = reactive({
   orderType: '',
   userAddrOrder: {},
   orderMold: 0,
-  virtualRemark: []
+  virtualRemark: [],
+  reduceAmount: 0,
+  platformFreeFreightAmount: 0
 })
-const carouserRef = ref()
-const virtualRemarkList = reactive([])
-const indexs = ref(0)
-const offsetCount = ref(0) // 偏移量
-const loadingDelivery = ref(false)
-const prodList = reactive([])
-const deliveryExpress = ref('')
-const orderSelfStationVO = ref({})
 
 const stepsStatus = computed(() => {
   if (dataForm.finallyTime) {
@@ -856,6 +854,7 @@ watch(() => deliveryExpress.value, () => {
 })
 
 const dataFormRef = ref()
+const visible = ref(false)
 const init = (orderId) => {
   dataForm.orderId = orderId || 0
   visible.value = true
@@ -867,9 +866,12 @@ const init = (orderId) => {
   }
 }
 
+const orderSelfStationVO = ref({})
+const prodList = reactive([])
+const virtualRemarkList = reactive([])
 const onGetDataList = () => {
   api.orderInfo(dataForm.orderId).then((data) => {
-    onHandleDataForm(data)
+    Object.assign(dataForm, data)
     orderSelfStationVO.value = data.orderSelfStationVO
     handleArr(virtualRemarkList, dataForm.orderItems[0].virtualRemark && dataForm.orderItems[0].virtualRemark !== 'null' ? JSON.parse(dataForm.orderItems[0].virtualRemark) : [])
     handleArr(virtualRemarkList, virtualRemarkList.filter((item) => {
@@ -896,7 +898,7 @@ const onGetDataList = () => {
 }
 
 const onFormatDiscountedPrice = (amount1, amount2) => {
-  if (!(amount1 && amount2)) {
+  if (!amount1) {
     return 0
   }
   return new Big(amount1).minus(amount2).div(100).toFixed(2)
@@ -943,31 +945,6 @@ const onSwitchNextItem = () => {
   } else {
     return false
   }
-}
-
-const onHandleDataForm = (data) => {
-  dataForm.orderId = data.orderId
-  dataForm.orderType = data.orderType
-  dataForm.deliveryType = data.deliveryType
-  dataForm.status = data.status
-  dataForm.total = data.total
-  dataForm.actualTotal = data.actualTotal
-  dataForm.nickName = data.nickName
-  dataForm.remarks = data.remarks
-  dataForm.shopRemarks = data.shopRemarks
-  dataForm.orderItems = data.orderItems
-  dataForm.createTime = data.createTime
-  dataForm.updateTime = data.updateTime
-  dataForm.payTime = data.payTime
-  dataForm.payType = data.payType
-  dataForm.deliveryTime = data.deliveryTime
-  dataForm.finallyTime = data.finallyTime
-  dataForm.cancelTime = data.cancelTime
-  dataForm.refundStatus = data.refundStatus
-  dataForm.orderAddr = data.orderAddr
-  dataForm.orderAddrId = data.orderAddrId
-  dataForm.orderScore = data.orderScore
-  dataForm.freightAmount = data.freightAmount
 }
 
 defineExpose({

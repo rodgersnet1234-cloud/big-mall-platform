@@ -39,7 +39,8 @@
             @blur="
               onHandleMaxValue(
                 dataForm.withdrawCashMax,
-                999999
+                999999,
+                1
               )"
           >
             <template #suffix>
@@ -136,7 +137,7 @@ const onSubmit = () => {
     }
   })
 }
-const onHandleMaxValue = (data, max) => {
+const onHandleMaxValue = (data, max, min) => {
   const patrn = /^(-)?\d+(\.\d+)?$/
   if (!data.match(patrn)) {
     dataForm.value.withdrawCashMax = ''
@@ -146,6 +147,9 @@ const onHandleMaxValue = (data, max) => {
     // 表格
     if (data > max) {
       dataForm.value.withdrawCashMax = max
+    }
+    if (data < min) {
+      dataForm.value.withdrawCashMax = min
     }
   }
 }

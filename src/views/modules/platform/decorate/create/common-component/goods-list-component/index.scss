@@ -90,6 +90,9 @@ $currentContentWidth: 1200px; // 当前页面内容宽度
             background: rgba(243, 245, 247, 0.39);
         }
         .image-slot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
             background: rgba(243, 245, 247, 0.39);

@@ -80,5 +80,9 @@ const handleClose = () => {
             .el-dialog__body {
                 padding: 0;
             }
+            .el-dialog__header{
+              padding: 0;
+              margin: 0;
+            }
         }
 </style>

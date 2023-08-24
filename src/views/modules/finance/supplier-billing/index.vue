@@ -98,7 +98,7 @@
               type="index"
               label="序号"
               align="left"
-              width="85"
+              width="90"
             />
             <el-table-column
               prop="amountType"
@@ -223,8 +223,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
-import { page } from '@/api/supplier-balance'
+import { page as pageApi } from '@/api/supplier-balance'
 import Big from 'big.js'
 
 const amount = (value) => {
@@ -312,7 +311,7 @@ const onGetData = (newData = false) => {
   } else {
     tempSearchForm = { ...tempSearchForm, ...params.value }
   }
-  page(tempSearchForm).then(res => {
+  pageApi(tempSearchForm).then(res => {
     tableData.value = res.list
     total.value = res.total
   })
@@ -348,6 +347,7 @@ const onClear = () => {
     refundId: '',
     reason: ''
   }
+  onSubmit(true)
 }
 
 </script>
