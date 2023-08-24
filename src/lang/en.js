@@ -85,9 +85,6 @@ export default {
     passwordError: 'The confirmation password is inconsistent',
     passwordTips3: 'The password length is 6-16 digits'
   },
-  register: {
-    passwordErrorTips2: 'Spaces are not allowed as the beginning or end of a password'
-  },
   unit: {
     dollar: 'yuan',
     day: 'day',
