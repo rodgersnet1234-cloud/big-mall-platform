@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="dataForm.categoryId? $t('table.edit'): $t('table.create')"
+    :title="dataForm.categoryPlatformId? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
     top="10vh"
     width="750px"
@@ -49,10 +49,10 @@
       <el-form-item
         v-if="dataForm.level === 2"
         :label="$t('product.category.deductionRate')"
-        prop="deductionRate"
+        prop="rate"
       >
         <el-input-number
-          v-model.number="dataForm.deductionRate"
+          v-model.number="dataForm.rate"
           type="number"
           controls-position="right"
           :precision="2"
@@ -65,7 +65,7 @@
       <!-- 上级分类 -->
       <el-form-item
         v-if="(dataForm.level
-          || (!dataForm.level && !dataForm.categoryId)) "
+          || (!dataForm.level && !dataForm.categoryPlatformId)) "
         :label="$t('product.category.categoryParent')"
       >
         <template #label>
@@ -144,7 +144,7 @@ import { ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 const visible = ref(false)
 const dataForm = ref({
-  categoryId: 0,
+  categoryPlatformId: 0,
   shopId: null,
   parentId: 0,
   name: null,
@@ -153,7 +153,7 @@ const dataForm = ref({
   status: '1',
   icon: '',
   level: null,
-  deductionRate: '',
+  rate: '',
   seq: 1,
   notChenkedIcon: '', // 分类图标（未选中状态）
   chenkedIcon: '' // 分类图标（选中状态）
@@ -165,7 +165,7 @@ const selectedCategories = ref([])
 
 const rules = {
 
-  deductionRate: [
+  rate: [
     { required: true, message: $t('product.category.deductionRateNoNull'), trigger: 'blur' }
   ]
 }
@@ -174,17 +174,17 @@ watch(() => selectedCategories.value, (list) => {
   isRequiredImg.value = !!list.length
 })
 
-const init = (categoryId, level) => {
+const init = (categoryPlatformId, level) => {
   visible.value = true
-  dataForm.value.categoryId = categoryId || 0
+  dataForm.value.categoryPlatformId = categoryPlatformId || 0
   nextTick(() => {
-    if (!dataForm.value.categoryId) {
+    if (!dataForm.value.categoryPlatformId) {
       return
     }
-    if (categoryId) {
+    if (categoryPlatformId) {
       showCategorySelectBtn.value = false
       dataForm.value.level = level
-      api.get(categoryId).then(data => {
+      api.get(categoryPlatformId).then(data => {
         dataForm.value = data
         data.categoryLangList.forEach(item => {
           if (item.lang === 1) {
@@ -253,7 +253,11 @@ const onSubmit = Debounce(function () {
     data.categoryLangList = []
     data.categoryLangList.push({ lang: 1, name: data.nameZh })
     data.categoryLangList.push({ lang: 2, name: data.nameEn })
-    const request = data.categoryId ? api.update(data) : api.save(data)
+    const updateData = {
+      categoryPlatformId: dataForm.value.categoryPlatformId,
+      rate: dataForm.value.rate
+    }
+    const request = data.categoryPlatformId ? api.update(updateData) : api.save(data)
     request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
@@ -278,7 +282,7 @@ const dataFormCancel = () => {
 // 关闭dialog时
 const closeDialog = () => {
   dataForm.value = {
-    categoryId: 0,
+    categoryPlatformId: 0,
     shopId: null,
     parentId: 0,
     nameZh: null,

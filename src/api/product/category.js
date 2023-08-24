@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取平台所有的分类信息
 export function categoryPage () {
   return request({
-    url: '/mall4cloud_product/mp/category/platform_categories',
+    url: '/mall4cloud_product/p/category_platform/info',
     method: 'get',
     params: {}
   })
@@ -46,12 +46,12 @@ export function getShopAttrs () {
   })
 }
 
-export function get (categoryId) {
+export function get (categoryPlatformId) {
   return request({
-    url: '/mall4cloud_product/mp/category',
+    url: '/mall4cloud_product/p/category_platform',
     method: 'get',
     params: {
-      categoryId
+      categoryPlatformId
     }
   })
 }
@@ -66,7 +66,7 @@ export function save (data) {
 
 export function update (data) {
   return request({
-    url: '/mall4cloud_product/mp/category',
+    url: '/mall4cloud_product/p/category_platform',
     method: 'put',
     data
   })
