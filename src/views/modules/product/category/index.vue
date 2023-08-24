@@ -41,7 +41,7 @@
           <div
             v-for="(firstItem, index) in page.list"
             :key="index"
-            :class="['addr-item', firstItemId===firstItem.categoryId?'active':'']"
+            :class="['addr-item', firstItemId===firstItem.categoryPlatformId?'active':'']"
           >
             <div
               class="dot"
@@ -76,7 +76,7 @@
           <div
             v-for="(secondItem, secondIdx) in secondList"
             :key="secondIdx"
-            :class="['addr-item', secondItemId===secondItem.categoryId?'active':'']"
+            :class="['addr-item', secondItemId===secondItem.categoryPlatformId?'active':'']"
           >
             <div
               class="dot"
@@ -134,7 +134,7 @@
                 v-permission="['product:category:update']"
                 link
                 type="primary"
-                @click="onAddOrUpdate(threeItem.categoryId, threeItem.level)"
+                @click="onAddOrUpdate(threeItem.categoryPlatformId, threeItem.level)"
               >
                 编辑
               </el-button>
@@ -214,23 +214,23 @@ const getPage = () => {
 const getSecondList = (idx) => {
   secondIndex.value = idx
   secondList.value = page.list[idx].children ? page.list[idx].children : []
-  firstItemId.value = page.list[idx].categoryId
+  firstItemId.value = page.list[idx].categoryPlatformId
   threeList.value = []
 }
 const getThreeList = (idx) => {
   threeIndex.value = idx
   threeList.value = secondList.value[idx].children ? secondList.value[idx].children : []
-  secondItemId.value = secondList.value[idx].categoryId
+  secondItemId.value = secondList.value[idx].categoryPlatformId
 }
 
 const addOrUpdateRef = ref(null)
 /**
  * 更新
  */
-const onAddOrUpdate = (categoryId, level) => {
+const onAddOrUpdate = (categoryPlatformId, level) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdateRef.value?.init(categoryId, level)
+    addOrUpdateRef.value?.init(categoryPlatformId, level)
   })
 }
 

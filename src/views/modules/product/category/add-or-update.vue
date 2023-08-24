@@ -153,7 +153,7 @@ const dataForm = ref({
   status: '1',
   icon: '',
   level: null,
-  rate: '',
+  rate: 0,
   seq: 1,
   notChenkedIcon: '', // 分类图标（未选中状态）
   chenkedIcon: '' // 分类图标（选中状态）
