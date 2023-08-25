@@ -69,3 +69,18 @@ export function getAppletQRcode () {
     responseType: 'arraybuffer'
   })
 }
+// 获取公众号信息
+export function getOfficialAccountInformation () {
+  return request({
+    url: '/mall4cloud_biz/p/wx/mp_info',
+    method: 'get'
+  })
+}
+// 公众号二维码
+export function getOfficialAccountQRcode () {
+  return request({
+    url: '/mall4cloud_biz/p/wx/mp_qrcode',
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}

@@ -18,8 +18,7 @@
         prop="appId"
       >
         <el-input
-          v-model="dataForm.appId"
-
+          v-model.trim="dataForm.appId"
           style="width:200px"
           controls-position="right"
         />
@@ -29,7 +28,7 @@
         prop="secret"
       >
         <el-input
-          v-model="dataForm.secret"
+          v-model.trim="dataForm.secret"
           style="width:200px"
           controls-position="right"
         />
@@ -82,7 +81,6 @@ const init = () => {
 }
 // 表单提交
 const onSubmit = () => {
-  emit('mpShow', false)
   const obj = {}
   obj.appId = dataForm.value.appId
   obj.secret = dataForm.value.secret
@@ -102,6 +100,7 @@ const onSubmit = () => {
           duration: 1500
         })
       })
+      emit('mpShow', false)
     }
   })
 }

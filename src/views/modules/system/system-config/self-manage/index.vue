@@ -45,8 +45,8 @@
                 class="applet-message-left"
               >
                 <img
-                  v-if="imgUrl"
-                  :src="imgUrl"
+                  v-if="miniAppImgUrl"
+                  :src="miniAppImgUrl"
                   alt=""
                   style="width:160px;height:160px;margin:82px 0 50px 0"
                 >
@@ -152,7 +152,17 @@
             <div
               class="applet-message-left"
             >
-              <img-show style="width:160px;height:160px;margin:82px 0 50px 0" />
+              <img
+                v-if="mpImgUrl"
+                :src="mpImgUrl"
+                alt=""
+                style="width:160px;height:160px;margin:82px 0 50px 0"
+              >
+              <img
+                v-else
+                src="~@/assets/images/def.png"
+                style="width:160px;height:160px;margin:82px 0 50px 0"
+              >
               <table>
                 <tr
                   class="table-title"
@@ -166,7 +176,7 @@
                   <td
                     class="tt-item"
                   >
-                    {{ '超级无敌大boss' }}
+                    {{ mpInformation.appName }}
                   </td>
                 </tr>
                 <tr class="table-title">
@@ -178,7 +188,7 @@
                   <td
                     class="tt-item"
                   >
-                    {{ 'kfcvme50898565' }}
+                    {{ mpInformation.appId }}
                   </td>
                 </tr>
               </table>
@@ -194,24 +204,59 @@ import { Download, Promotion, Upload } from '@element-plus/icons-vue'
 import * as api from '@/api/platform/sys-config.js'
 import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
+import { ElMessage } from 'element-plus'
 const miniAppShow = ref(true)
 const activeName = ref('first')
 
-const appletInformation = ref({})
-const imgUrl = ref('')
+let appletInformation = reactive({})
+const miniAppImgUrl = ref('')
 const miniAppShowState = (state) => {
   miniAppShow.value = state
   api.getAppletInformation().then(res => {
-    appletInformation.value = res
+    appletInformation = res
   })
   api.getAppletQRcode().then(res => {
     getBase64(res).then(base64 => {
-      imgUrl.value = base64
+      miniAppImgUrl.value = base64
     }).catch(err => {
       console.log(err, 'err')
     })
   })
 }
+const onDownload = () => {
+  if (appletInformation.value) {
+    api.onDownloadZip().then(res => {
+      const blob = new Blob([res], { type: 'application/zip' })
+      const elink = document.createElement('a')
+      elink.style.display = 'none'
+      elink.download = '小程序代码包'
+      elink.href = URL.createObjectURL(blob)
+      document.body.appendChild(elink)
+      elink.click()
+      URL.revokeObjectURL(elink.href) // 释放URL 对象
+      document.body.removeChild(elink)
+    })
+  } else {
+    ElMessage.error('微信小程序配置信息有误')
+  }
+}
+const mpShow = ref(true)
+let mpInformation = reactive({})
+const mpImgUrl = ref('')
+const mpShowState = (state) => {
+  mpShow.value = state
+  api.getOfficialAccountInformation().then(res => {
+    mpInformation = res
+  })
+  api.getOfficialAccountQRcode().then(res => {
+    getBase64(res).then(base64 => {
+      mpImgUrl.value = base64
+    }).catch(err => {
+      console.log(err, 'err')
+    })
+  })
+}
+
 // 二进制流转为base64
 const getBase64 = (data) => {
   return new Promise((resolve, reject) => {
@@ -220,25 +265,6 @@ const getBase64 = (data) => {
     reader.readAsDataURL(blob)
     reader.onload = () => resolve(reader.result)
     reader.onerror = (error) => reject(error)
-  })
-}
-
-const mpShow = ref(true)
-const mpShowState = (state) => {
-  mpShow.value = state
-}
-
-const onDownload = () => {
-  api.onDownloadZip().then(res => {
-    const blob = new Blob([res], { type: 'application/zip' })
-    const elink = document.createElement('a')
-    elink.style.display = 'none'
-    elink.download = '小程序代码包'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href) // 释放URL 对象
-    document.body.removeChild(elink)
   })
 }
 </script>
