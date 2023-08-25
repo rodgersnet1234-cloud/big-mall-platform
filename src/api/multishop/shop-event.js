@@ -22,3 +22,18 @@ export function updateMallName (data) {
     data
   })
 }
+// 获取下线信息
+export function getEventInfo () {
+  return request({
+    url: '/mall4cloud_admin/p/offline_handle_event/get_event_info',
+    method: 'GET'
+  })
+}
+// 申请上线
+export function auditApply (data) {
+  return request({
+    url: '/mall4cloud_admin/p/platform_detail/audit_apply',
+    method: 'POST',
+    data
+  })
+}

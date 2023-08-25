@@ -11,14 +11,51 @@
   <div class="Mall4j dashboard-container">
     <!-- 1.店铺状态信息提示 -->
     <div
-      v-if="shopStatus!==null&&shopStatus===0"
+      v-if="shopStatus === 2"
       class="shop-inf-imperfect-tips"
     >
-      <router-link
-        to="/system/system-config/principal-config"
+      <div>
+        <el-icon class="warning">
+          <Warning />
+        </el-icon>
+        您的店铺已下线，原因是：
+        <span>{{ offlineReason }}</span>
+        <span>。如有问题可重新申请上线 &gt;</span>
+      </div>
+      <el-button
+        type="primary"
+        link
+        @click="offlineManageHandle"
       >
-        为了不影响商城日常经营，建议及时选择主体认证方式并完成相关操作 &gt;
-      </router-link>
+        申请上线
+      </el-button>
+    </div>
+    <div
+      v-if="shopStatus === 5 || shopStatus === 3"
+      class="shop-inf-imperfect-tips"
+    >
+      <div>
+        <el-icon class="warning">
+          <Warning />
+        </el-icon>
+        您的店铺正在申请上线，
+        <span>店铺等待审核中</span>
+      </div>
+    </div>
+    <div
+      v-if="subjectType!==null&&subjectType===0"
+      class="shop-inf-imperfect-tips"
+    >
+      <div>
+        <el-icon class="warning">
+          <Warning />
+        </el-icon>
+        <router-link
+          to="/system/system-config/principal-config"
+        >
+          为了不影响商城日常经营，建议及时选择主体认证方式并完成相关操作 &gt;
+        </router-link>
+      </div>
     </div>
     <!-- 今日指数 -->
     <div class="today-index item-wrapper first-layer layer">
@@ -418,9 +455,15 @@
       </div>
     </div>
   </div>
+  <apply-online
+    v-if="applyOnlineVisible"
+    ref="applyOnlineRef"
+    @on-re-apply-data-submit="reReapplyDataSubmit"
+  />
 </template>
 
 <script setup>
+import applyOnline from '@/components/apply-online/index.vue'
 import {
   getDetailByHour,
   getCurrentMonthByDay,
@@ -436,9 +479,46 @@ import {
   listShopRankIngByFlow
 } from '@/api/multishop/shop-detail'
 import { mallUserStore } from '@/stores/modules/mallUser.js'
+import { getEventInfo, auditApply } from '@/api/multishop/shop-event'
+import { ElMessage } from 'element-plus'
+
 import Big from 'big.js'
+const applyOnlineVisible = ref(false)
+const offlineReason = ref('')
+let eventInfoData = null
+const getMallEventInfo = () => {
+  getEventInfo().then(res => {
+    if (res) {
+      eventInfoData = res
+      offlineReason.value = res.offlineReason
+    }
+  })
+}
+const applyOnlineRef = ref(null)
+const offlineManageHandle = () => {
+  applyOnlineVisible.value = true
+  nextTick(() => {
+    applyOnlineRef.value.init(eventInfoData)
+  })
+}
+const reReapplyDataSubmit = (data) => {
+  const param = {
+    eventId: data.eventId,
+    reapplyReason: data.reapplyReason // 申请理由
+  }
+
+  auditApply(param).then(() => {
+    applyOnlineVisible.value = false
+    ElMessage({
+      message: '提交成功',
+      type: 'success',
+      duration: 1000
+    })
+  })
+}
 const mallStore = mallUserStore()
 const shopStatus = computed(() => mallStore.platformStatus)
+const subjectType = computed(() => mallStore.subjectType)
 const pendingShop = ref(0)
 // 客户数量概况
 const customerCountInfo = reactive({
@@ -696,6 +776,7 @@ const getProdSaleRankData = () => {
 // 退单店铺排行
 const refundShopRankData = ref([])
 onMounted(() => {
+  getMallEventInfo()
   getTodayInfo()
   getRealTimeData()
   getEntiretyData()
@@ -747,6 +828,11 @@ const isTrueData = (data) => {
     border-radius: 2px;
     padding: 5px 30px;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    .warning {
+      top:2px
+    }
   }
   .layer {
     margin-top: 20px;
