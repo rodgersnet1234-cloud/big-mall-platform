@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="dataForm.sysUserId? $t('table.edit'): $t('table.create')"
+    :title="dataForm.platformUserId? $t('table.edit'): $t('table.create')"
   >
     <el-form
       ref="dataFormRef"
@@ -95,7 +95,7 @@ const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
 const dataForm = reactive({
-  sysUserId: 0,
+  platformUserId: 0,
   shopId: null,
   nickName: null,
   avatar: null,
@@ -114,8 +114,8 @@ const dataRule = {
   ]
 }
 const dataFormRef = ref(null)
-const init = (sysUserId) => {
-  dataForm.sysUserId = sysUserId || 0
+const init = (platformUserId) => {
+  dataForm.platformUserId = platformUserId || 0
   visible.value = true
   dataForm.isAdmin = 0
   nextTick(() => {
@@ -123,9 +123,10 @@ const init = (sysUserId) => {
     roleApi.list().then(data => {
       roleOpts.value = data
     })
-    if (dataForm.sysUserId) {
-      api.get(sysUserId).then(data => {
-        dataForm.sysUserId = data.sysUserId
+    if (dataForm.platformUserId) {
+      console.log(platformUserId)
+      api.get(platformUserId).then(data => {
+        dataForm.platformUserId = data.platformUserId
         dataForm.shopId = data.shopId
         dataForm.nickName = data.nickName
         dataForm.avatar = data.avatar
@@ -142,7 +143,7 @@ const init = (sysUserId) => {
 const onSubmit = Debounce(function () {
   dataFormRef.value?.validate(valid => {
     if (valid) {
-      const request = dataForm.sysUserId ? api.update(dataForm) : api.save(dataForm)
+      const request = dataForm.platformUserId ? api.update(dataForm) : api.save(dataForm)
       request.then(data => {
         ElMessage({
           message: $t('table.actionSuccess'),
