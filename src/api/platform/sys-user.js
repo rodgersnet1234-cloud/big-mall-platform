@@ -15,12 +15,12 @@ export function page (pageParam) {
   })
 }
 
-export function get (sysUserId) {
+export function get (platformUserId) {
   return request({
     url: '/mall4cloud_admin/p/sys_user',
     method: 'get',
     params: {
-      sysUserId
+      platformUserId
     }
   })
 }
@@ -41,12 +41,12 @@ export function update (data) {
   })
 }
 
-export function deleteById (sysUserId) {
+export function deleteById (platformUserId) {
   return request({
     url: '/mall4cloud_admin/p/sys_user',
     method: 'delete',
     params: {
-      sysUserId
+      platformUserId
     }
   })
 }

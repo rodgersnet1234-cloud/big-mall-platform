@@ -130,7 +130,7 @@
                   v-permission="['platform:account:save']"
                   link
                   type="primary"
-                  @click="onAddOrUpdateAccount(row.sysUserId,row.hasAccount)"
+                  @click="onAddOrUpdateAccount(row.platformUserId,row.hasAccount)"
                 >
                   设置账号
                 </el-button>
@@ -139,7 +139,7 @@
                   v-permission="['platform:account:update']"
                   link
                   type="primary"
-                  @click="onAddOrUpdateAccount(row.sysUserId,row.hasAccount)"
+                  @click="onAddOrUpdateAccount(row.platformUserId,row.hasAccount)"
                 >
                   修改账号
                 </el-button>
@@ -148,7 +148,7 @@
                   v-permission="['platform:sysUser:update']"
                   link
                   type="primary"
-                  @click="onAddOrUpdate(row.sysUserId)"
+                  @click="onAddOrUpdate(row.platformUserId)"
                 >
                   {{ $t('table.edit') }}
                 </el-button>
@@ -157,7 +157,7 @@
                   v-permission="['platform:sysUser:delete']"
                   link
                   type="primary"
-                  @click="onDelete(row.sysUserId)"
+                  @click="onDelete(row.platformUserId)"
                 >
                   {{ $t('table.delete') }}
                 </el-button>
@@ -237,31 +237,30 @@ const getPage = (newData = false) => {
 
 const addOrUpdateVisible = ref(false)
 const addOrUpdateRef = ref()
-const onAddOrUpdate = (sysUserId) => {
+const onAddOrUpdate = (platformUserId) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdateRef.value.init(sysUserId)
+    addOrUpdateRef.value.init(platformUserId)
   })
 }
 const accountAddOrUpdateVisible = ref(false)
 const accountAddOrUpdateRef = ref()
-const onAddOrUpdateAccount = (sysUserId, hasAccount) => {
+const onAddOrUpdateAccount = (platformUserId, hasAccount) => {
   accountAddOrUpdateVisible.value = true
   nextTick(() => {
-    accountAddOrUpdateRef.value.init(sysUserId, hasAccount)
+    accountAddOrUpdateRef.value.init(platformUserId, hasAccount)
   })
 }
-const onDelete = (sysUserId) => {
+const onDelete = (platformUserId) => {
   ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
     confirmButtonText: $t('table.confirm'),
     cancelButtonText: $t('table.cancel'),
     type: 'warning'
-  }).then(() => deleteById(sysUserId))
+  }).then(() => deleteById(platformUserId))
 }
 
-const deleteById = (sysUserId) => {
-  console.log(sysUserId)
-  api.deleteById(sysUserId).then(() => {
+const deleteById = (platformUserId) => {
+  api.deleteById(platformUserId).then(() => {
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',
