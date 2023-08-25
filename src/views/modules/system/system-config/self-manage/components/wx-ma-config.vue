@@ -18,7 +18,7 @@
         :label="`${$t('platform.config.miniPrograms')} AppId：`"
       >
         <el-input
-          v-model="dataForm.appId"
+          v-model.trim="dataForm.appId"
 
           style="width:200px"
           controls-position="right"
@@ -29,7 +29,7 @@
         :label="`${$t('platform.config.miniPrograms')} secret：`"
       >
         <el-input
-          v-model="dataForm.secret"
+          v-model.trim="dataForm.secret"
           style="width:200px"
           controls-position="right"
         />
@@ -82,14 +82,13 @@ const init = () => {
 const router = useRouter()
 
 const onSubmit = () => {
-  emit('miniAppShow', false)
   const obj = {}
   obj.appId = dataForm.value.appId
   obj.secret = dataForm.value.secret
 
-  dataFormRef.value?.validate((valid) => {
+  dataFormRef.value?.validate(async (valid) => {
     if (valid) {
-      api.save({
+      await api.save({
         paramKey: 'MA_CONFIG',
         paramValue: JSON.stringify(dataForm.value),
         remark: $t('platform.config.miniProgramsConfig')
@@ -103,6 +102,7 @@ const onSubmit = () => {
           duration: 1500
         })
       })
+      emit('miniAppShow', false)
     }
   })
 }

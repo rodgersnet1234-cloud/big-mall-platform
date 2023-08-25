@@ -54,3 +54,18 @@ export function onDownloadZip () {
     responseType: 'blob'
   })
 }
+// 获取小程序信息
+export function getAppletInformation () {
+  return request({
+    url: '/mall4cloud_biz/p/wx/miniapp/info',
+    method: 'get'
+  })
+}
+// 小程序二维码
+export function getAppletQRcode () {
+  return request({
+    url: '/mall4cloud_biz/p/wx/miniapp/mini_qrcode',
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}

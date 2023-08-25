@@ -44,7 +44,17 @@
               <div
                 class="applet-message-left"
               >
-                <img-show style="width:160px;height:160px;margin:82px 0 50px 0" />
+                <img
+                  v-if="imgUrl"
+                  :src="imgUrl"
+                  alt=""
+                  style="width:160px;height:160px;margin:82px 0 50px 0"
+                >
+                <img
+                  v-else
+                  src="~@/assets/images/def.png"
+                  style="width:160px;height:160px;margin:82px 0 50px 0"
+                >
                 <table>
                   <tr
                     class="table-title"
@@ -58,7 +68,7 @@
                     <td
                       class="tt-item"
                     >
-                      {{ '超级无敌大boss' }}
+                      {{ appletInformation.appName }}
                     </td>
                   </tr>
                   <tr class="table-title">
@@ -70,7 +80,7 @@
                     <td
                       class="tt-item"
                     >
-                      {{ 'kfcvme50898565' }}
+                      {{ appletInformation.appId }}
                     </td>
                   </tr>
                 </table>
@@ -182,18 +192,42 @@
 <script  setup>
 import { Download, Promotion, Upload } from '@element-plus/icons-vue'
 import * as api from '@/api/platform/sys-config.js'
-
 import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 const miniAppShow = ref(true)
 const activeName = ref('first')
+
+const appletInformation = ref({})
+const imgUrl = ref('')
 const miniAppShowState = (state) => {
   miniAppShow.value = state
+  api.getAppletInformation().then(res => {
+    appletInformation.value = res
+  })
+  api.getAppletQRcode().then(res => {
+    getBase64(res).then(base64 => {
+      imgUrl.value = base64
+    }).catch(err => {
+      console.log(err, 'err')
+    })
+  })
 }
+// 二进制流转为base64
+const getBase64 = (data) => {
+  return new Promise((resolve, reject) => {
+    const blob = new Blob([data], { type: 'image/jpg' })
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
 const mpShow = ref(true)
 const mpShowState = (state) => {
   mpShow.value = state
 }
+
 const onDownload = () => {
   api.onDownloadZip().then(res => {
     const blob = new Blob([res], { type: 'application/zip' })
