@@ -11,10 +11,23 @@
     <div class="way-card">
       <div class="card-content">
         <div
-          v-if="'a'===state"
+          v-if="subjectType===1&&subjectStatus===0"
           class="state-text"
         >
           认证中
+        </div>
+        <div
+          v-if="subjectType===1&&subjectStatus===1"
+          class="state-text"
+        >
+          认证成功
+        </div>
+        <div
+          v-if="subjectType===1&&subjectStatus===-1"
+          class="state-text"
+          style="background:#dddfe0;color:#fff"
+        >
+          认证失败
         </div>
         <img
           src="@/assets/images/icon_Subject authentication.png"
@@ -32,24 +45,52 @@
         </div>
 
         <div>
+          <el-button
+            v-if="subjectStatus===1&&subjectType===1"
+            type="primary"
+          >
+            查看详情
+          </el-button>
+          <el-button
+            v-else-if="subjectStatus===1&&subjectType!==1"
+            type="info"
+            style="width: 236px;"
+          >
+            无法同时申请不同类型认证
+          </el-button>
           <router-link
+            v-else
             :to="{path:'information-config',query:{type:'subject'}}"
+            @click="onAuthMethod(1)"
           >
             <el-button
               type="primary"
             >
-              {{ state==='a'?'继续编辑':'立即认证' }}
+              {{ subjectType===1&&subjectStatus===0?'继续编辑':'立即认证' }}
             </el-button>
           </router-link>
         </div>
       </div>
-      <!-- 非主体认证 -->
+      <!-- 非主体认证+授权小程序/公众号 -->
       <div class="card-content">
         <div
-          v-if="'b'===state"
+          v-if="subjectType===2&&subjectStatus===0"
           class="state-text"
         >
           认证中
+        </div>
+        <div
+          v-if="subjectType===2&&subjectStatus===1"
+          class="state-text"
+        >
+          认证成功
+        </div>
+        <div
+          v-if="subjectType===2&&subjectStatus===-1"
+          class="state-text"
+          style="background:#dddfe0;color:#fff"
+        >
+          认证失败
         </div>
         <img
           src="@/assets/images/icon_Subject authentication2.png"
@@ -60,25 +101,56 @@
           非主体认证+授权小程序/公众号
         </div>
         <div class="bottom-text">
-          ① 需自行配置微信支付<br>
+          ① 需自行配置商城支付方式<br>
           ② 由服务商协助管理微信小程序/公众号<br>
           ③ 商城平台与SaaS后台、入驻商家及供应商都进<br>
           行线下结算
         </div>
-        <router-link :to="{path:'information-config',query:{type:'notSubject'}}">
+        <el-button
+          v-if="subjectStatus===1&&subjectType===2"
+          type="primary"
+        >
+          查看详情
+        </el-button>
+        <el-button
+          v-else-if="subjectStatus===1&&subjectType!==2"
+          type="info"
+          style="width: 236px;"
+        >
+          无法同时申请不同类型认证
+        </el-button>
+        <router-link
+          v-else
+          :to="{path:'information-config',query:{type:'notSubject'}}"
+          @click="onAuthMethod(2)"
+        >
           <el-button
             type="primary"
           >
-            立即认证
+            {{ subjectType===2&&subjectStatus===0?'继续编辑':'立即认证' }}
           </el-button>
         </router-link>
       </div>
+      <!-- 非主体认证+自行管理小程序/公众号 -->
       <div class="card-content">
         <div
-          v-if="'c'===state"
+          v-if="subjectType===3&&subjectStatus===0"
           class="state-text"
         >
           认证中
+        </div>
+        <div
+          v-if="subjectType===3&&subjectStatus===1"
+          class="state-text"
+        >
+          认证成功
+        </div>
+        <div
+          v-if="subjectType===3&&subjectStatus===-1"
+          class="state-text"
+          style="background:#dddfe0;color:#fff"
+        >
+          认证失败
         </div>
         <img
           src="@/assets/images/icon_Subject authentication3.png"
@@ -89,33 +161,53 @@
           非主体认证+自行管理小程序/公众号
         </div>
         <div class="bottom-text">
-          ① 需自行配置微信支付<br>
+          ① 需自行配置商城支付方式<br>
           ② 需自行管理微信小程序/公众号<br>
           ③ 商城平台与SaaS后台、入驻商家及供应商都进行<br>
           线下结算
         </div>
-
-        <router-link :to="{path:'information-config',query:{type:'NonSubSelfManage'}}">
-          <el-button
-            v-if="1==1"
-            type="primary"
-            @click="loading=true"
-          >
-            立即认证
-          </el-button>
-        </router-link>
         <el-button
-          v-if="1==2"
+          v-if="subjectStatus===1&&subjectType===3"
           type="primary"
         >
-          继续编辑
+          查看详情
         </el-button>
+        <el-button
+          v-else-if="subjectStatus===1&&subjectType!==3"
+          type="info"
+          style="width: 236px;"
+        >
+          无法同时申请不同类型认证
+        </el-button>
+        <router-link
+          v-else
+          :to="{path:'information-config',query:{type:'NonSubSelfManage'}}"
+          @click="onAuthMethod(3)"
+        >
+          <el-button
+            type="primary"
+          >
+            {{ subjectType===3&&subjectStatus===0?'继续编辑':'立即认证' }}
+          </el-button>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-const state = ref('a')
+import { choiceSubjectType, getMallUserInfo } from '@/api/multishop/shop-event'
+
+const onAuthMethod = (subjectType) => {
+  choiceSubjectType({ subjectType })
+}
+const subjectStatus = ref(null)
+const subjectType = ref(null)
+onMounted(() => {
+  getMallUserInfo().then(res => {
+    subjectType.value = res.subjectType
+    subjectStatus.value = res.subjectStatus
+  })
+})
 
 </script>
 <style lang="scss" scoped>
@@ -182,7 +274,6 @@ const state = ref('a')
       :deep(.el-button){
         width: 124px;
         height: 42px;
-        background: #155BD4;
         border-radius: 2px;
         margin: 60px 0;
       }

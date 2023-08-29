@@ -1,6 +1,9 @@
 <template>
   <div class="mod-pay">
-    <allinpay ref="allinpayRef" />
+    <allinpay
+      ref="allinpayRef"
+      @toggle="emit('toggle', false)"
+    />
     <shopWithdraw
       v-if="paySettlementType===1"
       ref="shopWithdrawRef"
@@ -20,6 +23,7 @@ import allinpay from './allinpay-config.vue'
 import userWithdraw from './user-withdraw-config.vue'
 import shopWithdraw from './shop-withdraw-config.vue'
 import supplierWithdraw from './supplier-withdraw-config.vue'
+const emit = defineEmits(['toggle'])
 
 const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联

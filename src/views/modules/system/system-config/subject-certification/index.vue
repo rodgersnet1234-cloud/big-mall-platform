@@ -85,8 +85,7 @@
 <script setup>
 const router = useRouter()
 const toAccreditationPage = () => {
-  router.push('/system/system-config/certification-information'
-  )
+  router.push('certification-information')
 }
 </script>
 <style lang="scss" scoped>

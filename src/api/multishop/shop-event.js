@@ -37,3 +37,10 @@ export function auditApply (data) {
     data
   })
 }
+export function choiceSubjectType (data) {
+  return request({
+    url: '/mall4cloud_admin/p/platform_detail/choice_subject_type',
+    method: 'PUT',
+    data
+  })
+}

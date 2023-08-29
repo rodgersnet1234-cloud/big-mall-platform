@@ -148,6 +148,11 @@
       >
         {{ $t('platform.config.save') }}
       </el-button>
+      <el-button
+        @click="emit('toggle')"
+      >
+        {{ $t('platform.config.back') }}
+      </el-button>
     </el-form>
   </div>
 </template>
@@ -157,7 +162,7 @@ import { defineComponent } from 'vue'
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
 import useStore from 'element-plus/es/components/table/src/store/index'
-
+const emit = defineEmits(['toggle'])
 const dataForm = ref({
   requestUrl: '',
   appId: '',
@@ -216,7 +221,7 @@ const onSubmit = (paramKey) => {
           }
           api.save(params).then(() => {
             ElMessage.success('保存成功')
-            // 开启通联后，更新vuex中的配置
+            // 开启通联后，更新pinia中的配置
             useStore.dispatch('allinpay/getPaySettlementType')
           })
         }

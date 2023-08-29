@@ -36,7 +36,6 @@
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
-
 const emit = defineEmits(['refreshDataList'])
 
 const dataForm = ref({
@@ -53,7 +52,6 @@ onMounted(() => {
 })
 
 const init = () => {
-  // $refs['dataForm'].resetFields()
   nextTick(() => {
     api.get('MX_APP_CONFIG').then(data => {
       if (data) {

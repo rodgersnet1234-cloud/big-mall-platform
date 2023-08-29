@@ -93,18 +93,19 @@
       >
         {{ $t('platform.config.save') }}
       </el-button>
+      <el-button
+        @click="emit('toggle',false)"
+      >
+        {{ $t('platform.config.back') }}
+      </el-button>
     </el-form>
-    <template>
-      <span class="dialog-footer" />
-    </template>
   </div>
 </template>
 
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
-
-const emit = defineEmits(['refreshDataList'])
+const emit = defineEmits(['refreshDataList', 'toggle', 'initMessage'])
 
 const dataForm = reactive({
   appId: null,
@@ -147,6 +148,8 @@ const init = () => {
     api.get('ALIPAY_CONFIG').then(data => {
       if (data) {
         Object.assign(dataForm, JSON.parse(data))
+      } else {
+        emit('initMessage', true)
       }
     })
     dataFormRef.value?.resetFields()
@@ -154,6 +157,7 @@ const init = () => {
 }
 const dataFormRef = ref()
 // 表单提交
+
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {

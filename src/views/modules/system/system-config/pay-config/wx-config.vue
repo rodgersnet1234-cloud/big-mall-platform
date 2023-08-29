@@ -1,13 +1,17 @@
 <template>
   <div class="mod-pay">
     <app ref="appRef" />
-    <pay ref="payRef" />
+    <pay
+      ref="payRef"
+      @toggle="emit('toggle', false)"
+      @init-message="emit('initMessage', true)"
+    />
   </div>
 </template>
 <script setup>
 import app from './wx-app-config.vue'
 import pay from './wx-pay-config.vue'
-
+const emit = defineEmits(['toggle', 'initMessage'])
 </script>
 <style lang="scss" scoped>
 /*

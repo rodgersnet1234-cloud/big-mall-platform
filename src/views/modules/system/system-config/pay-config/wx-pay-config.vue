@@ -132,6 +132,11 @@
       >
         {{ $t('platform.config.save') }}
       </el-button>
+      <el-button
+        @click="emit('toggle')"
+      >
+        {{ $t('platform.config.back') }}
+      </el-button>
     </el-form>
   </div>
 </template>
@@ -139,9 +144,7 @@
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
-
-const emit = defineEmits(['refreshDataList'])
-
+const emit = defineEmits(['refreshDataList', 'toggle', 'initMessage'])
 const dataForm = reactive({
   mchId: null,
   mchKey: null,
@@ -195,6 +198,8 @@ const init = () => {
     api.get('WXPAY_CONFIG').then(data => {
       if (data) {
         Object.assign(dataForm, JSON.parse(data))
+      } else {
+        emit('initMessage')
       }
     })
     dataFormRef.value?.resetFields()

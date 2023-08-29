@@ -319,7 +319,7 @@ const getBase64 = (data) => {
       margin-left: 10px;
       :deep(.el-button){
         border: 0;
-  }
+      }
     }
     &::before{
         content: "";
