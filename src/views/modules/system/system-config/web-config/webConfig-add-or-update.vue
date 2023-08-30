@@ -10,11 +10,7 @@
     @keyup.enter="onSubmit()"
   >
     <!--后台相关配置-->
-    <span v-if=" dataForm.configType === 2">
-
-      <!-- <el-form-item :label="$t('rbac.webConfig.loginLogo')" prop="loginLogoImg">
-    <img-upload v-model="dataForm.loginLogoImg" :size="'380*96'" />
-  </el-form-item> -->
+    <span v-if="dataForm.configType === 1 || dataForm.configType === 2 || dataForm.configType === 6">
       <!-- 登录背景 -->
       <!-- 平台 -->
       <el-form-item
@@ -23,7 +19,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'380*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*560</span>
@@ -34,14 +30,11 @@
         :label="$t('rbac.webConfig.loginBg')"
         prop="loginBgImg"
       >
-        <div>
-          <img-upload
-            v-model="dataForm.loginBgImg"
-            :size="'560*560'"
-          />
-          <span class="img-tip">{{ $t('admin.recommImgSize') }}560*560</span>
-
-        </div>
+        <img-upload
+          v-model="dataForm.loginBgImg"
+          :size="'560*560'"
+        />
+        <span class="img-tip">{{ $t('admin.recommImgSize') }}560*560</span>
       </el-form-item>
       <!-- 供应商 -->
       <el-form-item
@@ -50,7 +43,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'626*594'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}626*594</span>
@@ -67,11 +60,6 @@
           show-word-limit
         />
       </el-form-item>
-
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsCopyright')+'-'+$t('rbac.webConfig.english')" prop="copyrightEn">
-  <el-input v-model="dataForm.copyrightEn" />
-</el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.bsTitleContent')+'-'+$t('rbac.webConfig.chinese')"
         prop="titleContentCn"
@@ -83,16 +71,12 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-  <el-input v-model="dataForm.titleContentEn" maxlength="20" show-word-limit />
-</el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.pcTitleImg')"
         prop="titleImg"
       >
         <img-upload
-          v-model:value="dataForm.titleImg"
+          v-model="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -103,7 +87,7 @@
         prop="bsTopBarIcon"
       >
         <img-upload
-          v-model:value="dataForm.bsTopBarIcon"
+          v-model="dataForm.bsTopBarIcon"
           :size="'160*48'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}160*48</span>
@@ -120,10 +104,6 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsMenuTitleOpen')+'-'+$t('rbac.webConfig.english')" prop="bsMenuTitleOpenEn">
-  <el-input v-model="dataForm.bsMenuTitleOpenEn" maxlength="20" show-word-limit />
-</el-form-item> -->
-
       <el-form-item
         :label="$t('rbac.webConfig.bsMenuTitleClose')+'-'+$t('rbac.webConfig.chinese')"
         prop="bsMenuTitleCloseCn"
@@ -135,10 +115,8 @@
         />
       </el-form-item>
 
-      <!-- <el-form-item :label="$t('rbac.webConfig.bsMenuTitleClose')+'-'+$t('rbac.webConfig.english')" prop="bsMenuTitleCloseEn">
-  <el-input v-model="dataForm.bsMenuTitleCloseEn" maxlength="6" show-word-limit />
-</el-form-item> -->
     </span>
+
     <!--PC端相关配置-->
     <span v-if="dataForm.configType === 3">
 
@@ -147,7 +125,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.loginLogoImg"
+          v-model="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -158,7 +136,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'1920*600'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}1920*600</span>
@@ -180,7 +158,7 @@
         prop="pcQrcodeImg"
       >
         <img-upload
-          v-model:value="dataForm.pcQrcodeImg"
+          v-model="dataForm.pcQrcodeImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -219,7 +197,7 @@
         prop="titleImg"
       >
         <img-upload
-          v-model:value="dataForm.titleImg"
+          v-model="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -229,7 +207,7 @@
         prop="pcLogoImgText"
       >
         <img-upload
-          v-model:value="dataForm.pcLogoImgText"
+          v-model="dataForm.pcLogoImgText"
           :size="'380*96'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*96</span>
@@ -253,7 +231,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.loginLogoImg"
+          v-model="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -266,9 +244,14 @@
           v-model="dataForm.titleContentCn"
         />
       </el-form-item>
-      <!-- <el-form-item :label="$t('rbac.webConfig.uniTitleContent')+'-'+$t('rbac.webConfig.english')" prop="titleContentEn">
-        <el-input v-model="dataForm.titleContentEn" />
-      </el-form-item> -->
+      <el-form-item
+        :label="$t('rbac.webConfig.h5Welcome')+'-'+$t('rbac.webConfig.chinese')"
+        prop="h5WelcomeCn"
+      >
+        <el-input
+          v-model="dataForm.h5WelcomeCn"
+        />
+      </el-form-item>
     </span>
 
     <!--自提点端相关配置-->
@@ -278,7 +261,7 @@
         prop="stationLoginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.stationLoginLogoImg"
+          v-model="dataForm.stationLoginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -307,7 +290,8 @@ import useStore from 'element-plus/es/components/table/src/store/index'
 
 const emit = defineEmits(['refreshDataList'])
 
-let dataForm = reactive({
+const visible = ref(false)
+const dataForm = ref({
   id: null,
   configType: null, // 配置类型（1:平台端 2:商家端 3:PC端 4:h5端 5:自提点端 6:供应商端）
   isActivity: 0,
@@ -339,19 +323,26 @@ const dataRule = reactive({})
 const props = defineProps({
   configType: {
     type: Number,
-    default: 2
+    default: 1
   }
 })
 const dataFormRef = ref(null)
 onMounted(() => {
   // dataForm.id = configId || 0
-  dataForm.configType = props.configType
+  dataForm.value.configType = props.configType
 
+  visible.value = true
   nextTick(() => {
     dataFormRef.value?.resetFields()
-    if (props.configType === 2) {
+    if (props.configType === 1) {
+      // 平台端配置
+      getFormData('PLATFROM_WEBSITE_CONFIG', 1)
+    } else if (props.configType === 2) {
       // 商家端配置
       getFormData('MULTISHOP_WEBSITE_CONFIG', 2)
+    } else if (props.configType === 6) {
+      // 供应商端配置
+      getFormData('SUPPLIER_WEBSITE_CONFIG', 6)
     } else if (props.configType === 3) {
       // pc端配置
       getFormData('PC_WEBSITE_CONFIG', 3)
@@ -365,26 +356,12 @@ onMounted(() => {
   })
 })
 
-// init(configType, id) {
-//   dataForm.id = id || 0
-//   dataForm.configType = configType
-//   visible = true
-//   nextTick(() => {
-//     $refs['dataForm'].resetFields()
-//     if (dataForm.id) {
-//       api.get(dataForm.id).then(data => {
-//         dataForm = data
-//       })
-//     }
-//   })
-// },
-//
 // 获取表单数据接口
-const getFormData = (apiKey, configType) => {
+const getFormData = (apiKey, configType, str) => {
   apis.getWebConfig(apiKey).then(data => {
     if (data) {
-      dataForm = JSON.parse(data)
-      dataForm.configType = configType
+      dataForm.value = JSON.parse(data)
+      dataForm.value.configType = configType
     }
   })
 }
@@ -396,84 +373,88 @@ const onSubmit = () => {
     }
 
     // 后台配置判断
-    if (dataForm.configType === 2) {
-      if (!dataForm.loginBgImg) {
+    if (dataForm.value.configType === 1 || dataForm.value.configType === 2 || dataForm.value.configType === 6) {
+      // if (!dataForm.loginLogoImg) {
+      //   errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
+      //   return
+      // }
+      if (!dataForm.value.loginBgImg) {
         errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.copyrightCn) {
+      if (!dataForm.value.copyrightCn) {
         errorMsg($t('rbac.webConfig.bsCopyright') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleContentCn) {
+      if (!dataForm.value.titleContentCn) {
         errorMsg($t('rbac.webConfig.bsTitleContent') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleImg) {
+      if (!dataForm.value.titleImg) {
         errorMsg($t('rbac.webConfig.pcTitleImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
       // TopIcon
-      if (!dataForm.bsTopBarIcon) {
+      if (!dataForm.value.bsTopBarIcon) {
         errorMsg($t('rbac.webConfig.TopIcon') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.bsMenuTitleOpenCn) {
+      if (!dataForm.value.bsMenuTitleOpenCn) {
         errorMsg($t('rbac.webConfig.bsMenuTitleOpen') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.bsMenuTitleCloseCn) {
+      if (!dataForm.value.bsMenuTitleCloseCn) {
         errorMsg($t('rbac.webConfig.bsMenuTitleClose') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
 
     // pc端配置判断
-    if (dataForm.configType === 3) {
-      if (!dataForm.loginLogoImg) {
+    if (dataForm.value.configType === 3) {
+      if (!dataForm.value.loginLogoImg) {
         errorMsg($t('rbac.webConfig.logo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.loginBgImg) {
+      if (!dataForm.value.loginBgImg) {
         errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.copyrightCn) {
+      if (!dataForm.value.copyrightCn) {
         errorMsg($t('rbac.webConfig.bsCopyright') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcQrcodeImg) {
+      if (!dataForm.value.pcQrcodeImg) {
         errorMsg($t('rbac.webConfig.pcQrcodeImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcCompanyNameCn) {
+      if (!dataForm.value.pcCompanyNameCn) {
         errorMsg($t('rbac.webConfig.pcCompanyName') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcCompanyInfoCn) {
+      if (!dataForm.value.pcCompanyInfoCn) {
         errorMsg($t('rbac.webConfig.pcCompanyInfo') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleContentCn) {
+      if (!dataForm.value.titleContentCn) {
         errorMsg($t('rbac.webConfig.pcTitleContent') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.titleImg) {
+      if (!dataForm.value.titleImg) {
         errorMsg($t('rbac.webConfig.pcTitleImg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcLogoImgText) {
+      if (!dataForm.value.pcLogoImgText) {
         errorMsg($t('rbac.webConfig.pcLogoImgText') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
-      if (!dataForm.pcWelcomeCn) {
+      if (!dataForm.value.pcWelcomeCn) {
         errorMsg($t('rbac.webConfig.pcWelcome') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
     // h5端配置判断
-    if (dataForm.configType === 4) {
-      if (!dataForm.loginLogoImg) {
+    if (dataForm.value.configType === 4) {
+      if (!dataForm.value.loginLogoImg) {
         errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
@@ -481,30 +462,36 @@ const onSubmit = () => {
 
     // 自提点端配置判断
     if (dataForm.configType === 5) {
-      if (!dataForm.stationLoginLogoImg) {
+      if (!dataForm.value.stationLoginLogoImg) {
         errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
         return
       }
     }
 
-    if (props.configType === 2) {
-    // 商家端配置
+    if (props.configType === 1) {
+      // 平台端配置
+      modifyFormData('PLATFROM_WEBSITE_CONFIG')
+    } else if (props.configType === 2) {
+      // 商家端配置
       modifyFormData('MULTISHOP_WEBSITE_CONFIG')
+    } else if (props.configType === 6) {
+      // 供应商端配置
+      modifyFormData('SUPPLIER_WEBSITE_CONFIG')
     } else if (props.configType === 3) {
-    // pc端配置
+      // pc端配置
       modifyFormData('PC_WEBSITE_CONFIG')
     } else if (props.configType === 4) {
-    // h5端配置
+      // h5端配置
       modifyFormData('H5_WEBSITE_CONFIG')
     } else if (props.configType === 5) {
-    // h5端配置
+      // h5端配置
       modifyFormData('STATION_WEBSITE_CONFIG')
     }
   })
 }
 // 修改更新接口
 const modifyFormData = (apiKey) => {
-  const newObj = Object.assign({}, dataForm)
+  const newObj = Object.assign({}, dataForm.value)
   if (newObj.configType) delete newObj.configType
   if (newObj.id || newObj.id === null) delete newObj.id
   if (newObj.isactive || newObj.isactive === null) delete newObj.isactive
@@ -512,13 +499,14 @@ const modifyFormData = (apiKey) => {
   apis.saveWebConfig({
     paramKey: apiKey,
     paramValue: JSON.stringify(newObj)
-  }).then(() => {
+  }).then(data => {
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',
       duration: 1500,
       customClass: 'zZindex',
       onClose: () => {
+        visible.value = false
         emit('refreshDataList')
       }
     })
@@ -536,7 +524,7 @@ const errorMsg = (message) => {
 
 // 更新网站配置信息
 const updateWebConfigData = () => {
-  if (dataForm.configType !== 1) {
+  if (dataForm.value.configType !== 1) {
     return
   }
   api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
@@ -549,6 +537,13 @@ const updateWebConfigData = () => {
 
 <style lang="scss" scoped>
 .page-webConfig-add-or-update{
+  :deep(.el-form-item__content){
+    display: block;
+
+    .img-tip{
+      position: static;
+    }
+  }
   .img-tip {
     font-weight: 400;
     position: absolute;
@@ -580,14 +575,6 @@ const updateWebConfigData = () => {
     width: 60%;
   }
 
-  ::v-deep(.el-upload-list--picture-card .el-upload-list__item-thumbnail) {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto 0;
-  }
   ::v-deep(.el-upload-list--picture-card .el-upload-list__item-thumbnail) {
     width: 100%;
     height: auto;

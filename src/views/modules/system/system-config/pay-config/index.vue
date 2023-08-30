@@ -109,6 +109,7 @@ import WxConfig from './wx-config.vue'
 import AlipayConfig from './alipay-config.vue'
 import AllinpayConfig from './allinpay.vue'
 import * as api from '@/api/platform/sys-config.js'
+
 import { ElMessage } from 'element-plus'
 const WeChatPay = ref(false)
 const Alipay = ref(false)
@@ -119,7 +120,6 @@ const alipayConfigVisible = ref(false)
 const allinpayConfigVisible = ref(false)
 const WeChatMessageConfig = ref(false)// 是否填写微信配置内容
 const alipayMessageConfig = ref(false)// 是否填写微信配置内容
-
 // 微信
 const onWeChatPayChange = (state) => {
   const paramValue = state ? { wxPayStatus: 1 } : { wxPayStatus: 0 }

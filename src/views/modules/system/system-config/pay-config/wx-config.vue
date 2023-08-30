@@ -4,7 +4,7 @@
     <pay
       ref="payRef"
       @toggle="emit('toggle', false)"
-      @init-message="emit('initMessage', true)"
+      @init-message="(state)=>{emit('initMessage', state)}"
     />
   </div>
 </template>

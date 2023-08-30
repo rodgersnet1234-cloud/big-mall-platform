@@ -148,6 +148,7 @@ const init = () => {
     api.get('ALIPAY_CONFIG').then(data => {
       if (data) {
         Object.assign(dataForm, JSON.parse(data))
+        emit('initMessage', false)
       } else {
         emit('initMessage', true)
       }

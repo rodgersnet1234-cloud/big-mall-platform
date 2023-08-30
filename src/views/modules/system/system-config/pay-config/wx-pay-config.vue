@@ -198,8 +198,9 @@ const init = () => {
     api.get('WXPAY_CONFIG').then(data => {
       if (data) {
         Object.assign(dataForm, JSON.parse(data))
+        emit('initMessage', false)
       } else {
-        emit('initMessage')
+        emit('initMessage', true)
       }
     })
     dataFormRef.value?.resetFields()

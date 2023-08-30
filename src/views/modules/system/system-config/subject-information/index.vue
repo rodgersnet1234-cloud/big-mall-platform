@@ -105,7 +105,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane
-        label="经验信息"
+        label="经营信息"
         name="second"
       >
         <div class="basic-info-list">

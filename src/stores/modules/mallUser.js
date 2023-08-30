@@ -27,6 +27,7 @@ export const mallUserStore = defineStore('mallUser', {
     onGetMallUserInfo () {
       return new Promise((resolve, reject) => {
         getMallUserInfo().then(shopUser => {
+          console.log(shopUser, 'shopUser')
           this.mallName = shopUser.mallName
           this.merchantName = shopUser.merchantName
           this.phone = shopUser.phone
