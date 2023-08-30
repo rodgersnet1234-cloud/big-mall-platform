@@ -3,6 +3,8 @@
     <allinpay
       ref="allinpayRef"
       @toggle="emit('toggle', false)"
+      @un-set-state="(state)=>emit('unSetState', state)"
+      @app-id-state="(state)=>emit('appIdState', state)"
     />
     <shopWithdraw
       v-if="paySettlementType===1"
@@ -23,7 +25,7 @@ import allinpay from './allinpay-config.vue'
 import userWithdraw from './user-withdraw-config.vue'
 import shopWithdraw from './shop-withdraw-config.vue'
 import supplierWithdraw from './supplier-withdraw-config.vue'
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'unSetState', 'appIdState'])
 
 const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联

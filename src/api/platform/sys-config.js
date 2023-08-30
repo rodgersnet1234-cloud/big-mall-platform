@@ -16,7 +16,6 @@ export function saveWebConfig (data) {
   })
 }
 // 网站配置
-
 export function get (key) {
   return request({
     url: '/mall4cloud_admin/p/sys_config/info/' + key,

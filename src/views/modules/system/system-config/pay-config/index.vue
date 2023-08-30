@@ -27,7 +27,7 @@
             </el-button>
           </div>
           <el-switch
-            v-model="WeChatPay"
+            v-model="weChatPay"
             @change="onWeChatPayChange"
           />
         </div>
@@ -84,7 +84,12 @@
             编辑
           </el-button>
         </div>
-        <el-switch v-model="UnionPay" />
+
+        <el-switch
+          v-model="allinpay"
+          :disabled="unSet || !appId"
+          @change="onAllinpayChange"
+        />
       </div>
     </div>
     <wx-config
@@ -100,6 +105,8 @@
     />
     <allinpay-config
       v-show="allinpayConfigVisible"
+      @un-set-state="unSetState"
+      @app-id-state="appIdState"
       @toggle="(state)=>allinpayConfigVisible=state"
     />
   </div>
@@ -109,17 +116,39 @@ import WxConfig from './wx-config.vue'
 import AlipayConfig from './alipay-config.vue'
 import AllinpayConfig from './allinpay.vue'
 import * as api from '@/api/platform/sys-config.js'
+import { WarningFilled } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
-import { ElMessage } from 'element-plus'
-const WeChatPay = ref(false)
+const weChatPay = ref(false)
 const Alipay = ref(false)
 const balancePay = ref(false)
-const UnionPay = ref(false)
 const wxConfigVisible = ref(false)
 const alipayConfigVisible = ref(false)
 const allinpayConfigVisible = ref(false)
 const WeChatMessageConfig = ref(false)// 是否填写微信配置内容
 const alipayMessageConfig = ref(false)// 是否填写微信配置内容
+onMounted(() => {
+  // 微信开启状态
+  api.get('WXPAY_STATUS_CONFIG').then(res => {
+    const wxPayStatus = JSON.parse(res).wxPayStatus
+    weChatPay.value = !!wxPayStatus
+  })
+  // 支付宝开启状态
+  api.get('ALIPAY_STATUS_CONFIG').then(res => {
+    const alipayStatus = JSON.parse(res).alipayStatus
+    Alipay.value = !!alipayStatus
+  })
+  // 余额开启状态
+  api.get('BALANCE_PAY_CONFIG').then(res => {
+    const balancePayStatus = JSON.parse(res).balancePayStatus
+    balancePay.value = !!balancePayStatus
+  })
+  // 通联开启状态
+  api.get('PAY_SETTLEMENT_CONFIG').then(res => {
+    const paySettlementType = JSON.parse(res).paySettlementType
+    allinpay.value = !!paySettlementType
+  })
+})
 // 微信
 const onWeChatPayChange = (state) => {
   const paramValue = state ? { wxPayStatus: 1 } : { wxPayStatus: 0 }
@@ -129,14 +158,14 @@ const onWeChatPayChange = (state) => {
       type: 'error',
       duration: 1500
     })
-    WeChatPay.value = false
+    weChatPay.value = false
     return
   }
   updatePayConfig('WXPAY_STATUS_CONFIG', paramValue, '微信支付状态')
 }
 // 支付宝
 const onAlipayChange = (state) => {
-  const paramValue = state ? { wxPayStatus: 1 } : { wxPayStatus: 0 }
+  const paramValue = state ? { alipayStatus: 1 } : { alipayStatus: 0 }
   if (alipayMessageConfig.value) {
     ElMessage({
       message: '请编辑填写配置信息',
@@ -153,6 +182,7 @@ const onUnionPayChange = (state) => {
   const paramValue = state ? { balancePayStatus: 1 } : { balancePayStatus: 0 }
   updatePayConfig('BALANCE_PAY_CONFIG', paramValue, '余额支付配置')
 }
+// 封装请求
 const updatePayConfig = (paramKey, paramValue, remark) => {
   api.save({
     paramKey,
@@ -166,6 +196,52 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
     })
   })
 }
+const allinpay = ref(false)
+const unSet = ref(false)
+const unSetState = (state) => {
+  unSet.value = state
+}
+const appId = ref(false)
+const appIdState = (state) => {
+  appId.value = state
+}
+// 通联支付
+const onAllinpayChange = (val) => {
+  if (val) {
+    ElMessageBox({
+      message: h('div', { style: 'padding:30px 5px 0', class: 'box' }, [
+        h('p', { style: 'line-height:24px;display:flex;align-item:center;' }, [
+          h(WarningFilled, { class: 'el-icon-warning', style: 'color:#FAAD14;width:24px' }, null),
+          h('span', { style: 'font-weight:bold;margin-left:10px;color:#333333;font-size:18px' }, '确认开启通联支付？ ')
+        ]),
+        h('p', { style: 'line-height:24px;color:#333333;font-size: 14px;margin:12px 0 20px 34px;' }, '开启后将采用通联支付体系且不能关闭，现有支付体系中的供应商、商家及用户余额将不再显示，请谨慎开启此功能或开启前先将系统内所有账号的余额结清。')
+      ]),
+      showCancelButton: true,
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      onClose: () => {
+        onSubmit('PAY_SETTLEMENT_CONFIG')
+      }
+    }).then(action => {
+      onSubmit('PAY_SETTLEMENT_CONFIG')
+    }).catch(() => {
+      allinpay.value = false
+    })
+  }
+}
+const onSubmit = (configKey) => {
+  if (appId.value) {
+    ElMessage({
+      message: '请编辑填写配置信息',
+      type: 'error',
+      duration: 1500
+    })
+    allinpay.value = false
+    return
+  }
+  updatePayConfig(configKey, { paySettlementType: 1 }, '支付结算配置')
+}
+
 </script>
 <style lang="scss" scoped>
 /*
