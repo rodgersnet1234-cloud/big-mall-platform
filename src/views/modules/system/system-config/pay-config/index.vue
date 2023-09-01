@@ -106,7 +106,7 @@
     <allinpay-config
       v-show="allinpayConfigVisible"
       @un-set-state="unSetState"
-      @app-id-state="appIdState"
+      @app-id-state="(state) =>appId = state"
       @toggle="(state)=>allinpayConfigVisible=state"
     />
   </div>
@@ -130,23 +130,15 @@ const alipayMessageConfig = ref(false)// 是否填写微信配置内容
 onMounted(() => {
   // 微信开启状态
   api.get('WXPAY_STATUS_CONFIG').then(res => {
-    const wxPayStatus = JSON.parse(res).wxPayStatus
-    weChatPay.value = !!wxPayStatus
+    weChatPay.value = !!JSON.parse(res).wxPayStatus
   })
   // 支付宝开启状态
   api.get('ALIPAY_STATUS_CONFIG').then(res => {
-    const alipayStatus = JSON.parse(res).alipayStatus
-    Alipay.value = !!alipayStatus
+    Alipay.value = res && !!JSON.parse(res).alipayStatus
   })
   // 余额开启状态
   api.get('BALANCE_PAY_CONFIG').then(res => {
-    const balancePayStatus = JSON.parse(res).balancePayStatus
-    balancePay.value = !!balancePayStatus
-  })
-  // 通联开启状态
-  api.get('PAY_SETTLEMENT_CONFIG').then(res => {
-    const paySettlementType = JSON.parse(res).paySettlementType
-    allinpay.value = !!paySettlementType
+    balancePay.value = res && !!JSON.parse(res).balancePayStatus
   })
 })
 // 微信
@@ -198,13 +190,12 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
 }
 const allinpay = ref(false)
 const unSet = ref(false)
+// 通联开启状态
 const unSetState = (state) => {
+  allinpay.value = state
   unSet.value = state
 }
 const appId = ref(false)
-const appIdState = (state) => {
-  appId.value = state
-}
 // 通联支付
 const onAllinpayChange = (val) => {
   if (val) {

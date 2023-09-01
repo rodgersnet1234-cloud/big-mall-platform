@@ -84,6 +84,9 @@
               <el-dropdown-item @click="changeMallName">
                 <span style="display: block">{{ $t("navbar.changeName") }}</span>
               </el-dropdown-item>
+              <el-dropdown-item @click="platformIdentifying">
+                <span style="display: block">{{ $t("navbar.platformIdentifying") }}</span>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -129,6 +132,8 @@
 import UpdatePassword from '@/components/update-password/index.vue'
 import UpdateMallName from '@/components/update-mall-name/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { getPlatformIdentifying } from '@/api/multishop/shop-event'
+
 import { Base64 } from 'js-base64'
 import { mallUserStore } from '@/stores/modules/mallUser.js'
 
@@ -169,6 +174,23 @@ const changeMallName = () => {
   updateMallNameVisible.value = true
   nextTick(() => {
     updateMallNameRef.value.init()
+  })
+}
+const platformIdentifying = () => {
+  getPlatformIdentifying().then(res => {
+    navigator.clipboard.writeText(res).then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    }).catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
   })
 }
 const updatePasswordRef = ref(null)

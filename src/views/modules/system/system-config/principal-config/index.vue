@@ -45,12 +45,16 @@
         </div>
 
         <div>
-          <el-button
+          <router-link
             v-if="subjectStatus===1&&subjectType===1"
-            type="primary"
+            :to="{path:'information-config',query:{type:'subject'}}"
           >
-            查看详情
-          </el-button>
+            <el-button
+              type="primary"
+            >
+              查看详情
+            </el-button>
+          </router-link>
           <el-button
             v-else-if="subjectStatus===1&&subjectType!==1"
             type="info"
@@ -106,12 +110,16 @@
           ③ 商城平台与SaaS后台、入驻商家及供应商都进<br>
           行线下结算
         </div>
-        <el-button
+        <router-link
           v-if="subjectStatus===1&&subjectType===2"
-          type="primary"
         >
-          查看详情
-        </el-button>
+          <el-button
+            :to="{path:'information-config',query:{type:'notSubject'}}"
+            type="primary"
+          >
+            查看详情
+          </el-button>
+        </router-link>
         <el-button
           v-else-if="subjectStatus===1&&subjectType!==2"
           type="info"
@@ -166,12 +174,16 @@
           ③ 商城平台与SaaS后台、入驻商家及供应商都进行<br>
           线下结算
         </div>
-        <el-button
+        <router-link
           v-if="subjectStatus===1&&subjectType===3"
-          type="primary"
+          :to="{path:'information-config',query:{type:'NonSubSelfManage'}}"
         >
-          查看详情
-        </el-button>
+          <el-button
+            type="primary"
+          >
+            查看详情
+          </el-button>
+        </router-link>
         <el-button
           v-else-if="subjectStatus===1&&subjectType!==3"
           type="info"

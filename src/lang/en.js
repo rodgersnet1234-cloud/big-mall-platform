@@ -48,7 +48,8 @@ export default {
   },
   navbar: {
     logOut: 'Log Out',
-    changeName: 'Change Name'
+    changeName: 'Change Name',
+    platformIdentifying: 'platform Identifying'
   },
   tagsView: {
     refresh: 'Refresh',

@@ -56,7 +56,8 @@ export default {
   navbar: {
     logOut: '退出登录',
     changeName: '修改名称',
-    changePassword: '修改密码'
+    changePassword: '修改密码',
+    platformIdentifying: '平台标识'
   },
   tagsView: {
     refresh: '刷新',

@@ -44,3 +44,10 @@ export function choiceSubjectType (data) {
     data
   })
 }
+// 获取平台标识
+export function getPlatformIdentifying () {
+  return request({
+    url: '/mall4cloud_admin/p/platform_detail/get_platform_identification',
+    method: 'GET'
+  })
+}

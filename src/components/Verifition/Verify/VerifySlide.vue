@@ -49,9 +49,9 @@ v-if="type === '2'" class="verify-sub-block"
 </template>
 <script type="text/babel">
 /**
-     * VerifySlide
-     * @description 滑块
-     * */
+ * VerifySlide
+ * @description 滑块
+ * */
 import { aesEncrypt } from './../utils/ase'
 import { resetSize } from './../utils/util'
 import { reqCheck, reqGet } from './../api/index'

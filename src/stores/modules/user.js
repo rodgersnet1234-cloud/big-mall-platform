@@ -38,6 +38,7 @@ export const useUserStore = defineStore('user', {
         login(loginData).then(response => {
           this.token = response.accessToken
           this.tenantId = response.tenantId
+          console.log(this.tenantId, 'this.tenantId')
           setTenantId(response.tenantId)
           setToken(response.accessToken)
           resolve()

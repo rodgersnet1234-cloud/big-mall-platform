@@ -514,6 +514,7 @@ const reReapplyDataSubmit = (data) => {
       type: 'success',
       duration: 1000
     })
+    getMallEventInfo()
   })
 }
 const mallStore = mallUserStore()
