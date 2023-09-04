@@ -28,6 +28,7 @@
           </div>
           <el-switch
             v-model="weChatPay"
+            v-permission="['platform:sysConfig:save']"
             @change="onWeChatPayChange"
           />
         </div>
@@ -48,6 +49,7 @@
           </div>
           <el-switch
             v-model="Alipay"
+            v-permission="['platform:sysConfig:save']"
             @change="onAlipayChange"
           />
         </div>
@@ -61,6 +63,7 @@
           </div>
           <el-switch
             v-model="balancePay"
+            v-permission="['platform:sysConfig:save']"
             @change="onUnionPayChange"
           />
         </div>
@@ -87,6 +90,7 @@
 
         <el-switch
           v-model="allinpay"
+          v-permission="['platform:sysConfig:save']"
           :disabled="unSet || !appId"
           @change="onAllinpayChange"
         />

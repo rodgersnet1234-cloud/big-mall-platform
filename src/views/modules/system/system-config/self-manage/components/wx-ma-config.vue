@@ -36,6 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button
+          v-permission="['platform:sysConfig:save']"
           type="primary"
           @click="onSubmit()"
         >

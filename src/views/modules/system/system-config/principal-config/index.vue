@@ -64,6 +64,7 @@
           </el-button>
           <router-link
             v-else
+            v-permission="['platform:subjectType:choice']"
             :to="{path:'information-config',query:{type:'subject'}}"
             @click="onAuthMethod(1)"
           >
@@ -129,6 +130,7 @@
         </el-button>
         <router-link
           v-else
+          v-permission="['platform:subjectType:choice']"
           :to="{path:'information-config',query:{type:'notSubject'}}"
           @click="onAuthMethod(2)"
         >
@@ -193,6 +195,7 @@
         </el-button>
         <router-link
           v-else
+          v-permission="['platform:subjectType:choice']"
           :to="{path:'information-config',query:{type:'NonSubSelfManage'}}"
           @click="onAuthMethod(3)"
         >
