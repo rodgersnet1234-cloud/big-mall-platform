@@ -23,7 +23,6 @@ service.interceptors.request.use(async config => {
   config.headers.sysType = 2
   if (useUserStore().token) {
     config.headers.Authorization = useUserStore().token
-    console.log(useUserStore().tenantId, 'useUserStore().tenantId')
     config.headers.tenantId = useUserStore().tenantId
   }
 

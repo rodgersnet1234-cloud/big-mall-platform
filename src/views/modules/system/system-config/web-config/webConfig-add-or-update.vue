@@ -274,6 +274,12 @@
       >
         {{ $t('rbac.webConfig.save') }}
       </el-button>
+      <el-button
+        type="primary"
+        @click="onCopyLink()"
+      >
+        {{ $t('复制链接') }}
+      </el-button>
     </el-form-item>
   </el-form>
 
@@ -287,6 +293,7 @@ import * as apis from '@/api/platform/sys-config'
 import { formatConfigInfo } from '@/utils/website-config'
 import { ElMessage } from 'element-plus'
 import useStore from 'element-plus/es/components/table/src/store/index'
+import { getLink } from '@/api/platform/audit-shop.js'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -326,9 +333,11 @@ const props = defineProps({
     default: 1
   }
 })
+let links = {}
+
 const dataFormRef = ref(null)
-onMounted(() => {
-  // dataForm.id = configId || 0
+onMounted(async () => {
+  links = await getLink()
   dataForm.value.configType = props.configType
 
   visible.value = true
@@ -357,7 +366,7 @@ onMounted(() => {
 })
 
 // 获取表单数据接口
-const getFormData = (apiKey, configType, str) => {
+const getFormData = (apiKey, configType) => {
   apis.getWebConfig(apiKey).then(data => {
     if (data) {
       dataForm.value = JSON.parse(data)
@@ -373,11 +382,7 @@ const onSubmit = () => {
     }
 
     // 后台配置判断
-    if (dataForm.value.configType === 1 || dataForm.value.configType === 2 || dataForm.value.configType === 6) {
-      // if (!dataForm.loginLogoImg) {
-      //   errorMsg($t('rbac.webConfig.loginLogo') + $t('rbac.webConfig.canNotBeEmpty'))
-      //   return
-      // }
+    if (dataForm.value.configType === 2) {
       if (!dataForm.value.loginBgImg) {
         errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
         return
@@ -468,15 +473,9 @@ const onSubmit = () => {
       }
     }
 
-    if (props.configType === 1) {
-      // 平台端配置
-      modifyFormData('PLATFROM_WEBSITE_CONFIG')
-    } else if (props.configType === 2) {
+    if (props.configType === 2) {
       // 商家端配置
       modifyFormData('MULTISHOP_WEBSITE_CONFIG')
-    } else if (props.configType === 6) {
-      // 供应商端配置
-      modifyFormData('SUPPLIER_WEBSITE_CONFIG')
     } else if (props.configType === 3) {
       // pc端配置
       modifyFormData('PC_WEBSITE_CONFIG')
@@ -484,10 +483,73 @@ const onSubmit = () => {
       // h5端配置
       modifyFormData('H5_WEBSITE_CONFIG')
     } else if (props.configType === 5) {
-      // h5端配置
+      // 门店端配置
       modifyFormData('STATION_WEBSITE_CONFIG')
     }
   })
+}
+const onCopyLink = async () => {
+  if (props.configType === 2) {
+    // 商家端
+    navigator.clipboard.writeText(links.enterUrl).then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    }).catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
+  } else if (props.configType === 3) {
+    // pc端
+    navigator.clipboard.writeText(links.pcUrl).then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    }).catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
+  } else if (props.configType === 4) {
+    // h5端
+    navigator.clipboard.writeText(links.h5Url).then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    }).catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
+  } else if (props.configType === 5) {
+    // 门店端
+    navigator.clipboard.writeText(links.stationUrl).then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    }).catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
+  }
 }
 // 修改更新接口
 const modifyFormData = (apiKey) => {
@@ -499,7 +561,7 @@ const modifyFormData = (apiKey) => {
   apis.saveWebConfig({
     paramKey: apiKey,
     paramValue: JSON.stringify(newObj)
-  }).then(data => {
+  }).then(() => {
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',

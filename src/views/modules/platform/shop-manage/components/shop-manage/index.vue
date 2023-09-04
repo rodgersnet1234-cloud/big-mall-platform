@@ -384,7 +384,7 @@ onMounted(() => {
 })
 const onCopyLink = () => {
   api.getLink().then(res => {
-    navigator.clipboard.writeText(res).then(() => {
+    navigator.clipboard.writeText(res.enterUrl).then(() => {
       ElMessage({
         message: '复制成功',
         type: 'success',

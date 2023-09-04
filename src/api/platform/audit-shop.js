@@ -351,7 +351,7 @@ export function reUploadIdCard (data) {
 // 获取平台邀请的入驻url
 export function getLink () {
   return request({
-    url: '/mall4cloud_admin/p/platform_detail/get_enter_url',
+    url: '/mall4cloud_admin/p/platform_detail/get_url',
     method: 'GET'
   })
 }

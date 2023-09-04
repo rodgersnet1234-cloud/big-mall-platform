@@ -134,7 +134,7 @@ const alipayMessageConfig = ref(false)// 是否填写微信配置内容
 onMounted(() => {
   // 微信开启状态
   api.get('WXPAY_STATUS_CONFIG').then(res => {
-    weChatPay.value = !!JSON.parse(res).wxPayStatus
+    weChatPay.value = res && !!JSON.parse(res).wxPayStatus
   })
   // 支付宝开启状态
   api.get('ALIPAY_STATUS_CONFIG').then(res => {
