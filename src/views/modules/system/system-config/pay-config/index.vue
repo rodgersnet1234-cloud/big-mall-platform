@@ -141,19 +141,21 @@ onMounted(() => {
     Alipay.value = res && !!JSON.parse(res).alipayStatus
   })
   // 余额开启状态
-  api.get('BALANCE_PAY_CONFIG').then(res => {
+  api.get('BALANCE_PAY_STATUS_CONFIG').then(res => {
     balancePay.value = res && !!JSON.parse(res).balancePayStatus
   })
 })
 // 微信
 const onWeChatPayChange = (state) => {
   const paramValue = state ? { wxPayStatus: 1 } : { wxPayStatus: 0 }
+  const hasOtherPayments = Alipay.value || balancePay.value
+  if (!state && !hasOtherPayments) {
+    weChatPay.value = true
+    ElMessage.error('至少保留一项支付方式')
+    return
+  }
   if (WeChatMessageConfig.value) {
-    ElMessage({
-      message: '请编辑填写配置信息',
-      type: 'error',
-      duration: 1500
-    })
+    ElMessage.error('请编辑填写配置信息')
     weChatPay.value = false
     return
   }
@@ -162,12 +164,14 @@ const onWeChatPayChange = (state) => {
 // 支付宝
 const onAlipayChange = (state) => {
   const paramValue = state ? { alipayStatus: 1 } : { alipayStatus: 0 }
+  const hasOtherPayments = weChatPay.value || balancePay.value
+  if (!state && !hasOtherPayments) {
+    Alipay.value = true
+    ElMessage.error('至少保留一项支付方式')
+    return
+  }
   if (alipayMessageConfig.value) {
-    ElMessage({
-      message: '请编辑填写配置信息',
-      type: 'error',
-      duration: 1500
-    })
+    ElMessage.error('请编辑填写配置信息')
     Alipay.value = false
     return
   }
@@ -176,22 +180,15 @@ const onAlipayChange = (state) => {
 // 余额支付状态
 const onUnionPayChange = (state) => {
   const paramValue = state ? { balancePayStatus: 1 } : { balancePayStatus: 0 }
-  updatePayConfig('BALANCE_PAY_CONFIG', paramValue, '余额支付配置')
+  const hasOtherPayments = weChatPay.value || Alipay.value
+  if (!state && !hasOtherPayments) {
+    balancePay.value = true
+    ElMessage.error('至少保留一项支付方式')
+    return
+  }
+  updatePayConfig('BALANCE_PAY_STATUS_CONFIG', paramValue, '余额支付配置')
 }
-// 封装请求
-const updatePayConfig = (paramKey, paramValue, remark) => {
-  api.save({
-    paramKey,
-    paramValue: JSON.stringify(paramValue),
-    remark
-  }).then(() => {
-    ElMessage({
-      message: '操作成功',
-      type: 'success',
-      duration: 1500
-    })
-  })
-}
+
 const allinpay = ref(false)
 const unSet = ref(false)
 // 通联开启状态
@@ -236,7 +233,20 @@ const onSubmit = (configKey) => {
   }
   updatePayConfig(configKey, { paySettlementType: 1 }, '支付结算配置')
 }
-
+// 封装请求
+const updatePayConfig = (paramKey, paramValue, remark) => {
+  api.save({
+    paramKey,
+    paramValue: JSON.stringify(paramValue),
+    remark
+  }).then(() => {
+    ElMessage({
+      message: '操作成功',
+      type: 'success',
+      duration: 1500
+    })
+  })
+}
 </script>
 <style lang="scss" scoped>
 /*

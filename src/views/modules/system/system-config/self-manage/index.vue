@@ -206,14 +206,14 @@ import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 import { ElMessage } from 'element-plus'
 const miniAppShow = ref(true)
-const activeName = ref('first')
-
 let appletInformation = reactive({})
+
+const activeName = ref('first')
 const miniAppImgUrl = ref('')
 const miniAppShowState = (state) => {
-  miniAppShow.value = state
   api.getAppletInformation().then(res => {
     appletInformation = res
+    miniAppShow.value = state
   })
   api.getAppletQRcode().then(res => {
     getBase64(res).then(base64 => {
@@ -244,8 +244,8 @@ const mpShow = ref(true)
 let mpInformation = reactive({})
 const mpImgUrl = ref('')
 const mpShowState = (state) => {
-  mpShow.value = state
   api.getOfficialAccountInformation().then(res => {
+    mpShow.value = state
     mpInformation = res
   })
   api.getOfficialAccountQRcode().then(res => {
