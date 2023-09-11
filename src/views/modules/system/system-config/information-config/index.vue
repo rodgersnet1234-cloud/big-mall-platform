@@ -8,7 +8,7 @@
         style="margin-right:80px"
       >
         <img
-          src="@/assets/images/Payment Illustration.png"
+          src="@/assets/images/Payment_Illustration.png"
           alt=""
         >
         <div class="top-text">
@@ -41,7 +41,7 @@
         style="margin-right:80px"
       >
         <img
-          src="@/assets/images/Authorized illustration.png"
+          src="@/assets/images/Authorized-illustration.png"
           alt=""
         >
         <div class="top-text">

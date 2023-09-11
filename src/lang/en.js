@@ -83,8 +83,11 @@ export default {
     thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
   },
   resetPassword: {
-    passwordError: 'The confirmation password is inconsistent',
-    passwordTips3: 'The password length is 6-16 digits'
+    passwordTips: 'Please enter a new password',
+    passwordTips2: 'Please confirm the password',
+    passwordTips3: 'Password length is 6-16 bits',
+    passwordError: 'Incorrect confirmation password',
+    returnStep: 'Back to the previous step'
   },
   unit: {
     dollar: 'yuan',

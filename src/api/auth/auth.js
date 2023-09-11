@@ -48,7 +48,7 @@ export function getMerchantRegisterProtocol () {
 // 获取忘记密码验证码
 export function getForgetCode (data) {
   return request({
-    url: '/mall4cloud_biz/m/sms/ua/update_pwd',
+    url: '/mall4cloud_biz/p/sms/ua/update_pwd',
     method: 'POST',
     data
   })
@@ -58,6 +58,14 @@ export function checkUpdatePwd (data) {
   return request({
     url: '/mall4cloud_biz/m/sms/ua/check_update_pwd',
     method: 'put',
+    data
+  })
+}
+// 忘记密码
+export function forgetPassword (data) {
+  return request({
+    url: '/mall4cloud_auth/ua/forget_password',
+    method: 'PUT',
     data
   })
 }

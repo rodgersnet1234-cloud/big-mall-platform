@@ -30,7 +30,7 @@
           认证失败
         </div>
         <img
-          src="@/assets/images/icon_Subject authentication.png"
+          src="@/assets/images/icon_Subject_authentication.png"
           alt=""
           style="margin-top:60px"
         >
@@ -98,7 +98,7 @@
           认证失败
         </div>
         <img
-          src="@/assets/images/icon_Subject authentication2.png"
+          src="@/assets/images/icon_Subject_authentication2.png"
           alt=""
           style="margin-top:60px"
         >
@@ -163,7 +163,7 @@
           认证失败
         </div>
         <img
-          src="@/assets/images/icon_Subject authentication3.png"
+          src="@/assets/images/icon_Subject_authentication3.png"
           alt=""
           style="margin-top:60px"
         >

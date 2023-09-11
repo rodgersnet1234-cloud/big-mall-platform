@@ -206,13 +206,13 @@ import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 import { ElMessage } from 'element-plus'
 const miniAppShow = ref(true)
-let appletInformation = reactive({})
+const appletInformation = ref({})
 
 const activeName = ref('first')
 const miniAppImgUrl = ref('')
 const miniAppShowState = (state) => {
   api.getAppletInformation().then(res => {
-    appletInformation = res
+    appletInformation.value = res
     miniAppShow.value = state
   })
   api.getAppletQRcode().then(res => {

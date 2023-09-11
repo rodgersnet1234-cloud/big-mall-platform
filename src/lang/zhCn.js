@@ -82,7 +82,10 @@ export default {
   },
   resetPassword: {
     passwordError: '确认密码不一致',
-    passwordTips3: '密码长度为6-16位'
+    passwordTips3: '密码长度为6-16位',
+    passwordTips: '请输入新密码',
+    passwordTips2: '请确认密码',
+    returnStep: '返回上一步'
   },
   unit: {
     dollar: '元',

@@ -3,7 +3,6 @@
     v-model="visible"
     title="商城名称"
     width="35%"
-    :before-close="handleClose"
   >
     <el-form
       ref="dataFormRef"
