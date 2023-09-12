@@ -69,7 +69,6 @@
 <script setup>
 import { generateTitle } from '@/utils/i18n'
 import SubMenu from './main-sidebar-sub-menu.vue'
-
 import Item from './item.vue'
 import '@/styles/variables.scss'
 import { useCommonStore } from '@/stores/modules/common.js'
