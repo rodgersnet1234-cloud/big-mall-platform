@@ -246,7 +246,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import { revenueDetail, soldExcel, revenueDetailInfo } from '@/api/funds-management/index'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'

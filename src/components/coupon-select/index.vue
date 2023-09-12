@@ -97,7 +97,7 @@
 
 <script setup>
 import { pagePlatformCoupons } from '@/api/coupon/coupon'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 
 const emit = defineEmits(['refreshSelectCouponList'])
 

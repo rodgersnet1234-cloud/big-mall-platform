@@ -302,7 +302,7 @@
 
 <script setup>
 import * as api from '@/api/coupon/coupon'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 

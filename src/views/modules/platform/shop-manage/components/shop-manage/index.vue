@@ -340,7 +340,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import accountManage from './account-manage.vue'
 import * as api from '@/api/platform/audit-shop.js'
 import { ElMessage } from 'element-plus'

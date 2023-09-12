@@ -71,7 +71,7 @@
 
 <script setup>
 import * as api from '@/api/user/user-tag.js'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import { batchUpdateUserTag } from '@/api/user/user-tag-user.js'
 import { ElMessage } from 'element-plus'
 const props = defineProps({

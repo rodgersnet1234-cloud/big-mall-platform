@@ -618,7 +618,7 @@ import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
 import AddOrUpdate from './components/refund-order-info.vue'
 import OrderInfo from '../order/components/order-info.vue'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 
 const options = [{
   value: 1,

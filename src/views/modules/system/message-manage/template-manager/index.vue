@@ -10,7 +10,10 @@
         @submit.prevent
       >
         <div class="input-row">
-          <el-form-item label="消息类型" prop="sendType">
+          <el-form-item
+            label="消息类型"
+            prop="sendType"
+          >
             <el-select
               v-model="searchParam.sendType"
               clearable
@@ -24,7 +27,10 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="发送类型" prop="msgType">
+          <el-form-item
+            label="发送类型"
+            prop="msgType"
+          >
             <el-select
               v-model="searchParam.msgType"
               clearable
@@ -38,7 +44,10 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="消息状态" prop="status">
+          <el-form-item
+            label="消息状态"
+            prop="status"
+          >
             <el-select
               v-model="searchParam.status"
               clearable
@@ -224,7 +233,7 @@
 </template>
 <script setup>
 import AddOrUpdate from './add-or-update.vue'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/biz/notify.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 

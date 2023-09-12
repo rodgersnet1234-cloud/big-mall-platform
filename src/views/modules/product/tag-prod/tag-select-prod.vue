@@ -131,7 +131,7 @@ import { treeDataTranslate, idList } from '@/utils'
 // import Big from 'big.js'
 import * as api from '@/api/product/tag-prod'
 import { categoryPage } from '@/api/product/category'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 
 const props = defineProps({

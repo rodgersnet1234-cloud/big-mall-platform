@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import * as shopApi from '@/api/platform/audit-shop'
 import * as supplierApi from '@/api/platform/audit-supplier'
 import * as userApi from '@/api/user/user-manager'

@@ -141,7 +141,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/biz/notify-template-tag'
 import { ElMessage, ElMessageBox } from 'element-plus'

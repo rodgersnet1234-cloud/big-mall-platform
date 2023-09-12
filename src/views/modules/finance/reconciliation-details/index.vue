@@ -270,7 +270,7 @@
 
 <script setup>
 import { getPayInfo, getRefundInfo } from '@/api/funds-management/index'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import Big from 'big.js'
 
 const amount = (value) => {

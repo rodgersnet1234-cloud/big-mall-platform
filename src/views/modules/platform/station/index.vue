@@ -263,7 +263,7 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './station-add-or-update.vue'
 import OfflineAudit from '@/components/offline-audit/index.vue'
 import * as api from '@/api/station/index'

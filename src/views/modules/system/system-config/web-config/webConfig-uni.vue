@@ -121,7 +121,7 @@
 <script setup>
 import AddOrUpdate from './webConfig-add-or-update.vue'
 import * as api from '@/api/rbac/web-config'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // loading

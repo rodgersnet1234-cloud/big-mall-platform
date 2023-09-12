@@ -57,7 +57,7 @@
 
 <script setup>
 import * as api from '@/api/user/user-recharge.js'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import Big from 'big.js'
 
 const conversionActual = (val) => {

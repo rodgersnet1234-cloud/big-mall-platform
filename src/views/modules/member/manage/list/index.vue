@@ -508,7 +508,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/user/user-manager.js'
 import * as levelApi from '@/api/user/level.js'
 import * as tagApi from '@/api/user/user-tag.js'

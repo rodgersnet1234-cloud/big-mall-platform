@@ -188,7 +188,7 @@
 import ProdsSelect from './tag-select-prod.vue'
 import UpdateSeq from './update-prod-seq.vue'
 import * as api from '@/api/product/tag-prod'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 const dataList = ref([])

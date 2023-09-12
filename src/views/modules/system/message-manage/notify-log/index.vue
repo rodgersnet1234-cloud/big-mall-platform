@@ -160,7 +160,7 @@
 <script setup>
 import moment from 'moment'
 import * as api from '@/api/biz/notify-log.js'
-import Pagination from '@/components/pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 
 let tempSearchForm = null
 // 查询的参数
