@@ -437,6 +437,7 @@ import AddOrUpdate from '../transcity-add-or-update/index.vue'
 import * as api from '@/api/delivery/transport.js'
 import Big from 'big.js'
 import { ElMessage } from 'element-plus'
+import { Debounce } from '@/utils/debounce'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -841,7 +842,7 @@ const formWriteHint = () => {
 }
 
 // 表单提交
-const onSubmit = () => {
+const onSubmit = Debounce(() => {
   dataFormRef.value?.validate((valid) => {
     if (!valid) {
       formWriteHint()
@@ -900,7 +901,7 @@ const onSubmit = () => {
       })
     }
   })
-}
+})
 
 defineExpose({ init })
 

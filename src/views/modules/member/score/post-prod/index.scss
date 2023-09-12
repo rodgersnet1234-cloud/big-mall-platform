@@ -247,14 +247,14 @@
   .foot-btn {
     position: fixed;
     bottom: 0;
-    width: calc(100% - 250px);
+    right: 20px;
+    width: calc(100% - 270px);
     padding: 15px 0;
     display: flex;
     justify-content: center;
     background: #fff;
-    // border-top: 1px solid #ddd;
     box-shadow: 0 -2px 3px rgba(139, 139, 139, 0.1);
-    z-index: 2;
+    z-index: 99;
     .el-form-item {
       margin-bottom: 0;
     }

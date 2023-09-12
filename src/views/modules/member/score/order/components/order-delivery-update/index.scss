@@ -35,3 +35,20 @@ div ::v-deep(.el-table .cell) {
 div ::v-deep(.numberOfShipmentsClass>.cell){
   margin: 0 auto;
 }
+.part-form-delivery {
+  display:flex;
+  .lb {
+    display: flex;
+    align-items: center;
+
+    margin-left: 20px;
+
+    .vertical {
+      display: inline-block;
+      width: 1px;
+      height: 10px;
+      background: #000;
+      margin: 0 6px;
+    }
+  }
+}

@@ -61,7 +61,7 @@ watch(
 const emit = defineEmits(['update:modelValue'])
 const isLoaded = ref(false)
 const init = reactive({
-  plugins: 'preview anchor autolink  codesample emoticons image link lists media searchreplace table visualblocks wordcount  pagebreak insertdatetime fullscreen',
+  plugins: 'preview anchor autolink  codesample emoticons image link lists media searchreplace table visualblocks  pagebreak insertdatetime fullscreen', //  插件 'preview anchor autolink  codesample emoticons image link lists media searchreplace table visualblocks wordcount  pagebreak insertdatetime fullscreen'
   content_css: 'default', // 主题tinymce-5-dark || tinymce-5 || default || writer || document || dark
   custom_undo_redo_levels: 50, // 回退数量
   end_container_on_empty_block: true, // 块级文本是否换行

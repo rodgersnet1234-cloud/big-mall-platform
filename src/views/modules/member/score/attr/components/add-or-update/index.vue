@@ -64,6 +64,8 @@
           >
             规格值不能重复！
           </div>
+        </el-form-item>
+        <el-form-item>
           <div
             v-if="dataForm.attrValues.length"
             class="attr-val"

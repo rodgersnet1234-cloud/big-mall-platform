@@ -274,22 +274,6 @@
       </el-table-column>
 
       <el-table-column
-        prop="barCode"
-        label="商品条形码"
-        class="tab-int-box"
-      >
-        <template #default="scope">
-          <el-input
-            v-model="scope.row.modelId"
-            :min="0"
-            :disabled="scope.row.status===0 || isDisabled"
-            maxlength="20"
-            class="tab-int"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column
         prop="skuCode"
         label="商品编码"
         class="tab-int-box"
@@ -306,7 +290,7 @@
       </el-table-column>
 
       <el-table-column
-        v-if="spuId && !isNoSkuValue"
+        v-if="!isNoSkuValue"
         prop="skuCode"
         label="sku状态"
         class="tab-int-box"
@@ -402,6 +386,7 @@ const setLeafList = computed(() => {
 
 const lists = ref([])
 const genLists = (filterPar, flattenPar) => {
+  let data
   const baseData = {
     stock: 0, // 库存
     marketPriceFee: 0, // 市场价
@@ -414,10 +399,27 @@ const genLists = (filterPar, flattenPar) => {
     status: 1 // 状态
   }
   if (filterPar.length && genFlatten(filterPar, flattenPar).length) {
-    return genFlatten(filterPar, flattenPar, { extraData: baseData })
+    data = genFlatten(filterPar, flattenPar, { extraData: baseData })
   } else {
-    return [baseData]
+    data = [baseData]
   }
+  if (data.length === 1 && !data[0]?.spuSkuAttrValues) {
+    props.flatten.forEach(el => {
+      const baseData = {
+        stock: el.stock, // 库存
+        marketPriceFee: el.marketPriceFee, // 市场价
+        priceFee: el.priceFee, // 销售价
+        scoreFee: el.scoreFee, // 积分价
+        volume: el.volume, // 体积
+        weight: el.weight, // 重量
+        partyCode: el.partyCode, // 商品编码
+        modelId: el.modelId, // 条形码
+        status: el.status || null // 状态
+      }
+      data = [baseData]
+    })
+  }
+  return data
 }
 
 const rowspan = ref([])
@@ -464,7 +466,7 @@ watch(() => props.flatten, () => {
   } else {
     originList = JSON.parse(JSON.stringify(lists.value))
   }
-  if (lists.value.length === 1 && !lists.value[0].spuSkuAttrValues) {
+  if (lists.value.length === 1 && !lists.value[0]?.spuSkuAttrValues) {
     props.flatten.forEach(el => {
       const baseData = {
         stock: el.stock, // 库存

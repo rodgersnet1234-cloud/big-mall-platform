@@ -116,9 +116,9 @@
                 width="300"
                 content="同个会员多次支付只计数一次"
               >
-                <div class="que-mark">
-                  ?
-                </div>
+                <el-icon class="que-mark">
+                  <QuestionFilled />
+                </el-icon>
               </el-tooltip>
             </p>
             <p class="strong-num">
@@ -161,9 +161,9 @@
                 width="300"
                 content="同个会员多次领券只计数一次"
               >
-                <div class="que-mark">
-                  ?
-                </div>
+                <el-icon class="que-mark">
+                  <QuestionFilled />
+                </el-icon>
               </el-tooltip>
             </p>
             <p class="strong-num">
@@ -527,12 +527,8 @@ defineExpose({
               display: inline-block;
               width: 14px;
               height: 14px;
-              line-height: 14px;
-              font-size: 12px;
-              text-align: center;
-              color: #fff;
-              background: #C8C9CC;
-              border-radius: 50%;
+              vertical-align: text-top;
+              color: #C8C9CC;
               margin-left: 5px;
               cursor: default;
             }

@@ -115,11 +115,14 @@ service.interceptors.response.use(
     return Promise.reject(res)
   },
   error => {
-    ElMessage({
-      message: error.message,
-      type: 'error',
-      duration: 1.5 * 1000
-    })
+    const url = error.response.config.url
+    if (!url.includes('/mall4cloud_admin/p/sys_config/info')) {
+      ElMessage({
+        message: error.message,
+        type: 'error',
+        duration: 1.5 * 1000
+      })
+    }
     return Promise.reject(error)
   }
 )

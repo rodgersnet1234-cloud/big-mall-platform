@@ -78,6 +78,7 @@
             <el-select
               v-model="datePickerType"
               class="date-picker-type"
+              style="width: 120px"
               @change="onSetdatePickerType(datePickerType)"
             >
               <el-option
@@ -95,6 +96,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :default-time="defaultTime"
             />
           </el-form-item>
           <el-form-item>
@@ -355,7 +357,10 @@ const pagination = (page) => {
 }
 // 查询
 const dateRangeParam = ref([])
-
+const defaultTime = ref([
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+])
 const onSubmit = (newData = false) => {
   dataFrom.value.startTime = dateRangeParam.value ? dateRangeParam.value[0] : ''
   dataFrom.value.endTime = dateRangeParam.value ? dateRangeParam.value[1] : ''

@@ -101,6 +101,12 @@
             </td>
           </tr>
         </vue-draggable-next>
+
+        <tr v-if="dataList.length === 0">
+          <td>
+            <span class="empty-data">暂无数据</span>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -277,6 +283,9 @@ const updateSeqOfCategories = (param) => {
   }
   table.table-box tr.t-head {
     background: #f9f9f9;
+  }
+  .empty-data {
+    color: #909399;
   }
 }
 </style>

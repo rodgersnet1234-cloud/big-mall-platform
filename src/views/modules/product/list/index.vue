@@ -381,23 +381,27 @@
                 class="tag-text"
               >下架</span>
               <span
-                v-if="row.spuStatus === 1"
+                v-else-if="row.spuStatus === 1"
                 class="tag-text"
               >上架</span>
               <span
-                v-if="row.spuStatus === 2"
+                v-else-if="row.spuStatus === 2"
                 class="tag-text"
               >违规下架</span>
               <!-- 违规下架待审核 -->
               <span
-                v-if="row.spuStatus === 3"
+                v-else-if="row.spuStatus === 3"
                 class="tag-text"
               >违规下架待审核</span>
               <!-- （平台开启）创建商品待审核 -->
               <span
-                v-if="row.spuStatus === 4"
+                v-else-if="row.spuStatus === 4"
                 class="tag-text"
               >待审核</span>
+              <!-- 默认值 -->
+              <span
+                v-else
+              >--</span>
             </template>
           </el-table-column>
           <!-- 商品类型 -->

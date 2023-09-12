@@ -111,7 +111,7 @@
           <el-form-item>
             <el-button
               type="primary"
-              v-cancel-highlight
+              v-cancel-focus
               @click="onSearchParamChange(true)"
             >
               查询
@@ -127,7 +127,7 @@
       <div class="operation-bar">
         <!-- 修改用户成长值 -->
         <el-button
-          v-cancel-highlight
+          v-cancel-focus
           v-permission="['user:user:updateGrowth']"
           type="primary"
           :disabled="dataListSelections.length <= 0"
@@ -137,7 +137,7 @@
         </el-button>
         <!-- 修改用户积分 -->
         <el-button
-          v-cancel-highlight
+          v-cancel-focus
           v-permission="['user:user:updateScore']"
           type="primary"
           :disabled="dataListSelections.length <= 0"
@@ -148,7 +148,7 @@
         <!-- 修改用户余额 1批量 -->
         <el-button
           v-if="paySettlementType !== 1"
-          v-cancel-highlight
+          v-cancel-focus
           v-permission="['user:user:modifyBalance']"
           type="primary"
           :disabled="dataListSelections.length <= 0"
@@ -158,7 +158,7 @@
         </el-button>
         <!-- 送优惠券 -->
         <el-button
-          v-cancel-highlight
+          v-cancel-focus
           v-permission="['user:user:sendCoupons']"
           type="primary"
           :disabled="dataListSelections.length <= 0"
@@ -168,6 +168,7 @@
         </el-button>
         <!-- 打标签 -->
         <el-button
+          v-cancel-focus
           v-permission="['user:user:tagging']"
           type="primary"
           :disabled="dataListSelections.length <= 0"
@@ -177,6 +178,7 @@
         </el-button>
         <!-- 导入会员 -->
         <el-button
+          v-cancel-focus
           v-permission="['user:user:import']"
           type="primary"
           :disabled="importDisabled"
@@ -540,30 +542,6 @@ const vElSelectLoadmore = {
         binding.value()
       }
     })
-  }
-}
-
-/**
- * 自动取消按钮高亮
- * 用于解决 element-ui 按钮点击后高亮显示不会复原问题
- * binding 设定几秒后恢复，不得低于1500，单位：毫秒
- */
-const vCancelHighlight = {
-  mounted: (el, binding) => {
-    let time = binding.value
-    if (time < 1500 || !time) time = 1500
-    el.addEventListener('click', ($event) => {
-      setTimeout(() => {
-        let target = $event.target
-        if (target.nodeName === 'SPAN') {
-          target = $event.target.parentNode
-        }
-        target.blur()
-      }, time)
-    })
-  },
-  beforeUnmount: (el) => {
-    el.removeEventListener('click', () => {})
   }
 }
 

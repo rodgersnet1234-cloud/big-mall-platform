@@ -18,7 +18,7 @@
             <li
               v-for="(item, index) in friends"
               :key="index"
-              :class="['shop-item',item.userId === selectedF ? 'changeUser' : '',item.message?'newMessage':'']"
+              :class="['shop-item',item.userId === Number(selectedF) ? 'changeUser' : '',item.message?'newMessage':'']"
               @click="changeImContent(item.userId,index)"
             >
               <img
@@ -72,8 +72,19 @@
                     :key="index"
                     class="row"
                   >
+                    <!-- <div
+                      v-if="index>0&&msgList[index].employeeId!==msgList[index-1].employeeId"
+                      class="divider-box"
+                    >
+                      <el-divider>
+                        以上是{{ msgList[index-1].nickName || msgList[index-1].shopName }}客服聊天记录
+                      </el-divider>
+                    </div> -->
                     <!-- 用户消息 -->
-                    <div class="topTime">
+                    <div
+                      v-if="row.timeStr"
+                      class="topTime"
+                    >
                       {{ row.timeStr }}
                     </div>
                     <!-- 用户发出的消息 -->
@@ -277,7 +288,7 @@
     </div>
     <!-- 转接客服弹窗 -->
     <el-dialog
-      v-model:visible="visible"
+      v-model="visible"
       :title="$t('chat.selectOnlineCustomerService')"
       :modal="false"
       top="61px"
@@ -368,6 +379,12 @@ const isSingle = ref(true)
 onMounted(() => {
   getShopInfo()
   getConversations()
+  // 监听storage的变化，用于退出登录时关闭ws
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'cloudPlatChatWs') {
+      imSocketTask?.close()
+    }
+  })
 })
 
 let imSocketTask = null
@@ -433,7 +450,6 @@ let userPages = null
  */
 const getConversations = async () => {
   const data = await api.getConversations(userCurrent, 20)
-  console.log('数据', data)
   if (data.list && data.pages) {
     data.list.forEach(item => {
       const a = isJSON(item.latestMsg)
@@ -522,9 +538,7 @@ const openWs = () => {
       result.code = Number(result.code)
     }
     if (result.code === 10) {
-      router.push({
-        name: 'login'
-      })
+      router.push({ path: '/login' })
       return
     }
     if (result.code === 11) {
@@ -545,6 +559,11 @@ const openWs = () => {
       ElMessage.error($t('chat.notYourResponsibility'))
       noAccountable = false
       return false
+    }
+    if (result.code === 18) {
+      clearTimeout(pushMsgTimer)
+      ElMessage.error(result.data || '该用户已注销')
+      return
     }
     if (!result.data) {
       return
@@ -652,7 +671,7 @@ const openWs = () => {
           msgIds.push(item.itemId)
           // 进行未读消息的加减
           if (!item.employeeUnread) {
-            friends.value[index].unread = friends.value[index].unread - 1
+            friends.value[index].unread = 0
           }
           item.employeeUnread = 1
         })
@@ -941,6 +960,17 @@ const textMsg = ref('')
  * 发送文本消息
  */
 const sendText = () => {
+  if (imSocketTask?.readyState !== 1) {
+    ElMessageBox.confirm($t('chat.connetBroken'), $t('chat.tips'), {
+      confirmButtonText: $t('chat.confirm'),
+      cancelButtonText: $t('chat.cancel'),
+      type: 'warning'
+    }).then(() => {
+      location.reload()
+    }).catch(() => {})
+    return
+  }
+
   if (textMsg.value === '' || !currentUserId) {
     return
   }
@@ -953,6 +983,7 @@ const sendText = () => {
   textMsg.value = ''
 }
 
+let pushMsgTimer = null
 const addMessage = (messageInfoPar, type) => {
   userRead = true // 重置,防止用户不在线时可以继续发消息
   userSend = true
@@ -970,18 +1001,19 @@ const addMessage = (messageInfoPar, type) => {
     nickName
   }
   messageInfo = msgItem
-  friends.value.forEach(item => {
-    if (item.userId === currentUserId) {
-      item.latestMsg = type ? '[' + $t('chat.image') + ']' : textMsg.value
-    }
-  })
+
   // 转接客服异步返回结果所以设下定时器
-  const time = setTimeout(() => {
+  pushMsgTimer = setTimeout(() => {
     if (noAccountable && userRead) {
+      friends.value.forEach(item => {
+        if (item.userId === currentUserId) {
+          item.latestMsg = type ? '[' + $t('chat.image') + ']' : msgItem.content
+        }
+      })
       pushMsgItem(msgList.value, msgItem)
       userSend = false
     }
-    clearTimeout(time)
+    clearTimeout(pushMsgTimer)
   }, 100)
 }
 

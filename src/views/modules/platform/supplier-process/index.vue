@@ -347,7 +347,7 @@
                     <div class="business-license-box">
                       <div class="license-content">
                         <img-upload
-                          v-model:value="supplierCompany.businessLicense"
+                          v-model="supplierCompany.businessLicense"
                           @input="imgChange(2, 'businessLicense')"
                         />
                         <div class="example-box">
@@ -374,7 +374,7 @@
                           prop="identityCardFront"
                         >
                           <img-upload
-                            v-model:value="supplierCompany.identityCardFront"
+                            v-model="supplierCompany.identityCardFront"
                             @input="imgChange(2, 'identityCardFront')"
                           />
                         </el-form-item>
@@ -384,7 +384,7 @@
                           prop="identityCardLater"
                         >
                           <img-upload
-                            v-model:value="supplierCompany.identityCardLater"
+                            v-model="supplierCompany.identityCardLater"
                             @input="imgChange(2, 'identityCardLater')"
                           />
                         </el-form-item>

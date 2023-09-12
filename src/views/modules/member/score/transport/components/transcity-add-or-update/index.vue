@@ -332,7 +332,7 @@ const handleAreaBoxShow = (e) => {
   // 市列表索引
   const index = e.target.dataset.inx
   // 区单体所占宽度
-  const offsetLeft = cityRef.value[index].offsetWidth
+  const offsetLeft = cityRef.value[index]?.offsetWidth
 
   // 显示区列表的左偏移值
   if (nodeName === 'span') {
@@ -346,7 +346,7 @@ const handleAreaBoxShow = (e) => {
     // 加setTimeout防止有时获取到的高度为0
     setTimeout(() => {
       // 显示区列表盒子的高度
-      const areaBoxH = areaBoxRef.value[index].offsetHeight
+      const areaBoxH = areaBoxRef.value[index]?.offsetHeight
       // 14为角标的高度
       areaStyle.top = e.clientY - e.offsetY - areaBoxH / 2 + 14 + 'px'
       // 角标

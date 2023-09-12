@@ -18,6 +18,12 @@
 
 .page-refund-order {
   background-color: #fff;
+
+  :deep(.el-form-item__content){
+    .el-select,.el-input{
+      width: 200px;
+    }
+  }
   .main {
     .status-nav {
       position: relative;

@@ -312,10 +312,8 @@ const handleChange = (val) => {
 // 根据条件搜索商品
 const onSearchProd = () => {
   searchForm.value.pageNum = 1
-  searchForm.value = {
-    keyword: searchForm.value.spuName,
-    shopSecondaryCategoryId: shopCategoryId.value
-  }
+  searchForm.value.keyword = searchForm.value.spuName
+  searchForm.value.shopSecondaryCategoryId = shopCategoryId.value
   getPageData()
 }
 

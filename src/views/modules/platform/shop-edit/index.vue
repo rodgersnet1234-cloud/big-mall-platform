@@ -216,7 +216,7 @@
                 >
                   <div class="business-license-box">
                     <div class="license-content">
-                      <img-upload v-model:value="shopBasicInfo.shopLogo" />
+                      <img-upload v-model="shopBasicInfo.shopLogo" />
                     </div>
                     <div class="upload-tips">
                       仅限jpg、gif、png、大小不超过2M，仅限上传1张
@@ -230,7 +230,7 @@
                       prop="mobileBackgroundPic"
                     >
                       <div class="license-content">
-                        <img-upload v-model:value="shopBasicInfo.mobileBackgroundPic" />
+                        <img-upload v-model="shopBasicInfo.mobileBackgroundPic" />
                       </div>
                       <div class="img-tips">
                         <p>移动端背景图</p>
@@ -244,7 +244,7 @@
                       prop="pcBackgroundPic"
                     >
                       <div class="license-content">
-                        <img-upload v-model:value="shopBasicInfo.pcBackgroundPic" />
+                        <img-upload v-model="shopBasicInfo.pcBackgroundPic" />
                       </div>
                       <div class="img-tips">
                         <p>PC端背景图</p>
@@ -437,7 +437,7 @@
               >
                 <div class="business-license-box">
                   <div class="license-content">
-                    <img-upload v-model:value="companyInfoForm.businessLicense" />
+                    <img-upload v-model="companyInfoForm.businessLicense" />
                     <div class="example-box">
                       <img
                         src="@/assets/example-img/Business-license.png"
@@ -460,13 +460,13 @@
                       label="法人身份证"
                       prop="identityCardFront"
                     >
-                      <img-upload v-model:value="companyInfoForm.identityCardFront" />
+                      <img-upload v-model="companyInfoForm.identityCardFront" />
                     </el-form-item>
                     <el-form-item
                       label-width="0"
                       prop="identityCardLater"
                     >
-                      <img-upload v-model:value="companyInfoForm.identityCardLater" />
+                      <img-upload v-model="companyInfoForm.identityCardLater" />
                     </el-form-item>
                   </div>
                   <div class="upload-example">

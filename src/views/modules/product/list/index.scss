@@ -49,13 +49,13 @@
       }
     }
   }
-  .popover-bottom {
-    display: flex;
-    margin-top: 10px;
-    text-align: right;
-  }
   :deep(.el-popover.el-popper) {
     min-width: 200px;
     width: auto;
   }
+}
+.popover-bottom {
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-end;
 }

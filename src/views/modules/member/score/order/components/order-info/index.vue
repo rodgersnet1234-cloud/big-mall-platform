@@ -143,10 +143,11 @@
                     <div class="res">
                       {{
                         [
-                          $t("order.order.expressDelivery"),
+                          $t("order.order.ordinaryExpress"),
+                          $t("order.order.ordinaryExpress"),
                           $t("order.order.selfMention"),
                           $t("order.order.noNeedRequired"),
-                        ][deliveryExpresse.deliveryType - 1]
+                        ][deliveryExpresse.deliveryType]
                       }}
                     </div>
                   </div>
@@ -159,7 +160,7 @@
                     </div>
                   </div>
                   <div
-                    v-if="deliveryExpresse.deliveryType === 1"
+                    v-if="deliveryExpresse.deliveryType === 1 || deliveryExpresse.deliveryType === 0"
                     class="d-item"
                   >
                     <div class="text">
@@ -170,7 +171,7 @@
                     </div>
                   </div>
                   <div
-                    v-if="deliveryExpresse.deliveryType === 1"
+                    v-if="deliveryExpresse.deliveryType === 1 || deliveryExpresse.deliveryType === 0"
                     class="d-item"
                   >
                     <div class="text">
@@ -398,10 +399,11 @@
                     {{
                       [
                         $t("order.order.ordinaryExpress"),
+                        $t("order.order.ordinaryExpress"),
                         $t("order.order.buyerMention"),
                         $t("order.order.noNeedRequired"),
                         $t("order.order.sameCityDelivery"),
-                      ][dataForm.deliveryType - 1]
+                      ][dataForm.deliveryType]
                     }}
                   </div>
                   <div
@@ -755,11 +757,15 @@ const indexs = ref(0)
 const getDataList = () => {
   api.orderInfo(dataForm.value.orderId).then((data) => {
     dataForm.value = data
-    if (dataForm.value.deliveryExpresses) {
-      deliveryExpresse = dataForm.value.deliveryExpresses[0]
-      indexs.value = 0
-    }
   })
+  if (dataForm.value.deliveryType !== 3) {
+    loadingDelivery.value = true
+    api.deliveryExpresseInfo({ orderId: dataForm.value.orderId }).then((data) => {
+      dataForm.value.deliveryExpresses = data
+      deliveryExpresse = data[0]
+      loadingDelivery.value = false
+    })
+  }
 }
 
 const loadingDelivery = ref(false)

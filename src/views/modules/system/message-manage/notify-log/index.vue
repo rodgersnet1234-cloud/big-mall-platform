@@ -13,38 +13,40 @@
               v-model="dateRange"
               type="datetimerange"
               :range-separator="$t('date.tip')"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
             />
           </el-form-item>
-          <el-button
-            @click="onSetDateRange(1)"
-          >
-            {{ $t('date.t') }}
-          </el-button>
-          <el-button
-            @click="onSetDateRange(2)"
-          >
-            {{ $t('date.y') }}
-          </el-button>
-          <el-button
-            @click="onSetDateRange(3)"
-          >
-            {{ $t('date.n') }}
-          </el-button>
-          <el-button
-            @click="onSetDateRange(4)"
-          >
-            {{ $t('date.m') }}
-          </el-button>
-          <el-button
-            class="operation-btn"
-            type="primary"
-            @click="onSearch(true)"
-          >
-            {{ $t('table.search') }}
-          </el-button>
+          <el-form-item>
+            <el-button
+              @click="onSetDateRange(1)"
+            >
+              {{ $t('date.t') }}
+            </el-button>
+            <el-button
+              @click="onSetDateRange(2)"
+            >
+              {{ $t('date.y') }}
+            </el-button>
+            <el-button
+              @click="onSetDateRange(3)"
+            >
+              {{ $t('date.n') }}
+            </el-button>
+            <el-button
+              @click="onSetDateRange(4)"
+            >
+              {{ $t('date.m') }}
+            </el-button>
+            <el-button
+              class="operation-btn"
+              type="primary"
+              @click="onSearch(true)"
+            >
+              {{ $t('table.search') }}
+            </el-button>
+          </el-form-item>
         </div>
       </el-form>
     </div>

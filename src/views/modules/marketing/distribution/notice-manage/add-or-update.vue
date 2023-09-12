@@ -33,7 +33,7 @@
       >
         <el-date-picker
           v-model="dataForm.startTime"
-          type="date"
+          type="datetime"
           placeholder="选择日期"
         />
       </el-form-item>
@@ -44,7 +44,7 @@
       >
         <el-date-picker
           v-model="dataForm.endTime"
-          type="date"
+          type="datetime"
           :picker-options="pickerOptions"
           placeholder="选择日期"
         />
@@ -192,8 +192,8 @@ const onSubmit = Debounce(function () {
     if (!valid) {
       return
     }
-    dataForm.startTime = moment(dataForm.startTime).startOf('day').format('YYYY-MM-DD HH:mm:ss')
-    dataForm.endTime = moment(dataForm.endTime).startOf('day').format('YYYY-MM-DD HH:mm:ss')
+    dataForm.startTime = moment(dataForm.startTime).format('YYYY-MM-DD HH:mm:ss')
+    dataForm.endTime = moment(dataForm.endTime).format('YYYY-MM-DD HH:mm:ss')
     if ((moment(dataForm.startTime).valueOf() - moment(dataForm.endTime).valueOf()) > 0) {
       return ElMessage.error(('开始时间不能大于结束时间'))
     }

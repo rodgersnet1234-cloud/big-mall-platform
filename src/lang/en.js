@@ -18,6 +18,7 @@ import menu from './rbac/menu/en'
 import menuPermission from './rbac/menu-permission/en'
 import selector from './components/category-selector/en'
 import shopUserAccount from './platform/sys-user-account/en'
+import shopAddr from './platform/shop-addr/en'
 import config from './platform/config/en'
 import coupon from './coupon/coupon/en'
 import group from './group/en'
@@ -33,6 +34,8 @@ import chat from './chat/en'
 import webConfig from './rbac/web-config/en'
 import menuResource from './rbac/menu-resource/en'
 import live from './live/en'
+import outletConfig from './outletConfig/en'
+import printer from './printer/en'
 
 export default {
   pay: {
@@ -180,7 +183,8 @@ export default {
     config,
     shopUser,
     hotSearch,
-    shopUserAccount
+    shopUserAccount,
+    shopAddr
   },
   product: {
     attr,
@@ -233,5 +237,11 @@ export default {
   constant: {
     ...constant
   },
-  ...live
+  ...live,
+  outletConfig: {
+    ...outletConfig
+  },
+  printer: {
+    ...printer
+  }
 }

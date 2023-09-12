@@ -51,23 +51,6 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item
-            prop="roomTop"
-            :label="$t('liveRoom.whetherToTop')+':'"
-          >
-            <el-select
-              v-model="searchForm.roomTop"
-              clearable
-              :placeholder="$t('liveRoom.whetherToTop')"
-            >
-              <el-option
-                v-for="item in roomTops"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
           <el-form-item :label="$t('liveRoom.liveBroadcastTime')+':'">
             <el-date-picker
               v-model="dateRange"
@@ -111,7 +94,6 @@
           <el-table-column
             prop="name"
             :label="$t('liveRoom.roomName')"
-            width="200"
           >
             <template #default="scope">
               <span class="table-cell-text">
@@ -122,7 +104,7 @@
           <el-table-column
             prop="nickName"
             :label="$t('liveRoom.anchorNickname')"
-            width="200"
+            width="240"
           >
             <template #default="scope">
               <span class="table-cell-text">
@@ -149,14 +131,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="roomTop"
-            :label="$t('liveRoom.whetherToTop')"
-          >
-            <template #default="scope">
-              <span>{{ [$t('liveRoom.notPinned'),$t('liveRoom.pinned')][scope.row.roomTop] }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             prop="startTime"
             :label="$t('liveRoom.LiveStartTime')"
             width="160"
@@ -174,26 +148,6 @@
           >
             <template #default="scope">
               <div class="text-btn-con">
-                <el-button
-                  v-if="scope.row.roomTop === 0"
-                  v-permission="['platform:liveRoom:top']"
-                  link
-                  type="primary"
-                  :disabled="scope.row.liveStatus === -1 || scope.row.liveStatus === 2"
-                  @click="toTopHandle(scope.row)"
-                >
-                  {{ $t('liveRoom.top') }}
-                </el-button>
-                <el-button
-                  v-if="scope.row.roomTop === 1"
-                  v-permission="['platform:liveRoom:top']"
-                  :disabled="scope.row.liveStatus === -1 || scope.row.liveStatus === 2"
-                  link
-                  type="primary"
-                  @click="toTopHandle(scope.row)"
-                >
-                  {{ $t('liveRoom.cancelTopping') }}
-                </el-button>
                 <el-button
                   v-if="scope.row.liveStatus !== -1 && scope.row.liveStatus !== 2"
                   v-permission="['platform:liveRoom:offline']"
@@ -283,15 +237,6 @@ const liveStatus = [
     label: '违规下架'
   }
 ]
-const roomTops = [
-  {
-    value: 1,
-    label: $t('liveRoom.pinned')
-  }, {
-    value: 0,
-    label: $t('liveRoom.notPinned')
-  }
-]
 
 onMounted(() => {
   getPageData()
@@ -324,31 +269,6 @@ const onDelete = (id) => {
     type: 'warning'
   }).then(() => {
     http.delLiveRoom(id).then(() => {
-      ElMessage({
-        message: '操作成功',
-        type: 'success',
-        duration: 1500,
-        onClose: () => {
-          getPageData()
-        }
-      })
-    })
-  })
-}
-const toTopHandle = (row) => {
-  if (row.liveStatus !== 1 && row.liveStatus !== 0) {
-    return
-  }
-  let str = $t('liveRoom.top')
-  if (row.roomTop) {
-    str = $t('liveRoom.cancelTopping')
-  }
-  ElMessageBox.confirm('确定进行' + ' ' + str + ' ' + '操作' + '?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    http.putLiveRoomToTop(row.roomId).then(() => {
       ElMessage({
         message: '操作成功',
         type: 'success',

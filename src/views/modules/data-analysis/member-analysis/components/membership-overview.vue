@@ -25,7 +25,7 @@
       <el-radio-group
         v-if="boardType === 'numTrends' || boardType === 'percentageTrend'"
         v-model="membershipRadio"
-        @change="getMemberNumTrendsData"
+        @change="onHandleMemberNumData()"
       >
         <el-radio-button :label="1">
           免费等级会员
@@ -120,13 +120,11 @@ const props = defineProps({
       return []
     }
   },
-  startTimePar: {
-    type: String,
-    default: ''
-  },
-  endTimePar: {
-    type: String,
-    default: ''
+  memberTrend: {
+    type: Array,
+    default: () => {
+      return []
+    }
   }
 })
 
@@ -135,10 +133,10 @@ watch(() => props.dateRange, () => {
     // 会员概览后台数据
     getMemberOverviewData()
   }
-  if (props.boardType === 'numTrends' || props.boardType === 'percentageTrend') {
-    // 会员人数趋势后台数据
-    getMemberNumTrendsData()
-  }
+  // if (props.boardType === 'numTrends' || props.boardType === 'percentageTrend') {
+  //   // 会员人数趋势后台数据
+  //   getMemberNumTrendsData()
+  // }
 })
 
 onMounted(() => {
@@ -309,43 +307,37 @@ const getMemberOverviewData = () => {
   })
 }
 
-let startTime = ''
-let endTime = ''
+let memberTrendData = [] // 会员人数趋势数据
+watch(() => props.memberTrend, () => {
+  memberTrendData = JSON.parse(JSON.stringify(props.memberTrend))
+  onHandleMemberNumData()
+})
+
 let rateArray = []
-const getMemberNumTrendsData = () => {
-  if (props.dateRange && props.dateRange.length > 0) {
-    startTime = props.dateRange[0]
-    endTime = props.dateRange[1]
-  } else {
-    startTime = props.startTimePar
-    endTime = props.endTimePar
-  }
-  const param = {
-    memberType: membershipRadio.value,
-    dateType: props.timeType,
-    startTime,
-    endTime
-  }
-  api.getMemberTrend(param).then(data => {
-    if (data) {
-      dataArray = []
-      rateArray = []
-      timeArray = []
-      for (let i = 0; i < data.length; i++) {
-        data[i].currentDay = formatDate(data[i].currentDay)
-        timeArray.push(data[i].currentDay)
-        dataArray.push(data[i].memberNum)
-        rateArray.push(data[i].memberNumRate)
-      }
-      if (props.boardType === 'numTrends') {
-        // 会员人数趋势图表
-        getNumTrendsDataChart()
-      } else {
-        // 会员占比趋势图表
-        getPercentageTrendDataChart()
-      }
+const onHandleMemberNumData = (isNewData) => {
+  dataArray = []
+  rateArray = []
+  timeArray = []
+  for (let i = 0; i < memberTrendData.length; i++) {
+    if (isNewData) {
+      memberTrendData[i].currentDay = formatDate(memberTrendData[i].currentDay)
     }
-  })
+    timeArray.push(memberTrendData[i].currentDay)
+    if (membershipRadio.value === 1) {
+      dataArray.push(memberTrendData[i].memberNum)
+      rateArray.push(memberTrendData[i].memberNumRate)
+    } else {
+      rateArray.push(memberTrendData[i].vipMemberNumRate)
+      dataArray.push(memberTrendData[i].vipMemberNum)
+    }
+  }
+  if (props.boardType === 'numTrends') {
+    // 会员人数趋势图表
+    getNumTrendsDataChart()
+  } else {
+    // 会员占比趋势图表
+    getPercentageTrendDataChart()
+  }
 }
 
 let dataList = []

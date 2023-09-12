@@ -16,7 +16,8 @@
         prop="growth"
       >
         <el-input
-          v-model.number="dataForm.growth"
+          v-model="dataForm.growth"
+          type="number"
           oninput="if(value.length>11)value=value.slice(0,11)"
         />
         <span>{{ $t('user.userManager.growthTip1') }}</span>

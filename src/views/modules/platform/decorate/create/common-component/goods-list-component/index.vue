@@ -64,10 +64,6 @@
                   v-show="config.showName === 0"
                   class="name"
                 >{{ item.name }}</span>
-                <span
-                  v-show="config.showDescription === 0"
-                  class="description"
-                >{{ item.description }}</span>
               </div>
               <div
                 v-show="config.showPrice === 0"
@@ -115,10 +111,6 @@
                   v-show="config.showName === 0"
                   class="name"
                 >{{ $t(`pcdecorate.goodsList.goodsName`) }}</span>
-                <span
-                  v-show="config.showDescription === 0"
-                  class="description"
-                >{{ $t(`pcdecorate.goodsList.goodsDescription`) }}</span>
               </div>
               <div
                 v-show="config.showPrice === 0"
@@ -206,7 +198,7 @@ const setClassName = computed(() => {
 })
 // 当所有内容不显示的时候
 const isShowAll = computed(() => {
-  return !(props.config.showName !== 0 && props.config.showDescription !== 0 && props.config.showPrice !== 0)
+  return !(props.config.showName !== 0 && props.config.showPrice !== 0)
 })
 // 活动商品下架或者结束
 const setImgs = computed(() => {

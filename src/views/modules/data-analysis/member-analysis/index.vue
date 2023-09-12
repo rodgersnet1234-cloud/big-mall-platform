@@ -26,6 +26,7 @@
         :board-type="'numTrends'"
         :time-type="dateType"
         :date-range="dateRange"
+        :member-trend="memberTrendData"
       />
     </div>
 
@@ -36,6 +37,7 @@
         :board-type="'percentageTrend'"
         :time-type="dateType"
         :date-range="dateRange"
+        :member-trend="memberTrendData"
       />
     </div>
 
@@ -78,6 +80,7 @@ import memberContributionValueAnalysis from './components/member-contribution-va
 import transactionAnalysis from './components/transaction-analysis.vue'
 import customerRetentionAnalysis from './components/customer-retention-analysis.vue'
 import dateTypeSelect from '../public-components/date-type-select.vue'
+import * as api from '@/api/data-analysis/member-analysis.js'
 
 const dateType = ref(4)
 
@@ -94,8 +97,28 @@ const dateRange = ref([])
 
 const changeData = (val) => {
   dateRange.value = val
+  getMemberNumTrendsData()
 }
 
+const memberTrendData = ref([])
+const getMemberNumTrendsData = () => {
+  let startTime = ''
+  let endTime = ''
+  if (dateRange.value && dateRange.value.length > 0) {
+    startTime = dateRange.value[0]
+    endTime = dateRange.value[1]
+  }
+  const param = {
+    dateType: dateType.value,
+    startTime,
+    endTime
+  }
+  api.getMemberTrend(param).then(data => {
+    if (data) {
+      memberTrendData.value = data
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

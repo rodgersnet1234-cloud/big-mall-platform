@@ -76,19 +76,15 @@
               align="center"
               :label="$t('user.userManager.couponDscription')"
             />
+            <!-- 优惠类型 1:代金券 2:折扣券 3:兑换券 -->
             <el-table-column
-              prop="getWay"
-              header-align="center"
-              align="center"
               :label="$t('coupon.coupon.couponType')"
+              prop="couponType"
+              align="center"
+              min-width="100"
             >
               <template #default="{row}">
-                <div v-if="row.getWay === 1">
-                  {{ $t('coupon.coupon.platformDistribution') }}
-                </div>
-                <div v-else>
-                  {{ $t('coupon.coupon.userClaim') }}
-                </div>
+                <span>{{ ['', '代金券', '折扣券', '兑换券'][row.couponType] }}</span>
               </template>
             </el-table-column>
             <el-table-column

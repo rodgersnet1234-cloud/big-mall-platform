@@ -48,7 +48,7 @@
         prop="icon"
       >
         <div style="width: 120px; height: 120px">
-          <img-upload v-model:value="dataForm.icon" />
+          <img-upload v-model="dataForm.icon" />
         </div>
       </el-form-item>
       <div

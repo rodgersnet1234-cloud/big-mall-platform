@@ -164,6 +164,17 @@ aside {
   }
 }
 
+// 调整插入body中的对话框样式
+.append-to-body-dialog {
+  .el-dialog__header {
+    border-bottom: 1px solid #EAEAEA;
+    margin: 0;
+  }
+  .el-dialog__body {
+    padding: 20px;
+  }
+}
+
 // 搜索栏
 .search-bar {
   padding: 24px 20px 7px;

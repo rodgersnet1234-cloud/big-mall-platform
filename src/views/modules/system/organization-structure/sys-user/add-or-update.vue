@@ -28,7 +28,7 @@
         prop="avatar"
         label-width="80px"
       >
-        <img-upload v-model:value="dataForm.avatar" />
+        <img-upload v-model="dataForm.avatar" />
       </el-form-item>
       <!-- 员工编号 -->
       <el-form-item

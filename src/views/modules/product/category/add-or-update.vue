@@ -7,7 +7,6 @@
     width="750px"
     @closed="closeDialog"
   >
-    <!-- native modifier has been removed, please confirm whether the function has been affected  -->
     <el-form
       ref="dataFormRef"
       :rules="rules"
@@ -31,7 +30,6 @@
           />
         </el-col>
       </el-form-item>
-      <!-- 分类名称 -->
       <!-- 分类图片 -->
       <el-form-item
         v-if="selectedCategories.length !== 1"

@@ -23,10 +23,7 @@
           label="轮播图片"
           prop="imgUrl"
         >
-          <imgs-upload
-            v-model="dataForm.imgUrl"
-            :limit="1"
-          />
+          <img-upload v-model="dataForm.imgUrl" />
           <div
             class=""
             style="width: 100%"
@@ -106,9 +103,6 @@
               :body-style="{ padding: '0px' }"
               style="height: 160px;width: 120px"
             >
-              <!-- <img :src="prods.imgUrls" style="height:104px;width:100%"> -->
-              <!-- <img v-if="dataForm.spu.mainImgUrl" :src="(dataForm.spu.mainImgUrl).indexOf('http')===-1 ? resourcesUrl + dataForm.spu.mainImgUrl : dataForm.spu.mainImgUrl" style="height:104px;width:100%">
-              <img v-if="!dataForm.spu.mainImgUrl" class="prod-img" src="~@/assets/images/def.png" style="height:104px;width:100%"> -->
               <ImgShow
                 :src="dataForm.spu.mainImgUrl"
                 :img-style="{height:'104px',width:'100%'}"
@@ -169,7 +163,6 @@ import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const visible = ref(false)
 const dataForm = reactive({
   imgId: 0,
@@ -180,26 +173,14 @@ const dataForm = reactive({
   spuId: null
 })
 const relatedSpu = ref(0)
-// 关联数据
-const card = reactive({
-  id: 0,
-  pic: '',
-  name: '',
-  realData: {
-    prod: [],
-    shop: [],
-    activity: []
-  }
-})
 const prodSelectVisible = ref(false)
-const prods = reactive({})
 const rules = {
   imgUrl: [
     { required: true, message: '请选择轮播图图片', trigger: 'blur' }
   ]
 }
 
-watch(relatedSpu, (nv) => {
+watch(() => relatedSpu.value, (nv) => {
   if (nv === 0) {
     deleteCurrentProd()
   }
@@ -260,11 +241,8 @@ const closeDialog = () => {
 }
 
 const getSelectedProd = (prods) => {
-  // prods = prods[0]
-  // dataForm.spuId = prods.spuId
   dataForm.spu = prods[0]
   dataForm.spuId = prods[0].spuId
-  // prodSelectVisible = false
 }
 
 const closeModule = () => {
@@ -287,7 +265,7 @@ const onSubmit = Debounce(() => {
       })
       return
     }
-    if (relatedSpu === 1 && !dataForm.spuId) {
+    if (relatedSpu.value === 1 && !dataForm.spuId) {
       ElMessage({
         message: '请选择商品',
         type: 'warning',
@@ -296,7 +274,7 @@ const onSubmit = Debounce(() => {
       return
     }
     const request = dataForm.imgId ? api.update(dataForm) : api.save(dataForm)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -314,7 +292,6 @@ const onSubmit = Debounce(() => {
 
 <style lang="scss" scoped>
 .index-img {
-
   .type-box{
     :deep(.el-form-item__content){
       display: block;

@@ -21,7 +21,7 @@
           >
             <el-input
               v-model="dataForm.nickName"
-              maxlength="30"
+              maxlength="15"
               :disabled="false"
               :placeholder="$t('user.userManager.nickName')"
               style="width:200px;"

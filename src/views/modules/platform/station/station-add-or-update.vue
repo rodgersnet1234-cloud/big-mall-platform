@@ -28,7 +28,7 @@
         prop="imgUrl"
       >
         <img-upload
-          v-model:value="dataForm.imgUrl"
+          v-model="dataForm.imgUrl"
           :disabled="true"
         />
       </el-form-item>

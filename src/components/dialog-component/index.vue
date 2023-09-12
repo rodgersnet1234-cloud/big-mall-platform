@@ -73,7 +73,7 @@ const handleClose = () => {
 </style>
 <!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->
 <style lang="scss">
-        .el-dialog {
+        .dialog-container.el-dialog {
             top: 50%!important;
             margin-top: 0!important;
             transform: translate(0, -50%)!important;

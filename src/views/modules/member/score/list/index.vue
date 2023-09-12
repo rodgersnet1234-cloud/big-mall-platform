@@ -30,6 +30,7 @@
             <el-row :gutter="10">
               <el-col :span="11">
                 <el-input
+                  class="min-width"
                   v-model.number="dataForm.saleBeginInp"
                   min="0"
                   @change="checkMaxValue(dataForm.saleBeginInp, 1)"
@@ -43,6 +44,7 @@
               </el-col>
               <el-col :span="11">
                 <el-input
+                  class="min-width"
                   v-model.number="dataForm.saleEndInp"
                   min="0"
                   @change="checkMaxValue(dataForm.saleEndInp, 2)"
@@ -55,6 +57,7 @@
             <el-row :gutter="10">
               <el-col :span="11">
                 <el-input
+                  class="min-width"
                   v-model.number="dataForm.currentPriceBeginInp"
                   min="0"
                   @change="checkMaxValue(dataForm.currentPriceBeginInp, 3)"
@@ -68,6 +71,7 @@
               </el-col>
               <el-col :span="11">
                 <el-input
+                  class="min-width"
                   v-model.number="dataForm.currentPriceEndInp"
                   @change="checkMaxValue(dataForm.currentPriceEndInp, 4)"
                 />
@@ -266,7 +270,7 @@
                 <el-popover
                   placement="bottom"
                   trigger="click"
-                  width="374"
+                  width="auto"
                   @show="getProdSku(row.spuId)"
                   @after-enter="getCurrentSpuId(row.spuId, 'priceFee')"
                   @after-leave="clearShowPopoverInf()"
@@ -385,7 +389,7 @@
                 <el-popover
                   placement="bottom"
                   trigger="click"
-                  width="374"
+                  width="auto"
                   @show="getProdSku(row.spuId)"
                   @after-enter="getCurrentSpuId(row.spuId, 'prodStock')"
                   @hide="clearShowPopoverInf()"

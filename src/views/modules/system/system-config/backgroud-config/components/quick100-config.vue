@@ -5,7 +5,7 @@
     </div>
     <el-form
       ref="dataFormRef"
-      label-width="180px"
+      label-width="200px"
       class="set-form"
       label-position="left"
       :rules="dataRule"
@@ -36,6 +36,17 @@
         />
       </el-form-item>
       <el-form-item
+        :label="`${$t('platform.config.quick100')} secret：`"
+        style="width:640px"
+        prop="secret"
+      >
+        <el-input
+          v-model="dataForm.secret"
+          :placeholder="`${$t('platform.config.quick100')}  secret`"
+          controls-position="right"
+        />
+      </el-form-item>
+      <el-form-item
         :label="`${$t('platform.config.quick100')} reqUrl：`"
         style="width:640px"
         prop="reqUrl"
@@ -47,7 +58,40 @@
         />
       </el-form-item>
       <el-form-item
-        :label="$t('platform.config.isActive') + '：'"
+        :label="`${$t('platform.config.quick100')} 电子面单ReqUrl：`"
+        style="width:640px"
+        prop="printReqUrl"
+      >
+        <el-input
+          v-model="dataForm.printReqUrl"
+          :placeholder="`${$t('platform.config.quick100')} 电子面单ReqUrl`"
+          controls-position="right"
+        />
+      </el-form-item>
+      <el-form-item
+        :label="$t('platform.config.printMock') + '：'"
+        style="width:640px"
+        prop="mock"
+      >
+        <el-switch
+          v-model="dataForm.mock"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
+      </el-form-item>
+      <el-form-item
+        :label="$t('platform.config.isPrint') + '：'"
+        style="width:640px"
+        prop="isPrint"
+      >
+        <el-switch
+          v-model="dataForm.isPrint"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
+      </el-form-item>
+      <el-form-item
+        :label="$t('platform.config.isQuery') + '：'"
         style="width:640px"
         prop="isOpen"
       >
@@ -80,7 +124,11 @@ const emit = defineEmits(['activationConfig'])
 const dataForm = ref({
   customer: null,
   key: null,
+  secret: null,
   reqUrl: null,
+  printReqUrl: null,
+  mock: false,
+  isPrint: false,
   isOpen: false
 })
 const activationEventOriginate = ref(false)
@@ -91,8 +139,14 @@ const dataRule = {
   key: [
     { required: true, message: `快递100  key ${$t('platform.config.nullTips')}`, trigger: 'blur' }
   ],
+  secret: [
+    { required: true, message: `快递100  secret ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+  ],
   reqUrl: [
     { required: true, message: `快递100  reqUrl ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+  ],
+  printReqUrl: [
+    { required: true, message: `快递100  电子面单ReqUrl ${$t('platform.config.nullTips')}`, trigger: 'blur' }
   ]
 }
 

@@ -1179,7 +1179,7 @@ const auditformRef = ref(null)
 /**
  * 提交供应商申请审核
  */
-const reviewStoreApplications = (status) => {
+const reviewStoreApplications = Debounce((status) => {
   let param = {}
   param = {
     supplierId: supplierId.value,
@@ -1211,7 +1211,7 @@ const reviewStoreApplications = (status) => {
     param.remarks = remarks.value.trim() // 驳回备注
     auditApply(status, param)
   }
-}
+}, 2000)
 
 const router = useRouter()
 const auditApply = (status, param) => {

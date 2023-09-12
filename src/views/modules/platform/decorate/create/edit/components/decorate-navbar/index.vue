@@ -198,7 +198,7 @@
           :label-width="labelWidth"
         >
           <div class="img-upload">
-            <img-upload v-model:value="dataForm.imgUrl" />
+            <img-upload v-model="dataForm.imgUrl" />
             <el-button
               v-if="dataForm.imgUrl"
               class="del-btn"

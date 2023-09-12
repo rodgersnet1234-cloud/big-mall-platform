@@ -1396,7 +1396,7 @@ const reviewStoreApplications = (status) => {
   }
 }
 const router = useRouter()
-const auditApply = (status, param) => {
+const auditApply = Debounce((status, param) => {
   api.auditData(param).then(() => {
     ElMessage({
       message: status === 1 ? '审核通过' : '申请已驳回',
@@ -1412,7 +1412,7 @@ const auditApply = (status, param) => {
     reviewDialogVisible.value = false
     router.push('/platform/shop-manage?activeName=2')
   })
-}
+}, 1500)
 
 const businessInfoReuploadRef = ref(null)
 

@@ -42,7 +42,6 @@ const titleConfig = ref({ // 标题配置信息
 const goodsConfig = ref({ // 商品配置信息
   showMany: 4,
   showName: 0,
-  showDescription: 0,
   showPrice: 0,
   listTypeList: new Array(4),
   dataList: []
@@ -74,8 +73,7 @@ watch(() => props.itemComponent, (newVal) => {
     goodsConfig.value = {
       showMany: 4,
       showName: newVal.rightConfigMessage.showContent.find(item => Number(item) === 0) ? 0 : 1,
-      showDescription: newVal.rightConfigMessage.showContent.find(item => Number(item) === 1) ? 0 : 1,
-      showPrice: newVal.rightConfigMessage.showContent.find(item => Number(item) === 2) ? 0 : 1,
+      showPrice: newVal.rightConfigMessage.showContent.find(item => Number(item) === 1) ? 0 : 1,
       listTypeList: new Array(4),
       dataList: newVal.rightConfigMessage.goodsList
     }
@@ -107,7 +105,6 @@ watch(() => props.itemComponent, (newVal) => {
     goodsConfig.value = {
       showMany: 4, // 一行展示多少个商品
       showName: 0, // 是否展示商品名称
-      showDescription: 0, // 是否展示商品描述
       showPrice: 0, // 是否展示商品价格
       listTypeList: new Array(4),
       dataList: []

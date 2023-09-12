@@ -20,8 +20,8 @@
           />
           <div
             v-if="disabled"
+            v-rich="dataFormPar.detailZh"
             class="det"
-            v-html="dataFormPar.detailZh"
           />
           <div
             v-if="disabled && !dataFormPar.detailZh"
@@ -37,7 +37,6 @@
 
 <script setup>
 import TinyMce from '@/components/tiny-mce/index.vue'
-import DOMPurify from 'dompurify'
 
 const props = defineProps({
   dataForm: {
@@ -64,7 +63,7 @@ const activeName = ref('Zh')
 const dataFormPar = ref(props.dataForm)
 
 onMounted(() => {
-  dataFormPar.value.detailZh = props.dataForm.detailZh ? DOMPurify.sanitize(props.dataForm.detailZh) : ''
+  dataFormPar.value.detailZh = props.dataForm.detailZh ? props.dataForm.detailZh : ''
 })
 
 const contentZhRef = ref(null)
