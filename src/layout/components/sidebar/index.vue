@@ -22,7 +22,7 @@
                 :class="{'menu-left-item' :true,'menu-left-active': selectLeftId === ''}"
                 @click="toHome"
               >
-                <item
+                <itemIcon
                   :icon="dashboard"
                   :title="'首页'"
                 />
@@ -69,7 +69,7 @@
 <script setup>
 import { generateTitle } from '@/utils/i18n'
 import SubMenu from './main-sidebar-sub-menu.vue'
-import Item from './Item.vue'
+import itemIcon from './item-icon.vue'
 import '@/styles/variables.scss'
 import { useCommonStore } from '@/stores/modules/common.js'
 
