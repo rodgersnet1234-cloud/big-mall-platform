@@ -162,7 +162,6 @@
 
 <script setup>
 import * as api from '@/api/coupon/coupon.js'
-import Pagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 

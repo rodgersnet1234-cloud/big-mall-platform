@@ -250,7 +250,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { refundsDetail, refundSoldExcel, refundDetailInfo } from '@/api/funds-management/index'

@@ -108,7 +108,6 @@
 
 <script setup>
 import * as api from '@/api/coupon/coupon.js'
-import Pagination from '@/components/Pagination/index.vue'
 import Big from 'big.js'
 
 const conversionActual = (val) => {

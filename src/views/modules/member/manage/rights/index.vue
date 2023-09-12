@@ -192,7 +192,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/user/user-rights.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import AddOrUpdate from './add-or-update.vue'

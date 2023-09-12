@@ -92,7 +92,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import { pageShopWallet } from '@/api/supplier-balance'
 import Big from 'big.js'
 

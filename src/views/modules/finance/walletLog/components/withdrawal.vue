@@ -72,8 +72,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
-
 const total = 0
 const params = ref({
   pageNum: 1,

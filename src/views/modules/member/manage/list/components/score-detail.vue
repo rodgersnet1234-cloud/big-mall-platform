@@ -60,8 +60,6 @@
 
 <script setup>
 import * as api from '@/api/user/user-manager.js'
-import Pagination from '@/components/Pagination/index.vue'
-
 let userId = null
 // 返回参数
 const pageVO = ref({

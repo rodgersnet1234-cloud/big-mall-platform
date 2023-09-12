@@ -28,9 +28,7 @@
                 v-model="singleSelectCouponId"
                 :label="row.couponId"
                 @change="onGetSelectProdRow(row)"
-              >
-&nbsp;
-              </el-radio>
+              />
             </div>
           </template>
         </el-table-column>
@@ -55,7 +53,7 @@
           :label="$t('coupon.coupon.couponDscription')"
         >
           <template #default="{row}">
-            <div>{{ row.subTitle||'-' }}</div>
+            <div>{{ row.subTitle || '-' }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -97,7 +95,6 @@
 
 <script setup>
 import { pagePlatformCoupons } from '@/api/coupon/coupon'
-import Pagination from '@/components/Pagination/index.vue'
 
 const emit = defineEmits(['refreshSelectCouponList'])
 
@@ -115,8 +112,7 @@ const pageVO = ref({
   pages: 0 // 一共多少页
 })
 // 查询参数
-const searchParam = {
-}
+const searchParam = {}
 const singleSelectCouponId = ref(0)
 let selectCoupons = []
 const dataList = ref([])
@@ -215,7 +211,12 @@ const onSubmitProds = () => {
     dataListSelections.forEach(item => {
       const couponIndex = coupons.findIndex((coupon) => coupon.couponId === item.couponId)
       if (couponIndex === -1) {
-        coupons.push({ couponId: item.couponId, couponName: item.couponName, subTitle: item.subTitle, limitNum: item.limitNum })
+        coupons.push({
+          couponId: item.couponId,
+          couponName: item.couponName,
+          subTitle: item.subTitle,
+          limitNum: item.limitNum
+        })
       }
     })
     emit('refreshSelectCouponList', coupons)
@@ -233,8 +234,9 @@ defineExpose({ onInit })
   border-top: 1px solid #eeeeee;
   border-right: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
- :deep(.couponTableSelection>.el-checkbox>.el-checkbox__input>.el-checkbox__inner::after) {
-  visibility: hidden;
-}
+
+  :deep(.couponTableSelection>.el-checkbox>.el-checkbox__input>.el-checkbox__inner::after) {
+    visibility: hidden;
+  }
 }
 </style>

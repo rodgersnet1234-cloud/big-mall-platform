@@ -605,7 +605,6 @@ import moment from 'moment'
 import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
 import OrderInfo from '../order/components/order-info.vue'
-import Pagination from '@/components/Pagination/index.vue'
 import { useRouter } from 'vue-router'
 
 const options = [{

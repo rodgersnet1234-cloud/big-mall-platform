@@ -45,8 +45,6 @@
 
 <script setup>
 import * as api from '@/api/user/user-manager.js'
-import Pagination from '@/components/Pagination/index.vue'
-
 onMounted(() => {
   onGetData()
 })

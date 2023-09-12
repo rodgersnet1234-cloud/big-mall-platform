@@ -233,7 +233,6 @@
 </template>
 <script setup>
 import AddOrUpdate from './add-or-update.vue'
-import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/biz/notify.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 

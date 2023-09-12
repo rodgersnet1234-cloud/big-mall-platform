@@ -177,11 +177,8 @@
 </template>
 
 <script setup>
-
-import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/user/user-order.js'
 import { formatPrice } from '@/utils/index.js'
-
 let tempSearchForm = null // 保存上次点击查询的请求条件
 
 const dateRange = ref([])

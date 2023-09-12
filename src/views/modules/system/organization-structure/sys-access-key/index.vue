@@ -137,7 +137,6 @@
   </div>
 </template>
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/rbac/sys-access-key'
 import { ElMessage, ElMessageBox } from 'element-plus'

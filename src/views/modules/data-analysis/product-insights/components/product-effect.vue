@@ -297,7 +297,6 @@
 import titleBar from '../../public-components/title-bar.vue'
 import checkboxOptionsGroup from './checkbox-options-group.vue'
 import prodDetails from '@/views/modules/product/list/components/prod-details/index.vue'
-import pagination from '@/components/Pagination/index.vue'
 import { list, soldExcel } from '@/api/data-analysis/product-effect.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Big from 'big.js'

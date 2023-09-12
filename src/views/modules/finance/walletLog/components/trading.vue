@@ -264,7 +264,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import { page } from '@/api/wallet-log/index'
 const price = (value) => {
   if (value) {

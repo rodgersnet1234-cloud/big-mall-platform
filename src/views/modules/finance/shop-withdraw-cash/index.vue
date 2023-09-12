@@ -187,7 +187,6 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import SetUp from './components/setUp.vue'
 import { page } from '@/api/shop-withdraw-cash'

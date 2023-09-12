@@ -162,8 +162,6 @@
 <script setup>
 import moment from 'moment'
 import * as api from '@/api/biz/notify-log.js'
-import Pagination from '@/components/Pagination/index.vue'
-
 let tempSearchForm = null
 // 查询的参数
 const pageQuery = reactive({

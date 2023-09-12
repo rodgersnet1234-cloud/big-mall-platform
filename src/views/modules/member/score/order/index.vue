@@ -841,7 +841,6 @@
 import AddOrUpdate from './components/order-info/index.vue'
 import { checkPermission } from '@/directive/permission/index.js'
 import moment from 'moment'
-import Pagination from '@/components/Pagination/index.vue'
 import OrderDeliveryUpdate from './components/order-delivery-update/index.vue'
 import OrderUpload from './components/order-upload/index.vue'
 import * as api from '@/api/order/order.js'

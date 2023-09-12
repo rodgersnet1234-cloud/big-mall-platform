@@ -147,7 +147,6 @@
 
 <script setup>
 import AddOrUpdate from '../add-or-update.vue'
-import Pagination from '@/components/Pagination/index.vue'
 import * as api from '@/api/form/form'
 import { ElMessageBox, ElMessage } from 'element-plus'
 let tempSearchForm = null // 保存上次点击查询的请求条件

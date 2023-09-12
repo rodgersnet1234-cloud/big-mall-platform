@@ -689,8 +689,6 @@ import * as api from '@/api/order/order'
 import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddOrUpdate from './components/order-info.vue'
-import Pagination from '@/components/Pagination/index.vue'
-
 let orderId = null
 let oldPar = {}
 const deliveryType = [{

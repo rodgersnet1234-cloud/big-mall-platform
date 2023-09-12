@@ -175,7 +175,7 @@
         </div>
       </template>
     </el-dialog>
-    <category-picker
+    <category-selector
       v-if="categorySelectorVisible"
       ref="categorySelectorRef"
       @close-dialog="categorySelectorVisible=false"
@@ -186,8 +186,6 @@
 
 <script setup>
 import * as api from '@/api/product/attr'
-import categoryPicker from '@/components/category-picker/index.vue'
-import categoryGroup from '@/components/category-group/index.vue'
 import { validNoEmptySpace } from '@/utils/validate'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'

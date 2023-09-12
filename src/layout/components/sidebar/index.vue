@@ -22,7 +22,7 @@
                 :class="{'menu-left-item' :true,'menu-left-active': selectLeftId === ''}"
                 @click="toHome"
               >
-                <itemIcon
+                <item
                   :icon="dashboard"
                   :title="'首页'"
                 />
@@ -39,7 +39,7 @@
                 :class="{'menu-left-item' :true,'menu-left-active': selectLeftId === menu.id}"
                 @click="expandMenu(menu)"
               >
-                <itemIcon
+                <item
                   :icon="menu.meta.icon"
                   :title="generateTitle(menu.meta.title)"
                 />
@@ -49,7 +49,7 @@
                 :class="{'menu-left-item' :true}"
                 @click="gotoRouteHandle(menu)"
               >
-                <itemIcon
+                <item
                   :icon="menu.meta.icon"
                   :title="generateTitle(menu.meta.title)"
                 />
@@ -69,7 +69,7 @@
 <script setup>
 import { generateTitle } from '@/utils/i18n'
 import SubMenu from './main-sidebar-sub-menu.vue'
-import itemIcon from './item-icon.vue'
+import item from './item.vue'
 import '@/styles/variables.scss'
 import { useCommonStore } from '@/stores/modules/common.js'
 

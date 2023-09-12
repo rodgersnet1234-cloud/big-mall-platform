@@ -126,7 +126,6 @@
 
 <script setup>
 import { checkPermission } from '@/directive/permission/index.js'
-import Pagination from '@/components/Pagination/index.vue'
 import AddOrUpdate from './components/add-or-update/index.vue'
 import * as api from '@/api/product/attr.js'
 import { ElMessageBox, ElMessage } from 'element-plus'

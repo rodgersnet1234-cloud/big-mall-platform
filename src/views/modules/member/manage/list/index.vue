@@ -110,8 +110,8 @@
 
           <el-form-item>
             <el-button
-              type="primary"
               v-cancel-focus
+              type="primary"
               @click="onSearchParamChange(true)"
             >
               查询
@@ -510,7 +510,7 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
-import Pagination from '@/components/Pagination/index.vue'
+
 import * as api from '@/api/user/user-manager.js'
 import * as levelApi from '@/api/user/level.js'
 import * as tagApi from '@/api/user/user-tag.js'
