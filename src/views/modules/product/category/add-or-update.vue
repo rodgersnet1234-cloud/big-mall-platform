@@ -59,13 +59,6 @@
           />
         </el-col>
       </el-form-item>
-      <!-- 分类名称 -->
-      <!-- <el-form-item :label="$t('form.nameEn')" prop="nameEn">
-        <label slot="label" class="el-form-item__label" style="width: 90px;padding-left: 8.45px;">{{ $t('form.nameEn') }}</label>
-        <el-col>
-          <el-input v-model="dataForm.nameEn" :placeholder="$t('product.category.enterCateName')" maxlength="30" show-word-limit />
-        </el-col>
-      </el-form-item> -->
       <!-- 分类图片 -->
       <el-form-item
         v-if="selectedCategories.length !== 1"
@@ -74,7 +67,7 @@
         prop="imgUrl"
       >
         <div>
-          <img-upload v-model:value="dataForm.imgUrl" />
+          <img-upload v-model="dataForm.imgUrl" />
           <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>
         </div>
       </el-form-item>

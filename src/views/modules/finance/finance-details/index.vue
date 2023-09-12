@@ -58,7 +58,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :clearable="false"
+                :default-time="defaultTime"
               />
             </el-form-item>
             <el-form-item>
@@ -256,6 +256,10 @@ const total = ref(0)
 let isSubmit = false
 const datePickerType = ref('daterange') // 日期筛选类型
 const dateRangeParam = ref([moment().add(-6, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'), moment().endOf('day').format('YYYY-MM-DD HH:mm:ss')])
+const defaultTime = ref([
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+])
 const datePickerTypeOptions = [
   {
     label: '日期范围',

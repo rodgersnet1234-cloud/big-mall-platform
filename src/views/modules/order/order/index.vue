@@ -5,6 +5,7 @@
         ref="searchFormRef"
         :inline="true"
         :model="searchForm"
+        label-width="100px"
         @submit.prevent
         @keyup.enter="onGetDataList(0,true)"
       >
@@ -211,16 +212,12 @@
             >
               {{ $t("order.order.query") }}
             </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button
               class="operation-btn"
               @click="onGetSoldExcel()"
             >
               {{ $t("table.export") }}
             </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button
               class="operation-btn"
               @click="onClear()"
@@ -698,7 +695,7 @@ let orderId = null
 let oldPar = {}
 const deliveryType = [{
   value: 1,
-  label: $t('order.order.expressDelivery')
+  label: $t('order.order.ordinaryExpress')
 }, {
   value: 2,
   label: $t('order.order.selfMention')

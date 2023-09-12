@@ -272,7 +272,7 @@ watch(() => sumData.value, () => {
   changVisibles()
 }, { deep: true })
 
-watch(() => props.timeType, () => {
+watch([() => props.timeType, () => props.startTime], () => {
   init()
 }, { deep: true })
 

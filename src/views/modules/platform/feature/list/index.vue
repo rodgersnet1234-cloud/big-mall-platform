@@ -7,32 +7,34 @@
         :model="searchForm"
         @submit.prevent
       >
-        <el-form-item
-          prop="pageName"
-          :label="$t('shopFeature.list.pageName')"
-          class="search-form-item"
-        >
-          <el-input
-            v-model="searchForm.pageName"
-            link
-            :placeholder="$t('shopFeature.list.pageName')"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            class="operation-btn"
-            type="primary"
-            @click="onSearch()"
+        <div class="input-row">
+          <el-form-item
+            prop="pageName"
+            :label="$t('shopFeature.list.pageName')"
+            class="search-form-item"
           >
-            {{ $t('table.search') }}
-          </el-button>
-          <el-button
-            class="operation-btn"
-            @click="onResetSearch()"
-          >
-            重置
-          </el-button>
-        </el-form-item>
+            <el-input
+              v-model="searchForm.pageName"
+              link
+              :placeholder="$t('shopFeature.list.pageName')"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              class="operation-btn"
+              type="primary"
+              @click="onSearch()"
+            >
+              {{ $t('table.search') }}
+            </el-button>
+            <el-button
+              class="operation-btn"
+              @click="onResetSearch()"
+            >
+              重置
+            </el-button>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
     <div class="feature-list-content container-fff app-container-15 app-ele-border-radius-0 main-content">

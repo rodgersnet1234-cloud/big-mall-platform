@@ -4,6 +4,7 @@
       <el-form
         :inline="true"
         :model="searchForm"
+        label-width="100px"
         @submit.prevent
         @keyup.enter="onGetDataList(true)"
       >
@@ -125,8 +126,6 @@
                 $t("date.t")
               }}
             </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button
               @click="onSetDateRange(2)"
             >
@@ -134,8 +133,6 @@
                 $t("date.y")
               }}
             </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button
               @click="onSetDateRange(3)"
             >
@@ -143,8 +140,6 @@
                 $t("date.n")
               }}
             </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button
               @click="onSetDateRange(4)"
             >
@@ -153,22 +148,21 @@
               }}
             </el-button>
           </el-form-item>
-        </div>
-
-        <div class="operation-box">
-          <el-button
-            class="operation-btn"
-            type="primary"
-            @click="onSearch(true)"
-          >
-            {{ $t("order.order.query") }}
-          </el-button>
-          <el-button
-            class="operation-btn"
-            @click="onClear()"
-          >
-            {{ $t('table.reset') }}
-          </el-button>
+          <el-form-item>
+            <el-button
+              class="operation-btn"
+              type="primary"
+              @click="onSearch(true)"
+            >
+              {{ $t("order.order.query") }}
+            </el-button>
+            <el-button
+              class="operation-btn"
+              @click="onClear()"
+            >
+              {{ $t('table.reset') }}
+            </el-button>
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -388,7 +382,7 @@
                         <ImgShow :src="orderItem.pic" />
                       </div>
                       <div class="prod-name">
-                        <dir class="prod-con">
+                        <div class="prod-con">
                           <div class="prod-name-txt">
                             {{ orderItem.spuName }}
                           </div>
@@ -413,7 +407,7 @@
                           >
                             虚拟商品订单
                           </div>
-                        </dir>
+                        </div>
                       </div>
                       <div class="prod-price">
                         <span>{{ formatPrice(orderItem.price, 1).toFixed(2) }}</span>
@@ -598,12 +592,6 @@
       :total="page.total"
       @pagination="onGetDataList()"
     />
-    <!-- 弹窗  -->
-    <add-or-update
-      v-if="addOrUpdateVisible"
-      ref="addOrUpdateRef"
-      @refresh-data-list="onRefreshChange"
-    />
     <order-info
       v-if="orderInfoVisible"
       ref="orderInfoRef"
@@ -616,9 +604,9 @@
 import moment from 'moment'
 import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
-import AddOrUpdate from './components/refund-order-info.vue'
 import OrderInfo from '../order/components/order-info.vue'
 import Pagination from '@/components/pagination/index.vue'
+import { useRouter } from 'vue-router'
 
 const options = [{
   value: 1,
@@ -770,12 +758,13 @@ const onViewOrder = (id) => {
 }
 
 // 处理退款
-const addOrUpdateRef = ref()
-const addOrUpdateVisible = ref(false)
-const refundHandle = (id, shopId) => {
-  addOrUpdateVisible.value = true
-  nextTick(() => {
-    addOrUpdateRef.value?.init(id, shopId)
+const router = useRouter()
+const refundHandle = (refundId) => {
+  router.push({
+    path: '/order/refund-order-info',
+    query: {
+      refundId
+    }
   })
 }
 

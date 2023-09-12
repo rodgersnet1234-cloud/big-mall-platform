@@ -94,7 +94,7 @@
                 {{ $t('shopFeature.header.pic') }}
               </el-radio>
               <div v-if="formData.bgType === 1">
-                <img-upload v-model:value="formData.bgImg" />
+                <img-upload v-model="formData.bgImg" />
                 <div
                   class="default-btn"
                   @click="formData.bgImg=''"

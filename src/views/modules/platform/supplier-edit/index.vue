@@ -362,7 +362,7 @@
               >
                 <div class="business-license-box">
                   <div class="license-content">
-                    <img-upload v-model:value="companyInfoForm.businessLicense" />
+                    <img-upload v-model="companyInfoForm.businessLicense" />
                     <div class="example-box">
                       <img
                         src="@/assets/example-img/Business-license.png"
@@ -385,13 +385,13 @@
                       label="法人身份证"
                       prop="identityCardFront"
                     >
-                      <img-upload v-model:value="companyInfoForm.identityCardFront" />
+                      <img-upload v-model="companyInfoForm.identityCardFront" />
                     </el-form-item>
                     <el-form-item
                       label-width="0"
                       prop="identityCardLater"
                     >
-                      <img-upload v-model:value="companyInfoForm.identityCardLater" />
+                      <img-upload v-model="companyInfoForm.identityCardLater" />
                     </el-form-item>
                   </div>
                   <div class="upload-example">

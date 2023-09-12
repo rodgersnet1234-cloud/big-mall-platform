@@ -5,7 +5,7 @@
     </div>
     <el-form
       ref="dataFormRef"
-      label-width="180px"
+      label-width="200px"
       class="set-form"
       label-position="left"
       :rules="dataRule"
@@ -36,7 +36,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="$t('platform.config.isActive') + '：'"
+        :label="$t('platform.config.isQuery') + '：'"
         style="width:640px"
         prop="isOpen"
       >

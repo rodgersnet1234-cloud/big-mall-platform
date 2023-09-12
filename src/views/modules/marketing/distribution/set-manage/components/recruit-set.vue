@@ -28,7 +28,7 @@
 
       <el-form-item label="封面图片">
         <div class="cover-photo">
-          <img-upload v-model:value="dataForm.pic" />
+          <img-upload v-model="dataForm.pic" />
           <div
             v-if="dataForm.pic"
             class="del-btn"

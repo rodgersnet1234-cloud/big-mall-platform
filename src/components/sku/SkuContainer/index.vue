@@ -20,14 +20,13 @@
             class="spec-imgbox"
           >
             <img-upload
-              v-if="hasSkuImage"
-              v-model:value="item.imgUrl"
-              :show="!!view"
+              v-model="item.imgUrl"
+              :show="view"
               class="spec-img"
               @input="handleUploadSuccess(item, $event)"
             />
             <div
-              v-if="hasSkuImage && item.imgUrl"
+              v-if="item.imgUrl"
               class="preview-btn"
               @click="picturePreview(item.imgUrl)"
             >

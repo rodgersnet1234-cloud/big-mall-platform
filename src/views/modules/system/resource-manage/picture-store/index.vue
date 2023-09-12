@@ -856,6 +856,7 @@ const showMoveImgs = () => {
 const MoveImgs = () => {
   batchMoveImgs(groupForm.value.attachFileGroupId, fileIds).then(() => {
     imgRes.value = []
+    images = []
     fileIds = []
     changeNameVisible1.value = false
     ElMessage.success($t('table.actionSuccess'))

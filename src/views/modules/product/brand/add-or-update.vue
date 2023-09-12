@@ -57,7 +57,7 @@
         :label="$t('product.brand.imgUrl')"
         prop="imgUrl"
       >
-        <img-upload v-model:value="dataForm.imgUrl" />
+        <img-upload v-model="dataForm.imgUrl" />
       </el-form-item>
       <!-- 检索首字母 -->
       <el-form-item
@@ -292,14 +292,8 @@ const getCategorySelected = (selectedCategoryList, categoryId) => {
   if (!dataForm.categoryIds) {
     dataForm.categoryIds = []
   }
-  console.log('categoryId', categoryId)
   dataForm.categoryIds.push(categoryId)
   selectedCategories.value.push(categoryObj)
-  if (dataForm.selectedCategories) {
-    dataForm.selectedCategories.push(categoryObj)
-  } else {
-    dataForm.selectedCategories = categoryObj
-  }
 }
 
 // 删除选中的某一项分类

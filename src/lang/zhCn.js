@@ -16,6 +16,7 @@ import menu from './rbac/menu/zh'
 import menuPermission from './rbac/menu-permission/zh'
 import selector from './components/category-selector/zh'
 import shopUserAccount from './platform/sys-user-account/zh'
+import shopAddr from './platform/shop-addr/zh'
 import score from './user/score/zh'
 import level from './user/level/zh'
 import rights from './user/rights/zh'
@@ -40,6 +41,8 @@ import chat from './chat/zh'
 import webConfig from './rbac/web-config/zh'
 import menuResource from './rbac/menu-resource/zh'
 import live from './live/zh'
+import outletConfig from './outletConfig/zh'
+import printer from './printer/zh'
 
 export default {
   pay: {
@@ -173,6 +176,7 @@ export default {
     shopUser,
     hotSearch,
     shopUserAccount,
+    shopAddr,
     notice
   },
   product: {
@@ -231,5 +235,11 @@ export default {
     ...distributionUser,
     ...distributionProd
   },
-  ...live
+  ...live,
+  outletConfig: {
+    ...outletConfig
+  },
+  printer: {
+    ...printer
+  }
 }

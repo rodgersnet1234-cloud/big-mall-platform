@@ -170,7 +170,8 @@ const dataForm = reactive({
   userMobile: '',
   identityCardPicFront: '',
   identityCardPicBack: '',
-  identityCardPicHold: ''
+  identityCardPicHold: '',
+  updateTime: ''
 })
 const infoVisible = ref(false)
 // eslint-disable-next-line no-unused-vars
@@ -214,6 +215,7 @@ const init = (data, initIsEdit) => {
   dataForm.identityCardPicFront = data.identityCardPicFront
   dataForm.identityCardPicBack = data.identityCardPicBack
   dataForm.identityCardPicHold = data.identityCardPicHold
+  dataForm.updateTime = data.updateTime
 }
 // 表单提交
 const onSubmit = () => {

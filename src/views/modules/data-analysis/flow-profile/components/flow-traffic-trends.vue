@@ -157,7 +157,7 @@ watch(() => props.systemType, () => {
   init()
 })
 
-watch(() => props.timeType, () => {
+watch([() => props.timeType, () => props.startTime], () => {
   init()
 })
 

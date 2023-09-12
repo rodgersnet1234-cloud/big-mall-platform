@@ -345,6 +345,11 @@ export default {
   merchantRejected: 'Merchant rejected',
 
   ordinaryExpress: 'Express delivery',
+  onlineDelivery: 'Online Shipping',
+  deliveryPrintType: 'Shipping Type',
+  printInfo: 'Printout',
+  printer: 'Printer',
+  selfDelivery: 'Blow-the-line Shipping',
   buyerMention: 'Buyer mention',
   returnType: 'Return type',
   refundType: 'Refund type',

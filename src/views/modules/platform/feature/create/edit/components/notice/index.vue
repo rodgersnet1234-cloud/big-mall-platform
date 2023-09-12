@@ -3,7 +3,7 @@
     <div class="design-preview-controller">
       <div class="notice-content">
         <span class="iconfont_ckq ckq_notice" />
-        {{ formData.title }}
+        {{ formData.titleText }}
       </div>
     </div>
     <div
@@ -70,7 +70,7 @@ watch(() => props.dataField, (val) => {
 }, { deep: true })
 
 const formData = reactive({
-  title: $t('shopFeature.notice.announcement')
+  titleText: $t('shopFeature.notice.announcement')
 })
 /** 设置或者重设formData的数据 */
 const setFormData = () => {

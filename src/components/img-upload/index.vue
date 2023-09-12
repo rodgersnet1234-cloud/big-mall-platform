@@ -1,5 +1,5 @@
 <template>
-  <div class="component-img-upload-box single-image-upload">
+  <div class="component-img-upload-box">
     <div class="plugin-images">
       <div
         tabindex="0"
@@ -7,7 +7,7 @@
         @click="elxImgboxHandle"
       >
         <img-show
-          v-if="value"
+          v-if="modelValue"
           :src="getImgSrc()"
           :class-list="['pic']"
         />
@@ -29,20 +29,20 @@
       v-model="visible"
       :append-to-body="visible"
     >
-      <ImgShow :src="getImgSrc()" />
+      <img-show :src="getImgSrc()" />
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:modelValue'])
 
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const elxImgboxVisible = ref(false)
 const visible = ref(false)
 
 const props = defineProps({
-  value: {
+  modelValue: {
     default: '',
     type: String
   },
@@ -59,9 +59,7 @@ const props = defineProps({
 // 打开图片选择窗
 const elxImgboxRef = ref(null)
 const elxImgboxHandle = () => {
-  if (!props.show) {
-    return
-  }
+  if (!props.show) return
   if (props.disabled) {
     openImg()
     return false
@@ -76,13 +74,13 @@ const elxImgboxHandle = () => {
  * 获取图片路径
  */
 const getImgSrc = () => {
-  if (!props.value) {
+  if (!props.modelValue) {
     return ''
   }
-  if (props.value.indexOf('http://') === 0 || props.value.indexOf('https://') === 0) {
-    return props.value
+  if (props.modelValue && props.modelValue.indexOf('http') === -1 && props.modelValue.indexOf('https') === -1) {
+    return resourcesUrl + props.modelValue
   }
-  return resourcesUrl + props.value
+  return props.modelValue
 }
 
 const openImg = () => {
@@ -90,7 +88,7 @@ const openImg = () => {
 }
 
 const refreshPic = (imagePath) => {
-  emit('update:value', imagePath)
+  emit('update:modelValue', imagePath)
 }
 
 </script>
@@ -120,13 +118,6 @@ const refreshPic = (imagePath) => {
       height: 120px;
       line-height: 120px;
       text-align: center;
-    }
-    .pic {
-      width: auto;
-      max-width: 118px;
-      height: auto;
-      max-height: 118px;
-      display: block;
     }
     .el-upload:hover {
       border-color: #409eff;

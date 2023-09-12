@@ -21,6 +21,7 @@
           v-model="dataForm.balanceValue"
           maxlength="18"
           :controls="false"
+          type="number"
           @input="onChangeNum"
           @change="onInputNumber"
         />

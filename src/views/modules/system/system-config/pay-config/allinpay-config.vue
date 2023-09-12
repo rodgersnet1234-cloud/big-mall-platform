@@ -144,26 +144,19 @@
         />
       </el-form-item>
       <el-button
-        size="slmall"
         @click="onSubmit('ALLINPAY_CONFIG')"
       >
         {{ $t('platform.config.save') }}
       </el-button>
     </el-form>
-    <template>
-      <span class="dialog-footer">
-      <!-- <el-button @click="visible = false">取消</el-button> -->
-      </span>
-    </template>
   </div>
 </template>
 
 <script setup>
-import { defineComponent } from 'vue'
+import { h } from 'vue'
 import * as api from '@/api/platform/sys-config.js'
-import { ElMessage } from 'element-plus'
-import useStore from 'element-plus/es/components/table/src/store/index'
-
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { WarningFilled } from '@element-plus/icons-vue'
 const dataForm = ref({
   requestUrl: '',
   appId: '',
@@ -223,7 +216,7 @@ const onSubmit = (paramKey) => {
           api.save(params).then(() => {
             ElMessage.success('保存成功')
             // 开启通联后，更新vuex中的配置
-            useStore.dispatch('allinpay/getPaySettlementType')
+            useAllinpayStore().getPaySettlementType()
           })
         }
       })
@@ -235,7 +228,7 @@ const onSubmit = (paramKey) => {
           paramKey: 'ALLINPAY_CONFIG',
           paramValue: JSON.stringify(dataForm.value),
           remark: '通联支付配置'
-        }).then(data => {
+        }).then(() => {
           // 保存成功后，更新appid
           init()
           ElMessage({
@@ -250,18 +243,20 @@ const onSubmit = (paramKey) => {
 }
 const changeSwitchType = (val) => {
   if (val) {
-    const h = defineComponent
-    ElMessage({
-      message: h('div', { style: 'padding:30px 5px 0' }, [
+    ElMessageBox({
+      message: h('div', { style: 'padding:30px 5px 0', class: 'box' }, [
         h('p', { style: 'line-height:24px;display:flex;align-item:center;' }, [
-          h('i', { class: 'el-icon-warning', style: 'color:#FAAD14;font-size:24px' }, null),
+          h(WarningFilled, { class: 'el-icon-warning', style: 'color:#FAAD14;width:24px' }, null),
           h('span', { style: 'font-weight:bold;margin-left:10px;color:#333333;font-size:18px' }, '确认开启通联支付？ ')
         ]),
         h('p', { style: 'line-height:24px;color:#333333;font-size: 14px;margin:12px 0 20px 34px;' }, '开启后将采用通联支付体系且不能关闭，现有支付体系中的供应商、商家及用户余额将不再显示，请谨慎开启此功能或开启前先将系统内所有账号的余额结清。')
       ]),
       showCancelButton: true,
       confirmButtonText: '确定',
-      cancelButtonText: '取消'
+      cancelButtonText: '取消',
+      onClose: () => {
+        onSubmit('PAY_SETTLEMENT_CONFIG')
+      }
     }).then(action => {
       onSubmit('PAY_SETTLEMENT_CONFIG')
     }).catch(() => {
@@ -277,5 +272,7 @@ defineExpose({ init })
     margin-top: 18px;
     display:flex;
     align-items: center;
+
   }
+
 </style>

@@ -23,7 +23,7 @@
           :label="`${name}名称`"
         />
         <el-table-column
-          v-if="type != 2"
+          v-if="type !== 2"
           :prop="propList[1]"
           label="联系人"
         />
@@ -103,7 +103,7 @@
           :label="`${name}名称`"
         />
         <el-table-column
-          v-if="type != 2"
+          v-if="type !== 2"
           :prop="propList[1]"
           label="联系人"
         />
@@ -117,8 +117,8 @@
         >
           <template #default="{row}">
             <span v-if="row[propList[3]] === -1">未开通</span>
-            <span v-if="row[propList[3]] === 0">{{ type == 2 ? '禁用' : '停业中' }}</span>
-            <span v-if="row[propList[3]] === 1">{{ type == 2 ? '正常' : '营业中' }}</span>
+            <span v-if="row[propList[3]] === 0">{{ type === 2 ? '禁用' : '停业中' }}</span>
+            <span v-if="row[propList[3]] === 1">{{ type === 2 ? '正常' : '营业中' }}</span>
             <span v-if="row[propList[3]] === 2">平台下线</span>
             <span v-if="row[propList[3]] === 3">开店待审核</span>
             <span v-if="row[propList[3]] === 4">店铺申请中</span>
@@ -201,9 +201,9 @@ watch(() => dialogVisible, (data) => {
   if (data) {
     nextTick(() => {
       multipleTableRef.value?.clearSelection()
-      multipleSelection.value = tableData.value.map(item => item[idKey])
+      multipleSelection.value = tableData.value.map(item => item[idKey.value])
       tableData.value.forEach(row => {
-        const index = pageVO.list.findIndex(item => item[idKey] === row[idKey])
+        const index = pageVO.list.findIndex(item => item[idKey.value] === row[idKey.value])
         if (index >= 0) {
           multipleTableRef.value.toggleRowSelection(pageVO.list[index], true)
         }
@@ -248,17 +248,16 @@ const searchInfo = () => {
 }
 // 记录选中状态
 const getRowKeys = (row) => {
-  return row[idKey]
+  return row[idKey.value]
 }
 const onDelete = (row) => {
-  tableData.value = tableData.value.filter(item => item[idKey] !== row[idKey])
+  tableData.value = tableData.value.filter(item => item[idKey.value] !== row[idKey.value])
   multipleSelection.value = tableData.value
-  const ids = tableData.value.map(item => item[idKey])
+  const ids = tableData.value.map(item => item[idKey.value])
   emit('getIds', ids)
 }
 
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
 </style>

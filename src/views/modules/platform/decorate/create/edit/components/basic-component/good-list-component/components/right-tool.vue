@@ -106,7 +106,7 @@
           </el-checkbox>
 
           <el-checkbox
-            label="2"
+            label="1"
             style="width: 33.3%;text-align: center"
           >
             {{ $t(`pcdecorate.goodsList.goodsPrice`) }}
@@ -158,7 +158,7 @@ const emit = defineEmits(['handleUpdateMessage'])
 
 const goodsForm = ref({
   listType: 3,
-  showContent: ['0', '2'], // 显示内容
+  showContent: ['0', '1'], // 显示内容
   goodsList: [] // 商品列表
 })
 watch(() => goodsForm.value, (newVal) => { // 监听配置信息的改变
@@ -176,7 +176,7 @@ watch(() => props.currentItem, (newVal) => { // 监听组件回显
     } else {
       goodsForm.value = {
         listType: 3,
-        showContent: ['0', '2'], // 显示内容
+        showContent: ['0', '1'], // 显示内容
         goodsList: [] // 商品列表
       }
     }

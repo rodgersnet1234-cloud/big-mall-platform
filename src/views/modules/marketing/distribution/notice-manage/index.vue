@@ -266,6 +266,7 @@ const deleteById = (msgId) => {
     return
   }
   api.deleteById(selectedMsgList.value).then(() => {
+    selectedMsgList.value = []
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',

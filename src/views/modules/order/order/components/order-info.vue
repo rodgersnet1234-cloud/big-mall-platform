@@ -186,9 +186,10 @@
                       {{
                         [
                           $t("order.order.ordinaryExpress"),
+                          $t("order.order.ordinaryExpress"),
                           $t("order.order.selfMention"),
                           $t("order.order.noNeedRequired"),
-                        ][deliveryExpress.deliveryType - 1]
+                        ][deliveryExpress.deliveryType]
                       }}
                     </div>
                   </div>
@@ -201,7 +202,7 @@
                     </div>
                   </div>
                   <div
-                    v-if="deliveryExpress.deliveryType === 1"
+                    v-if="deliveryExpress.deliveryType === 1 || deliveryExpress.deliveryType === 0"
                     class="d-item"
                   >
                     <div class="text">
@@ -212,7 +213,7 @@
                     </div>
                   </div>
                   <div
-                    v-if="deliveryExpress.deliveryType === 1"
+                    v-if="deliveryExpress.deliveryType === 1 || deliveryExpress.deliveryType === 0"
                     class="d-item"
                   >
                     <div class="text">
@@ -437,10 +438,11 @@
                     {{
                       [
                         $t("order.order.ordinaryExpress"),
+                        $t("order.order.ordinaryExpress"),
                         $t("order.order.buyerMention"),
                         $t("order.order.noNeedRequired"),
                         $t("order.order.sameCityDelivery"),
-                      ][dataForm.deliveryType - 1]
+                      ][dataForm.deliveryType]
                     }}
                   </div>
                   <div

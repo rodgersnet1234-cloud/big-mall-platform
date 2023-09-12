@@ -5,6 +5,7 @@
       v-loadmore="loadmore"
       :style="selStyle"
       filterable
+      class="def-width"
       remote
       :remote-method="remoteMethod"
       :placeholder="placeTips"
@@ -148,5 +149,10 @@ const checkCurSel = (curList, curId) => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.component-select-lazy {
+  .def-width {
+    width: 200px;
+  }
+}
 </style>

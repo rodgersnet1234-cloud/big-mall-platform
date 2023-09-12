@@ -19,7 +19,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'380*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*560</span>
@@ -31,7 +31,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'560*560'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}560*560</span>
@@ -43,7 +43,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'626*594'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}626*594</span>
@@ -76,7 +76,7 @@
         prop="titleImg"
       >
         <img-upload
-          v-model:value="dataForm.titleImg"
+          v-model="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -87,7 +87,7 @@
         prop="bsTopBarIcon"
       >
         <img-upload
-          v-model:value="dataForm.bsTopBarIcon"
+          v-model="dataForm.bsTopBarIcon"
           :size="'160*48'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}160*48</span>
@@ -125,7 +125,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.loginLogoImg"
+          v-model="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -136,7 +136,7 @@
         prop="loginBgImg"
       >
         <img-upload
-          v-model:value="dataForm.loginBgImg"
+          v-model="dataForm.loginBgImg"
           :size="'1920*600'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}1920*600</span>
@@ -158,7 +158,7 @@
         prop="pcQrcodeImg"
       >
         <img-upload
-          v-model:value="dataForm.pcQrcodeImg"
+          v-model="dataForm.pcQrcodeImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -197,7 +197,7 @@
         prop="titleImg"
       >
         <img-upload
-          v-model:value="dataForm.titleImg"
+          v-model="dataForm.titleImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -207,7 +207,7 @@
         prop="pcLogoImgText"
       >
         <img-upload
-          v-model:value="dataForm.pcLogoImgText"
+          v-model="dataForm.pcLogoImgText"
           :size="'380*96'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}380*96</span>
@@ -231,7 +231,7 @@
         prop="loginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.loginLogoImg"
+          v-model="dataForm.loginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -261,7 +261,7 @@
         prop="stationLoginLogoImg"
       >
         <img-upload
-          v-model:value="dataForm.stationLoginLogoImg"
+          v-model="dataForm.stationLoginLogoImg"
           :size="'100*100'"
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
@@ -537,6 +537,13 @@ const updateWebConfigData = () => {
 
 <style lang="scss" scoped>
 .page-webConfig-add-or-update{
+  :deep(.el-form-item__content){
+    display: block;
+
+    .img-tip{
+      position: static;
+    }
+  }
   .img-tip {
     font-weight: 400;
     position: absolute;

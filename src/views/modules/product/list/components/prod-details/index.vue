@@ -194,7 +194,7 @@
               <div class="part-form-item">
                 <!-- sku-组件 -->
                 <sku-block
-                  v-model:salesAttrs="salesAttrs"
+                  :sales-attrs="salesAttrs"
                   :save-sales-attrs="originalSalesAttrs"
                   :sku-tree="originalSkuTree"
                   :on-fetch-group="fetchSkuTree"

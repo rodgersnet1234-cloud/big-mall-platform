@@ -147,27 +147,21 @@
             >
               {{ $t("order.order.query") }}
             </el-button>
-          </el-form-item>
 
-          <el-form-item>
             <el-button
               class="operation-btn"
               @click="getSoldExcel()"
             >
               {{ $t("table.export") }}
             </el-button>
-          </el-form-item>
 
-          <el-form-item>
             <el-button
               class="operation-btn"
               @click="clear()"
             >
               {{ $t('table.reset') }}
             </el-button>
-          </el-form-item>
 
-          <el-form-item>
             <el-button
               class="operation-btn"
               @click="uploadSpu"
@@ -629,13 +623,13 @@
                     :label="$t('order.order.deliveryMethod') + '：'"
                     style="text-align: left;"
                   >
-                    <el-radio-group v-model="logItem.deliveryType">
+                    <el-radio-group v-model="logItem.tempDeliveryType">
                       <el-radio
                         :label="1"
                         disabled
                       >
                         {{
-                          $t("order.order.needLogistics")
+                          $t("order.order.ordinaryExpress")
                         }}
                       </el-radio>
                       <el-radio
@@ -644,6 +638,31 @@
                       >
                         {{
                           $t("order.order.noNeedRequired")
+                        }}
+                      </el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <!--配送方式 线上 线下-->
+                  <el-form-item
+                    v-if="logItem.tempDeliveryType === 1"
+                    :label="$t('order.order.delType') + '：'"
+                    style="text-align: left;"
+                  >
+                    <el-radio-group v-model="logItem.deliveryType">
+                      <el-radio
+                        :label="0"
+                        disabled
+                      >
+                        {{
+                          $t("order.order.onlineDelivery")
+                        }}
+                      </el-radio>
+                      <el-radio
+                        :label="1"
+                        disabled
+                      >
+                        {{
+                          $t("order.order.selfDelivery")
                         }}
                       </el-radio>
                     </el-radio-group>
@@ -675,6 +694,29 @@
                         :class="['int-frame', errorNum === 1 ? 'errortip' : '']"
                         :placeholder="$t('order.order.trackingNumber')"
                       />
+                    </el-form-item>
+                  </div>
+                  <div
+                    v-if="logItem.deliveryType === 0"
+                    class="info-int"
+                  >
+                    <el-form-item
+                      :label="$t('order.order.courierCompany') + '：'"
+                      class="form-item"
+                      style="text-align: left;"
+                    >
+                      <div
+                        v-if="logVisible"
+                        class="con"
+                      >
+                        {{ deliveryCompanyType[logItem.deliveryCompanyId - 1].label }}
+                      </div>
+                    </el-form-item>
+                    <el-form-item
+                      :label="$t('order.order.trackingNumber') + '：'"
+                      class="form-item"
+                    >
+                      {{ logItem.deliveryNo }}
                     </el-form-item>
                   </div>
                 </el-form>
@@ -836,13 +878,39 @@ const options = [
 const deliveryType = [
   {
     value: 1,
-    label: $t('order.order.expressDelivery')
+    label: $t('order.order.ordinaryExpress')
   },
   {
     value: 3,
     label: $t('order.order.noNeedRequired')
   }
 ]
+
+const deliveryCompanyType = [{
+  value: 1,
+  label: '顺丰速运'
+}, {
+  value: 2,
+  label: '京东快递'
+}, {
+  value: 3,
+  label: '圆通速递'
+}, {
+  value: 4,
+  label: '韵达快递'
+}, {
+  value: 5,
+  label: '中通快递'
+}, {
+  value: 6,
+  label: '申通快递'
+}, {
+  value: 7,
+  label: '百世快递'
+}, {
+  value: 8,
+  label: 'EMS'
+}]
 
 const payType = [
   {
@@ -1065,6 +1133,7 @@ const reviseLogistics = (orderId) => {
   }).then(data => {
     logisticsInfo.value = data
     logisticsInfo.value.forEach((el, index) => {
+      el.tempDeliveryType = el.deliveryType === 1 || el.deliveryType === 0 ? 1 : el.deliveryType
       el.newDeliveryNo = el.deliveryNo
       el.newDeliveryCompanyId = el.deliveryCompanyId
       el.deliveryCompanyIdName = $t('order.order.package') + Number(index + 1)
@@ -1083,7 +1152,7 @@ const logDataFormSubmit = () => {
   let flag = true
   const logisticsInfoPar = logisticsInfo.value
   logisticsInfoPar.forEach((el) => {
-    if (el.deliveryType === 3) {
+    if (el.deliveryType === 3 || el.deliveryType === 0) {
       return
     }
     if (!flag) {

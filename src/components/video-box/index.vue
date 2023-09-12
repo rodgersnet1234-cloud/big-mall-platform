@@ -3,7 +3,7 @@
     <el-dialog
       v-model="visible"
       title="视频管理器"
-      class="elx-videobox-dialog"
+      class="elx-videobox-dialog append-to-body-dialog"
       top="9vh"
       width="860px"
       :append-to-body="visible"
@@ -26,7 +26,6 @@
             :inline="true"
             :model="dataForm"
             class="demo-form-inline form"
-            size="small"
             @submit.prevent
           >
             <el-form-item>
@@ -122,6 +121,7 @@
               layout="->, total, prev, pager, next"
               :current-page="page.current"
               :page-size="page.size"
+              style="float: right;"
               :total="page.total"
               @current-change="onPageNumChange"
             />
@@ -215,7 +215,7 @@
               <div class="preview-list">
                 <!-- 视频预览 -->
                 <div
-                  v-for="(item, index) in videoList"
+                  v-for="(item, index) in uploadFiles"
                   :key="index"
                   class="video-preview video-preview-left"
                 >
@@ -358,7 +358,7 @@ const dataForm = reactive({
   host: '',
   attachFileGroupId: 0
 })
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
+const resourcesUrl = ref(import.meta.env.VITE_APP_RESOURCES_URL)
 const groupForm = reactive({
   attachFileGroupId: '', // 选择分组的值
   name: '' // 分组名称
@@ -590,6 +590,7 @@ const uploadFileBtn = () => {
   files.value = []
   fileIds.value = []
   disabled.value = false
+  uploadFiles.value = []
   dataForm.attachFileGroupId = null
 }
 
@@ -728,10 +729,10 @@ const uploadFile = (event) => {
     formdata.append('signature', dataForm.signature)
     formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
     formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl)
+    formdata.append('host', resourcesUrl.value)
     formdata.append('key', ossList[0].dir + ossList[0].fileName)
     formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata).then(() => {
+    aliImgUpdate(resourcesUrl.value, formdata).then(() => {
       saveFileData(file, attachFile.filePath)
     }).catch(error => {
       // 上传视频失败
@@ -771,6 +772,7 @@ const saveFileData = (file, filePath) => {
   ]
   save(uploadFile).then(() => {
     attachFiles.value = []
+    uploadFiles.value = []
     options.activeTab = 'pick'
     dataForm.attachFileGroupId = 0
     loadListImage()

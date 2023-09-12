@@ -128,7 +128,7 @@
             <el-table-column
               prop="skuName"
               label="sku名称"
-              width="230"
+              min-width="230"
             >
               <template #default="scope">
                 {{ scope.row.skuName || spu.name }}

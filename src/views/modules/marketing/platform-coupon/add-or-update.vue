@@ -105,11 +105,9 @@
         />
         <el-time-select
           v-model="launchTimeValue"
-          :picker-options="{
-            start: '00:00',
-            step: '00:30',
-            end: '23:30'
-          }"
+          start="00:00"
+          step="00:30"
+          end="23:30"
           style="width:130px"
           placeholder="开始时间"
         />
@@ -252,11 +250,9 @@
           />
           <el-time-select
             v-model="startTimeValue"
-            :picker-options="{
-              start: '00:00',
-              step: '00:30',
-              end: '23:30'
-            }"
+            start="00:00"
+            step="00:30"
+            end="23:30"
             style="width:130px"
             :disabled="dataForm.couponId !== 0"
             placeholder="开始时间"
@@ -277,11 +273,9 @@
           />
           <el-time-select
             v-model="endTimeValue"
-            :picker-options="{
-              start: '00:00',
-              step: '00:30',
-              end: '23:30'
-            }"
+            start="00:00"
+            step="00:30"
+            end="23:30"
             style="width:130px"
             placeholder="结束时间"
             :disabled="dataForm.status === 0"
@@ -448,6 +442,8 @@
           {{ $t('table.cancel') }}
         </el-button>
         <el-button
+          :disabled="dataForm.status === 0"
+          :class="dataForm.status === 0 ? 'gray-btn' : ''"
           type="primary"
           @click="onSubmit()"
         >
@@ -873,6 +869,14 @@ defineExpose({ init })
   .prod-item {
     margin-right: 10px;
     margin-bottom: 10px;
+  }
+  .gray-btn {
+    background-color: #8aadea;
+    border-color: #8aadea;
+    &:hover{
+      background-color: #8aadea;
+      border-color: #8aadea;
+    }
   }
 }
 </style>

@@ -60,3 +60,11 @@ export function getActivity (webConfigType) {
     }
   })
 }
+
+// 获取快递100配置（是否开启）
+export function getQuick100Config () {
+  return request({
+    url: '/mall4cloud_admin/p/ua/sys_config/quick_100',
+    method: 'get'
+  })
+}

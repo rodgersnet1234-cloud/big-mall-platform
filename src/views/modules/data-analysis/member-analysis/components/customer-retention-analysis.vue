@@ -172,15 +172,15 @@ const dateRange = ref([])
 const title = ref('客户留存分析')
 const rangeOptions = reactive([
   {
-    label: '最近3个月',
+    label: '近90天',
     value: 1
   },
   {
-    label: '最近6个月',
+    label: '近180天',
     value: 2
   },
   {
-    label: '最近1年',
+    label: '近365天',
     value: 3
   }
 ])

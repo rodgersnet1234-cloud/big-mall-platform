@@ -133,6 +133,10 @@ const logout = async () => {
     type: 'warning'
   }).then(async () => {
     await userStore.logout()
+    lockReconnect = true // 退出登录不在重连
+    imSocketTask?.close() // 关闭ws
+    imSocketTask = null
+    localStorage.setItem('cloudPlatChatWs', Date.now()) // 通知新窗口关闭ws
     await router.push(`/login?redirect=${route.fullPath}`)
   })
 }
@@ -148,15 +152,12 @@ const changePassword = () => {
 /**
  * 开启webstocket
  */
-let imSocketTask = reactive({})
-const ortherUser = ref(false)
+let imSocketTask = null
 const noAccountable = ref(false)
 const newMessage = ref(false)
 const notificationDebounce = ref(1)
 const messageReminding = ref(null)
 const message = ref(0)
-const lockReconnect = ref(false)
-const plooTime = ref(0)
 const tenantId = computed(() => userStore.tenantId)
 const userId = computed(() => userStore.userId)
 const notification = ref(false)
@@ -189,14 +190,14 @@ const openWs = () => {
         } else {
           imSocketTask.close()
           imSocketTask = null
-          lockReconnect.value = false
+          lockReconnect = false
+          onReconnect()
         }
       }, this.timeout)
     }
   }
   imSocketTask.onopen = () => {
     heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-    ortherUser.value = false
     imSocketTask.send(
       JSON.stringify({
         content: 'HEART_BEAT',
@@ -240,21 +241,20 @@ const openWs = () => {
       messageRemindingFn()
     }
   }
-  imSocketTask.onclose = () => {
-    if (!ortherUser.value) {
-      ortherUser.value = false
-      if (plooTime.value < 3) {
-        plooTime.value++
-        if (lockReconnect.value) return
-        lockReconnect.value = true
-        setTimeout(() => {
-          // 没连接上会一直重连，设置延迟避免请求过多
-          openWs()
-          lockReconnect.value = false
-        }, 2000)
-      }
-    }
+  imSocketTask.onerror = () => {
+    onReconnect()
   }
+}
+
+let lockReconnect = false
+const onReconnect = () => {
+  if (lockReconnect) return
+  lockReconnect = true
+  setTimeout(() => {
+    // 没连接上会一直重连，设置延迟避免请求过多
+    openWs()
+    lockReconnect = false
+  }, 2000)
 }
 
 const openUrl = () => {

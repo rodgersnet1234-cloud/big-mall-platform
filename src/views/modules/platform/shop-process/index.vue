@@ -211,7 +211,7 @@
                       <div class="business-license-box">
                         <div class="license-content">
                           <img-upload
-                            v-model:value="shopDetail.shopLogo"
+                            v-model="shopDetail.shopLogo"
                             @input="imgChange(1, 'shopLogo')"
                           />
                         </div>
@@ -227,7 +227,7 @@
                           prop="mobileBackgroundPic"
                         >
                           <img-upload
-                            v-model:value="shopDetail.mobileBackgroundPic"
+                            v-model="shopDetail.mobileBackgroundPic"
                             @input="imgChange(1, 'mobileBackgroundPic')"
                           />
                           <div class="img-tips">
@@ -242,7 +242,7 @@
                           prop="pcBackgroundPic"
                         >
                           <img-upload
-                            v-model:value="shopDetail.pcBackgroundPic"
+                            v-model="shopDetail.pcBackgroundPic"
                             @input="imgChange(1, 'pcBackgroundPic')"
                           />
                           <div class="img-tips">
@@ -425,7 +425,7 @@
                     <div class="business-license-box">
                       <div class="license-content">
                         <img-upload
-                          v-model:value="shopCompany.businessLicense"
+                          v-model="shopCompany.businessLicense"
                           @input="imgChange(2, 'businessLicense')"
                         />
                         <div class="example-box">
@@ -452,7 +452,7 @@
                           prop="identityCardFront"
                         >
                           <img-upload
-                            v-model:value="shopCompany.identityCardFront"
+                            v-model="shopCompany.identityCardFront"
                             @input="imgChange(2, 'identityCardFront')"
                           />
                         </el-form-item>
@@ -462,7 +462,7 @@
                           prop="identityCardLater"
                         >
                           <img-upload
-                            v-model:value="shopCompany.identityCardLater"
+                            v-model="shopCompany.identityCardLater"
                             @input="imgChange(2, 'identityCardLater')"
                           />
                         </el-form-item>

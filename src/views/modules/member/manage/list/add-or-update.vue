@@ -33,7 +33,7 @@
                 <div>
                   <img
                     v-if="!dataForm.pic"
-                    src="../../../../../assets/images/user_img.jpg"
+                    src="@/assets/images/user_img.jpg"
                     width="130"
                     height="130"
                     alt=""
@@ -94,10 +94,10 @@
             </el-main>
             <el-footer>
               <el-row class="user-info">
-                <!-- <el-col :span="$t('language') == 'language' ? 4 : 3"> -->
                 <!-- 发放优惠券 -->
                 <div class="user-info-item">
                   <el-button
+                    v-cancel-focus
                     v-permission="['user:user:sendCoupons']"
                     type="primary"
                     @click="onUpdateCoupon()"
@@ -105,10 +105,10 @@
                     {{ $t("user.userManager.sendCoupons") }}
                   </el-button>
                 </div>
-                <!-- <el-col :span="$t('language') == 'language' ? 4 : 3"> -->
                 <!-- 修改用户昵称 -->
                 <div class="user-info-item">
                   <el-button
+                    v-cancel-focus
                     v-permission="['user:user:update']"
                     type="primary"
                     @click="onUpdateUserInfo()"
@@ -119,6 +119,7 @@
                 <!-- 给用户打标签 -->
                 <div class="user-info-item">
                   <el-button
+                    v-cancel-focus
                     v-permission="['user:user:tagging']"
                     type="primary"
                     @click="onUpdateTags()"

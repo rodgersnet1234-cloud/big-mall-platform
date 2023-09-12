@@ -27,7 +27,7 @@
         prop="accessKeyId"
       >
         <el-input
-          v-model="dataForm.accessKeyId"
+          v-model.trim="dataForm.accessKeyId"
           :placeholder="`${$t('platform.config.SMSService')} accessKeyId`"
           controls-position="right"
         />
@@ -38,7 +38,7 @@
         prop="accessKeySecret"
       >
         <el-input
-          v-model="dataForm.accessKeySecret"
+          v-model.trim="dataForm.accessKeySecret"
           :placeholder="`${$t('platform.config.shortMessage')} accessKeySecret`"
           controls-position="right"
         />
@@ -49,7 +49,7 @@
         prop="signName"
       >
         <el-input
-          v-model="dataForm.signName"
+          v-model.trim="dataForm.signName"
           :placeholder="`${$t('platform.config.shortMessageSign')} signName`"
           controls-position="right"
         />
@@ -110,7 +110,7 @@ const onSubmit = () => {
     if (valid) {
       api.save({
         paramKey: 'ALIDAYU_CONFIG',
-        paramValue: JSON.stringify(dataForm),
+        paramValue: JSON.stringify(dataForm.value),
         remark: $t('platform.config.alidayuSMSServicePlatform')
       }).then(data => {
         if (data) {

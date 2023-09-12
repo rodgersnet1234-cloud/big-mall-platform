@@ -57,7 +57,7 @@
                     {{ scope.row.spuName }}
                   </p>
                   <p class="prod-pri">
-                    ￥{{ scope.row.price }}
+                    ￥{{ onToPrice(scope.row.price) }}
                   </p>
                 </div>
               </div>
@@ -300,6 +300,7 @@ import prodDetails from '@/views/modules/product/list/components/prod-details/in
 import pagination from '@/components/pagination/index.vue'
 import { list, soldExcel } from '@/api/data-analysis/product-effect.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import Big from 'big.js'
 
 const title = ref('商品洞察')
 
@@ -420,6 +421,11 @@ const handleShowProdDetailPop = (spuId) => {
   }, 500)
 }
 
+// 处理价格显示
+const onToPrice = (price) => {
+  Big.DP = 2
+  return new Big(price).div(100).toFixed(2)
+}
 </script>
 
 <style lang="scss" scoped>

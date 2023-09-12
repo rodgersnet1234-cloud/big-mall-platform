@@ -9,7 +9,7 @@
     <el-form
       ref="dataFormRef"
       :model="dataForm"
-      label-position="left"
+      label-position="right"
       label-width="100px"
       @submit.prevent
     >

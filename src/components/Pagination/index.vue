@@ -68,7 +68,6 @@ const emit = defineEmits(['update:page', 'update:limit', 'pagination'])
 const currentPage = computed({
   get: () => props.page,
   set: (val) => {
-    console.log('currentPage', val)
     emit('update:page', val)
   }
 })

@@ -168,8 +168,9 @@
           @click="visible = false"
         >取消</el-button>
         <el-button
-          :disabled="!isAudit"
           type="primary"
+          :disabled="!isAudit"
+          :class="[!isAudit?'disabled':'']"
           @click="onSubmit"
         >确认审核</el-button>
       </span>
@@ -301,5 +302,13 @@ defineExpose({
 .content-color {
   color: #155bd4;
   word-break: break-word;
+}
+.disabled {
+  background-color: #a0cfff;
+  border-color: #a0cfff;
+  &:hover {
+    background-color: #a0cfff;
+    border-color: #a0cfff;
+  }
 }
 </style>

@@ -130,6 +130,7 @@
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
+                :default-time="defaultTime"
               />
             </el-form-item>
             <el-form-item label-width="120px">
@@ -192,6 +193,10 @@ const activeName = 'first'
 
 const datePickerType = ref('daterange') // 日期筛选类型
 const dateRangeParam = ref([])
+const defaultTime = ref([
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+])
 const datePickerTypeOptions = [
   {
     label: '日期范围',

@@ -271,7 +271,7 @@ const onDeleteById = (userTagId) => {
             .label-name {
               height: 30px;
               font-weight: 700;
-              padding: 0 0 10px;
+              // padding: 0 0 10px;
             }
             .op-btn-wrapper {
               position: absolute;

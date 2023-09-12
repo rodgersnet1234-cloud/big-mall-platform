@@ -21,7 +21,7 @@
         prop="keywords"
       >
         <el-input
-          v-model="dataForm.keywords"
+          v-model.trim="dataForm.keywords"
           maxlength="20"
         />
       </el-form-item>

@@ -54,6 +54,7 @@
             v-if="timeType === 3 "
             v-model="preMonth"
             style="width: 150px;"
+            popper-class="month-picker"
             type="month"
             placeholder="自然月"
             :disabled-date="monthPickerOptions.disabledDate"
@@ -182,7 +183,7 @@ const monthPickerOptions = reactive({
   disabledDate (time) {
     const month = moment().startOf('month')
     return (
-      time.getTime() >= month.valueOf()
+      time.getTime() > month.valueOf()
     )
   }
 })
@@ -346,7 +347,7 @@ const flushDateTime = () => {
  * 获取前一个月的时间
  */
 const getPreMonth = () => {
-  return moment(moment().add(-1, 'month')).startOf('month')
+  return moment(moment().add(-1, 'month')).startOf('month').format('YYYY-MM')
 }
 
 /**
@@ -386,5 +387,12 @@ const updateDateTime = (val) => {
       margin-right: 6px;
     }
   }
+}
+</style>
+<!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->
+<style>
+.month-picker .el-month-table td.today .cell  {
+  color: var(--el-datepicker-text-color);
+  font-weight: normal;
 }
 </style>

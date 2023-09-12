@@ -3,7 +3,7 @@
     <el-dialog
       v-model="visible"
       :title="$t('biz.imgbox.picManager')"
-      class="elx-imgbox-dialog"
+      class="elx-imgbox-dialog append-to-body-dialog"
       top="9vh"
       width="860px"
       :append-to-body="visible"
@@ -129,6 +129,7 @@
               :current-page="page.current"
               :page-size="page.size"
               :total="page.total"
+              style="float: right"
               @current-change="onPageNumChange"
             />
 
@@ -178,7 +179,7 @@
               <el-upload
                 ref="uploadRef"
                 :file-list="uploadFiles"
-                :class="['upload-img-preview',hideUpload?'upload-hide':'']"
+                :class="['upload-img-preview',hideUpload?'hide':'']"
                 list-type="picture-card"
                 accept=".jpg,.png,.gif,.jpeg"
                 action=""
@@ -756,7 +757,7 @@ const uploadTips = () => {
 // eslint-disable-next-line no-unused-vars
 const handleAvatarChange = (file, files) => {
   uploadFiles.value = files
-  if (uploadFiles.value.length >= 20) {
+  if (uploadFiles.value.length >= 9) {
     hideUpload.value = true
   }
 }
