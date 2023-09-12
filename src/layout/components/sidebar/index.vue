@@ -39,7 +39,7 @@
                 :class="{'menu-left-item' :true,'menu-left-active': selectLeftId === menu.id}"
                 @click="expandMenu(menu)"
               >
-                <item
+                <itemIcon
                   :icon="menu.meta.icon"
                   :title="generateTitle(menu.meta.title)"
                 />
@@ -49,7 +49,7 @@
                 :class="{'menu-left-item' :true}"
                 @click="gotoRouteHandle(menu)"
               >
-                <item
+                <itemIcon
                   :icon="menu.meta.icon"
                   :title="generateTitle(menu.meta.title)"
                 />

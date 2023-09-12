@@ -124,7 +124,7 @@
         </el-button>
       </div>
     </template>
-    <category-selector
+    <category-picker
       v-if="categorySelectorVisible"
       ref="categorySelectorRef"
       @get-category-selected="getCategorySelected"
@@ -135,7 +135,7 @@
 <script setup>
 import * as api from '@/api/product/brand'
 import ImgUpload from '@/components/img-upload/index.vue'
-import categorySelector from '@/components/category-selector/index.vue'
+import categoryPicker from '@/components/category-picker/index.vue'
 import categoryGroup from '@/components/category-group/index.vue'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
