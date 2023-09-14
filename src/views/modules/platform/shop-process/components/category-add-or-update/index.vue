@@ -166,12 +166,14 @@ onMounted(() => {
 const getPlatformCategory = () => {
   loading.value = true
   // 包含三级分类的分类列表
-  enableCategories({ shopId: 0 }).then(data => {
-    data = data.filter((item) => {
+  enableCategories({ shopId: 0 }).then((data1) => {
+    data1 = data1.filter((item) => {
       return item.status === 1
     })
     loading.value = false
-    categorgTreeData.value = treeDataTranslate(data, 'categoryId', 'parentId')
+    nextTick(() => {
+      categorgTreeData.value = treeDataTranslate(data1, 'categoryId', 'parentId')
+    })
     categorgTreeData.value = removeNotThirdCategoryItem(categorgTreeData.value)
     signCategoryList.value = props.categorySigningList
     getIds(props.categorySigningList)
