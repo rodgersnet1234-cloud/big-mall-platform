@@ -11,7 +11,7 @@ export default {
   revName: 'Edit name',
   inputNewName: 'Please enter a new picture name',
   superiorLimit: 'The number of selectable photos has reached the upper limit',
-  onlyPictures: 'Only support image format, size can not exceed 2m, other files have been cleared',
+  onlyPictures: 'Only support image format, other files have been cleared',
   onlySupported: 'Only supports',
   pic: 'picture',
   notExceed: 'Size cannot exceed',

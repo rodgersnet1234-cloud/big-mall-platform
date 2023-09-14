@@ -72,10 +72,7 @@
   </div>
 </template>
 <script setup>
-import { useWebConfigStore } from '@/stores/modules/web-config.js'
-
 const webConfig = computed(() => useWebConfigStore().webConfig)
-
 // 当前语言
 const language = computed(() => useAppStore().language)
 // 登录表单

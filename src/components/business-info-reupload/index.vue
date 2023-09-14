@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="upload-tips">
-            仅限jpg、gif、png、大小不超过2M，仅限上传1张
+            仅限jpg、gif、png，仅限上传1张
           </div>
         </div>
       </el-form-item>
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="upload-tips">
-            请上传身份证正反面照片，仅限jpg、gif、png、大小不超过2M，仅限上传2张
+            请上传身份证正反面照片，仅限jpg、gif、png，仅限上传2张
           </div>
         </div>
       </div>

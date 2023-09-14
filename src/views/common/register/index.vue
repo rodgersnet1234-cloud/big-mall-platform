@@ -216,7 +216,7 @@
       class="merchant-register-protocol"
     >
       <div class="registration-agreement">
-        <div v-html="registerProtocol" />
+        <div v-rich="registerProtocol" />
       </div>
 
       <template #footer>
@@ -259,7 +259,6 @@
 <script setup>
 import { isMobile, isUserName, validPassword, noSpacesBothSides, validNoEmptySpace } from '@/utils/validate'
 import { getRegisterCode, register, getMerchantRegisterProtocol } from '@/api/auth/auth'
-import DOMPurify from 'dompurify'
 import { encrypt } from '@/utils/crypto'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
@@ -292,7 +291,7 @@ const protocolDialogVisible = ref(false)
 const registerProtocol = ref('')
 
 const mobileBorder = ref(false)
-const webConfig = JSON.parse(localStorage.getItem('cloudShopWebConfigData')) || {}
+const webConfig = computed(() => useWebConfigStore().webConfig)
 // 当前语言
 const language = computed(() => useAppStore().language)
 watch(mallName, () => {
@@ -474,7 +473,7 @@ const onRegister = Debounce(function () {
 const queryRegisterProtocol = () => {
   protocolDialogVisible.value = true
   getMerchantRegisterProtocol().then((data) => {
-    registerProtocol.value = DOMPurify.sanitize(data)
+    registerProtocol.value = data
   })
 }
 

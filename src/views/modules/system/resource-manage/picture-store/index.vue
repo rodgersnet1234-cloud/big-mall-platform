@@ -1187,12 +1187,8 @@ const uploadTypeTip = () => {
   return $t('biz.imgbox.onlySupported') + ' jpg/png/gif ' + $t('biz.imgbox.pic')
 }
 
-const uploadSizeTip = () => {
-  return $t('biz.imgbox.notExceed') + '2M'
-}
-
 const uploadTips = () => {
-  const tips = [uploadTypeTip(), uploadSizeTip()]
+  const tips = [uploadTypeTip()]
   if (!options.multiple) {
     return tips.join('，')
   }

@@ -118,7 +118,7 @@ import { getForgetCode, checkUpdatePwd } from '@/api/auth/auth'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
 
-const webConfig = JSON.parse(localStorage.getItem('cloudShopWebConfigData')) || {}
+const webConfig = computed(() => useWebConfigStore().webConfig)
 
 // 当前语言
 const language = computed(() => useAppStore().language)
