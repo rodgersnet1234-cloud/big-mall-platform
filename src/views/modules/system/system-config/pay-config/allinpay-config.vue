@@ -207,7 +207,7 @@ const init = () => {
         appId.value = JSON.parse(data).appId // 获取appid，用于判断是否保存完成
         emit('appIdState', appId.value)
       } else {
-        emit('appIdState', true)
+        emit('appIdState', '')
       }
     })
   })

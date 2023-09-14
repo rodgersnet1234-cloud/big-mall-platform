@@ -110,7 +110,7 @@
     <allinpay-config
       v-show="allinpayConfigVisible"
       @un-set-state="unSetState"
-      @app-id-state="(state) =>appId = state"
+      @app-id-state="getAppidState"
       @toggle="(state)=>allinpayConfigVisible=state"
     />
   </div>
@@ -196,7 +196,11 @@ const unSetState = (state) => {
   allinpay.value = state
   unSet.value = state
 }
-const appId = ref(false)
+
+const appId = ref('')
+const getAppidState = (state) => {
+  appId.value = state
+}
 // 通联支付
 const onAllinpayChange = (val) => {
   if (val) {
