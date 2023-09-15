@@ -295,16 +295,16 @@ const webConfig = computed(() => useWebConfigStore().webConfig)
 // 当前语言
 const language = computed(() => useAppStore().language)
 watch(mallName, () => {
-  if (mallName.value && mallNameEmptyTips) {
+  if (mallName.value && mallNameEmptyTips.value) {
     mallNameEmptyTips.value = false
   }
 })
 watch(username, () => {
-  if (username.value && usernameEmptyTips) {
+  if (username.value && usernameEmptyTips.value) {
     usernameEmptyTips.value = false
     return
   }
-  if (isUserName(username) && usernameErrTips) {
+  if (isUserName(username.value) && usernameErrTips.value) {
     usernameErrTips.value = false
   }
 })
