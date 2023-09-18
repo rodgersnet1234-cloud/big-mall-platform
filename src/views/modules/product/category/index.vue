@@ -3,32 +3,13 @@
     <el-form @submit.prevent>
       <el-form-item>
         <el-alert
-          title="商品类目最多可添加3个层级，一级及二级类目只做为结构类目存在，未添加三级类目的类目不会在商城前台展示。对商品类目的修改或删除将会影响到商品展示与销售利润，请谨慎操作，尽量使用“修改”而避免“删除”！"
+          title="平台可对三级分类进行分类扣率的编辑"
           type="warning"
           show-icon
           :closable="false"
         />
       </el-form-item>
     </el-form>
-    <!-- 搜索相关区域 -->
-    <!-- <div class="filter-container">
-      <el-button
-        v-permission="['product:category:save']"
-        type="primary"
-        class="filter-item"
-        @click="onAddOrUpdate()"
-      >
-        {{ $t('table.create') }}
-      </el-button>
-      <el-button
-        v-permission="['platform:category:export']"
-        type="primary"
-        class="filter-item"
-        @click="exportFrom()"
-      >
-        导出
-      </el-button>
-    </div> -->
 
     <!-- 分类列表 -->
     <div class="category-list">
