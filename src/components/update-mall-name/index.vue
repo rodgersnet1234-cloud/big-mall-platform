@@ -33,6 +33,7 @@
             #append
           >
             <el-button
+              style="width: 102px;"
               :loading="!!countdown"
               :disabled="!!countdown"
               @click="getCode"
@@ -116,15 +117,15 @@ const getCode = () => {
     countdown.value = 60
     getCountdown()
   })
-  // 倒计时1分钟
-  const getCountdown = () => {
-    const timer = setInterval(() => {
-      countdown.value--
-      if (countdown.value === 0) {
-        clearInterval(timer)
-      }
-    }, 1000)
-  }
+}
+// 倒计时1分钟
+const getCountdown = () => {
+  const timer = setInterval(() => {
+    countdown.value--
+    if (countdown.value === 0) {
+      clearInterval(timer)
+    }
+  }, 1000)
 }
 defineExpose({
   init
