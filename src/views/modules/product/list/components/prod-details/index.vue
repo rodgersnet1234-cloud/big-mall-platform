@@ -146,7 +146,7 @@
                   class="rotating-img"
                   style="width: 100px; height: 100px"
                   :src="img"
-                  :preview-src-list="dataForm.imgUrls"
+                  :preview-src-list="[img]"
                 >
                   <template #error>
                     <img
@@ -313,7 +313,7 @@
 
 <script setup>
 import * as api from '@/api/product/prod-info.js'
-import { getUUID, formatHtml } from '@/utils/index.js'
+import { getUUID, formatHtml, checkFileUrl } from '@/utils/index.js'
 import { transportGet } from '@/api/distribution-manage/transport.js'
 import skuBlock from '@/components/sku/SkuBlock/index.vue'
 import skuTable from '@/components/sku/SkuTable/index.vue'
@@ -323,7 +323,6 @@ import categoryGroup from '@/components/category-group/index.vue'
 import picturePreview from '@/components/picture-preview/index.vue'
 import Big from 'big.js'
 import { ElMessage } from 'element-plus'
-
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const route = useRoute()
@@ -392,12 +391,8 @@ const init = (spuId) => {
         const imgUrls = data.imgUrls.split(',')
         const imgs = []
         imgUrls.forEach((img) => {
-          if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-            const image = resourcesUrl + img
-            imgs.push(image)
-          } else {
-            imgs.push(img)
-          }
+          const image = checkFileUrl(img)
+          imgs.push(image)
         })
         dataForm.value.imgUrls = imgs
       } else {
@@ -410,7 +405,7 @@ const init = (spuId) => {
       // 商品分类选择按钮
       showCategorySelectBtn.value = false
       if (data.brand?.imgUrl) {
-        brandImgUrl.value = (data.brand.imgUrl).indexOf('http') === -1 ? resourcesUrl + data.brand.imgUrl : data.brand.imgUrl // 品牌图片
+        brandImgUrl.value = checkFileUrl(data.brand.imgUrl) // 品牌图片
       }
       brandName.value = data.brand?.name // 品牌名字
       // 根据分类获取基本规格列表

@@ -500,9 +500,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img
@@ -590,9 +590,9 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
-                      :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
+                      :src="checkFileUrl(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -619,9 +619,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img

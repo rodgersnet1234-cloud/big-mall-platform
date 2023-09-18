@@ -207,8 +207,8 @@
                   fit="contain"
                   class="img-static"
                   style="width: 100px; height: 100px"
-                  :src="shopBasicInfo.shopLogo.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.shopLogo : shopBasicInfo.shopLogo"
-                  :preview-src-list="shopBasicInfo.shopLogo.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.shopLogo] : [shopBasicInfo.shopLogo]"
+                  :src="checkFileUrl(shopBasicInfo.shopLogo)"
+                  :preview-src-list="[checkFileUrl(shopBasicInfo.shopLogo)]"
                 >
                   <template #error>
                     <img
@@ -242,8 +242,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="shopBasicInfo.mobileBackgroundPic.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.mobileBackgroundPic : shopBasicInfo.mobileBackgroundPic"
-                    :preview-src-list="shopBasicInfo.mobileBackgroundPic.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.mobileBackgroundPic] : [shopBasicInfo.mobileBackgroundPic]"
+                    :src="checkFileUrl(shopBasicInfo.mobileBackgroundPic) "
+                    :preview-src-list=" [checkFileUrl(shopBasicInfo.mobileBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -265,8 +265,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="shopBasicInfo.pcBackgroundPic.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.pcBackgroundPic : shopBasicInfo.pcBackgroundPic"
-                    :preview-src-list="shopBasicInfo.pcBackgroundPic.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.pcBackgroundPic] : [shopBasicInfo.pcBackgroundPic]"
+                    :src="checkFileUrl(shopBasicInfo.pcBackgroundPic) "
+                    :preview-src-list="[checkFileUrl(shopBasicInfo.pcBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -447,8 +447,8 @@
                 fit="contain"
                 class="img-static"
                 style="width: 100px; height: 100px"
-                :src="businessInfo.businessLicense.indexOf('http')===-1 ? resourcesUrl + businessInfo.businessLicense : businessInfo.businessLicense"
-                :preview-src-list="businessInfo.businessLicense.indexOf('http')===-1 ? [resourcesUrl + businessInfo.businessLicense] : [shopBasicInfo.businessLicense]"
+                :src="checkFileUrl(businessInfo.businessLicense)"
+                :preview-src-list="[checkFileUrl(businessInfo.businessLicense)]"
               >
                 <template #error>
                   <img
@@ -478,8 +478,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="businessInfo.identityCardFront.indexOf('http')===-1 ? resourcesUrl + businessInfo.identityCardFront : businessInfo.identityCardFront"
-              :preview-src-list="businessInfo.identityCardFront.indexOf('http')===-1 ? [resourcesUrl + businessInfo.identityCardFront] : [businessInfo.identityCardFront]"
+              :src="checkFileUrl(businessInfo.identityCardFront)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -493,8 +493,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="businessInfo.identityCardLater.indexOf('http')===-1 ? resourcesUrl + businessInfo.identityCardLater : businessInfo.identityCardLater"
-              :preview-src-list="businessInfo.identityCardLater.indexOf('http')===-1 ? [resourcesUrl + businessInfo.identityCardLater] : [businessInfo.identityCardLater]"
+              :src="checkFileUrl(businessInfo.identityCardLater)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -594,7 +594,7 @@
                       class="tab-img"
                       style="width: 60px; height: 60px"
                       :src="img"
-                      :preview-src-list="scope.row.imgs"
+                      :preview-src-list="[img]"
                       preview-teleported
                     >
                       <template #error>
@@ -675,8 +675,8 @@
                     preview-teleported
                     class="tab-img"
                     style="width: 60px; height: 60px;"
-                    :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
-                    :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                    :src="checkFileUrl(scope.row.imgUrl)"
+                    :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -700,7 +700,7 @@
                       class="tab-img"
                       style="width: 60px; height: 60px"
                       :src="img"
-                      :preview-src-list="scope.row.imgs"
+                      :preview-src-list="[img]"
                     >
                       <template #error>
                         <img
@@ -770,8 +770,8 @@
                       class="tab-img"
                       preview-teleported
                       style="width: 60px; height: 60px"
-                      :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
-                      :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                      :src="checkFileUrl(scope.row.imgUrl)"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -794,8 +794,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :src="checkFileUrl(img)"
+                      :preview-src-list="[checkFileUrl(img)]"
                       preview-teleported
                     >
                       <template #error>
@@ -1108,9 +1108,8 @@
 import { Debounce } from '@/utils/debounce'
 import * as api from '@/api/platform/audit-shop'
 import { ElMessage } from 'element-plus'
+import { checkFileUrl } from '@/utils'
 
-// 图片前缀
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const route = useRoute()
 const shopId = route.query.shopId || 0
 // 页面类型 查看详情/审核申请
@@ -1320,12 +1319,8 @@ const queryBrandSigningInfo = () => {
 const handleImgUrl = (imgUrls) => {
   const imgs = []
   imgUrls.forEach((img) => {
-    if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-      const image = resourcesUrl + img
-      imgs.push(image)
-    } else {
-      imgs.push(img)
-    }
+    const image = checkFileUrl(img)
+    imgs.push(image)
   })
   return imgs
 }

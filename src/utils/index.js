@@ -611,3 +611,16 @@ export function bigNumberTransform (value) {
   }
   return newValue.join('')
 }
+/**
+* 文件地址校验
+* @param fileUrl 获取到的文件路径
+*/
+export function checkFileUrl (fileUrl) {
+  const baseUrl = import.meta.env.VITE_APP_RESOURCES_URL
+  const rex = new RegExp(baseUrl)
+  if (fileUrl && !rex.test(fileUrl.trim())) {
+    return baseUrl + fileUrl
+  } else {
+    return fileUrl
+  }
+}

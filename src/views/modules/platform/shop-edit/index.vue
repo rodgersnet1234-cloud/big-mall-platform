@@ -575,9 +575,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img
@@ -665,9 +665,9 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
-                      :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
+                      :src="checkFileUrl(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -695,8 +695,8 @@
                       :key="index"
                       class="tab-img"
                       preview-teleported
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :src="checkFileUrl(img)"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img
@@ -1050,7 +1050,7 @@
 <script setup>
 import * as api from '@/api/platform/audit-shop'
 import * as addrApi from '@/api/delivery/transport'
-import { treeDataTranslate } from '@/utils'
+import { treeDataTranslate, checkFileUrl } from '@/utils'
 // import ImgUpload from '@/components/ImgUpload'
 import { isMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
 import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
@@ -1063,7 +1063,6 @@ import { useRouter } from 'vue-router'
 // import { countByShopStatus } from '@/api/multishop/shop-detail'
 const cateAddOrUpdateRef = ref(null)
 const brandAddOrUpdateRef = ref(null)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const shopId = ref(useRoute().query.shopId || 0)
 const navStatus = ref(0)
 const router = useRouter()
