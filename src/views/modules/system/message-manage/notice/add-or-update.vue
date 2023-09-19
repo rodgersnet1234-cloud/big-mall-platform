@@ -58,9 +58,6 @@
         prop="type"
       >
         <el-checkbox-group v-model="dataForm.types">
-          <el-checkbox :label="3">
-            供应商
-          </el-checkbox>
           <el-checkbox :label="1">
             商家
           </el-checkbox>
@@ -89,7 +86,7 @@
         :type="1"
         @get-ids="(ids) => dataForm.multiShopIds = ids"
       />
-      <el-form-item
+      <!-- <el-form-item
         v-show="dataForm.types.includes(3)"
         label="供应商范围"
         prop="type"
@@ -108,7 +105,7 @@
         :table-list="dataForm.supplierDetailList"
         :type="3"
         @get-ids="(ids) => dataForm.supplierIds = ids"
-      />
+      /> -->
       <el-form-item
         v-show="dataForm.types.includes(2)"
         label="用户范围"
@@ -355,14 +352,14 @@ const onSubmit = Debounce(() => {
       })
       return
     }
-    if (dataForm.supplierRange === 2 && !dataForm.supplierIds.length) {
-      ElMessage({
-        message: '请选择指定供应商',
-        type: 'error',
-        duration: 1500
-      })
-      return
-    }
+    // if (dataForm.supplierRange === 2 && !dataForm.supplierIds.length) {
+    //   ElMessage({
+    //     message: '请选择指定供应商',
+    //     type: 'error',
+    //     duration: 1500
+    //   })
+    //   return
+    // }
     if (dataForm.userRange === 2 && !dataForm.userIds.length) {
       ElMessage({
         message: '请选择指定用户',
