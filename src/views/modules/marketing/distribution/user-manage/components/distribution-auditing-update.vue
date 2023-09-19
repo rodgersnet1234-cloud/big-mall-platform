@@ -113,6 +113,7 @@
         </el-button>
         <el-button
           type="primary"
+          :class="!isEdit?'gray-btn':''"
           :disabled="!isEdit"
           @click="onSubmit()"
         >
@@ -272,5 +273,13 @@ div :deep(.el-dialog__wrapper) {
   }
 :deep(.distribution-auditing-update .el-dialog__footer){
   padding-top:20px
+}
+.gray-btn{
+  background-color: #8aadea;
+    border-color: #8aadea;
+    &:hover{
+      background-color: #8aadea;
+      border-color: #8aadea;
+    }
 }
 </style>
