@@ -190,7 +190,7 @@
             <a
               class="strong"
               @click="queryRegisterProtocol"
-            >《商家注册协议》
+            >《平台注册协议》
             </a>
           </div>
         </div>
