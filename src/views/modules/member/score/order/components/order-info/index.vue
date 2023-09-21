@@ -509,6 +509,7 @@
                 </div>
               </div>
             </div>
+            <!-- 商品列表 -->
             <div class="goods-list">
               <el-table
                 :data="dataForm.orderItems"
@@ -757,15 +758,15 @@ const indexs = ref(0)
 const getDataList = () => {
   api.orderInfo(dataForm.value.orderId).then((data) => {
     dataForm.value = data
+    if (dataForm.value.deliveryType !== 3) {
+      loadingDelivery.value = true
+      api.deliveryExpresseInfo({ orderId: dataForm.value.orderId }).then((data) => {
+        dataForm.value.deliveryExpresses = data
+        deliveryExpresse = data[0]
+        loadingDelivery.value = false
+      })
+    }
   })
-  if (dataForm.value.deliveryType !== 3) {
-    loadingDelivery.value = true
-    api.deliveryExpresseInfo({ orderId: dataForm.value.orderId }).then((data) => {
-      dataForm.value.deliveryExpresses = data
-      deliveryExpresse = data[0]
-      loadingDelivery.value = false
-    })
-  }
 }
 
 const loadingDelivery = ref(false)
