@@ -113,9 +113,9 @@
         </div>
         <router-link
           v-if="subjectStatus===1&&subjectType===2"
+          :to="{path:'information-config',query:{type:'notSubject'}}"
         >
           <el-button
-            :to="{path:'information-config',query:{type:'notSubject'}}"
             type="primary"
           >
             查看详情
