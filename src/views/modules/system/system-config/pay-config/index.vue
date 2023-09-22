@@ -134,15 +134,15 @@ const alipayMessageConfig = ref(false)// 是否填写微信配置内容
 onMounted(() => {
   // 微信开启状态
   api.get('WXPAY_STATUS_CONFIG').then(res => {
-    weChatPay.value = res && !!JSON.parse(res).wxPayStatus
+    weChatPay.value = !!JSON.parse(res)?.wxPayStatus
   })
   // 支付宝开启状态
   api.get('ALIPAY_STATUS_CONFIG').then(res => {
-    Alipay.value = res && !!JSON.parse(res).alipayStatus
+    Alipay.value = !!JSON.parse(res)?.alipayStatus
   })
   // 余额开启状态
   api.get('BALANCE_PAY_STATUS_CONFIG').then(res => {
-    balancePay.value = res && !!JSON.parse(res).balancePayStatus
+    balancePay.value = !!JSON.parse(res)?.balancePayStatus
   })
 })
 // 微信
