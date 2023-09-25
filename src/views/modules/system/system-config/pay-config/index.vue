@@ -3,7 +3,7 @@
     class="mod-platform-pconfigs"
   >
     <div
-      v-if="!wxConfigVisible&&!alipayConfigVisible&&!allinpayConfigVisible"
+      v-if="!wxConfigVisible&&!alipayConfigVisible"
     >
       <!-- 直连支付 -->
       <div class="tips-text">
@@ -82,7 +82,7 @@
           <el-button
             type="primary"
             link
-            @click="allinpayConfigVisible=true"
+            @click="onAllinConfigEdit"
           >
             编辑
           </el-button>
@@ -91,7 +91,7 @@
         <el-switch
           v-model="allinpay"
           v-permission="['platform:sysConfig:save']"
-          :disabled="unSet || !appId"
+          :disabled="disable"
           @change="onAllinpayChange"
         />
       </div>
@@ -108,10 +108,10 @@
       @toggle="(state)=>Alipay=state"
     />
     <allinpay-config
-      v-show="allinpayConfigVisible"
+      ref="allinpayConfigRef"
       @un-set-state="unSetState"
       @app-id-state="getAppidState"
-      @toggle="(state)=>allinpayConfigVisible=state"
+      @toggle="(state)=>allinpay=state"
     />
   </div>
 </template>
@@ -128,11 +128,11 @@ const Alipay = ref(false)
 const balancePay = ref(false)
 const wxConfigVisible = ref(false)
 const alipayConfigVisible = ref(false)
-const allinpayConfigVisible = ref(false)
 const WeChatMessageConfig = ref(false)// 是否填写微信配置内容
 const alipayMessageConfig = ref(false)// 是否填写微信配置内容
 const alipayConfigRef = ref(null)
 const wxConfigRef = ref(null)
+const allinpayConfigRef = ref(null)
 onMounted(() => {
   // 微信开启状态
   api.get('WXPAY_STATUS_CONFIG').then(res => {
@@ -179,12 +179,16 @@ const onAlipayChange = (state) => {
   }
   updatePayConfig('ALIPAY_STATUS_CONFIG', paramValue, '支付宝支付状态')
 }
+// 开启支付宝配置信息弹窗
 const onAlipayEdit = () => {
   alipayConfigRef.value.exposeVisible()
 }
-// 开启微信配置弹窗
+// 开启微信配置信息弹窗
 const onWxConfigEdit = () => {
   wxConfigRef.value.exposeVisible()
+}
+const onAllinConfigEdit = () => {
+  allinpayConfigRef.value.exposeVisible()
 }
 // 余额支付状态
 const onUnionPayChange = (state) => {
@@ -212,6 +216,11 @@ const getAppidState = (state) => {
 }
 // 通联支付
 const onAllinpayChange = (val) => {
+  if (!appId.value) {
+    allinpayConfigRef.value.exposeVisible()
+    allinpay.value = false
+    return
+  }
   if (val) {
     ElMessageBox({
       message: h('div', { style: 'padding:30px 5px 0', class: 'box' }, [
@@ -234,8 +243,9 @@ const onAllinpayChange = (val) => {
     })
   }
 }
-const onSubmit = (configKey) => {
-  if (appId.value) {
+const disable = ref(false)
+const onSubmit = async (configKey) => {
+  if (!appId.value) {
     ElMessage({
       message: '请编辑填写配置信息',
       type: 'error',
@@ -244,7 +254,10 @@ const onSubmit = (configKey) => {
     allinpay.value = false
     return
   }
-  updatePayConfig(configKey, { paySettlementType: 1 }, '支付结算配置')
+  const res = await updatePayConfig(configKey, { paySettlementType: 1 }, '支付结算配置')
+  if (res) {
+    disable.value = true // 如果配置成功则禁掉Switch按钮
+  }
 }
 // 封装请求
 const updatePayConfig = (paramKey, paramValue, remark) => {
