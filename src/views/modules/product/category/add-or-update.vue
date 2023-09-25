@@ -81,12 +81,6 @@
           @select-or-revise-category="()=>{selectOrReviseCategory(selectedCategories)}"
           @delete-category-item-of-selected="deleteCategoryItemOfSelected"
         />
-        <!-- 文字说明 -->
-        <div class="tips-text-part">
-          <p class="tips">
-            {{ $t('product.category.categoryParentTip') }}
-          </p>
-        </div>
       </el-form-item>
       <!-- 排序 -->
       <el-form-item
