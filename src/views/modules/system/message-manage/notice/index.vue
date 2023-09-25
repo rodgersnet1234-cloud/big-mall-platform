@@ -57,10 +57,6 @@
                 label="在用户端展示"
                 value="2"
               />
-              <el-option
-                label="在供应商端展示"
-                value="3"
-              />
             </el-select>
           </el-form-item>
           <el-form-item
@@ -222,10 +218,7 @@
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/platform/notice'
 import { ElMessage, ElMessageBox } from 'element-plus'
-// 表单
-const searchForm = reactive({
-  title: ''
-})
+
 const addOrUpdateVisible = ref(false)
 const addOrUpdateRef = ref()
 const searchParam = reactive({
