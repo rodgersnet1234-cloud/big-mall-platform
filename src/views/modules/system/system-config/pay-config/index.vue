@@ -21,7 +21,7 @@
             <el-button
               type="primary"
               link
-              @click="wxConfigVisible=true"
+              @click="onWxConfigEdit"
             >
               编辑
             </el-button>
@@ -42,7 +42,7 @@
             <el-button
               type="primary"
               link
-              @click="alipayConfigVisible=true"
+              @click="onAlipayEdit"
             >
               编辑
             </el-button>
@@ -97,15 +97,15 @@
       </div>
     </div>
     <wx-config
-      v-show="wxConfigVisible"
-      @toggle="(state)=>wxConfigVisible=state"
+      ref="wxConfigRef"
+      @toggle="(state)=>weChatPay=state"
       @init-message="(state)=>WeChatMessageConfig=state"
     />
 
     <alipay-config
-      v-show="alipayConfigVisible"
-      @toggle="(state)=>alipayConfigVisible=state"
+      ref="alipayConfigRef"
       @init-message="(state)=>alipayMessageConfig=state"
+      @toggle="(state)=>Alipay=state"
     />
     <allinpay-config
       v-show="allinpayConfigVisible"
@@ -131,6 +131,8 @@ const alipayConfigVisible = ref(false)
 const allinpayConfigVisible = ref(false)
 const WeChatMessageConfig = ref(false)// 是否填写微信配置内容
 const alipayMessageConfig = ref(false)// 是否填写微信配置内容
+const alipayConfigRef = ref(null)
+const wxConfigRef = ref(null)
 onMounted(() => {
   // 微信开启状态
   api.get('WXPAY_STATUS_CONFIG').then(res => {
@@ -155,7 +157,7 @@ const onWeChatPayChange = (state) => {
     return
   }
   if (WeChatMessageConfig.value) {
-    ElMessage.error('请编辑填写配置信息')
+    wxConfigRef.value.exposeVisible(true)
     weChatPay.value = false
     return
   }
@@ -171,11 +173,18 @@ const onAlipayChange = (state) => {
     return
   }
   if (alipayMessageConfig.value) {
-    ElMessage.error('请编辑填写配置信息')
+    alipayConfigRef.value.exposeVisible(true)
     Alipay.value = false
     return
   }
   updatePayConfig('ALIPAY_STATUS_CONFIG', paramValue, '支付宝支付状态')
+}
+const onAlipayEdit = () => {
+  alipayConfigRef.value.exposeVisible()
+}
+// 开启微信配置弹窗
+const onWxConfigEdit = () => {
+  wxConfigRef.value.exposeVisible()
 }
 // 余额支付状态
 const onUnionPayChange = (state) => {
@@ -218,7 +227,7 @@ const onAllinpayChange = (val) => {
       onClose: () => {
         onSubmit('PAY_SETTLEMENT_CONFIG')
       }
-    }).then(action => {
+    }).then(() => {
       onSubmit('PAY_SETTLEMENT_CONFIG')
     }).catch(() => {
       allinpay.value = false
@@ -339,12 +348,8 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
     padding-right: 20px;
   }
   :deep(.gray-box) {
-    background: #f2f2f6;
     padding: 20px 35px;
     height: 100%;
-  }
-  :deep(.border-bottom-gray) {
-    border-bottom: 1px solid #dddce2;
   }
   :deep(.bottom-redius) {
     border-bottom-left-radius: 6px;
