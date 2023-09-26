@@ -6,7 +6,7 @@
         <WarningFilled />
       </el-icon>
       <span>
-        主体未认证时将会限制商品上架、微信收款及余额提现等功能。为了不影响商城日常经营，建议及时完成主体认证。
+        主体未认证时将会限制微信收款及余额提现等功能。为了不影响商城日常经营，建议及时完成主体认证。
       </span>
     </div>
     <div class="subject-certification">

@@ -38,8 +38,8 @@
         <el-icon class="warning">
           <Warning />
         </el-icon>
-        您的店铺正在申请上线，
-        <span>店铺等待审核中</span>
+        您的平台正在申请上线，
+        <span>平台审核中</span>
       </div>
     </div>
     <div
