@@ -71,7 +71,7 @@
       <!-- 聚合支付 -->
       <div class="tips-text">
         <h4>聚合支付</h4>
-        <span class="tips-content">配置开通后将才去通联的支付体系进行线上分账，无需重复配置微信/支付宝信息。开通后无法关闭，请谨慎开启。</span>
+        <span class="tips-content">配置开通后将采取通联的支付体系进行线上分账，无需重复配置微信/支付宝信息。开通后无法关闭，请谨慎开启。</span>
       </div>
       <div class="pay-card">
         <img src="@/assets/images/icon_allinpay.png">
