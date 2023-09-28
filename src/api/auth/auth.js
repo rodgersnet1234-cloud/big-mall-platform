@@ -25,7 +25,7 @@ export function updatePassword (data) {
 
 export function getRegisterCode (data) {
   return request({
-    url: '/mall4cloud_biz/ua/sms/verification_code/apply_shop',
+    url: '/mall4cloud_biz/ua/sms/verification_code/apply_platform',
     method: 'PUT',
     data
   })
