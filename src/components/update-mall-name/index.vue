@@ -22,7 +22,10 @@
         label="修改商城名称"
         prop="newName"
       >
-        <el-input v-model="dataForm.newName" />
+        <el-input
+          v-model="dataForm.newName"
+          maxlength="16"
+        />
       </el-form-item>
       <el-form-item
         label="验证码"
