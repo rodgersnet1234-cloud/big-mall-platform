@@ -37,11 +37,10 @@
           >
             <el-button
               style="width: 102px;"
-              :loading="!!countdown"
               :disabled="!!countdown"
               @click="getCode"
             >
-              {{ countdown? countdown:'获取验证码' }}
+              {{ countdown? countdown + 's':'获取验证码' }}
             </el-button>
           </template>
         </el-input>
