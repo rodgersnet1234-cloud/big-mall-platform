@@ -62,7 +62,7 @@
 import { sendCode, updateMallName } from '@/api/multishop/shop-event'
 import { ElMessage } from 'element-plus'
 import { mallUserStore } from '@/stores/modules/mallUser.js'
-
+const emit = defineEmits(['updateName'])
 const visible = ref(false)
 const countdown = ref(0)
 const dataForm = reactive({
@@ -77,16 +77,19 @@ const dataRules = reactive({
   ]
 })
 const dataFormRef = ref()
-const init = () => {
+const mallStore = mallUserStore()
+const phone = ref('')
+
+const init = async () => {
   visible.value = true
+  await mallStore.onGetMallUserInfo()
+  dataForm.oldName = mallStore.mallName
+  phone.value = mallStore.phone
   nextTick(() => {
     dataFormRef.value?.resetFields()
   })
 }
-const phone = ref('')
-const mallStore = mallUserStore()
-dataForm.oldName = mallStore.mallName
-phone.value = mallStore.phone
+
 const onHidePhone = (phone) => {
   const reg = /^(\d{3})\d{4}(\d{4})$/
   return phone.replace(reg, '$1****$2')
@@ -100,10 +103,11 @@ const onSubmit = () => {
         mallName: dataForm.newName
       }
       updateMallName(data).then(() => {
+        emit('updateName')
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',
-          duration: 1500,
+          duration: 500,
           onClose: () => {
             visible.value = false
           }

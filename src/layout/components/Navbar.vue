@@ -124,6 +124,7 @@
     <update-mall-name
       v-if="updateMallNameVisible"
       ref="updateMallNameRef"
+      @update-name="updateName"
     />
   </div>
 </template>
@@ -132,7 +133,7 @@
 import UpdatePassword from '@/components/update-password/index.vue'
 import UpdateMallName from '@/components/update-mall-name/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { getPlatformIdentifying } from '@/api/multishop/shop-event'
+import { getPlatformIdentifying, getMallUserInfo } from '@/api/multishop/shop-event'
 
 import { Base64 } from 'js-base64'
 import { mallUserStore } from '@/stores/modules/mallUser.js'
@@ -383,6 +384,11 @@ onMounted(() => {
 const mallName = ref('')
 const mallStore = mallUserStore()
 mallName.value = mallStore.mallName
+const updateName = () => {
+  getMallUserInfo().then(shopUser => {
+    mallName.value = shopUser.mallName
+  })
+}
 const isDecorate = computed(() => {
   return !(/^\/(platform-decorate\/decorate-select-decorate)/.test(router.currentRoute.value.path))
 })
