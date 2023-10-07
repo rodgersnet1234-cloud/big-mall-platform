@@ -121,17 +121,16 @@ const rules = {
     { pattern: EMAIL_REGEXP, message: '邮箱格式有误', trigger: 'blur' }
   ],
   phone: [
+    { required: true, message: '请输入手机号码', trigger: 'blur' },
     { pattern: MOBILE_REGEXP, message: '手机号格式有误', trigger: 'blur' }
   ],
   password: [
-    // { required: true, message: '密码不能为空', trigger: 'blur' },
     { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ]
 }
 
 const init = (userId, hasAccount) => {
-  console.log('init', hasAccount)
   dataForm.userId = userId
   dataForm.hasAccount = hasAccount
   visible.value = true
@@ -167,7 +166,7 @@ const onSubmit = () => {
       data.password = encrypt(data.password)
     }
     const request = data.hasAccount ? api.update(data) : api.save(data)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
