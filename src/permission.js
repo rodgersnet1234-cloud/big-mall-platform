@@ -10,7 +10,7 @@
 import router from './router'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { useUserStore } from '@/stores/modules/user.js'
-import { mallUserStore } from '@/stores/modules/mallUser.js'
+import { mallUserStore } from '@/stores/modules/mall-user.js'
 import { usePermissionStore } from '@/stores/modules/permission.js'
 
 const whiteList = ['/login', '/register', '/forget-password', '/reset-password']// no redirect whitelist

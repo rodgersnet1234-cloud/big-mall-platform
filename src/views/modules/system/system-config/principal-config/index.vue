@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="way-card">
-      <div class="card-content">
+      <!-- <div class="card-content">
         <div
           v-if="subjectType===1&&subjectStatus===0"
           class="state-text"
@@ -40,8 +40,6 @@
         <div class="bottom-text">
           ① 由服务商协助配置微信支付<br>
           ② 由服务商协助管理微信小程序/公众号<br>
-          ③ 商城平台与SaaS后台进行线上结算，与商家及<br>
-          供应商进行线下结算
         </div>
 
         <div>
@@ -75,9 +73,9 @@
             </el-button>
           </router-link>
         </div>
-      </div>
+      </div> -->
       <!-- 非主体认证+授权小程序/公众号 -->
-      <div class="card-content">
+      <!-- <div class="card-content">
         <div
           v-if="subjectType===2&&subjectStatus===0"
           class="state-text"
@@ -108,8 +106,6 @@
         <div class="bottom-text">
           ① 需自行配置商城支付方式<br>
           ② 由服务商协助管理微信小程序/公众号<br>
-          ③ 商城平台与SaaS后台、入驻商家及供应商都进<br>
-          行线下结算
         </div>
         <router-link
           v-if="subjectStatus===1&&subjectType===2"
@@ -140,7 +136,7 @@
             {{ subjectType===2&&subjectStatus===0?'继续编辑':'立即认证' }}
           </el-button>
         </router-link>
-      </div>
+      </div> -->
       <!-- 非主体认证+自行管理小程序/公众号 -->
       <div class="card-content">
         <div
@@ -173,8 +169,6 @@
         <div class="bottom-text">
           ① 需自行配置商城支付方式<br>
           ② 需自行管理微信小程序/公众号<br>
-          ③ 商城平台与SaaS后台、入驻商家及供应商都进行<br>
-          线下结算
         </div>
         <router-link
           v-if="subjectStatus===1&&subjectType===3"
@@ -279,6 +273,7 @@ onMounted(() => {
         margin: 60px 0 20px;
        }
        .bottom-text{
+        width: 315px;
         height: 84px;
         font-size: 14px;
         font-family: Microsoft YaHei-Regular, Microsoft YaHei, sans-serif;

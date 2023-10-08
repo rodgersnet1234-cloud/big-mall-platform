@@ -136,7 +136,7 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { getPlatformIdentifying, getMallUserInfo } from '@/api/multishop/shop-event'
 
 import { Base64 } from 'js-base64'
-import { mallUserStore } from '@/stores/modules/mallUser.js'
+import { mallUserStore } from '@/stores/modules/mall-user.js'
 
 const updatePasswordVisible = ref(false)
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL

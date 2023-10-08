@@ -478,7 +478,7 @@ import {
   countByShopStatus,
   listShopRankIngByFlow
 } from '@/api/multishop/shop-detail'
-import { mallUserStore } from '@/stores/modules/mallUser.js'
+import { mallUserStore } from '@/stores/modules/mall-user.js'
 import { getEventInfo, auditApply } from '@/api/multishop/shop-event'
 import { ElMessage } from 'element-plus'
 

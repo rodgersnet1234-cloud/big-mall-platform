@@ -8,8 +8,8 @@
       ref="dataFormRef"
       :rules="rules"
       :model="dataForm"
-      label-position="left"
-      label-width="70px"
+      label-position="right"
+      label-width="80px"
       style="width: 400px; margin-left:50px;"
       @submit.prevent
     >

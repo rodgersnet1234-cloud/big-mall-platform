@@ -63,7 +63,7 @@
 <script  setup>
 import { sendCode, updateMallName } from '@/api/multishop/shop-event'
 import { ElMessage } from 'element-plus'
-import { mallUserStore } from '@/stores/modules/mallUser.js'
+import { mallUserStore } from '@/stores/modules/mall-user.js'
 const emit = defineEmits(['updateName'])
 const visible = ref(false)
 const countdown = ref(0)
