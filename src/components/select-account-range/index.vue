@@ -123,6 +123,7 @@
             <span v-if="row[propList[3]] === 3">开店待审核</span>
             <span v-if="row[propList[3]] === 4">店铺申请中</span>
             <span v-if="row[propList[3]] === 5">上线待审核</span>
+            <span v-if="row[propList[3]] === 7">系统下线</span>
           </template>
         </el-table-column>
       </el-table>

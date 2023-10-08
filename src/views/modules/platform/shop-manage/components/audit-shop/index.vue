@@ -92,7 +92,7 @@
               <span>{{ row.createTime || '-' }}</span>
             </template>
           </el-table-column>
-          <!-- 店铺状态 shopStatus (-1:已删除 0: 停业中 1:营业中 2:平台下线 3:开店待审核 4:店铺申请中 6.上线待审核 -->
+          <!-- 店铺状态 shopStatus (-1:已删除 0: 停业中 1:营业中 2:平台下线 3:开店待审核 4:店铺申请中 6.上线待审核 7.系统下线 -->
           <el-table-column
             label="店铺状态"
             prop="shopStatus"
@@ -127,6 +127,10 @@
                 v-if="row.shopStatus === 5"
                 type="danger"
               >上线待审核</span>
+              <span
+                v-if="row.shopStatus === 7"
+                type="danger"
+              >系统下线</span>
             </template>
           </el-table-column>
           <!-- 审核状态 status (0 未审核 1已通过 -1未通过) -->
