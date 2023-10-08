@@ -39,6 +39,7 @@
     <div class="main-content">
       <div class="operation-bar">
         <el-checkbox
+          :disabled="!pageData?.dataList.length"
           v-model="checkAll"
           :indeterminate="isIndeterminate"
           class="all-check-btn"
@@ -219,7 +220,7 @@ const getPageData = (newData = false) => {
 // 监听表格选中
 const handleSelectionChange = (value) => {
   const checkedCount = value.length
-  checkAll.value = checkedCount === pageData.value.dataList.length
+  checkAll.value = pageData.value.dataList.length ? checkedCount === pageData.value.dataList.length : false
   isIndeterminate.value = checkedCount > 0 && checkedCount < pageData.value.dataList.length
   // 提取出公告id列表
   const selectedMsgs = []

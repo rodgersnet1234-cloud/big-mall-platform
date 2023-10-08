@@ -18,7 +18,6 @@
           :label="$t('rbac.webConfig.pcConfiguration')"
           name="webConfigPc"
         >
-          <!-- <webConfigPc v-if="activeName === 'webConfigPc'" /> -->
           <add-or-update
             v-if="activeName === 'webConfigPc'"
             :config-type="3"
@@ -28,7 +27,6 @@
           :label="$t('rbac.webConfig.h5Configuration')"
           name="webConfigUni"
         >
-          <!-- <webConfigUni v-if="activeName === 'webConfigUni'" /> -->
           <add-or-update
             v-if="activeName === 'webConfigUni'"
             :config-type="4"
@@ -38,7 +36,6 @@
           :label="$t('rbac.webConfig.stationConfiguration')"
           name="webConfigStation"
         >
-          <!-- <webConfigStation v-if="activeName === 'webConfigStation'" /> -->
           <add-or-update
             v-if="activeName === 'webConfigStation'"
             :config-type="5"

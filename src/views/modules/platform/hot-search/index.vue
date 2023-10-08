@@ -59,7 +59,7 @@
               type="primary"
               @click="getSearchList(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="clearSearchInfo()"
@@ -298,13 +298,3 @@ const clearSearchInfo = () => {
 }
 
 </script>
-
-<style lang="scss" scoped>
-.mod-hot-search {
-  .el-form--inline {
-    .el-form-item {
-      margin-right: 20px;
-    }
-  }
-}
-</style>

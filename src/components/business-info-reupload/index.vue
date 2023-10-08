@@ -180,10 +180,10 @@ const submitForm = Debounce(function () {
   })
 }, 1500)
 
+defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>
-
   .business-license-box {
     .license-content {
       display: flex;
@@ -248,7 +248,7 @@ const submitForm = Debounce(function () {
       color: #fff;
       background: rgba(51, 51, 51, 0.5);
       text-align: center;
-      border-radius: 0px 0px 3px 3px;
+      border-radius: 0 0 3px 3px;
     }
   }
 

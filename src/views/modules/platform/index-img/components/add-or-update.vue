@@ -14,7 +14,7 @@
         :rules="rules"
         :model="dataForm"
         label-position="right"
-        label-width="90px"
+        label-width="auto"
         style="min-width: 600px; width: 600px; margin-left:35px;"
         @submit.prevent
       >
@@ -292,17 +292,6 @@ const onSubmit = Debounce(() => {
 
 <style lang="scss" scoped>
 .index-img {
-  .type-box{
-    :deep(.el-form-item__content){
-      display: block;
-
-    }
-  }
-  .el-form--label-left {
-    .el-form-item__label {
-      text-align: right !important;
-    }
-  }
   .select-pro {
     margin-top: 10px;
     width: 100%;
@@ -324,9 +313,6 @@ const onSubmit = Debounce(() => {
       position: absolute;
       top: 30px;
       right: 0;
-    }
-    .el-button--medium {
-      padding: 2px 6px !important;
     }
   }
 }

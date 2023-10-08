@@ -172,8 +172,7 @@ const getPage = (newData = false) => {
     pageData.value.pages = res.pages
     pageData.value.total = res.total
     pageLoading.value = false
-  }).catch(err => {
-    console.log(err)
+  }).catch(() => {
     pageLoading.value = false
   })
 }
@@ -194,7 +193,6 @@ const onDelete = (sysAccessKeyId) => {
 }
 
 const deleteById = (sysAccessKeyId) => {
-  console.log(sysAccessKeyId)
   api.deleteById(sysAccessKeyId).then(() => {
     ElMessage({
       message: $t('table.actionSuccess'),
@@ -206,11 +204,11 @@ const deleteById = (sysAccessKeyId) => {
 }
 const reset = (sysAccessKeyId) => {
   api.reset(sysAccessKeyId).then(() => {
-    this.$message({
-      message: this.$t('table.actionSuccess'),
+    ElMessage({
+      message: $t('table.actionSuccess'),
       type: 'success',
       duration: 1500,
-      onClose: () => this.getPage()
+      onClose: () => getPage()
     })
   })
 }

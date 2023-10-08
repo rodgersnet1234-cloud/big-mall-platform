@@ -52,12 +52,12 @@
               type="primary"
               @click="getPageData(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="onResetSearch(searchFormRef)"
             >
-              重置
+              {{ $t('table.reset') }}
             </el-button>
           </el-form-item>
         </div>

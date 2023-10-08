@@ -16,7 +16,7 @@
             <el-image
               :key="index"
               style="display: flex; align-items: center;justify-content: center; width: 100%; height: 100%"
-              fit="contain"
+              fit="fill"
               :src="item.url"
             >
               <template #error>

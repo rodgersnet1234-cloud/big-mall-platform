@@ -9,7 +9,6 @@
       class="el-dialog-bodyt"
       @close="closeDialog"
     >
-      <!-- native modifier has been removed, please confirm whether the function has been affected  -->
       <el-form
         ref="dataFormRef"
         :rules="rules"
@@ -73,7 +72,9 @@
                 <template #content>
                   <div>选择需要后，发布商品时该属性为必填</div>
                 </template>
-                <el-icon><QuestionFilled /></el-icon>
+                <el-icon>
+                  <QuestionFilled />
+                </el-icon>
               </el-tooltip>
             </div>
           </el-radio>
@@ -515,73 +516,69 @@ defineExpose({ init })
 
 <style lang="scss" scoped>
 .attr-manage {
-  .el-dialog__wrapper {
-    padding: 20px 0;
-  }
-  .el-form-item--medium .el-form-item__label {
-    text-align: right;
-    padding-right: 15px;
-  }
-  p {
-    margin: 0;
-  }
   .attr-int {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .add-btn {
       margin-left: 10px;
     }
   }
+
   .attr-val {
     background: #f8f8f8;
     margin-top: 20px;
-    // padding: 20px;
     box-sizing: border-box;
+
     .attr-scr {
-      // min-height: 40px;
-      // max-height: 220px;
       height: 180px;
       overflow-y: auto;
       padding: 10px 20px;
     }
-    // .attr-scr::-webkit-scrollbar { // 隐藏滚动条
-    //   display: none;
-    // }
+
     .lang-head {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       padding-right: 50px;
+
       .lang-int {
         display: block;
         width: 48%;
         text-align: center;
       }
+
       .lang-int:not(:last-child) {
         margin-right: 10px;
       }
     }
+
     .attr-val-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       .attr-val-int:not(:last-child) {
         margin-right: 10px;
       }
     }
+
     .attr-val-item:not(:last-child) {
       margin-bottom: 10px;
     }
+
     .attr-val-item .int-con {
       display: block;
       width: 100%;
     }
+
     .attr-val-item .txt-del-btn {
       margin-left: 15px;
     }
   }
+
   .attrVal-error {
     font-size: 12px;
     color: #ff4949;
@@ -594,26 +591,7 @@ defineExpose({ init })
     overflow: auto;
   }
 }
-// 防止属性过长挡住内容
-.el-dialog-bodyt .el-dialog__header{
-  border-bottom: 1px solid #c0ccda;
-}
-.el-dialog-bodyt .el-dialog__body {
-  height: 650px;
-  overflow-y: auto;
-}
-.el-dialog-bodyt .el-dialog__footer{
-  border-top: 1px solid #c0ccda;
-}
-.zZindex{
-  z-index: 9999 !important;
-}
-.el-dialog-bodyt .el-dialog__body{
-  height: auto !important;
-}
-// .attr-manage .el-dialog{
-//   margin: auto !important;
-// }
+
 .required {
   color: #ff4949;
   margin-right: 4px;

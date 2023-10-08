@@ -141,7 +141,6 @@ const rules = {
 }
 
 const init = (supplierId) => {
-  console.log('supplierId')
   visible.value = true
   pageQuery.supplierId = supplierId || null
   dataForm.value.supplierId = supplierId || null
@@ -169,7 +168,7 @@ const onSubmit = () => {
       password: encrypt(dataForm.value.password),
       supplierId: dataForm.value.supplierId
     }
-    api.updateLoginPassword(param).then((data) => {
+    api.updateLoginPassword(param).then(() => {
       ElMessage({
         message: '更新成功！',
         type: 'success',

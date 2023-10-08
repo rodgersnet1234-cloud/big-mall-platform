@@ -12,7 +12,7 @@
       class="dialog-form"
       :model="dataForm"
       :rules="dataRule"
-      :label-width="$t('language') === 'language' ? '150px' : '80px'"
+      label-width="auto"
       @submit.prevent
       @keyup.enter="onSubmit()"
     >
@@ -98,7 +98,6 @@ const init = (id) => {
   if (dataForm.id) {
     http.getSkills(id)
       .then((data) => {
-        console.log(data)
         dataForm.id = data.id
         dataForm.keywords = data.keywords
         dataForm.content = data.content
@@ -121,7 +120,7 @@ const onSubmit = () => {
       }
       isSubmit.value = true
       http[dataForm.id ? 'putSkills' : 'postSkills'](obj)
-        .then((data) => {
+        .then(() => {
           ElMessage({
             message: '操作成功',
             type: 'success',
@@ -132,8 +131,7 @@ const onSubmit = () => {
               dataForm.content = ''
             }
           })
-        }).catch((e) => {
-          console.log(e)
+        }).catch(() => {
           isSubmit.value = false
         })
     }
@@ -150,45 +148,9 @@ defineExpose({ init })
 
 <style lang="scss" scoped>
 .dialog-form {
-  ::v-deep(.el-form-item) {
-    margin-bottom: 4px;
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-.dialog-form {
-  ::v-deep(.el-form-item) {
-    margin-bottom: 4px;
-  }
-  ::v-deep(.el-form-item.is-error) {
-    margin-bottom: 22px;
-  }
-  .content{
-    padding-top:5px;
+  .content {
+    padding-top: 5px;
     padding-bottom: 5px;
-  }
-}
-.question-icon {
-  position: relative;
-  right: 30px;
-  // top: -13px;
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
-  font-size: 12px;
-  text-align: center;
-  color: #fff;
-  background: #C8C9CC;
-  border-radius: 50%;
-  margin-left: 5px;
-  cursor: default;
-}.notice-content {
-  ::v-deep(.el-form-item__label:before){
-    content: '*';
-    color: #F56C6C;
-    margin-right: 4px;
   }
 }
 </style>

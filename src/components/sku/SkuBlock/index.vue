@@ -12,7 +12,7 @@
     />
     <!-- 添加属性 -->
     <div
-      v-if="data.length < maxSize && view"
+      v-if="view"
       class="part-form-item"
     >
       <div class="part-form-item">

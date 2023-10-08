@@ -20,7 +20,7 @@
             type="primary"
             @click="getPage(true)"
           >
-            {{ $t('delivery.transport.query') }}
+            {{ $t('table.search') }}
           </el-button>
           <el-button
             @click="clearSearchInfo()"

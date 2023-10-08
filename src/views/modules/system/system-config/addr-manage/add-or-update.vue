@@ -161,7 +161,7 @@ const onSubmit = () => {
       dataForm.level = selectedOptions.value.length
     }
     const request = dataForm.areaId ? api.update(dataForm) : api.save(dataForm)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -178,13 +178,3 @@ const onSubmit = () => {
 
 defineExpose({ init })
 </script>
-
-<style lang="scss" scoped>
-.addr-manage {
-  .addr-item {
-    .el-cascader--medium {
-      width: 220px;
-    }
-  }
-}
-</style>

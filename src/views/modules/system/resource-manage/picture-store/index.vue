@@ -54,7 +54,7 @@
               type="primary"
               @click="searchImg(true)"
             >
-              {{ $t("biz.imgbox.query") }}
+              {{ $t('table.search') }}
             </el-button>
           </el-form-item>
         </el-form>

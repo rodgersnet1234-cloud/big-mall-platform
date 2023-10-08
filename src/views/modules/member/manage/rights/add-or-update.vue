@@ -185,9 +185,9 @@
           class="discount-body"
         >
           <el-input-number
-            v-model="dataForm.discount"
+            v-model.number="dataForm.discount"
             :placeholder="$t('user.level.discountRange')"
-            :min="0.1"
+            :min="0.0"
             :max="10"
             :precision="1"
             style="width: 200px;"
@@ -361,7 +361,7 @@ const onInit = (rightsId) => {
     }
     api.get(rightsId).then(data => {
       dataForm.value = data
-      detailsRef.value?.setContent(data.details || '')
+      dataForm.value.details = data.details || ''
       dataForm.value.discount = dataForm.value.discount / 10
       dataForm.value.rateScore = dataForm.value.rateScore / 10
       couponList.value = data.couponList.filter(item => {
@@ -474,7 +474,7 @@ const onSubmit = () => {
 
     const param = { ...dataForm.value }
 
-    param.discount = param.discount * 10
+    param.discount = param.discount * 10 || 0.0
     param.rateScore = param.rateScore * 10
     isSubmit = true
     const request = dataForm.value.rightsId ? api.update(param) : api.save(param)

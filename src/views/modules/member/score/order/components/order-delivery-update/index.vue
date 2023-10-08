@@ -147,7 +147,7 @@
           </el-radio>
           <el-radio
             :label="3"
-            :disabled="dataForm.deliveryType === 4"
+            :disabled="dataForm.deliveryType === 4 || isDisableNoCourier"
           >
             {{
               $t("order.order.noNeedRequired")
@@ -317,7 +317,6 @@
     <template #footer>
       <span>
         <el-button
-          type="primary"
           @click="visible = false"
         >{{
           $t("table.cancel")
@@ -414,11 +413,40 @@ const getDeliveryList = () => {
 }
 
 let selectOrderItems = []
+
+// 是否禁用"无需快递"选项
+const isDisableNoCourier = ref(false)
 /**
  * 修改状态
  */
 const onSelectSome = (val) => {
   selectOrderItems = val
+  getNoDeliverySts()
+}
+watch(() => dataList, () => {
+  getNoDeliverySts()
+}, { deep: true })
+
+/**
+ * 设置无需快递按钮状态
+ */
+const getNoDeliverySts = () => {
+  let flag = false
+  if (dataList.value.length !== selectOrderItems.length) {
+    flag = true
+  }
+  for (let i = 0; i < dataList.value.length; i++) {
+    const item = dataList.value[i]
+    if ((item.beDeliveredNum !== 0 && item.beDeliveredNum !== item.count) || item.count !== item.changeNum) {
+      flag = true
+      break
+    }
+  }
+  if (flag) {
+    dataForm.tempDeliveryType = 1
+    dataForm.deliveryType = 1
+  }
+  isDisableNoCourier.value = flag
 }
 
 /**

@@ -84,9 +84,17 @@ const dataForm = reactive({
   accessKey: null
 })
 
+const validName = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('内容不能只有空格'))
+  }
+  callback()
+}
+
 const dataRule = {
   name: [
-    { required: true, message: '请输入密钥名称', trigger: 'blur' }
+    { required: true, message: '请输入密钥名称', trigger: 'blur' },
+    { validator: validName, trigger: 'blur' }
   ]
 }
 
@@ -114,7 +122,7 @@ const onSubmit = () => {
       return
     }
     const request = dataForm.sysAccessKeyId ? api.update(dataForm) : api.save(dataForm)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',

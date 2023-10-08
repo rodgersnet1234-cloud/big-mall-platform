@@ -20,7 +20,7 @@
             class="spec-imgbox"
           >
             <img-upload
-              v-model="item.imgUrl"
+              v-model:model-value="item.imgUrl"
               :show="view"
               class="spec-img"
               @input="handleUploadSuccess(item, $event)"
@@ -252,7 +252,6 @@ const handleUploadSuccess = (item, urls) => {
     if (el.id === item.id) {
       el.imgUrl = urls
       el.is_show = true
-      // $forceUpdate()
     }
   })
   ease.onHandleSkuValueImg(skuPar)

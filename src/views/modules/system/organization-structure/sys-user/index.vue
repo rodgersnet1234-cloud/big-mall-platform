@@ -9,7 +9,10 @@
         @submit.prevent
       >
         <div class="input-row">
-          <el-form-item label="昵称：">
+          <el-form-item
+            label="昵称："
+            prop="nickName"
+          >
             <el-input
               v-model="searchParam.nickName"
               maxlength="30"
@@ -18,7 +21,10 @@
               clearable
             />
           </el-form-item>
-          <el-form-item :label="$t('联系方式') + '：'">
+          <el-form-item
+            :label="$t('联系方式') + '：'"
+            prop="phoneNum"
+          >
             <el-input
               v-model="searchParam.phoneNum"
               maxlength="11"
@@ -32,10 +38,10 @@
               type="primary"
               @click="getPage(true)"
             >
-              {{ $t('delivery.transport.query') }}
+              {{ $t('table.search') }}
             </el-button>
             <el-button
-              @click="onResetSearch(searchFormRef)"
+              @click="onResetSearch()"
             >
               {{ $t('table.reset') }}
             </el-button>
@@ -205,7 +211,7 @@ const searchParam = reactive({
 })
 
 const pageLoading = ref(false)
-const searchFormRef = ref(null)
+
 // 保存上次点击查询的请求条件
 let tempSearchForm = null
 // 返回参数
@@ -228,8 +234,7 @@ const getPage = (newData = false) => {
     pageData.value.pages = res.pages
     pageData.value.total = res.total
     pageLoading.value = false
-  }).catch(err => {
-    console.log(err)
+  }).catch(() => {
     pageLoading.value = false
   })
 }
@@ -268,8 +273,10 @@ const deleteById = (platformUserId) => {
     })
   })
 }
-const onResetSearch = (formEl) => {
-  formEl.resetFields()
+
+const searchFormRef = ref(null)
+const onResetSearch = () => {
+  searchFormRef.value?.resetFields()
 }
 
 onMounted(() => {

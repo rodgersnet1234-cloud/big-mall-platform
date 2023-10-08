@@ -35,7 +35,6 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['update:modelValue'])
 
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const elxImgboxVisible = ref(false)
@@ -55,6 +54,7 @@ const props = defineProps({
     type: Boolean
   }
 })
+const emit = defineEmits(['update:modelValue', 'input'])
 
 // 打开图片选择窗
 const elxImgboxRef = ref(null)
@@ -89,6 +89,7 @@ const openImg = () => {
 
 const refreshPic = (imagePath) => {
   emit('update:modelValue', imagePath)
+  emit('input', imagePath)
 }
 
 </script>

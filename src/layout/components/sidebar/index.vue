@@ -60,6 +60,7 @@
       </el-scrollbar>
       <sub-menu
         v-if="!isCollapse"
+        class="menu-right-con"
         :expand-menu="expandMenuList"
       />
     </div>
@@ -320,13 +321,17 @@ const toHome = () => {
 .menu-mod {
   display: flex;
 }
+.menu-right-con {
+  position: absolute;
+  z-index: 1;
+  left: 100px;
+}
 .menu-left {
   background: #222222;
   color: #ffffff !important;
   width: 100px;
   height: calc(100vh - 50px);
   overflow-y: auto;
-  /* border-top: 1px solid #EBEDF0; */
 }
 .menu-mod .menu-left-item {
   width: 100%;

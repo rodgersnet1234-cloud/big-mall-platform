@@ -26,14 +26,11 @@
       </el-form-item>
     </el-form>
 
-    <template>
-      <span class="dialog-footer">
-        <!-- <el-button @click="visible = false">取消</el-button> -->
-        <el-button
-          @click="onSubmit()"
-        >{{ $t('platform.config.save') }}</el-button>
-      </span>
-    </template>
+    <span class="dialog-footer">
+      <el-button
+        @click="onSubmit()"
+      >{{ $t('platform.config.save') }}</el-button>
+    </span>
   </div>
 </template>
 
@@ -47,7 +44,6 @@ const visible = ref(false)
 let dataForm = reactive({
   paymentServiceDomainName: null
 })
-const searchForm = reactive({})
 const dataRule = {
   paymentServiceDomainName: [
     { required: true, message: $t('platform.config.paymentServiceDomainNullTips'), trigger: 'blur' }
