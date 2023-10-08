@@ -17,12 +17,9 @@
   </div>
 </template>
 <script setup>
-import templateManager from '../template-manager/index.vue'
-import notifyLog from '../notify-log/index.vue'
+import templateManager from './components/template-manager/index.vue'
+import notifyLog from './components/notify-log.vue'
 
 const activeName = ref('first')
 
 </script>
-<style lang="scss">
-
-</style>

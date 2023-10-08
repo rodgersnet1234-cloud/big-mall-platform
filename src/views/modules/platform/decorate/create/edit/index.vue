@@ -358,7 +358,7 @@ const getTemplateDetail = () => {
         imgUrl: data.image || ''
       }
     }
-    if (pageType === 'add' && isTemplate === '0') {
+    if (pageType === 'add' && isTemplate.value === '0') {
       isTemplateId = null
     }
     let contentArr = JSON.parse(data.content)

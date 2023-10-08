@@ -1,9 +1,5 @@
 <template>
   <div class="mod-sys-area">
-    <!-- 搜索相关区域 -->
-    <div class="filter-container">
-      <!-- <el-input v-model="areaName" class="area-search-input" placeholder="地区关键词" /> -->
-    </div>
     <div class="filter-item">
       <el-button
         v-permission="['system:addr:save']"
@@ -196,22 +192,12 @@ const regionList = ref([]) // 区域
 const provList = ref([]) // 省
 const cityList = ref([]) // 市
 const areaList = ref([]) // 区
-const areaName = ref('')
-const params = reactive({
-  areaName: null
-})
 const pageLoading = ref(true)
-const props = reactive({
-  id: 'areaId',
-  label: 'areaName',
-  children: 'children'
-})
+
 const regionId = ref(0)
 const provId = ref(0)
 const cityId = ref(0)
-// 查询参数
-const searchParam = {
-}
+
 const addOrUpdateVisible = ref(false)
 const selectProvIndex = ref('')
 const selectCityIndex = ref('')
@@ -289,39 +275,14 @@ const deleteById = (areaId) => {
   })
 }
 
-const filterNode = (value, data) => {
-  if (!value) return true
-  return data.areaName.indexOf(value) !== -1
-}
-
 </script>
 
 <style lang="scss" scoped>
 .mod-sys-area {
   background-color: #fff;
   padding: 20px;
-  .filter-container {
-  }
-  .custom-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
-  }
-  .area-search-input {
-    width: 30%;
-  }
-  .area-add-btn {
-    float: right;
-  }
-  .filter-item {
-  }
-
   // 地址列表区域
   .addr {
-    // margin: 0 auto;
     display: flex;
     margin: 20px 0;
     overflow-x: auto;
@@ -364,9 +325,6 @@ const filterNode = (value, data) => {
           .btn {
             min-width: 98px;
             margin-right: 15px;
-            .el-button--text {
-              color: #155bd4;
-            }
           }
         }
         .addr-item:hover,

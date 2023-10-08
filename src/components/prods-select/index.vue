@@ -28,7 +28,7 @@
         <el-cascader
           v-model="selectedCategory"
           expand-trigger="hover"
-          :options="categoryList"
+          :options="categoryListFiltered"
           :props="categoryTreeProps"
           :clearable="true"
           style="width: 180px"
@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import { treeDataTranslate, idList, formatPrice } from '@/utils'
+import { treeDataTranslate, idList, formatPrice, deepClone } from '@/utils'
 import { page } from '@/api/product/list'
 import { categoryPage } from '@/api/product/category'
 import { ElMessage } from 'element-plus'
@@ -171,7 +171,7 @@ const searchForm = ref({
   spuType: null,
   spuStatus: 0,
   keyword: '',
-  shopSecondaryCategoryId: null,
+  categoryId: null,
   spuName: ''
 })
 const pageData = ref({
@@ -193,10 +193,6 @@ const categoryTreeProps = ref({
 const filterSup = ref(false)
 const indexImg = ref(false)
 const filterSupDelivery = ref(false)
-
-onMounted(() => {
-  getPageData()
-})
 
 const init = (initSelectProds, option) => {
   if (option) {
@@ -223,6 +219,14 @@ const getCategoryList = () => {
     categoryList.value = treeDataTranslate(data, 'categoryId', 'parentId')
   })
 }
+
+/**
+ * 上级分类选项不要展示没有三级分类的分类
+ */
+const categoryListFiltered = computed(() => {
+  const List = deepClone(categoryList.value)
+  return List.filter(i => i.children)
+})
 
 const prodTableRef = ref(null)
 const getPageData = (init = false) => {
@@ -313,7 +317,7 @@ const handleChange = (val) => {
 const onSearchProd = () => {
   searchForm.value.pageNum = 1
   searchForm.value.keyword = searchForm.value.spuName
-  searchForm.value.shopSecondaryCategoryId = shopCategoryId.value
+  searchForm.value.categoryId = shopCategoryId.value
   getPageData()
 }
 

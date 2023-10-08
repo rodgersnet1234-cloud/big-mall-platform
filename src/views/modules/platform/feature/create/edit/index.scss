@@ -403,7 +403,7 @@ $topHeight: 0px;
   .preview-box {
     width: 70.5%;
 
-    &.isMoveIng {
+    .isMoveIng {
       .preview-item {
         .design-editor-item {
           opacity: 0;

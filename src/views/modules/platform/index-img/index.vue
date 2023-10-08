@@ -46,7 +46,7 @@
               type="primary"
               @click="search()"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="clearSearchInfo()"
@@ -95,10 +95,9 @@
             width="300"
           >
             <template #default="{row}">
-              <!-- <img :src="(row.imgUrl).indexOf('http')===-1 ? resourcesUrl + row.imgUrl : row.imgUrl" class="img"> -->
               <ImgShow
                 :src="row.imgUrl"
-                :class-list="['img']"
+                class="img"
               />
             </template>
           </el-table-column>
@@ -189,7 +188,6 @@ import AddOrUpdate from './components/add-or-update.vue'
 import * as api from '@/api/platform/index-img.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-// const resourcesUrl = process.env.VUE_APP_RESOURCES_URL
 // 查询的参数
 const pageQuery = reactive({
   pageSize: 10,
@@ -267,14 +265,13 @@ const clearSearchInfo = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-container.index-img {
-  // .el-table .cell {
-  //   line-height: 13px!important;
-  // }
-  .el-table--enable-row-transition .el-table__body td {
-    height: 100px;
-    line-height: 100px;
+  :deep(.el-table__body) {
+    td {
+      height: 100px;
+      line-height: 100px;
+    }
   }
   .img {
     width: auto;
@@ -284,7 +281,4 @@ const clearSearchInfo = () => {
     object-fit: contain;
   }
 }
-</style>
-
-<style scoped>
 </style>

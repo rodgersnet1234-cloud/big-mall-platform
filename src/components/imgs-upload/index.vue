@@ -97,7 +97,7 @@ const props = defineProps({
   },
   // 最大上传数量
   limit: {
-    default: 9,
+    default: 20,
     type: Number
   },
   // false: 能对图片进行操作  true: 不能对图片进行操作
@@ -183,8 +183,6 @@ const onDragEnd = (e) => {
 // 打开图片选择窗
 const elxImgboxRef = ref(null)
 const elxImgboxHandle = () => {
-  console.log('props.limit', props.limit)
-  console.log('Data.imageList.length', Data.imageList.length)
   const num = props.limit - Data.imageList.length
   if (num < 1) {
     ElMessage.error($t('components.imgsUpload.maximumPic'))

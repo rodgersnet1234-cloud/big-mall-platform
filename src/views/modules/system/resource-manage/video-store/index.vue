@@ -53,7 +53,7 @@
               type="primary"
               @click="searchImg(true)"
             >
-              {{ $t("biz.videobox.query") }}
+              {{ $t('table.search') }}
             </el-button>
           </el-form-item>
         </el-form>

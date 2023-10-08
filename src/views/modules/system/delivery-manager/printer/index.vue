@@ -31,7 +31,7 @@
             <el-button
               @click="onResetSearch(searchFormRef)"
             >
-              {{ $t('table.clear') }}
+              {{ $t('table.reset') }}
             </el-button>
           </el-form-item>
         </div>

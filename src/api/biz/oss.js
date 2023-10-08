@@ -54,8 +54,6 @@ export function deleteFileGroup (param) {
  * @param data 图片文件
  */
 export function minIoImgUpdate (url, data) {
-  console.log('minIo上传文件请求接口url：', url)
-  console.log('minIo上传文件请求接口data：', data)
   return request({
     headers: {
       'Content-Type': data.type

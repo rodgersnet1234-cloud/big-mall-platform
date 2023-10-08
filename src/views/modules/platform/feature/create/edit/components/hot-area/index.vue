@@ -99,7 +99,7 @@
                 />
                 <el-icon
                   class="close-icon"
-                  @click="item.activeBoxs.splice(hotIndex, 1)"
+                  @click="formData.imageList.splice(hotIndex, 1)"
                 >
                   <CircleCloseFilled />
                 </el-icon>
@@ -195,11 +195,6 @@
   </div>
 </template>
 <script setup>
-/**
- * 创建新组件之后，在all-can-use-components中添加
- * 必须应用 microCreateMinis
- * 数据必须以formData包含
- * */
 import '../../directive/index'
 import { VueDraggableNext } from 'vue-draggable-next'
 import ElxImgbox from '@/components/img-box/index.vue'

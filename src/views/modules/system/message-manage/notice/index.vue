@@ -83,7 +83,7 @@
               type="primary"
               @click="getPage(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="onResetSearch(searchFormRef)"
@@ -250,8 +250,7 @@ const getPage = () => {
     pageVO.pages = res.pages
     pageVO.total = res.total
     pageLoading.value = false
-  }).catch(err => {
-    console.log(err)
+  }).catch(() => {
     pageLoading.value = false
   })
 }

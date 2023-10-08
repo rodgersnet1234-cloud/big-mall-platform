@@ -60,15 +60,6 @@
             {{ scope.row.visitNums || 0 }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="clickNums"
-          class="table-item"
-          label="点击量"
-        >
-          <template #default="scope">
-            {{ scope.row.clickNums || 0 }}
-          </template>
-        </el-table-column>
 
         <el-table-column
           prop="prodVisitUser"

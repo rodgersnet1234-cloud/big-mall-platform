@@ -39,7 +39,7 @@
             <el-button
               @click="onClearSearchInfo()"
             >
-              {{ $t('table.clear') }}
+              {{ $t('table.reset') }}
             </el-button>
           </el-form-item>
         </div>

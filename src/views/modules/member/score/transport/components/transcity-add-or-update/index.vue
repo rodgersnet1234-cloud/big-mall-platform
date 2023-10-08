@@ -49,7 +49,7 @@
                     v-show="provinceItem.show"
                     class="area-count"
                   >({{ provinceItem.areaCount }})</span>
-                  <i class="el-icon-arrow-down" />
+                  <el-icon><ArrowDown /></el-icon>
                 </span>
                 <!-- 市 -->
                 <div
@@ -81,10 +81,7 @@
                           :data-inx="cityIndex"
                           class="area-count"
                         >({{ cityItem.areaCount }})</span>
-                        <i
-                          class="el-icon-arrow-down"
-                          :data-inx="cityIndex"
-                        />
+                        <el-icon :data-inx="cityIndex"><ArrowDown /></el-icon>
                       </span>
                     </span>
                     <!-- 区 -->
@@ -233,7 +230,7 @@ const checkedAllDisabled = ref(false)
 const checkedAllJudge = () => {
   let checkedNum = 0
   let disabledNum = 0
-  const len = menuList.length
+  const len = menuList.value.length
   let hasIndeterminate = false
   menuList.value.forEach(region => {
     region.checked && checkedNum++

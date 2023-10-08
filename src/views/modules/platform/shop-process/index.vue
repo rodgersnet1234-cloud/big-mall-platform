@@ -1724,13 +1724,13 @@ const changeBank = (value) => {
 }
 /**
 * 图片的值发生改变，重新校验对应表单字段
-* @param {*} applyStep 表单类型 1-基本信息 2-工商信息
+* @param {*} applyStepPar 表单类型 1-基本信息 2-工商信息
 * @param {*} prop 图片字段名
 */
-const imgChange = (applyStep, prop) => {
-  if (applyStep.value === 1) {
+const imgChange = (applyStepPar, prop) => {
+  if (applyStepPar === 1) {
     shopDetailRef.value?.validateField(prop)
-  } else if (applyStep.value === 2) {
+  } else if (applyStepPar === 2) {
     shopCompanyRef.value?.validateField(prop)
   }
 }

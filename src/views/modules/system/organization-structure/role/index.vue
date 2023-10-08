@@ -22,7 +22,7 @@
               type="primary"
               @click="getPage(true)"
             >
-              {{ $t('delivery.transport.query') }}
+              {{ $t('table.search') }}
             </el-button>
           </el-form-item>
         </div>
@@ -171,8 +171,7 @@ const getPage = (newData = false) => {
     pageData.value.pages = res.pages
     pageData.value.total = res.total
     pageLoading.value = false
-  }).catch(err => {
-    console.log(err)
+  }).catch(() => {
     pageLoading.value = false
   })
 }

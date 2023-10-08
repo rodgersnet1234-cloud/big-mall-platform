@@ -30,7 +30,7 @@
           content="开启之后商家新发布、要上架以及二次编辑涉及到文字、图片、视频的商品将默认处于待审核状态，由平台审核后正常上架。"
           placement="top"
         >
-          <i class="el-icon-info" />
+          <el-icon><InfoFilled /></el-icon>
         </el-tooltip>
       </el-form-item>
     </el-form>

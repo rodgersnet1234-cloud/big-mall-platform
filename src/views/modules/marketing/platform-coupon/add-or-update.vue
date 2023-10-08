@@ -28,19 +28,6 @@
           :disabled="dataForm.couponId !== 0"
         />
       </el-form-item>
-      <!-- 优惠券副标题 -->
-      <el-form-item
-        :label="$t('coupon.coupon.subTitle')"
-        prop="subTitle"
-      >
-        <el-input
-          v-model="dataForm.subTitle"
-          :placeholder="$t('coupon.coupon.subTitle')"
-          :disabled="dataForm.couponId !== 0"
-          maxlength="32"
-          show-word-limit
-        />
-      </el-form-item>
       <!-- 优惠券投放状态(-1:取消投放 0:等待投放 1:投放 2:违规下架 3:等待审核) -->
       <el-form-item
         :label="$t('coupon.coupon.putonStatus')"
@@ -546,7 +533,6 @@ const dataForm = reactive({
   couponId: 0,
   shopId: null,
   couponName: '',
-  subTitle: '',
   couponType: 1,
   suitableProdType: 0,
   getWay: 0,
@@ -657,7 +643,6 @@ const init = (couponId) => {
       dataForm.couponId = data.couponId
       dataForm.shopId = data.shopId
       dataForm.couponName = data.couponName
-      dataForm.subTitle = data.subTitle
       dataForm.couponType = data.couponType
       dataForm.suitableProdType = data.suitableProdType
       dataForm.getWay = data.getWay

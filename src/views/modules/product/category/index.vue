@@ -222,7 +222,6 @@ const onAddOrUpdate = (categoryPlatformId, level) => {
 
   // 地址列表区域
   .category-list {
-    // margin: 0 auto;
     display: flex;
     margin: 20px 30px;
     overflow-x: auto;

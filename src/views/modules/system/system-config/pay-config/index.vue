@@ -275,9 +275,6 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
 }
 </script>
 <style lang="scss" scoped>
-/*
-通用样式
-*/
 .mod-platform-pconfigs {
   background-color: #fff;
   padding: 20px;
@@ -337,7 +334,7 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
   :deep(.footer-bar-pagination) {
     width: calc(100% + 30px);
     background-color: white;
-    bottom: 0px;
+    bottom: 0;
     position: fixed;
     height: 50px;
     text-align: center;
@@ -380,7 +377,7 @@ const updatePayConfig = (paramKey, paramValue, remark) => {
 
   :deep(.valid-input) {
     margin-left: 20px;
-    border-top-left-radius: 0px;
+    border-top-left-radius: 0;
   }
 
   /**

@@ -55,7 +55,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item
-        label="省市区"
+        label="地址"
         prop="status"
       >
         <el-input

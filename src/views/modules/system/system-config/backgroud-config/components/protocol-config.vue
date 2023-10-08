@@ -71,6 +71,7 @@ const configArr = ref([
 <style lang="scss" scoped>
 .mod-protocol {
   background: #f2f2f6;
+  padding: 0 20px;
   .title {
     font-size: 16px;
     font-weight: 700;

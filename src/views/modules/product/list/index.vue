@@ -131,7 +131,7 @@
               type="primary"
               @click="onSearch(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="onResetSearch()"

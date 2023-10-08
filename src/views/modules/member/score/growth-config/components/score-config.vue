@@ -160,7 +160,6 @@
           :min="0"
           :max="100"
           :placeholder="$t('user.score.percent')"
-          type="number"
         />
       </el-form-item>
       <el-form-item
@@ -202,7 +201,6 @@
           :precision="1"
           :max="100"
           :placeholder="$t('user.score.percent')"
-          type="number"
         />
       </el-form-item>
     </el-form>
@@ -316,7 +314,9 @@ const onSubmit = () => {
   param.signInScore = []
   param.shoppingGetScore = !dataForm.value.shoppingGetScore ? 0 : dataForm.value.shoppingGetScore
   param.shoppingUseScoreRatio = !dataForm.value.shoppingUseScoreRatio ? 0 : dataForm.value.shoppingUseScoreRatio
-  param.getDiscount = !dataForm.value.useRatioLimit ? 0 : dataForm.value.useRatioLimit
+  param.getDiscount = dataForm.value.useRatioLimit || 0
+  param.useRatioLimit = dataForm.value.useRatioLimit || 0
+  param.getRatioLimit = dataForm.value.getRatioLimit || 0
   param.useDiscount = !dataForm.value.getRatioLimitRange ? 0 : dataForm.value.getRatioLimitRange
   param.signInScore.push(signInScoreOne.value || 0)
   param.signInScore.push(signInScoreTwo.value || 0)

@@ -315,7 +315,6 @@ watch(() => props.config, (newVal) => {
           max-width: calc(50% - 5px);
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
           word-break: break-all;
         }
 
@@ -326,7 +325,6 @@ watch(() => props.config, (newVal) => {
           max-width: calc(50% - 5px);
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
           word-break: break-all;
         }
       }
@@ -342,10 +340,6 @@ watch(() => props.config, (newVal) => {
           font-family: PingFang SC;
         }
 
-        i {
-          font-size: 12px;
-          color: #999;
-        }
       }
     }
 
@@ -416,10 +410,6 @@ watch(() => props.config, (newVal) => {
             color: #999;
           }
 
-          i {
-            font-size: 12px;
-            color: #999;
-          }
         }
       }
 
@@ -480,11 +470,6 @@ watch(() => props.config, (newVal) => {
           align-items: center;
 
           span {
-            font-size: 12px;
-            color: #999;
-          }
-
-          i {
             font-size: 12px;
             color: #999;
           }

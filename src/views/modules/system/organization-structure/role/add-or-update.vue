@@ -223,7 +223,7 @@ const onSubmit = () => {
       }
       isSubmit.value = true
       const request = dataForm.roleId ? api.update(dataForm) : api.save(dataForm)
-      request.then(data => {
+      request.then(() => {
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',

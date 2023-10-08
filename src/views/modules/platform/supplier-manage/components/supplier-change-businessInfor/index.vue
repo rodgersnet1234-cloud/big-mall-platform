@@ -32,12 +32,12 @@
               type="primary"
               @click="getPage(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="clearSearchInfo()"
             >
-              重置
+              {{ $t('table.reset') }}
             </el-button>
           </el-form-item>
         </div>

@@ -227,6 +227,16 @@
             <div class="option-line">
               <el-checkbox v-model="isOrderAverPrice">
                 {{ $t('user.tag.averPri') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="订单均价为消费金额/消费次数"
+                  placement="top"
+                >
+                  <el-icon class="question">
+                    <QuestionFilled />
+                  </el-icon>
+                </el-tooltip>
               </el-checkbox>
               <el-select
                 v-model="orderAverPriceValue"
@@ -338,6 +348,7 @@ import Big from 'big.js'
 import { Debounce } from '@/utils/debounce.js'
 import moment from 'moment'
 import { ElMessage } from 'element-plus'
+import { QuestionFilled } from '@element-plus/icons-vue'
 const emit = defineEmits(['refreshLabelList'])
 
 const basicConOpts = [{ // 基础条件

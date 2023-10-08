@@ -141,7 +141,7 @@ const onSubmit = () => {
     }
     isConfirm.value = true
     const request = dataForm.templateId ? api.update(dataForm) : api.save(dataForm)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -159,20 +159,7 @@ const onSubmit = () => {
 }
 // 是否是英文
 const isEn = () => {
-  if (getLanguage === 'en') {
-    return true
-  } else {
-    return false
-  }
+  return getLanguage === 'en'
 }
 defineExpose({ init })
 </script>
-
-<style lang="scss" scoped>
-.notify-form {
-  // & .el-input.el-input--small,
-  & .el-select.el-select--small {
-    width: 100%;
-  }
-}
-</style>
