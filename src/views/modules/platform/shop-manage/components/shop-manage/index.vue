@@ -112,11 +112,6 @@
         >
           {{ $t('table.create') }}
         </el-button>
-        <el-button
-          @click="onCopyLink()"
-        >
-          {{ $t('table.getLink') }}
-        </el-button>
       </div>
       <div class="table-con">
         <el-table
@@ -389,23 +384,6 @@ watchEffect((offlineReason) => {
 onMounted(() => {
   getPage()
 })
-const onCopyLink = () => {
-  api.getLink().then(res => {
-    navigator.clipboard.writeText(res.enterUrl).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
-      })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
-  })
-}
 const getPage = (newData = false) => {
   if (newData || !tempSearchForm.value) {
     tempSearchForm.value = { ...pageQuery.value, ...searchParam.value }
