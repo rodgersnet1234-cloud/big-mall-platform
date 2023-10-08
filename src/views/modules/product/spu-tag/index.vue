@@ -162,22 +162,15 @@
       ref="addOrUpdateRef"
       @refresh-data-list="refreshChange"
     />
-    <!-- <prod-manage
-      v-if="prodManageVisible"
-      ref="prodManageRef"
-      @refreshDataList="refreshChange"
-    /> -->
   </div>
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/product/spu-tag'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 let tempSearchForm = null // 保存上次点击查询的请求条件
-const dataList = ref([])
 // 查询的参数
 const pageQuery = reactive({
   pageSize: 10,
@@ -195,9 +188,7 @@ const pageLoading = ref(true)
 const searchParam = reactive({
   title: ''
 })
-const searchForm = reactive({})
 const dataListLoading = ref(false)
-const prodManageVisible = ref(false)
 const addOrUpdateVisible = ref(false)
 
 onMounted(() => {
@@ -257,18 +248,10 @@ const deleteById = (spuId) => {
 }
 // 刷新回调用
 const refreshChange = () => {
-  console.log('dddd')
-  getPage()
-}
-const onSearch = () => {
   getPage()
 }
 // 清空搜索内容
 const clearSearchInfo = () => {
   searchParam.title = ''
 }
-
 </script>
-
-<style lang="scss" scoped>
-</style>

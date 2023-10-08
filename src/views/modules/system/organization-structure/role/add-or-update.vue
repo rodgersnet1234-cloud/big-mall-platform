@@ -95,8 +95,7 @@ const menuListTreeProps = reactive({
 })
 // 用于临时将权限转化为"菜单"的key
 const tempPermissionToMenuKey = ref(5498415864)
-const rules = {
-}
+
 const dataFormRef = ref(null)
 const menuListTreeRef = ref(null)
 
@@ -225,7 +224,7 @@ const onSubmit = () => {
       }
       isSubmit.value = true
       const request = dataForm.roleId ? api.update(dataForm) : api.save(dataForm)
-      request.then(data => {
+      request.then(() => {
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',

@@ -155,7 +155,6 @@ const handleInputSpace = () => {
 // 表单提交
 const dataFormRef = ref('')
 const onSubmit = () => {
-  console.log(!dataForm.aliNo, !dataForm.birdNo, !dataForm.hundredNo, !dataForm.aliNo && !dataForm.birdNo && !dataForm.hundredNo)
   if (!dataForm.aliNo && !dataForm.birdNo && !dataForm.hundredNo) {
     ElMessage.error('必须填写一个或多个物流公司编号')
     return
@@ -166,7 +165,7 @@ const onSubmit = () => {
       return
     }
     const request = dataForm.deliveryCompanyId ? api.update(dataForm) : api.save(dataForm)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',

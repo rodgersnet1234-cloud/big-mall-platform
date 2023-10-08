@@ -350,6 +350,12 @@ const pagination = (page) => {
 }
 const onSetdatePickerType = (val) => {
   datePickerType.value = val
+  if (val === 'monthrange') {
+    dateRangeParam.value = [
+      moment().startOf('month').subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss'),
+      moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')
+    ]
+  }
 }
 // 导出
 const onExportFrom = () => {
@@ -449,6 +455,9 @@ const onClear = () => {
       }
       :deep(.date-picker-type .el-input--suffix) {
         width: 120px !important;
+      }
+      .el-form-item .el-form-item__content .el-select{
+        width: 130px !important;
       }
     }
     .question{

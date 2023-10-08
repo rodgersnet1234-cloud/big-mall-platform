@@ -143,7 +143,7 @@ const onSubmit = Debounce(function () {
   dataFormRef.value?.validate(valid => {
     if (valid) {
       const request = dataForm.sysUserId ? api.update(dataForm) : api.save(dataForm)
-      request.then(data => {
+      request.then(() => {
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',

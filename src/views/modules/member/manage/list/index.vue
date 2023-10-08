@@ -110,11 +110,11 @@
 
           <el-form-item>
             <el-button
-              type="primary"
               v-cancel-focus
+              type="primary"
               @click="onSearchParamChange(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button @click="onClearSearchInfo()">
               {{ $t('table.reset') }}

@@ -87,7 +87,7 @@
               type="primary"
               @click="getPage(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="onResetSearch(searchFormRef)"
@@ -223,10 +223,7 @@ import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
 import * as api from '@/api/platform/notice'
 import { ElMessage, ElMessageBox } from 'element-plus'
-// 表单
-const searchForm = reactive({
-  title: ''
-})
+
 const addOrUpdateVisible = ref(false)
 const addOrUpdateRef = ref()
 const searchParam = reactive({
@@ -258,8 +255,7 @@ const getPage = () => {
     pageVO.pages = res.pages
     pageVO.total = res.total
     pageLoading.value = false
-  }).catch(err => {
-    console.log(err)
+  }).catch(() => {
     pageLoading.value = false
   })
 }

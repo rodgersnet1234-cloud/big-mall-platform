@@ -356,14 +356,13 @@ const onGetData = (orderId, refundId) => {
     data.value.tableData = resData.orderItemDetailList
   })
 }
+
 const router = useRouter()
 const onBack = () => {
   if (path.value === '0') {
     router.push('/finance/platform-walletLog')
-  } else if ((path.value === '1')) {
-    router.push('/finance/shop-merchant-balance')
   } else {
-    router.push('/finance/shop-supplier-balance')
+    router.back()
   }
 }
 

@@ -123,8 +123,6 @@
                 v-if="row.mainImgUrl"
                 class="table-cell-image"
               >
-                <!-- <img v-if="row.mainImgUrl" :src="(row.mainImgUrl).indexOf('http')===-1 ? resourcesUrl + row.mainImgUrl : row.mainImgUrl">
-                <img v-if="!row.mainImgUrl" src="~@/assets/images/def.png"> -->
                 <ImgShow :src="row.mainImgUrl" />
               </div>
             </template>
@@ -185,13 +183,11 @@
 </template>
 
 <script setup>
-import ProdsSelect from './tag-select-prod.vue'
-import UpdateSeq from './update-prod-seq.vue'
+import ProdsSelect from './components/tag-select-prod.vue'
+import UpdateSeq from './components/update-prod-seq.vue'
 import * as api from '@/api/product/tag-prod'
-import Pagination from '@/components/pagination/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-const dataList = ref([])
 // 查询的参数
 const pageQuery = reactive({
   pageSize: 10,
@@ -205,7 +201,6 @@ const page = reactive({
 })
 // loading
 const pageLoading = ref(true)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 // 查询参数
 const searchParam = reactive({
   spuName: '',
@@ -221,7 +216,6 @@ const isIndeterminate = ref(false)
 const checkedCount = ref(0)
 // 被选中的商品列表
 const selectedProdList = ref([])
-const dataListSelections = ref([])
 
 onMounted(() => {
   getPage()
@@ -318,12 +312,6 @@ const prodInfTableRef = ref(null)
 const handleCheckAllChange = () => {
   prodInfTableRef.value?.toggleAllSelection()
   isIndeterminate.value = false
-}
-const selectTagProds = () => {
-  getPage(page)
-}
-const onSearch = (params) => {
-  getPage(page, params)
 }
 
 const ProdsSelectRef = ref(null)

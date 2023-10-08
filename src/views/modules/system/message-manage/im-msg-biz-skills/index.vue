@@ -95,7 +95,7 @@
             width="300"
           >
             <template #default="{row}">
-              {{ row.remark||'-' }}
+              {{ row.remark || '-' }}
             </template>
           </el-table-column>
           <el-table-column
@@ -151,8 +151,6 @@ import addOrUpdate from './add-or-update.vue'
 import * as http from '@/api/im-msg-biz-skills'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-// directives: { permission },
-
 let tempSearchForm = null // 保存上次点击查询的请求条件
 let theParams = null // 保存上次点击查询的请求条件
 const dataList = ref([])
@@ -169,7 +167,6 @@ const searchFormRef = ref(null)
 const dateRange = ref([])
 const dataListLoading = ref(false)
 
-const dataForm = reactive({})
 onMounted(() => {
   getDataList(page)
 })
@@ -178,12 +175,12 @@ const getDataList = (pageParam, newData = false) => {
   if (newData || !tempSearchForm) {
     theParams = JSON.parse(JSON.stringify(searchForm))
     tempSearchForm = {
-      pageNum: page == null ? page.currentPage : page.currentPage,
-      pageSize: page == null ? page.pageSize : page.pageSize
+      pageNum: pageParam == null ? page.currentPage : pageParam.currentPage,
+      pageSize: pageParam == null ? page.pageSize : pageParam.pageSize
     }
   } else {
-    tempSearchForm.pageNum = page == null ? page.currentPage : page.currentPage
-    tempSearchForm.pageSize = page == null ? page.pageSize : page.pageSize
+    tempSearchForm.pageNum = pageParam == null ? page.currentPage : pageParam.currentPage
+    tempSearchForm.pageSize = pageParam == null ? page.pageSize : pageParam.pageSize
   }
   http.getList(Object.assign(tempSearchForm, theParams)).then((data) => {
     dataList.value = data.list
@@ -227,7 +224,7 @@ const onDelete = (id) => {
           }
         })
       })
-  }).catch(() => { })
+  })
 }
 
 // 刷新回调用
@@ -256,35 +253,13 @@ const onResetSearch = (formName) => {
 
 <style lang="scss" scoped>
 .mod-shop-notice {
-    background-color: #fff;
-    padding: 20px;
-  .notice-html-con {
-    max-height: 370px;
-    overflow-x: hidden;
-    word-break: break-word;
-  }
-  .notice-html-con::-webkit-scrollbar {
-    width: 6px;
-    height: 1px;
-    border-radius: 4px;
-    background: #f7f8fa;
-  }
-  .notice-html-con::-webkit-scrollbar-thumb {
-    background: #e9ecf3;
-    border-radius: 4px;
-  }
-  .table-con .content{
-    overflow: hidden;
-    display: -webkit-box;
-    text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-  .pagination-container{
+  background-color: #fff;
+  padding: 20px;
+
+  .pagination-container {
     background: #fff;
     padding: 32px 16px;
     text-align: right;
   }
-
 }
 </style>

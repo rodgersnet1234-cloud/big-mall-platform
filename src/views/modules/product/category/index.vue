@@ -289,7 +289,6 @@ const pageLoading = ref(true)
 const searchParam = {
 }
 const addOrUpdateVisible = ref(false)
-const disable = ref(false)
 onMounted(() => {
   isSubmit.value = false
   getPage()
@@ -413,30 +412,15 @@ const enableOrDisable = (categoryId, sts, idx) => {
         onClose: () => getPage()
       })
     })
-  }).catch(() => {
   })
 }
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-container {
-  .cate-img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 200px;
-  }
-  .cate-icon-img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100px;
-  }
-
   // 地址列表区域
   .category-list {
-    // margin: 0 auto;
     display: flex;
     margin: 20px 30px;
     overflow-x: auto;
@@ -483,9 +467,6 @@ const enableOrDisable = (categoryId, sts, idx) => {
             }
             min-width: 98px;
             margin-right: 10px;
-            .el-button--text {
-              color: #155bd4;
-            }
           }
         }
         .addr-item:hover,

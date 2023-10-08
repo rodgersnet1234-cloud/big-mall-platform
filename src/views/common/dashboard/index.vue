@@ -81,7 +81,7 @@
             今日客单价(元)
           </div>
           <div class="di-num">
-            {{ conversionActual(isTrueData(todayInfoData.todayData.onePrice)) }}
+            {{ isTrueData(todayInfoData.todayData.onePrice) }}
           </div>
           <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayOnePriceRate >= 0 ? 'rise' : 'reduce')">
             {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayOnePriceRate)) }}%
@@ -96,7 +96,7 @@
             今日支付金额(元)
           </div>
           <div class="di-num">
-            {{ conversionActual(isTrueData(todayInfoData.todayData.payActual)) }}
+            {{ isTrueData(todayInfoData.todayData.payActual) }}
           </div>
           <div
             :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayActualRate >= 0 ? 'rise' : 'reduce')"
@@ -180,7 +180,7 @@
               当天支付金额(元)
             </div>
             <div class="tt-num">
-              {{ conversionActual(todayInfoData.todayData.payActual) }}
+              {{ todayInfoData.todayData.payActual }}
             </div>
           </div>
           <div class="t-month t-pay-item">

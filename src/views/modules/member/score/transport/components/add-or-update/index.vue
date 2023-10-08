@@ -610,44 +610,14 @@ const getTransport = () => {
 
 const getDataList = (row, cityList, type) => {
   if (type === 0) {
-    const addrNameList = setAddrInfoByAreaList(cityList)
-    for (const item of dataForm.value.transFees) {
-      if (arrayEquals(addrNameList, item.addrNameList)) {
-        ElMessage.error('当前已存在相同的地址配置项')
-        return
-      }
-    }
     dataForm.value.transFees[row].cityList = cityList
-    dataForm.value.transFees[row].addrNameList = addrNameList
+    dataForm.value.transFees[row].addrNameList = setAddrInfoByAreaList(cityList)
   }
   if (type === 1) {
-    const addrNameList = setAddrInfoByAreaList(cityList)
-    for (const item of dataForm.value.transFeeFrees) {
-      if (arrayEquals(addrNameList, item.freeAddrNameList)) {
-        ElMessage.error('当前已存在相同的地址配置项')
-        return
-      }
-    }
     dataForm.value.transFeeFrees[row].freeCityList = cityList
-    dataForm.value.transFeeFrees[row].freeAddrNameList = addrNameList
+    dataForm.value.transFeeFrees[row].freeAddrNameList = setAddrInfoByAreaList(cityList)
   }
   handleBinAreas()
-}
-
-const arrayEquals = (newArr = [], oldArr = []) => {
-  newArr = newArr.sort()
-  oldArr = oldArr.sort()
-  if (!newArr) return false
-  if (oldArr.length !== newArr.length) return false
-
-  for (let i = 0, l = oldArr.length; i < l; i++) {
-    if (oldArr[i] instanceof Array && newArr[i] instanceof Array) {
-      if (!oldArr[i].equals(newArr[i])) return false
-    } else if (oldArr[i] !== newArr[i]) {
-      return false
-    }
-  }
-  return true
 }
 
 let areaListDB = []
@@ -923,9 +893,6 @@ defineExpose({ init })
       display: flex;
       flex-direction: column;
       align-items: center;
-      .el-form-item.el-form-item--small:first-child {
-        padding-top: 22px;
-      }
     }
   }
 }

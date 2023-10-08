@@ -131,7 +131,6 @@ const rules = {
 }
 
 const init = (userId, hasAccount) => {
-  console.log('init', hasAccount)
   dataForm.userId = userId
   dataForm.hasAccount = hasAccount
   visible.value = true
@@ -167,7 +166,7 @@ const onSubmit = () => {
       data.password = encrypt(data.password)
     }
     const request = data.hasAccount ? api.update(data) : api.save(data)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',

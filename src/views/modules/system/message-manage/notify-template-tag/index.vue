@@ -207,15 +207,13 @@ const onSendTagMsg = (row) => {
     })
     return
   }
-  api.sendMsg(row.templateId).then(data => {
+  api.sendMsg(row.templateId).then(() => {
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',
       duration: 1500,
       onClose: () => getPage()
     })
-  }).catch((e) => {
-    console.log(e)
   })
 }
 onMounted(() => {

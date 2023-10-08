@@ -30,8 +30,8 @@
             <el-row :gutter="10">
               <el-col :span="11">
                 <el-input
-                  class="min-width"
                   v-model.number="dataForm.saleBeginInp"
+                  class="min-width"
                   min="0"
                   @change="checkMaxValue(dataForm.saleBeginInp, 1)"
                 />
@@ -44,8 +44,8 @@
               </el-col>
               <el-col :span="11">
                 <el-input
-                  class="min-width"
                   v-model.number="dataForm.saleEndInp"
+                  class="min-width"
                   min="0"
                   @change="checkMaxValue(dataForm.saleEndInp, 2)"
                 />
@@ -57,8 +57,8 @@
             <el-row :gutter="10">
               <el-col :span="11">
                 <el-input
-                  class="min-width"
                   v-model.number="dataForm.currentPriceBeginInp"
+                  class="min-width"
                   min="0"
                   @change="checkMaxValue(dataForm.currentPriceBeginInp, 3)"
                 />
@@ -71,8 +71,8 @@
               </el-col>
               <el-col :span="11">
                 <el-input
-                  class="min-width"
                   v-model.number="dataForm.currentPriceEndInp"
+                  class="min-width"
                   @change="checkMaxValue(dataForm.currentPriceEndInp, 4)"
                 />
               </el-col>
@@ -85,7 +85,7 @@
               type="primary"
               @click="conditionSearch(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="clearSearchInfo()"

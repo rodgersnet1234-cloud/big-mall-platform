@@ -156,9 +156,6 @@
                     >
                   </template>
                 </el-image>
-                <div class="banner-tips">
-                  建议图片尺寸为 800*800，可拖动排序，最多上传9张
-                </div>
               </div>
             </div>
             <!-- 商品视频 -->
@@ -166,7 +163,7 @@
               v-if="dataForm.video"
               class="part-form-div"
             >
-              <div class="part-form-item-tit star">
+              <div class="part-form-item-tit">
                 商品视频
               </div>
               <div class="part-form-item">

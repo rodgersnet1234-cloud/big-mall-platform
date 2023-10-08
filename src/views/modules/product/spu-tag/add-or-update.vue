@@ -134,7 +134,7 @@ const onSubmit = () => {
     }
     isConfirm.value = true
     const request = dataForm.value.id ? api.update(dataForm.value) : api.save(dataForm.value)
-    request.then(data => {
+    request.then(() => {
       isConfirm.value = true
       ElMessage({
         message: $t('table.actionSuccess'),

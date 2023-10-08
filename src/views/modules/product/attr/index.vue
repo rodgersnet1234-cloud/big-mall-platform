@@ -39,7 +39,7 @@
               type="primary"
               @click="onGetPage(true)"
             >
-              查询
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               @click="onClearSearchInfo()"

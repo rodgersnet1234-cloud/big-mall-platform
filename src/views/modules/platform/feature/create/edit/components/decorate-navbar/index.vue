@@ -69,7 +69,10 @@
           {{ $t('pcdecorate.decorateNavbar.setTemplate') }}
         </div>
       </el-menu-item>
-      <el-divider direction="vertical" />
+      <el-divider
+        v-show="isTemplate === '0'"
+        direction="vertical"
+      />
       <el-menu-item
         class="site-navbar__avatar"
         index="4"

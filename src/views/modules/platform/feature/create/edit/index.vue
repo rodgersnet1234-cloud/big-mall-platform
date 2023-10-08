@@ -73,7 +73,7 @@
                   </div>
                   <!--组价-->
                   <SlickList
-                    :list="currentUseComponents"
+                    v-model:list="currentUseComponents"
                     :use-drag-handle="true"
                     lock-axis="y"
                     :press-delay="500"
@@ -625,8 +625,15 @@ const goodsWaterfallComponentValueChance = ($val) => {
 }
 
 const isMoveIng = ref(false) // 是否正在移动
+let elementArr = []
 // 拖拽
 const sortStart = () => {
+  // 开始拖拽时隐藏编辑区
+  elementArr = document.getElementsByClassName('design-hide-class')
+  for (let i = 0; i < elementArr.length; i++) {
+    // 隐藏样式
+    elementArr[i].style.visibility = 'hidden'
+  }
   setOther.dragCursor = 'all-scroll'
   isMoveIng.value = true
 }
@@ -636,8 +643,14 @@ const sortMove = () => {}
 
 // 结束拖拽
 const sortEnd = (val) => {
+  // 结束拖拽时显示编辑区
+  for (let i = 0; i < elementArr.length; i++) {
+    // 显示样式
+    elementArr[i].style.visibility = 'visible'
+  }
   currentEditComponent.value = val.newIndex
   isMoveIng.value = false
+  isShowEdit.value = true
 }
 
 let isDrag = false // 是否拖动了位置

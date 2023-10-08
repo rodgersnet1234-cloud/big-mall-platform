@@ -163,13 +163,4 @@ const deleteById = (supplierRefundAddrId) => {
   })
 }
 
-// 清空搜索内容
-const clearSearchInfo = () => {
-  searchParam.mobile = null
-  searchParam.consignee = null
-  searchParam.isDefault = null
-  pageQuery.pageNum = 1
-  getPage()
-}
-
 </script>

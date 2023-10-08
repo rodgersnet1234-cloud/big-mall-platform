@@ -155,12 +155,11 @@ const dataForm = reactive({
   categoryIds: [], // 分类id列表
   seq: 0,
   selectedCategories: []
-  // status: 1
 })
 const selectedCategories = ref([])
 const categorySelectorVisible = ref(false) // 分类弹窗显隐
 const validateFirstLetter = (rule, value, callback) => {
-  const regexp = /^[A-Z]{1}$/
+  const regexp = /^[A-Z]/
   if (!regexp.test(value)) {
     callback(new Error('请输入一位大写字母'))
   } else {
@@ -182,9 +181,6 @@ const rules = {
     { required: true, message: '请选择分类', trigger: 'blur' }
   ]
 }
-const language = computed(() => {
-  return useAppStore().language === 'zh' ? 1 : 2
-})
 const dataFormRef = ref(null)
 watch(() => selectedCategories.value, (newQuestion, oldQuestion) => {
   dataForm.selectedCategories = newQuestion
@@ -313,12 +309,11 @@ const closeDialog = () => {
   dataForm.categoryIds = []
   dataForm.seq = 0
   selectedCategories.value = []
-  console.log(22)
 }
 
 // 表单提交
 const onSubmit = Debounce(() => {
-  dataForm.isTop = isTop ? 1 : 0
+  dataForm.isTop = isTop.value ? 1 : 0
   dataFormRef.value.validate(valid => {
     if (!valid) {
       return
@@ -351,23 +346,7 @@ defineExpose({ init })
   align-items: center;
   justify-content: center;
 }
-.brand-add-upd {
-  p {
-    margin: 0;
-  }
-  .el-form-item.el-form-item--medium {
-    .el-form-item--medium .el-form-item__label {
-      text-align: right !important;
-    }
-  }
 
-}
-
-p{
-  margin: 0;
-}
-</style>
-<style scoped>
 @media (max-width: 1440px) {
   .brand-add-upd ::v-deep(.el-dialog){
     margin-top: 160px !important;

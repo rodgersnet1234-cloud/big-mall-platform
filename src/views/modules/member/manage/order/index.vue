@@ -30,7 +30,7 @@
             type="primary"
             @click="searchParamChange(true)"
           >
-            {{ $t("order.order.query") }}
+            {{ $t('table.search') }}
           </el-button>
           <el-button
             @click="clear()"

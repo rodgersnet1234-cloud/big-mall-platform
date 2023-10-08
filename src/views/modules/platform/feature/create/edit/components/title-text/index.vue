@@ -318,15 +318,15 @@ const startCheckFieldRulesCommonFun = () => {
   let errorMessage = ''
   if (formData.title.trim() === '') {
     isPass = false
-    errorMessage = $t('shopFeature.titText.titText') + props.current + $t('shopFeature.titText.pleaseFillTit')
+    errorMessage = $t('shopFeature.titText.pleaseFillTit')
   }
   if (formData.isLink) {
     if (formData.linkStyle !== 3 && !formData.linkText.trim()) {
       isPass = false
-      errorMessage = $t('shopFeature.titText.titText') + props.current + $t('shopFeature.titText.pleaseFillTextContent')
+      errorMessage = $t('shopFeature.titText.pleaseFillTextContent')
     } else if (formData.path.name === '') {
       isPass = false
-      errorMessage = $t('shopFeature.titText.titText') + props.current + $t('shopFeature.tabNav.pleaseChooseRouteLink')
+      errorMessage = $t('shopFeature.tabNav.pleaseChooseRouteLink')
     }
   }
   if (isPass) {

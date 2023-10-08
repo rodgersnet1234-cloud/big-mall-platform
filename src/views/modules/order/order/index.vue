@@ -210,7 +210,7 @@
               type="primary"
               @click="onSearch(true)"
             >
-              {{ $t("order.order.query") }}
+              {{ $t('table.search') }}
             </el-button>
             <el-button
               class="operation-btn"

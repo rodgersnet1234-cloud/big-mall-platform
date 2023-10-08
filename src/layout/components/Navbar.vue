@@ -124,6 +124,14 @@ const toggleSideBar = () => {
   appStore.toggleSideBar()
 }
 
+const isImbox = computed(() => {
+  const roles = userStore.roles
+
+  const isAdmin = userStore.isAdmin
+  const index = roles.findIndex(item => item === 'message:message:view')
+  return isAdmin || index > -1
+})
+
 const route = useRoute()
 const router = useRouter()
 const logout = async () => {
@@ -322,7 +330,9 @@ const showMessage = Debounce(function () {
 
 onMounted(() => {
   message.value = localStorage.getItem('cloudVsNotificationMessage') || null
-  openWs()
+  if (isImbox.value) {
+    openWs()
+  }
 })
 const isDecorate = computed(() => {
   return !(/^\/(platform-decorate\/decorate-select-decorate)/.test(router.currentRoute.value.path))

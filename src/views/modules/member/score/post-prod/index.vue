@@ -95,7 +95,7 @@
                 maxlength="100"
               />
               <div class="hint">
-                商品卖点展示在商品详情标题下面，长度不超过100个字符
+                商品卖点展示在商品名称下面，长度不超过100个字符
               </div>
             </el-form-item>
             <el-form-item
@@ -131,16 +131,14 @@
           <!-- 商品轮播图 -->
           <el-form-item
             class="is-required"
+            prop="imgUrls"
             label="商品轮播图"
           >
-            <div class="part-form-item">
-              <imgs-upload v-model:modelValue="dataForm.imgUrls" />
-              <div class="banner-tips">
-                建议图片尺寸为 800*800，可拖动排序，最多上传9张，首图为主图
-              </div>
+            <imgs-upload v-model:modelValue="dataForm.imgUrls" />
+            <div class="banner-tips">
+              建议图片尺寸为 800*800，可拖动排序，最多上传9张，首图为主图
             </div>
           </el-form-item>
-
           <!-- 商品视频 -->
           <el-form-item label="商品视频">
             <div class="part-form-item">
@@ -386,6 +384,9 @@ const rules = reactive({
   ],
   deliveryTemplateId: [
     { required: true, message: '请选择运费模板', trigger: 'change' }
+  ],
+  imgUrls: [
+    { required: true, message: '请选择商品轮播图', trigger: 'onChange' }
   ]
 })
 const flatten = ref([])
@@ -438,6 +439,13 @@ const dataForm = ref({
   video: '', // 商品视频
   brand: null // 品牌
 })
+
+watch(() => dataForm.value.imgUrls, (newVal) => {
+  if (newVal) {
+    dataFormRef.value?.clearValidate()
+  }
+}, { deep: true })
+
 let originalSpuAttrValueList = [] // 基本属性回显原数据
 const init = () => {
   querySalesAttrData() // 请求销售属性
@@ -1010,14 +1018,14 @@ const formValidation = () => {
   }
   if (salesAttrs.value?.find((item) => item.id && item.leaf && !item.leaf.length)) {
     ElMessage({
-      message: '请选择已添加销售属性的属性值！',
+      message: '请选择已添加规格的规格值！',
       duration: 1500
     })
     hasSkuValue.value = false
     return false
   }
   // 勾选“添加属性图片”但未上传任何图片时（至少上传一张图片）
-  if (dataFormPar.hasSkuImg === 1 && !dataFormPar.skuList.find(el => el.imgUrl)) {
+  if (dataFormPar.hasSkuImg === 1 && !dataFormPar.skuList.find(el => el.imgUrl) && salesAttrs.value[0].id) {
     ElMessage({
       message: '请上传属性图片！',
       duration: 1000

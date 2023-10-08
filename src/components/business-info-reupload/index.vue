@@ -180,10 +180,10 @@ const submitForm = Debounce(function () {
   })
 }, 1500)
 
+defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>
-
   .business-license-box {
     .license-content {
       display: flex;
@@ -248,7 +248,7 @@ const submitForm = Debounce(function () {
       color: #fff;
       background: rgba(51, 51, 51, 0.5);
       text-align: center;
-      border-radius: 0px 0px 3px 3px;
+      border-radius: 0 0 3px 3px;
     }
   }
 
@@ -260,7 +260,7 @@ const submitForm = Debounce(function () {
   }
 
   // 图片上传框样式修改
-  ::v-deep .el-upload {
+  :deep(.el-upload) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -270,9 +270,6 @@ const submitForm = Debounce(function () {
     border: 1px solid #EAEAEA;
     border-radius: 3px;
     box-sizing: border-box;
-    // img {
-    //   width: 120px;
-    // }
     .el-icon-plus {
       font-size: 22px;
       color: #EAEAEA;

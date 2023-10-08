@@ -22,12 +22,6 @@
           || (!dataForm.level && !dataForm.categoryId)) "
         :label="$t('product.category.categoryParent')"
       >
-        <template #label>
-          <label
-            class="el-form-item__label"
-            style="width: 90px;padding-left: 8.45px;"
-          >{{ $t('product.category.categoryParent') }}</label>
-        </template>
         <div>
           <category-group
             :selected-categories="selectedCategories"
@@ -93,12 +87,6 @@
         :label="$t('product.category.seq')"
         prop="seq"
       >
-        <template #label>
-          <label
-            class="el-form-item__label"
-            style="width: 90px;padding-left: 8.45px;"
-          >{{ $t('product.category.seq') }}</label>
-        </template>
         <el-input-number
           v-model="dataForm.seq"
           :min="0"
@@ -162,7 +150,6 @@ const dataForm = ref({
 })
 const isRequiredImg = ref(false) // 图片分类一级不必填
 const showCategorySelectBtn = ref(true)
-const categoryList = ref([])
 const categorySelectorVisible = ref(false)
 const selectedCategories = ref([])
 
@@ -239,11 +226,6 @@ const selectOrReviseCategory = (selectedCategories) => {
   })
 }
 
-// handleChange(val) {
-//   dataForm.value.parentId = val[val.length - 1]
-//   console.log('selectedCategory:', selectedCategory)
-// },
-
 /**
  * 获取子组件返回数据
  */
@@ -263,22 +245,6 @@ const deleteCategoryItemOfSelected = () => {
   }
   selectedCategories.value.splice(0, selectedCategories.value.length)
   dataForm.value.parentId = 0
-}
-const { proxy } = getCurrentInstance()
-// 删除icon
-const deleteIcon = (type) => {
-  if (type === 0) {
-    // 删除未选中状态icon
-    dataForm.value.notChenkedIcon = ''
-  } else if (type === 1) {
-    // 删除选中状态icon
-    dataForm.value.chenkedIcon = ''
-  }
-  proxy.$forceUpdate()
-}
-
-const selectIcon = () => {
-  proxy.$forceUpdate()
 }
 
 const dataFormRef = ref(null)
@@ -304,7 +270,7 @@ const onSubmit = Debounce(function () {
     data.categoryLangList.push({ lang: 1, name: data.nameZh })
     data.categoryLangList.push({ lang: 2, name: data.nameEn })
     const request = data.categoryId ? api.update(data) : api.save(data)
-    request.then(data => {
+    request.then(() => {
       ElMessage({
         message: $t('table.actionSuccess'),
         type: 'success',
@@ -350,96 +316,25 @@ const closeDialog = () => {
 
 </script>
 
-<style lang="scss">
-.category-form {
-  // .category-group {
-  //   display: flex;
-  //   align-items: center;
-  //   height: 36px;
-  //   line-height: 36px;
-  //   .category {
-  //     display: flex;
-  //     align-items: center;
-  //     .classify {
-  //       height: 30px;
-  //       line-height: 30px;
-  //       padding: 0 8px;
-  //     }
-  //   }
-  // }
-  .catagory-icon {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-    .checked {
-      margin-right: 50px;
-      .icon-box {
-        display: block;
-        position: relative;
-        border-radius: 6px;
-        height: 122px;
-        cursor: pointer;
-        .del-btn {
-          display: none;
-          width: 100%;
-          height: 2em;
-          position: absolute;
-          bottom: 0;
-          text-align: center;
-          background: rgba($color: #000000, $alpha: .3);
-          color: #fff;
-          font-size: 12px;
-          z-index: 2;
-          line-height: 2em;
-          border-radius: 0 0 6px 6px;
-        }
-      }
-      .icon-box:hover {
-        .del-btn {
-          display: block;
-        }
-      }
-      .txt {
-        font-size: 12px;
-        color: #888;
-        height: 1.5em;
-        line-height: 1.5em;
-        text-align: center;
-        margin-top: 10px;
-      }
-    }
+<style lang="scss" scoped>
+// 相关说明文字提示
+.tips-text-part {
+  display: inline-block;
+  background: #fffcf2;
+  border: 1px solid #F6C023;
+  padding: 5px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5em;
+  margin-top: 5px;
+
+  p {
+    margin: 0;
+    line-height: 1.5em;
   }
-  .classify-show {
-    .category-sel1 {
-      margin-right: 10px;
-      max-width: 300px;
-      line-height: 17px !important;
-    }
-    .change-category {
-      width: 150px;
-    }
+
+  p:not(:last-child) {
+    margin-bottom: 10px;
   }
 }
-
-  // 相关说明文字提示
-  .tips-text-part {
-    display: inline-block;
-    // width: 100%;
-    background: #fffcf2;
-    border: 1px solid #F6C023;
-    padding: 5px;
-    font-size: 12px;
-    color: #666;
-    line-height: 1.5em;
-    margin-top: 5px;
-    // margin-bottom: 20px;
-    p {
-      margin: 0;
-      line-height: 1.5em;
-    }
-    p:not(:last-child) {
-      margin-bottom: 10px;
-    }
-  }
 </style>
