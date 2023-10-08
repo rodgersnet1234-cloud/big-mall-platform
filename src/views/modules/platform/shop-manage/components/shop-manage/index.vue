@@ -64,6 +64,10 @@
                 label="上线审核失败"
                 value="6"
               />
+              <el-option
+                label="系统下线"
+                value="7"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="店铺标签">
@@ -224,6 +228,10 @@
                 v-if="paySettlementType===1 && row.shopStatus === 6"
                 type="danger"
               >上线审核失败</span>
+              <span
+                v-if="row.shopStatus === 7"
+                type="danger"
+              >系统下线</span>
             </template>
           </el-table-column>
           <!-- 店铺标签  -->

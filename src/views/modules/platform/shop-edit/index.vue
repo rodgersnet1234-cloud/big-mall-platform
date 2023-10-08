@@ -76,6 +76,7 @@
             <span v-if="shopStatus.shopStatus === 4">开店申请中</span>
             <span v-if="shopStatus.shopStatus === 5">上线待审核</span>
             <span v-if="paySettlementType===1 && shopStatus.shopStatus === 6">上线审核失败</span>
+            <span v-if="shopStatus.shopStatus === 7">系统下线</span>
           </div>
         </div>
         <!-- 信息 -->

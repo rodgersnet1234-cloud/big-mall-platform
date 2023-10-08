@@ -52,7 +52,7 @@
             </el-select>
           </el-form-item>
           <!-- 商品分类 -->
-          <el-form-item label="平台分类：">
+          <el-form-item label="SaaS分类：">
             <el-cascader
               v-model="selectedMenu"
               clearable

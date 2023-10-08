@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="商城名称"
+    title="平台名称"
     width="35%"
   >
     <el-form
@@ -12,14 +12,14 @@
       style="max-width: 460px"
       @keyup.enter="onSubmit()"
     >
-      <el-form-item label="原商城名称">
+      <el-form-item label="原平台名称">
         <el-input
           v-model="dataForm.oldName"
           disabled
         />
       </el-form-item>
       <el-form-item
-        label="修改商城名称"
+        label="修改平台名称"
         prop="newName"
       >
         <el-input
