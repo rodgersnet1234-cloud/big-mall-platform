@@ -301,7 +301,7 @@ const getAddrList = () => {
 
 // 跳转管理地址库
 const onManageAddr = () => {
-  window.open('/platform/addr', '_blank', 'noopener,noreferrer')
+  window.open('/system/delivery-manager/addr', '_blank', 'noopener,noreferrer')
 }
 
 defineExpose({
