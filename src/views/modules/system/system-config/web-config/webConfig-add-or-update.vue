@@ -295,6 +295,11 @@ import { formatConfigInfo } from '@/utils/website-config'
 import { ElMessage } from 'element-plus'
 import useStore from 'element-plus/es/components/table/src/store/index'
 import { getLink } from '@/api/platform/audit-shop.js'
+import loginBg from '@/assets/website-config/login-bg.jpg'
+import titleIcon from '@/assets/website-config/title-icon.png'
+import menuTopIcon from '@/assets/website-config/menu-top-icon.png'
+import pcBottomQRCode from '@/assets/website-config/pc-bottom-qr-code.jpg'
+import pcLogoImgText from '@/assets/website-config/pc-logo-img-text.png'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -371,6 +376,27 @@ const getFormData = (apiKey, configType) => {
   apis.getWebConfig(apiKey).then(data => {
     if (data) {
       dataForm.value = JSON.parse(data)
+      if (!dataForm.value.loginBgImg) {
+        dataForm.value.loginBgImg = location.origin + loginBg
+      }
+      if (!dataForm.value.titleImg) {
+        dataForm.value.titleImg = location.origin + titleIcon
+      }
+      if (!dataForm.value.bsTopBarIcon) {
+        dataForm.value.bsTopBarIcon = location.origin + menuTopIcon
+      }
+      if (!dataForm.value.pcQrcodeImg) {
+        dataForm.value.pcQrcodeImg = location.origin + pcBottomQRCode
+      }
+      if (!dataForm.value.loginLogoImg) {
+        dataForm.value.loginLogoImg = location.origin + titleIcon
+      }
+      if (!dataForm.value.pcLogoImgText) {
+        dataForm.value.pcLogoImgText = location.origin + pcLogoImgText
+      }
+      if (!dataForm.value.stationLoginLogoImg) {
+        dataForm.value.stationLoginLogoImg = location.origin + titleIcon
+      }
       dataForm.value.configType = configType
     }
   })

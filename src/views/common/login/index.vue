@@ -2,7 +2,15 @@
   <div class="Mall4j page-login login-container">
     <div class="login-frame">
       <div class="login-img">
-        <img :src="webConfig.loginBgImg">
+        <img
+          v-if="isLoginBgImg"
+          :src="webConfig.loginBgImg"
+          @error="isLoginBgImg=false"
+        >
+        <img
+          v-else
+          src="@/assets/website-config/login-bg.jpg"
+        >
       </div>
       <div class="login-info">
         <div class="title">
@@ -83,7 +91,7 @@ const loginInfo = reactive({
   captchaVerification: '', // 验证码
   sysType: 2
 })
-
+const isLoginBgImg = ref(true)
 const passwordType = ref('password')
 const passwordRef = ref(null)
 // eslint-disable-next-line no-unused-vars
