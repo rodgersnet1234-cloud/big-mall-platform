@@ -625,6 +625,7 @@ const updateWebConfigData = () => {
     return
   }
   api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
+    useWebConfigStore().addData(formatConfigInfo(data))
     data = formatConfigInfo(data)
     useStore.commit('webConfig/addData', data)
   })()
