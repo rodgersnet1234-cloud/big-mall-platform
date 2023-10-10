@@ -72,6 +72,7 @@
   </div>
 </template>
 <script setup>
+import * as api from '@/api/rbac/web-config'
 const webConfig = computed(() => useWebConfigStore().webConfig)
 // 当前语言
 const language = computed(() => useAppStore().language)
@@ -163,6 +164,9 @@ const onLogin = verifyResult => {
       } else {
         router.push({ path: redirect.value || '/', query: otherQuery }, () => {})
       }
+      api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
+        useWebConfigStore().addData(formatConfigInfo(data))
+      })
     })
   }).catch((e) => {
     loading.value = false

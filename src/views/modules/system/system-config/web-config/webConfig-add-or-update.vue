@@ -275,6 +275,7 @@
         {{ $t('rbac.webConfig.save') }}
       </el-button>
       <el-button
+        v-if="configType!==1"
         type="primary"
         @click="onCopyLink()"
       >
@@ -381,6 +382,38 @@ const onSubmit = () => {
       return
     }
 
+    // 平台端配置判断
+    if (dataForm.value.configType === 1) {
+      if (!dataForm.value.loginBgImg) {
+        errorMsg($t('rbac.webConfig.loginBg') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      if (!dataForm.value.copyrightCn) {
+        errorMsg($t('rbac.webConfig.bsCopyright') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      if (!dataForm.value.titleContentCn) {
+        errorMsg($t('rbac.webConfig.bsTitleContent') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      if (!dataForm.value.titleImg) {
+        errorMsg($t('rbac.webConfig.pcTitleImg') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      // TopIcon
+      if (!dataForm.value.bsTopBarIcon) {
+        errorMsg($t('rbac.webConfig.TopIcon') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      if (!dataForm.value.bsMenuTitleOpenCn) {
+        errorMsg($t('rbac.webConfig.bsMenuTitleOpen') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+      if (!dataForm.value.bsMenuTitleCloseCn) {
+        errorMsg($t('rbac.webConfig.bsMenuTitleClose') + '-' + $t('rbac.webConfig.chinese') + $t('rbac.webConfig.canNotBeEmpty'))
+        return
+      }
+    }
     // 后台配置判断
     if (dataForm.value.configType === 2) {
       if (!dataForm.value.loginBgImg) {
@@ -485,6 +518,8 @@ const onSubmit = () => {
     } else if (props.configType === 5) {
       // 门店端配置
       modifyFormData('STATION_WEBSITE_CONFIG')
+    } else if (props.configType === 1) {
+      modifyFormData('PLATFROM_WEBSITE_CONFIG')
     }
   })
 }
