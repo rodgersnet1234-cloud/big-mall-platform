@@ -161,26 +161,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="supplierRate"
-            label="供应商分账比例"
-            width="130"
-            align="center"
-          >
-            <template #default="scope">
-              <span>{{ scope.row.supplierRate }}%</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="purchasePlatformCommission"
-            label="供应商平台佣金"
-            width="130"
-            align="center"
-          >
-            <template #default="scope">
-              <span>￥ {{ price(scope.row.purchasePlatformCommission) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             prop="scoreAmount"
             label="使用积分金额"
             width="130"
