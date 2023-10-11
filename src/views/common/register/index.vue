@@ -440,7 +440,7 @@ const handleRegister = () => {
 
   if (!checked.value) {
     ElMessage({
-      message: '请先阅读按钮下方《供应商注册协议》',
+      message: $t('register.readAgreement'),
       type: 'error',
       duration: 1500
     })

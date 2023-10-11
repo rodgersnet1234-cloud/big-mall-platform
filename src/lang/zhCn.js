@@ -184,7 +184,7 @@ export default {
     agree: '我已阅读同意',
     agree2: '已阅读并同意本协议',
     agreement: '供应商注册协议',
-    readAgreement: '请先阅读按钮下方《供应商注册协议》',
+    readAgreement: '请先阅读按钮下方《平台注册协议》',
     registerSuccess: '注册成功！即将跳转到登录页...'
   },
   forgetPassword: {
