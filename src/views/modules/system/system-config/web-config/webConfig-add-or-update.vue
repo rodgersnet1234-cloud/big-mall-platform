@@ -300,6 +300,7 @@ import titleIcon from '@/assets/website-config/title-icon.png'
 import menuTopIcon from '@/assets/website-config/menu-top-icon.png'
 import pcBottomQRCode from '@/assets/website-config/pc-bottom-qr-code.jpg'
 import pcLogoImgText from '@/assets/website-config/pc-logo-img-text.png'
+
 const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
@@ -376,25 +377,25 @@ const getFormData = (apiKey, configType) => {
     if (data) {
       dataForm.value = JSON.parse(data)
       if (!dataForm.value.loginBgImg) {
-        dataForm.value.loginBgImg = loginBg
+        dataForm.value.loginBgImg = location.origin + loginBg
       }
       if (!dataForm.value.titleImg) {
-        dataForm.value.titleImg = titleIcon
+        dataForm.value.titleImg = location.origin + titleIcon
       }
       if (!dataForm.value.bsTopBarIcon) {
-        dataForm.value.bsTopBarIcon = menuTopIcon
+        dataForm.value.bsTopBarIcon = location.origin + menuTopIcon
       }
       if (!dataForm.value.pcQrcodeImg) {
-        dataForm.value.pcQrcodeImg = pcBottomQRCode
+        dataForm.value.pcQrcodeImg = location.origin + pcBottomQRCode
       }
       if (!dataForm.value.loginLogoImg) {
-        dataForm.value.loginLogoImg = titleIcon
+        dataForm.value.loginLogoImg = location.origin + titleIcon
       }
       if (!dataForm.value.pcLogoImgText) {
-        dataForm.value.pcLogoImgText = pcLogoImgText
+        dataForm.value.pcLogoImgText = location.origin + pcLogoImgText
       }
       if (!dataForm.value.stationLoginLogoImg) {
-        dataForm.value.stationLoginLogoImg = titleIcon
+        dataForm.value.stationLoginLogoImg = location.origin + titleIcon
       }
       dataForm.value.configType = configType
     }

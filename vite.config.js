@@ -70,6 +70,7 @@ export default defineConfig({
   },
   build: {
     base: './',
+    assetsInlineLimit: 1,
     rollupOptions: {
       // 静态资源分类打包
       output: {
