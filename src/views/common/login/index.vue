@@ -149,12 +149,14 @@ watch(
 const loading = ref(false)
 const userStore = useUserStore()
 // 登录
-const onLogin = verifyResult => {
+let logged = false
+const onLogin = (verifyResult) => {
   loading.value = true
   loginInfo.captchaVerification = verifyResult.captchaVerification
   const loginData = JSON.parse(JSON.stringify(loginInfo))
   loginData.passWord = encrypt(loginInfo.passWord)
   userStore.login(loginData).then(() => {
+    logged = true
     // 获取用户信息
     userStore.getUserInfo().then(data => {
       // 获取并更新通联支付配置信息（平台开启通联支付会清除所有用户token，所以重新登录时更新通联支付配置信息）
@@ -164,14 +166,18 @@ const onLogin = verifyResult => {
       } else {
         router.push({ path: redirect.value || '/', query: otherQuery }, () => {})
       }
-      api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
-        useWebConfigStore().addData(formatConfigInfo(data))
-      })
     })
   }).catch((e) => {
     loading.value = false
   })
 }
+onUnmounted(() => {
+  if (logged) {
+    api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
+      useWebConfigStore().addData(formatConfigInfo(data))
+    })
+  }
+})
 
 </script>
 
