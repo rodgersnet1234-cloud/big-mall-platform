@@ -43,7 +43,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo && shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.unsettledAmount? amount(shopWalletInfo.unsettledAmount): 0 }}
             </span>
           </div>
         </div>
@@ -61,7 +61,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo && shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.freezeAmount? amount(shopWalletInfo.freezeAmount): 0 }}
             </span>
           </div>
         </div>
@@ -79,7 +79,7 @@
           </div>
           <div class="balance">
             <span style="margin-right:30px">
-              {{ shopWalletInfo && shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount):'-' }}
+              {{ shopWalletInfo && shopWalletInfo.totalSettledAmount? amount(shopWalletInfo.totalSettledAmount): 0 }}
             </span>
           </div>
         </div>
