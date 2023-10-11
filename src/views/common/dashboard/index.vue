@@ -18,7 +18,7 @@
         <el-icon class="warning">
           <Warning />
         </el-icon>
-        您的店铺已下线，原因是：
+        您的平台已下线，原因是：
         <span>{{ offlineReason }}</span>
         <span>。如有问题可重新申请上线 &gt;</span>
       </div>
@@ -53,7 +53,7 @@
         <router-link
           to="/system/system-config/principal-config"
         >
-          为了不影响商城日常经营，建议及时选择主体认证方式并完成相关操作 &gt;
+          为了不影响商城日常经营，请及时进行主体配置，完善支付配置信息和微信配置信息 &gt;
         </router-link>
       </div>
     </div>
