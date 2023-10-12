@@ -14,6 +14,7 @@ import { shopUserInfo } from '@/api/platform/sys-user'
 import { listMenuIds } from '@/api/rbac/menu'
 import { getToken, removeToken, setToken, getTenantId, setTenantId, removeTenantId } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import Cookies from 'vue-cookies'
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -114,6 +115,8 @@ export const useUserStore = defineStore('user', {
       this.token = ''
       removeToken()
       removeTenantId()
+      Cookies.remove('miniAppConfigSave')
+      Cookies.remove('mpConfigSave')
       this.name = ''
       this.userName = ''
       this.avatar = ''

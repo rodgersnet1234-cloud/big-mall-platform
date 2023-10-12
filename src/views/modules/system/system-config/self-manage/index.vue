@@ -10,7 +10,7 @@
       >
         <mini-app
           v-if="miniAppShow"
-          @mini-app-show="miniAppShowState(state)"
+          @mini-app-show-state="miniAppShowState"
         />
         <!-- 配置小程序 -->
         <div v-if="!miniAppShow">
@@ -205,15 +205,27 @@ import * as api from '@/api/platform/sys-config.js'
 import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 import { ElMessage } from 'element-plus'
+import Cookies from 'vue-cookies'
+
 const miniAppShow = ref(true)
 const appletInformation = ref({})
-
+onMounted(() => {
+  if (Cookies.get('miniAppConfigSave') === 'false') {
+    miniAppShowState()
+  }
+  if (Cookies.get('mpConfigSave') === 'false') {
+    mpShowState()
+  }
+})
 const activeName = ref('first')
 const miniAppImgUrl = ref('')
 const miniAppShowState = (state) => {
   api.getAppletInformation().then(res => {
     appletInformation.value = res
     miniAppShow.value = state
+    Cookies.set('miniAppConfigSave', false)
+  }).catch(() => {
+    Cookies.set('miniAppConfigSave', true)
   })
   api.getAppletQRcode().then(res => {
     getBase64(res).then(base64 => {
@@ -221,6 +233,9 @@ const miniAppShowState = (state) => {
     }).catch(err => {
       console.log(err, 'err')
     })
+  })
+  Promise.all([api.getAppletInformation(), api.getAppletQRcode()]).then(res => {
+    // miniAppImgUrl.value = res[1]
   })
 }
 const onDownload = () => {
@@ -247,6 +262,9 @@ const mpShowState = (state) => {
   api.getOfficialAccountInformation().then(res => {
     mpShow.value = state
     mpInformation = res
+    Cookies.set('mpConfigSave', false)
+  }).catch(() => {
+    Cookies.set('mpConfigSave', true)
   })
   api.getOfficialAccountQRcode().then(res => {
     getBase64(res).then(base64 => {

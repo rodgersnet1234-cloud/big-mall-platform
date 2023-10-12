@@ -52,6 +52,7 @@
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
+const emit = defineEmits(['miniAppShowState'])
 const dataForm = ref({
   appId: null,
   secret: null
@@ -67,15 +68,12 @@ const dataRule = {
 onMounted(() => {
   init()
 })
-const emit = defineEmits(['miniAppShow'])
 const dataFormRef = ref()
 const init = () => {
-  nextTick(() => {
-    api.get('MA_CONFIG').then(data => {
-      if (data) {
-        dataForm.value = JSON.parse(data)
-      }
-    })
+  api.get('MA_CONFIG').then(data => {
+    if (data) {
+      dataForm.value = JSON.parse(data)
+    }
     dataFormRef.value?.resetFields()
   })
 }
@@ -86,7 +84,6 @@ const onSubmit = () => {
   const obj = {}
   obj.appId = dataForm.value.appId
   obj.secret = dataForm.value.secret
-
   dataFormRef.value?.validate(async (valid) => {
     if (valid) {
       await api.save({
@@ -103,12 +100,11 @@ const onSubmit = () => {
           duration: 1500
         })
       })
-      emit('miniAppShow', false)
+      emit('miniAppShowState', false)
     }
   })
 }
 const onBack = () => {
   router.go(-1)
 }
-
 </script>
