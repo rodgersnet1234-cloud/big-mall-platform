@@ -9,14 +9,14 @@
         @submit.prevent
       >
         <div class="input-row">
-          <el-form-item label="店铺名称">
+          <el-form-item label="店铺名称：">
             <el-input
               v-model="searchParam.shopName"
               placeholder="店铺名称"
               maxlength="20"
             />
           </el-form-item>
-          <el-form-item label="店铺类型">
+          <el-form-item label="店铺类型：">
             <el-select
               v-model="searchParam.type"
               placeholder="请选择店铺类型"
@@ -32,7 +32,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="店铺状态">
+          <el-form-item label="店铺状态：">
             <el-select
               v-model="searchParam.shopStatus"
               placeholder="请选择店铺状态"
@@ -70,7 +70,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="店铺标签">
+          <el-form-item label="店铺标签：">
             <el-select
               v-model="searchParam.isPreferred"
               placeholder="请选择店铺标签"
