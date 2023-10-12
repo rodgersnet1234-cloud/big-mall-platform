@@ -274,13 +274,6 @@
       >
         {{ $t('rbac.webConfig.save') }}
       </el-button>
-      <el-button
-        v-if="configType!==1"
-        type="primary"
-        @click="onCopyLink()"
-      >
-        {{ $t('复制链接') }}
-      </el-button>
     </el-form-item>
   </el-form>
 
@@ -294,7 +287,6 @@ import * as apis from '@/api/platform/sys-config'
 import { formatConfigInfo } from '@/utils/website-config'
 import { ElMessage } from 'element-plus'
 import useStore from 'element-plus/es/components/table/src/store/index'
-import { getLink } from '@/api/platform/audit-shop.js'
 import loginBg from '@/assets/website-config/login-bg.jpg'
 import titleIcon from '@/assets/website-config/title-icon.png'
 import menuTopIcon from '@/assets/website-config/menu-top-icon.png'
@@ -339,11 +331,9 @@ const props = defineProps({
     default: 1
   }
 })
-let links = {}
 
 const dataFormRef = ref(null)
 onMounted(async () => {
-  links = await getLink()
   dataForm.value.configType = props.configType
 
   visible.value = true
@@ -549,69 +539,7 @@ const onSubmit = () => {
     }
   })
 }
-const onCopyLink = async () => {
-  if (props.configType === 2) {
-    // 商家端
-    navigator.clipboard.writeText(links.enterUrl).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
-      })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
-  } else if (props.configType === 3) {
-    // pc端
-    navigator.clipboard.writeText(links.pcUrl).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
-      })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
-  } else if (props.configType === 4) {
-    // h5端
-    navigator.clipboard.writeText(links.h5Url).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
-      })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
-  } else if (props.configType === 5) {
-    // 门店端
-    navigator.clipboard.writeText(links.stationUrl).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
-      })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
-  }
-}
+
 // 修改更新接口
 const modifyFormData = (apiKey) => {
   const newObj = Object.assign({}, dataForm.value)

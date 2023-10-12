@@ -57,107 +57,215 @@
         </router-link>
       </div>
     </div>
-    <!-- 今日指数 -->
-    <div class="today-index item-wrapper first-layer layer">
-      <div class="title">
-        <div class="t-title">
-          今日指数
+    <div class="first-layer">
+      <!-- 今日指数 -->
+      <div class="today-index item-wrapper  layer">
+        <div class="title">
+          <div class="t-title">
+            今日指数
+          </div>
+          <div class="t-explain-item t-explain-first-item t-small-text t-red">
+            较昨日增长
+          </div>
+          <div class="t-explain-item t-explain-second-item t-small-text t-dark-green">
+            较昨日下降
+          </div>
         </div>
-        <div class="t-explain-item t-explain-first-item t-small-text t-red">
-          较昨日增长
-        </div>
-        <div class="t-explain-item t-explain-second-item t-small-text t-dark-green">
-          较昨日下降
+        <div class="data-content">
+          <div class="check-pending-shop-num d-item">
+            <div class="di-title">
+              待审核店铺
+            </div>
+            <div class="di-num">
+              {{ pendingShop }}
+            </div>
+          </div>
+          <div class="today-pay-customer-num d-item">
+            <div class="di-title">
+              今日支付客户数(个)
+            </div>
+            <div class="di-num">
+              {{ isTrueData(todayInfoData.todayData.payUserCount) }}
+            </div>
+            <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayUserRate >= 0 ? 'rise' : 'reduce')">
+              {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayUserRate)) }}%
+              <el-icon>
+                <Top v-if="todayInfoData.todayData.yesterdayPayUserRate >= 0" />
+                <Bottom v-else />
+              </el-icon>
+            </div>
+          </div>
+          <div class="pay-order-num d-item">
+            <div class="di-title">
+              今日支付订单数(笔)
+            </div>
+            <div class="di-num">
+              {{ isTrueData(todayInfoData.todayData.payOrderCount) }}
+            </div>
+            <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayOrderRate >= 0 ? 'rise' : 'reduce')">
+              {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayOrderRate)) }}%
+              <el-icon>
+                <Top v-if="todayInfoData.todayData.yesterdayPayOrderRate >= 0" />
+                <Bottom v-else />
+              </el-icon>
+            </div>
+          </div>
+          <div class="refund-amount-num d-item">
+            <div class="di-title">
+              今日退款金额(元)
+            </div>
+            <div class="di-num">
+              {{ conversionActual(isTrueData(todayInfoData.todayData.refund)) }}
+            </div>
+            <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayRefundRate >= 0 ? 'rise' : 'reduce')">
+              {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayRefundRate)) }}%
+              <el-icon>
+                <Top v-if="todayInfoData.todayData.yesterdayRefundRate >= 0" />
+                <Bottom v-else />
+              </el-icon>
+            </div>
+          </div>
+          <div class="single-customer-price d-item">
+            <div class="di-title">
+              今日客单价(元)
+            </div>
+            <div class="di-num">
+              {{ isTrueData(todayInfoData.todayData.onePrice) }}
+            </div>
+            <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayOnePriceRate >= 0 ? 'rise' : 'reduce')">
+              {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayOnePriceRate)) }}%
+              <el-icon>
+                <Top v-if="todayInfoData.todayData.yesterdayOnePriceRate >= 0" />
+                <Bottom v-else />
+              </el-icon>
+            </div>
+          </div>
+          <div class="pay-amount-num d-item">
+            <div class="di-title">
+              今日支付金额(元)
+            </div>
+            <div class="di-num">
+              {{ isTrueData(todayInfoData.todayData.payActual) }}
+            </div>
+            <div
+              :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayActualRate >= 0 ? 'rise' : 'reduce')"
+            >
+              {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayActualRate)) }}%
+              <el-icon>
+                <Top v-if="todayInfoData.todayData.yesterdayPayActualRate >= 0" />
+                <Bottom v-else />
+              </el-icon>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="data-content">
-        <div class="check-pending-shop-num d-item">
-          <div class="di-title">
-            待审核店铺
-          </div>
-          <div class="di-num">
-            {{ pendingShop }}
-          </div>
-        </div>
-        <div class="today-pay-customer-num d-item">
-          <div class="di-title">
-            今日支付客户数(个)
-          </div>
-          <div class="di-num">
-            {{ isTrueData(todayInfoData.todayData.payUserCount) }}
-          </div>
-          <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayUserRate >= 0 ? 'rise' : 'reduce')">
-            {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayUserRate)) }}%
-            <el-icon>
-              <Top v-if="todayInfoData.todayData.yesterdayPayUserRate >= 0" />
-              <Bottom v-else />
-            </el-icon>
+      <div
+        class="item-wrapper link-index"
+      >
+        <div class="title">
+          <div class="t-title">
+            链接入口
           </div>
         </div>
-        <div class="pay-order-num d-item">
-          <div class="di-title">
-            今日支付订单数(笔)
+        <!-- 商家端链接 -->
+        <div class="link-content">
+          <div class="link-left">
+            <img
+              src="@/assets/images/icon_business.png"
+              alt=""
+            >
+            <div class="text-content">
+              <p class="text-top">
+                商家端链接
+              </p>
+              <p class="text-bottom">
+                支持商家入驻进行售卖商品
+              </p>
+            </div>
           </div>
-          <div class="di-num">
-            {{ isTrueData(todayInfoData.todayData.payOrderCount) }}
-          </div>
-          <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayOrderRate >= 0 ? 'rise' : 'reduce')">
-            {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayOrderRate)) }}%
-            <el-icon>
-              <Top v-if="todayInfoData.todayData.yesterdayPayOrderRate >= 0" />
-              <Bottom v-else />
-            </el-icon>
-          </div>
-        </div>
-        <div class="refund-amount-num d-item">
-          <div class="di-title">
-            今日退款金额(元)
-          </div>
-          <div class="di-num">
-            {{ conversionActual(isTrueData(todayInfoData.todayData.refund)) }}
-          </div>
-          <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayRefundRate >= 0 ? 'rise' : 'reduce')">
-            {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayRefundRate)) }}%
-            <el-icon>
-              <Top v-if="todayInfoData.todayData.yesterdayRefundRate >= 0" />
-              <Bottom v-else />
-            </el-icon>
-          </div>
-        </div>
-        <div class="single-customer-price d-item">
-          <div class="di-title">
-            今日客单价(元)
-          </div>
-          <div class="di-num">
-            {{ isTrueData(todayInfoData.todayData.onePrice) }}
-          </div>
-          <div :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayOnePriceRate >= 0 ? 'rise' : 'reduce')">
-            {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayOnePriceRate)) }}%
-            <el-icon>
-              <Top v-if="todayInfoData.todayData.yesterdayOnePriceRate >= 0" />
-              <Bottom v-else />
-            </el-icon>
-          </div>
-        </div>
-        <div class="pay-amount-num d-item">
-          <div class="di-title">
-            今日支付金额(元)
-          </div>
-          <div class="di-num">
-            {{ isTrueData(todayInfoData.todayData.payActual) }}
-          </div>
-          <div
-            :class="'di-trend di-trend-' + (todayInfoData.todayData.yesterdayPayActualRate >= 0 ? 'rise' : 'reduce')"
+          <el-button
+            type="primary"
+            link
+            @click="copyLink('enterUrl')"
           >
-            {{ dataFormat(isTrueData(todayInfoData.todayData.yesterdayPayActualRate)) }}%
-            <el-icon>
-              <Top v-if="todayInfoData.todayData.yesterdayPayActualRate >= 0" />
-              <Bottom v-else />
-            </el-icon>
+            复制链接
+          </el-button>
+        </div>
+        <!-- 门店端链接 -->
+        <div class="link-content">
+          <div class="link-left">
+            <img
+              src="@/assets/images/icon_store.png"
+              alt=""
+            >
+            <div class="text-content">
+              <p class="text-top">
+                门店端链接
+              </p>
+              <p class="text-bottom">
+                支持商家门店进行线下核销
+              </p>
+            </div>
           </div>
+          <el-button
+            type="primary"
+            link
+            @click="copyLink('stationUrl')"
+          >
+            复制链接
+          </el-button>
+        </div>
+        <!-- H5端链接 -->
+        <div class="link-content">
+          <div class="link-left">
+            <img
+              src="@/assets/images/icon_H5.png"
+              alt=""
+            >
+            <div class="text-content">
+              <p class="text-top">
+                H5端链接
+              </p>
+              <p class="text-bottom">
+                支持用户在H5端访问商城
+              </p>
+            </div>
+          </div>
+          <el-button
+            type="primary"
+            link
+            @click="copyLink('h5Url')"
+          >
+            复制链接
+          </el-button>
+        </div>
+        <!-- PC端链接 -->
+        <div class="link-content">
+          <div class="link-left">
+            <img
+              src="@/assets/images/icon_pc.png"
+              alt=""
+            >
+            <div class="text-content">
+              <p class="text-top">
+                PC端链接
+              </p>
+              <p class="text-bottom">
+                支持用户在PC端访问商城
+              </p>
+            </div>
+          </div>
+          <el-button
+            type="primary"
+            link
+            @click="copyLink('pcUrl')"
+          >
+            复制链接
+          </el-button>
         </div>
       </div>
     </div>
+
     <div class="second-layer layer">
       <!-- 实时数据 -->
       <div class="real-time-data item-wrapper">
@@ -464,6 +572,7 @@
 
 <script setup>
 import applyOnline from '@/components/apply-online/index.vue'
+import { getLink } from '@/api/platform/audit-shop.js'
 import {
   getDetailByHour,
   getCurrentMonthByDay,
@@ -785,8 +894,45 @@ onMounted(() => {
   getShopDealRankData()
   getProdSaleRankData()
   getRefundShopRankData()
+  getShopLink()
 })
-
+let links = {}
+const getShopLink = () => {
+  getLink().then(res => {
+    links = res
+  })
+}
+const copyToClipboardAndNotify = (url) => {
+  navigator.clipboard.writeText(url)
+    .then(() => {
+      ElMessage({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        message: '复制失败',
+        type: 'error',
+        duration: 1000
+      })
+    })
+}
+const copyLink = (value) => {
+  if (value === 'enterUrl') {
+    copyToClipboardAndNotify(links.enterUrl)
+  } else if (value === 'stationUrl') {
+    // 门店端
+    copyToClipboardAndNotify(links.stationUrl)
+  } else if (value === 'h5Url') {
+    // h5端
+    copyToClipboardAndNotify(links.h5Url)
+  } else if (value === 'pcUrl') {
+    // pc端
+    copyToClipboardAndNotify(links.pcUrl)
+  }
+}
 // filters
 const dataFormat = (value) => {
   if (!value) {
@@ -1008,21 +1154,22 @@ const isTrueData = (data) => {
 
   // 今日指数
   .today-index {
-    width: 100%;
-    height: 225px;
+    width: calc((100% - 20px) * 0.7);
     background: #FFFFFF;
 
     .data-content {
       display: flex;
-      justify-content: space-between;
-      padding: 0 5%;
+      flex-wrap:wrap;
       margin-top: 37px;
-
+      padding-left: 20px;
       .d-item {
-        max-width: 15%;
+        display: flex;
+        width: 25%;
         overflow: hidden;
         text-align: center;
-
+        margin-bottom: 20px;
+        flex-direction: column;
+        align-items: flex-start;
         .di-title {
           font-size: 14px;
           color: #666;
@@ -1050,7 +1197,45 @@ const isTrueData = (data) => {
       }
     }
   }
-
+  // 第一层
+  .first-layer{
+    display: flex;
+    .link-index{
+      width: calc((100% - 20px) * 0.3);
+      margin-left:20px;background: #ffffff;
+    }
+    .link-content{
+      display: flex;
+      margin-top: 24px;
+      justify-content: space-between;
+      .link-left{
+        display: flex;
+        height: 44px;
+        .text-content{
+          p{
+           margin: 0 0 0 16px;
+         }
+          .text-top{
+            height: 18px;
+            font-size: 14px;
+            font-family: Microsoft YaHei-Bold, Microsoft YaHei;
+            font-weight: bold;
+            color: #333333;
+            line-height: 18px;
+        }
+          .text-bottom{
+            height: 12px;
+            font-size: 12px;
+            font-family: Microsoft YaHei-Regular, Microsoft YaHei;
+            font-weight: 400;
+            color: #999999;
+            line-height: 14px;
+            margin-top: 10px;
+        }
+        }
+      }
+    }
+  }
   // 第二层
   .second-layer {
     display: flex;
