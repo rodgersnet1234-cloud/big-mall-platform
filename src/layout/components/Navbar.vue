@@ -224,13 +224,13 @@ const notificationDebounce = ref(1)
 const messageReminding = ref(null)
 const message = ref(0)
 const tenantId = computed(() => userStore.tenantId)
-const userId = computed(() => userStore.userId)
+const platformUserId = computed(() => userStore.platformUserId)
 const notification = ref(false)
 // 图标提醒标题闪烁
 const showHidden = ref(true)
 const openWs = () => {
   imSocketTask = new WebSocket(
-    import.meta.env.VITE_APP_WEBSOCKET_URL + '/mall4cloud_im/p/ua/im/websocket/online/' + Base64.encode(getToken()) + '/' + tenantId.value + '/' + userId.value
+    import.meta.env.VITE_APP_WEBSOCKET_URL + '/mall4cloud_im/p/ua/im/websocket/online/' + Base64.encode(getToken()) + '/' + tenantId.value + '/' + platformUserId.value
   )
   const heartCheck = {
     timeout: 19000, // 19s发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。 尽量一个小时发送三次

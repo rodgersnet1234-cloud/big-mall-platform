@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
       avatar: '',
       introduction: '',
       isAdmin: 0,
-      userId: '',
+      platformUserId: '',
       tenantId: getTenantId(),
       roles: [],
       menuIds: [],
@@ -54,7 +54,7 @@ export const useUserStore = defineStore('user', {
           this.name = shopUser.nickName
           this.avatar = shopUser.avatar
           this.isAdmin = shopUser.isAdmin
-          this.userId = shopUser.userId
+          this.platformUserId = shopUser.platformUserId
           this.userName = shopUser.userName
           resolve(shopUser)
         }).catch(error => {
@@ -121,7 +121,7 @@ export const useUserStore = defineStore('user', {
       this.userName = ''
       this.avatar = ''
       this.isAdmin = 0
-      this.userId = ''
+      this.platformUserId = ''
       this.tenantId = ''
       this.roles = []
       this.menuIds = []
