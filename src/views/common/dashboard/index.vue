@@ -43,7 +43,7 @@
       </div>
     </div>
     <div
-      v-if="subjectType!==null&&subjectType===0"
+      v-if="subjectStatus&&subjectStatus!==1"
       class="shop-inf-imperfect-tips"
     >
       <div>
@@ -587,11 +587,11 @@ import {
   countByShopStatus,
   listShopRankIngByFlow
 } from '@/api/multishop/shop-detail'
-import { mallUserStore } from '@/stores/modules/mall-user.js'
-import { getEventInfo, auditApply } from '@/api/multishop/shop-event'
+import { getEventInfo, auditApply, getMallUserInfo } from '@/api/multishop/shop-event'
 import { ElMessage } from 'element-plus'
 
 import Big from 'big.js'
+
 const applyOnlineVisible = ref(false)
 const offlineReason = ref('')
 let eventInfoData = null
@@ -624,11 +624,10 @@ const reReapplyDataSubmit = (data) => {
       duration: 1000
     })
     getMallEventInfo()
+    getMallStatus()
   })
 }
-const mallStore = mallUserStore()
-const shopStatus = computed(() => mallStore.platformStatus)
-const subjectType = computed(() => mallStore.subjectType)
+
 const pendingShop = ref(0)
 // 客户数量概况
 const customerCountInfo = reactive({
@@ -884,6 +883,8 @@ const getProdSaleRankData = () => {
   })
 }
 // 退单店铺排行
+const subjectStatus = ref(0)
+const shopStatus = ref(0)
 const refundShopRankData = ref([])
 onMounted(() => {
   getMallEventInfo()
@@ -895,7 +896,14 @@ onMounted(() => {
   getProdSaleRankData()
   getRefundShopRankData()
   getShopLink()
+  getMallStatus()
 })
+const getMallStatus = () => {
+  getMallUserInfo().then(res => {
+    subjectStatus.value = res.subjectStatus
+    shopStatus.value = res.platformStatus
+  })
+}
 let links = {}
 const getShopLink = () => {
   getLink().then(res => {
