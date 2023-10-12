@@ -317,7 +317,7 @@ const getBase64 = (data) => {
     border: 1px solid #FFD888;
     border-radius: 2px;
     padding: 5px 22px;
-    margin:5px 0 60px 0;
+    margin-bottom: 30px;
 
     span{
       margin-left: 3px;
@@ -385,11 +385,11 @@ const getBase64 = (data) => {
     }
   }
   .official-accounts{
-    margin-top:60px ;
     width: 685px;
     height: 460px;
     border-radius: 2px 2px 2px 2px;
     border: 1px solid #DCDFE6;
   }
+
 }
 </style>

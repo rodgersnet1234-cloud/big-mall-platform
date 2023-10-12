@@ -19,7 +19,7 @@
       >
         <el-input
           v-model.trim="dataForm.appId"
-          style="width:200px"
+          style="width:270px"
           controls-position="right"
         />
       </el-form-item>
@@ -29,7 +29,7 @@
       >
         <el-input
           v-model.trim="dataForm.secret"
-          style="width:200px"
+          style="width:270px"
           controls-position="right"
         />
       </el-form-item>
