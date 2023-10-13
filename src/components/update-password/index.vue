@@ -32,6 +32,7 @@
       >
         <el-input
           v-model="dataForm.password"
+          show-password
           type="password"
           maxlength="16"
         />
@@ -43,6 +44,7 @@
         <el-input
           v-model="dataForm.newPassword"
           type="password"
+          show-password
           maxlength="16"
         />
       </el-form-item>
@@ -53,6 +55,7 @@
         <el-input
           v-model="dataForm.confirmPassword"
           type="password"
+          show-password
           maxlength="16"
         />
       </el-form-item>
