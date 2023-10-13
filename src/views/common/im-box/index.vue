@@ -398,7 +398,7 @@ let userId = ''
 let nickName = ''
 const getShopInfo = () => {
   api.shopUserInfo().then(data => {
-    userId = data.userId
+    userId = data.platformUserId
     nickName = data.nickName
   })
 }
