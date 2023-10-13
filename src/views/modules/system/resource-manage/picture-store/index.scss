@@ -320,6 +320,12 @@
         color: #fff;
       }
     }
+    .el-upload-list__item-preview{
+      display: none !important;
+    }
+    .el-upload-list__item-delete{
+      margin: 0;
+    }
   }
   :deep(.el-upload--picture-card)
    {
