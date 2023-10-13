@@ -42,7 +42,7 @@
           <el-table-column
             type="index"
             label="序号"
-            width="55"
+            width="80"
           />
           <el-table-column
             v-if="params.shopId !== '0'"
@@ -157,7 +157,7 @@
           <el-table-column
             type="index"
             label="序号"
-            width="50"
+            width="80"
           />
           <el-table-column
             v-if="params.shopId !== '0'"
