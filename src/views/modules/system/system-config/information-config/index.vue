@@ -99,7 +99,7 @@ const { query } = useRoute()
     height: 454px;;
     border: 1px solid #E3E2E5;
     border-radius: 5px;
-    padding: 80px 0 60px 0;
+    padding: 80px 10px 60px 10px;
     .top-text{
       height: 24px;
       line-height: 21px;
