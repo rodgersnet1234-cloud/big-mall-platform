@@ -285,7 +285,7 @@ const statusOptions = [{
   label: '启用'
 }, {
   value: 2,
-  label: '平台下架'
+  label: 'SaaS下架'
 }, {
   value: 3,
   label: '等待审核'

@@ -163,7 +163,7 @@ onMounted(() => {
 })
 
 /**
- * 获取平台分类列表，并转换成树形结构
+ * 获取SaaS分类列表，并转换成树形结构
  */
 const getPlatformCategory = () => {
   loading.value = true

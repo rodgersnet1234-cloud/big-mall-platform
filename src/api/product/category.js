@@ -9,7 +9,7 @@ export function categoryPage () {
   })
 }
 
-// 导出平台分类
+// 导出SaaS分类
 export function soldExcel (pageParam) {
   return request({
     url: '/mall4cloud_product/p/category/sold_excel',

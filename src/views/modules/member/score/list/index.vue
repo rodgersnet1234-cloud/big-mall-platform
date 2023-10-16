@@ -531,7 +531,7 @@
             <template #default="{ row }">
               <span v-if="row.spuStatus === 0">下架</span>
               <span v-if="row.spuStatus === 1">上架</span>
-              <span v-if="row.spuStatus === 2">平台下架</span>
+              <span v-if="row.spuStatus === 2">SaaS下架</span>
               <span v-if="row.spuStatus === 3">等待审核</span>
             </template>
           </el-table-column>
@@ -679,7 +679,7 @@ onMounted(() => {
   searchParam.spuId = route.query.spuId
   dataForm.prodName = route.query.spuName
   getProdList()
-  getPlatformCategories() // 平台分类
+  getPlatformCategories() // SaaS分类
 })
 
 const pageQuery = reactive({
@@ -753,9 +753,9 @@ const getProdList = (newData = false) => {
   checkedCount.value = 0
 }
 
-const platformCategories = ref([]) // 平台分类
+const platformCategories = ref([]) // SaaS分类
 /**
- * 获取平台分类
+ * 获取SaaS分类
  */
 const getPlatformCategories = () => {
   pageLoading.value = true

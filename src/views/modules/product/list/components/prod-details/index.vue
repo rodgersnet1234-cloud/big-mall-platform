@@ -24,10 +24,10 @@
             <div class="part-tit">
               <span class="part-tit-num">1</span><span class="part-tit-name">商品基本信息</span>
             </div>
-            <!-- 商品平台分类（不可修改） -->
+            <!-- 商品SaaS分类（不可修改） -->
             <div class="part-form-div">
               <div class="part-form-item-tit">
-                平台分类
+                SaaS分类
               </div>
               <div class="part-form-item">
                 <div class="classify-show">
@@ -444,13 +444,13 @@ const init = (spuId) => {
   })
 }
 
-const selectedCategories = ref([]) // 选中的平台分类
-const selectedShopCategories = ref([]) // 选中的平台分类
+const selectedCategories = ref([]) // 选中的SaaS分类
+const selectedShopCategories = ref([]) // 选中的SaaS分类
 /**
  * 获取分类
  */
 const getCategoryBack = () => {
-  // 平台分类
+  // SaaS分类
   selectedCategories.value = [] // 选中的分类
   dataForm.value.category.categories.forEach(category => {
     selectedCategories.value.push({ name: category.name })

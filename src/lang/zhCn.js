@@ -126,7 +126,7 @@ export default {
     createTime: '创建时间',
     updateTime: '更新时间',
     applyForListing: '申请上架',
-    platformDown: '平台下架',
+    platformDown: 'SaaS下架',
     disable: '禁用',
     enable: '启用',
     waitReview: '等待审核',

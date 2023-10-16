@@ -145,7 +145,7 @@ import { ElMessage } from 'element-plus'
 defineProps({
   takedown: {
     type: String,
-    default: '平台下架'
+    default: 'SaaS下架'
   }
 })
 

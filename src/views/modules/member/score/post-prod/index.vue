@@ -1197,7 +1197,7 @@ const onSubmit = Debounce((dataFormPar) => {
 const resetForm = () => {
   dataFormRef.value?.resetFields()
   if (!dataForm.value.spuId) {
-    // 平台分类id
+    // SaaS分类id
     dataForm.value.categoryId = ''
     // 基本属性列表
     basicAttrs.value = []
