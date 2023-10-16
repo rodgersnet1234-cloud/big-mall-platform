@@ -253,6 +253,7 @@ onMounted(() => {
   .way-card{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     .card-content{
       position: relative;
       width: 398px;
@@ -264,7 +265,6 @@ onMounted(() => {
       flex-direction: column;
       align-items: center;
       .top-text{
-        width: 238px;
         height: 24px;
         font-size: 18px;
         font-family: Microsoft YaHei-Regular, Microsoft YaHei, sans-serif;
