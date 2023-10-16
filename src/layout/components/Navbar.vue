@@ -134,7 +134,7 @@ import UpdatePassword from '@/components/update-password/index.vue'
 import UpdateMallName from '@/components/update-mall-name/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { getPlatformIdentifying, getMallUserInfo } from '@/api/multishop/shop-event'
-
+import * as api from '@/api/rbac/web-config'
 import { Base64 } from 'js-base64'
 import { mallUserStore } from '@/stores/modules/mall-user.js'
 
@@ -174,6 +174,9 @@ const logout = async () => {
     type: 'warning'
   }).then(async () => {
     await userStore.logout()
+    api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
+      useWebConfigStore().addData(formatConfigInfo(data))
+    })
     lockReconnect = true // 退出登录不在重连
     imSocketTask?.close() // 关闭ws
     imSocketTask = null
