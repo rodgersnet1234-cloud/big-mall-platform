@@ -293,12 +293,16 @@ const dataForm = ref({
 let isSubmit = false
 // eslint-disable-next-line no-unused-vars
 const validate = (rule, value, callback) => {
-  const reg = /<p>(&nbsp;|&nbsp;\s+)+<\/p>|<p>(<br>)+<\/p>/g
-  if (value.trim() === '' || reg.test(value)) {
+  if (value.trim() === '' || isRichTextEmpty(value)) {
     callback(new Error('输入内容不能为空'))
   } else {
     callback()
   }
+}
+const isRichTextEmpty = (content) => {
+  const textOnly = content.replace(/<[^<>]+>/g, '').replace(/&nbsp;/gi, '')
+  // 检查剩余文本的长度是否大于零
+  return textOnly.trim().length === 0
 }
 const dataRule = {
   rightsName: [
