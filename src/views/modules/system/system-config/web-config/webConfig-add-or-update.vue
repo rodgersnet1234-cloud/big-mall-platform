@@ -66,7 +66,7 @@
       >
         <el-input
           v-model="dataForm.titleContentCn"
-          maxlength="15"
+          maxlength="16"
           show-word-limit
         />
       </el-form-item>
@@ -99,7 +99,7 @@
       >
         <el-input
           v-model="dataForm.bsMenuTitleOpenCn"
-          maxlength="15"
+          maxlength="16"
           show-word-limit
         />
       </el-form-item>
@@ -110,7 +110,7 @@
       >
         <el-input
           v-model="dataForm.bsMenuTitleCloseCn"
-          maxlength="6"
+          maxlength="16"
           show-word-limit
         />
       </el-form-item>
