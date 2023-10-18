@@ -238,8 +238,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 const searchTypesMessage = [
   { key: 1, name: '用户' },
-  { key: 2, name: '商家' },
-  { key: 3, name: '供应商' }
+  { key: 2, name: '商家' }
 ]
 // 查询的参数
 const pageQuery = reactive({
@@ -339,24 +338,6 @@ const sendTypes = [{
 }, {
   value: 113,
   label: '商家端的' + $t('biz.notify.activityAuditResultReminder')
-}, {
-  value: 1006,
-  label: '供应商端的' + $t('biz.notify.productRemovalReminder')
-}, {
-  value: 1007,
-  label: '供应商端的' + $t('biz.notify.commodityAuditResultReminder')
-}, {
-  value: 1002,
-  label: '供应商端的' + $t('biz.notify.userConfirmsReceiptNotification')
-}, {
-  value: 1005,
-  label: '供应商端的' + $t('biz.notify.reminderOfPendingShipment')
-}, {
-  value: 1003,
-  label: '供应商端的' + $t('biz.notify.reminderOfPendingRefund')
-}, {
-  value: 1004,
-  label: '供应商端的' + $t('biz.notify.reminderToNeReceived')
 }]
 const tableSendTypes = [{
   value: 0,
@@ -439,24 +420,6 @@ const tableSendTypes = [{
 }, {
   value: 113,
   label: $t('biz.notify.activityAuditResultReminder')
-}, {
-  value: 1006,
-  label: $t('biz.notify.productRemovalReminder')
-}, {
-  value: 1007,
-  label: $t('biz.notify.commodityAuditResultReminder')
-}, {
-  value: 1002,
-  label: $t('biz.notify.userConfirmsReceiptNotification')
-}, {
-  value: 1005,
-  label: $t('biz.notify.reminderOfPendingShipment')
-}, {
-  value: 1003,
-  label: $t('biz.notify.reminderOfPendingRefund')
-}, {
-  value: 1004,
-  label: $t('biz.notify.reminderToNeReceived')
 }]
 const addOrUpdateVisible = ref(false)
 
