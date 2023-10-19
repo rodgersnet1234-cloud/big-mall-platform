@@ -132,6 +132,17 @@
               controls-position="right"
             />
           </el-form-item>
+          <el-form-item
+            v-if="dataForm.version === 3"
+            :label="$t('platform.config.wechatOpenPlatformApplicationConfig')"
+            style="width:640px"
+          >
+            <el-input
+              v-model="appId"
+              :placeholder="`${$t('platform.config.wechatOpenPlatformApplication')} appId`"
+              controls-position="right"
+            />
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -154,8 +165,6 @@
 <script setup>
 import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
-// import app from './wx-app-config.vue'
-
 const emit = defineEmits(['refreshDataList', 'toggle', 'initMessage'])
 const dataForm = reactive({
   mchId: null,
@@ -170,6 +179,7 @@ const dataForm = reactive({
   privateCertPath: null,
   privateCertContent: null
 })
+const appId = ref(null)
 const dataRule = {
   mchId: [
     { required: true, message: `${$t('platform.config.wechatPay')} mchId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
@@ -212,6 +222,11 @@ const exposeVisible = (isSwitch) => {
 const dataFormRef = ref()
 const init = () => {
   nextTick(() => {
+    api.get('MX_APP_CONFIG').then(data => {
+      if (data) {
+        appId.value = JSON.parse(data)
+      }
+    })
     api.get('WXPAY_CONFIG').then(data => {
       if (data) {
         Object.assign(dataForm, JSON.parse(data))
@@ -231,6 +246,13 @@ const init = () => {
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
+      if (appId.value) {
+        api.save({
+          paramKey: 'MX_APP_CONFIG',
+          paramValue: JSON.stringify(appId.value),
+          remark: $t('platform.config.wechatOpenPlatformApplicationConfig')
+        })
+      }
       api.save({
         paramKey: 'WXPAY_CONFIG',
         paramValue: JSON.stringify(dataForm),
