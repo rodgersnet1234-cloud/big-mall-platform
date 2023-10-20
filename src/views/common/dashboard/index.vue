@@ -43,7 +43,7 @@
       </div>
     </div>
     <div
-      v-if="subjectStatus&&subjectStatus!==1"
+      v-if="subjectStatus!==1"
       class="shop-inf-imperfect-tips"
     >
       <div>
