@@ -281,5 +281,9 @@ const clearSearchInfo = () => {
     max-height: 80px;
     object-fit: contain;
   }
+
+  :deep(.el-form-item__content){
+    display: block;
+  }
 }
 </style>

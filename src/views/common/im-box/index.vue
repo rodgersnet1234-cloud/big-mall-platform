@@ -497,8 +497,22 @@ const getConversations = async () => {
     }
     userPages = data.pages
   } else {
-    openWs() // 开启webstocket
+    // 平台联系买家
+    if (route.query.orderNumber && route.query.userId && !friends.value.length) {
+      getNewUser()
+    } else {
+      openWs() // 开启webstocket
+    }
   }
+}
+
+// 添加新的用户栏到左侧
+const getNewUser = async () => {
+  const res = await api.getUserinfo(route.query.userId)
+  friends.value.push(res[0])
+  currentUserId = res[0].userId
+  selectedF.value = res[0].userId
+  openWs() // 开启webstocket
 }
 
 let ortherUser = false // 别的账号登录判断

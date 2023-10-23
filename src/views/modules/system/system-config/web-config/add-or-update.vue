@@ -121,7 +121,7 @@
     <span v-if="dataForm.configType === 3">
 
       <el-form-item
-        :label="$t('rbac.webConfig.loginLogo')"
+        :label="$t('rbac.webConfig.logo')"
         prop="loginLogoImg"
       >
         <img-upload

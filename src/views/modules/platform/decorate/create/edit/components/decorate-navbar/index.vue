@@ -158,6 +158,7 @@
     <el-dialog
       v-model="viewDialog"
       :title="$t('pcdecorate.decorateNavbar.templateInfo')"
+      class="view-content"
       width="30%"
     >
       <el-form
@@ -494,6 +495,12 @@ div :deep(.site-navbar__menu--right:not(:first-child)::after) {
   padding: 30px 20px;
   .el-dialog__body {
     padding: 30px 0;
+  }
+}
+:deep(.view-content.el-dialog){
+  .el-dialog__body {
+    padding: 10px 0;
+    margin-bottom: -22px;
   }
 }
 </style>

@@ -158,7 +158,7 @@
             min-width="180"
           >
             <template #default="{row}">
-              <span>{{ row.publishTime }}</span>
+              <span>{{ row.publishTime || '-' }}</span>
             </template>
           </el-table-column>
           <!-- 状态(1:公布 0:撤回) -->

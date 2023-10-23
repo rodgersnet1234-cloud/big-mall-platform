@@ -343,11 +343,17 @@
   }
 }
 
-.el-upload-list__item-actions {
+:deep(.el-upload-list__item-actions) {
   a {
     i {
       color: #fff;
     }
+  }
+  .el-upload-list__item-preview{
+    display: none !important;
+  }
+  .el-upload-list__item-delete{
+    margin: 0;
   }
 }
 .hide{

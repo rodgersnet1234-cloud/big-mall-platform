@@ -1,6 +1,14 @@
 export default {
   liveRoom: {
     roomName: 'Live room name',
+    view: 'View',
+    viewLRoomInfo: 'View live room information',
+    anchorName: 'Anchor Name',
+    liveTime: 'Time of live broadcast',
+    liveBackgroundImage: 'Live background image',
+    prod: 'Live Prod',
+    anchorSharingPicture: 'Anchor sharing picture',
+    liveCoverImage: 'Live cover image',
     anchorNickname: 'Anchor nickname',
     anchorMobile: 'Anchor Mobile',
     liveRoomStatus: 'Live room status',

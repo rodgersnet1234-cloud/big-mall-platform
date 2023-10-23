@@ -90,6 +90,7 @@
     <el-dialog
       v-model="viewDialog"
       :title="$t('pcdecorate.decorateNavbar.templateInfo')"
+      class="view-content"
       width="30%"
     >
       <el-form
@@ -97,7 +98,6 @@
         :model="dataForm"
         :rules="dataRule"
         label-width="100px"
-        style="margin: 30px 30px 0 10px"
         @submit.prevent
       >
         <el-form-item

@@ -189,7 +189,7 @@
 <script setup>
 import Pagination from '@/components/pagination/index.vue'
 import AddOrUpdate from './add-or-update.vue'
-import SetUp from './components/setUp.vue'
+import SetUp from './components/set-up.vue'
 import { page } from '@/api/shop-withdraw-cash'
 import Big from 'big.js'
 const useAllinpay = useAllinpayStore()

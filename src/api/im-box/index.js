@@ -19,7 +19,7 @@ export function getConversations (pageNum, pageSize) {
 // 获取用户信息
 export function getUserinfo (id) {
   return request({
-    url: '/mall4cloud_im/m/im/userInfo?userId=' + id,
+    url: '/mall4cloud_im/p/im/userInfo?userId=' + id,
     method: 'GET'
   })
 }

@@ -32,9 +32,8 @@
               <i style="font-style:normal;margin-right: 10px;">元</i>
             </template>
           </el-input>
-        </el-form-item>
-        <el-form-item label="不高于">
-          <el-input
+          元，不高于
+          <el-input-number
             v-model.trim="dataForm.withdrawCashMax"
             @blur="
               onHandleMaxValue(
@@ -42,11 +41,8 @@
                 999999,
                 1
               )"
-          >
-            <template #suffix>
-              <i style="font-style:normal;margin-right: 10px;">元</i>
-            </template>
-          </el-input>
+          />
+          元
         </el-form-item>
         <el-form-item label="提现频次">
           <el-select v-model="dataForm.frequency">
@@ -63,15 +59,11 @@
               :value="3"
             />
           </el-select>
-          <el-input
+          <el-input-number
             v-model.trim="dataForm.number"
             style="width: 140px;margin-left: 10px"
             @blur="onHandleEdit(dataForm.number)"
-          >
-            <template #suffix>
-              <i style="font-style:normal;margin-right: 10px;">次</i>
-            </template>
-          </el-input>
+          />
         </el-form-item>
       </el-form>
       <template #footer>

@@ -149,6 +149,13 @@
             <template #default="scope">
               <div class="text-btn-con">
                 <el-button
+                  link
+                  type="primary"
+                  @click="onAddOrUpdate(scope.row)"
+                >
+                  {{ $t("liveRoom.view") }}
+                </el-button>
+                <el-button
                   v-if="scope.row.liveStatus !== -1 && scope.row.liveStatus !== 2"
                   v-permission="['platform:liveRoom:offline']"
                   link
@@ -189,12 +196,17 @@
       />
     </div>
   </div>
+  <add-or-update
+    v-if="addOrUpdateVisible"
+    ref="addOrUpdateRef"
+    @refresh-data-list="refreshChange"
+  />
 </template>
 
 <script setup>
 import * as http from '@/api/live/index.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
-
+import AddOrUpdate from './add-or-update.vue'
 let tempSearchForm = null // 保存上次点击查询的请求条件
 
 // 返回参数
@@ -284,6 +296,9 @@ const onSearch = (newData = false) => {
   searchForm.pageNum = 1
   getPageData(newData)
 }
+const refreshChange = () => {
+  getPageData()
+}
 // 下线活动
 const onOfflineHandle = (row) => {
   let tips = $t('liveRoom.offlineTip')
@@ -316,6 +331,18 @@ const onOfflineHandle = (row) => {
 const getOfflineRemark = (remark) => {
   ElMessageBox.confirm(remark, $t('liveRoom.reasonForOffline'), {
     confirmButtonText: $t('table.confirm')
+  })
+}
+const addOrUpdateVisible = ref(false)
+const addOrUpdateRef = ref(null)
+/**
+ * 新增 / 修改
+ * @param data
+ */
+const onAddOrUpdate = (data) => {
+  addOrUpdateVisible.value = true
+  nextTick(() => {
+    addOrUpdateRef.value?.init(data)
   })
 }
 </script>

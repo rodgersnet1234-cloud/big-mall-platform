@@ -69,11 +69,6 @@ const init = () => {
 // 表单提交
 const onSubmit = () => {
   api.save({
-    paramKey: props.params.keyCN,
-    paramValue: contentCN.value,
-    remark: props.params.remarkCN
-  })
-  api.save({
     paramKey: props.params.keyEN,
     paramValue: contentEN.value,
     remark: props.params.remarkEN

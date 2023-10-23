@@ -225,6 +225,13 @@
             >
               {{ $t("order.order.refundClosed") }}
             </li>
+            <li
+              :class="['nav-item-li', sts === 6 ? 'selected' : '']"
+              data-sts="6"
+              @click="onSelectNav($event)"
+            >
+              平台介入中
+            </li>
           </ul>
           <ul class="nav-right" />
         </div>
@@ -524,7 +531,26 @@
                 :span="2"
                 style="height: 100%"
               >
-                <div class="item">
+                <div
+                  v-if="orderRefund.platformInterventionStatus && orderRefund.platformInterventionStatus!==-1"
+                  class="item"
+                >
+                  <!-- 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功 -->
+                  <span>{{
+                    [
+                      "",
+                      '平台介入中',
+                      '平台介入中',
+                      '退款关闭',
+                      '',
+                      '退款成功'
+                    ][orderRefund.platformInterventionStatus]
+                  }}</span>
+                </div>
+                <div
+                  v-else
+                  class="item"
+                >
                   <span
                     v-if="orderRefund.returnMoneySts !== -1"
                     type="danger"
@@ -569,6 +595,14 @@
                       "
                     >
                       {{ $t("order.order.processingRefunds") }}
+                    </el-button>
+                    <el-button
+                      v-if="orderRefund.platformInterventionStatus===1"
+                      link
+                      type="primary"
+                      @click="onToImBox(orderRefund)"
+                    >
+                      联系买家
                     </el-button>
                   </div>
                 </div>
@@ -626,6 +660,9 @@ const options = [{
 }, {
   value: -1,
   label: $t('order.order.refundClosed')
+}, {
+  value: 6,
+  label: '平台介入中'
 }]
 const orderType = [{
   value: 0,
@@ -766,6 +803,19 @@ const refundHandle = (refundId) => {
       refundId
     }
   })
+}
+
+// 联系买家
+const onToImBox = (order) => {
+  const path = router.resolve({
+    path: '/im-box',
+    query: {
+      userId: order.userId,
+      orderNumber: order.orderId
+    }
+  })
+  const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
+  if (win) win.opener = null
 }
 
 /**

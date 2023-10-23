@@ -134,6 +134,7 @@ const init = (sysUserId) => {
         dataForm.phoneNum = data.phoneNum
         dataForm.hasAccount = data.hasAccount
         dataForm.roleIds = data.roleIds
+        dataForm.isAdmin = data.isAdmin
       })
     }
   })

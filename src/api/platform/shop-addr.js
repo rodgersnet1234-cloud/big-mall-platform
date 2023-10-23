@@ -50,13 +50,3 @@ export function list () {
     method: 'get'
   })
 }
-// 是否被网点引用
-export function isConfigByOutlet (shopRefundAddrId) {
-  return request({
-    url: '/mall4cloud_order/mp/outlet_config/is_config_by_outlet',
-    method: 'get',
-    params: {
-      shopRefundAddrId
-    }
-  })
-}
