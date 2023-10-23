@@ -66,7 +66,7 @@
       >
         <el-input
           v-model="dataForm.titleContentCn"
-          maxlength="16"
+          maxlength="20"
           show-word-limit
         />
       </el-form-item>

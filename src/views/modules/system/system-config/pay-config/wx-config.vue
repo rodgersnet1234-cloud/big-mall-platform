@@ -138,7 +138,7 @@
             style="width:640px"
           >
             <el-input
-              v-model="appId"
+              v-model="dataFormAppId.appId"
               :placeholder="`${$t('platform.config.wechatOpenPlatformApplication')} appId`"
               controls-position="right"
             />
@@ -179,7 +179,9 @@ const dataForm = reactive({
   privateCertPath: null,
   privateCertContent: null
 })
-const appId = ref(null)
+const dataFormAppId = ref({
+  appId: null
+})
 const dataRule = {
   mchId: [
     { required: true, message: `${$t('platform.config.wechatPay')} mchId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
@@ -224,7 +226,7 @@ const init = () => {
   nextTick(() => {
     api.get('MX_APP_CONFIG').then(data => {
       if (data) {
-        appId.value = JSON.parse(data)
+        dataFormAppId.value = JSON.parse(data)
       }
     })
     api.get('WXPAY_CONFIG').then(data => {
@@ -246,10 +248,10 @@ const init = () => {
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
-      if (appId.value) {
+      if (dataFormAppId.value) {
         api.save({
           paramKey: 'MX_APP_CONFIG',
-          paramValue: JSON.stringify(appId.value),
+          paramValue: JSON.stringify(dataFormAppId.value),
           remark: $t('platform.config.wechatOpenPlatformApplicationConfig')
         })
       }
