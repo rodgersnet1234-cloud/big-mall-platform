@@ -231,85 +231,90 @@ const notification = ref(false)
 // 图标提醒标题闪烁
 const showHidden = ref(true)
 const openWs = () => {
-  imSocketTask = new WebSocket(
-    import.meta.env.VITE_APP_WEBSOCKET_URL + '/mall4cloud_im/p/ua/im/websocket/online/' + Base64.encode(getToken()) + '/' + platformUserId.value
-  )
-  const heartCheck = {
-    timeout: 19000, // 19s发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。 尽量一个小时发送三次
-    serverTimeoutObj: null,
-    reset () {
-      clearTimeout(this.serverTimeoutObj)
-      return this
-    },
-    start () {
-      this.serverTimeoutObj = setTimeout(() => {
-        if (!imSocketTask) {
-          return
-        }
-        if (imSocketTask.readyState === 1) {
-          imSocketTask.send(
-            JSON.stringify({
-              content: 'HEART_BEAT',
-              msgType: 0
-            })
-          )
-          heartCheck.reset().start() // 如果获取到消息，说明连接是正常的，重置心跳检测
-        } else {
-          imSocketTask.close()
-          imSocketTask = null
-          lockReconnect = false
-          onReconnect()
-        }
-      }, this.timeout)
-    }
-  }
-  imSocketTask.onopen = () => {
-    heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-    imSocketTask.send(
-      JSON.stringify({
-        content: 'HEART_BEAT',
-        msgType: 0
-      })
+  try {
+    imSocketTask = new WebSocket(
+      import.meta.env.VITE_APP_WEBSOCKET_URL + '/mall4cloud_im/p/ua/im/websocket/online/' + Base64.encode(getToken()) + '/' + platformUserId.value + '/' + userId.value
     )
-  }
+    const heartCheck = {
+      timeout: 19000, // 19s发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。 尽量一个小时发送三次
+      serverTimeoutObj: null,
+      reset () {
+        clearTimeout(this.serverTimeoutObj)
+        return this
+      },
+      start () {
+        this.serverTimeoutObj = setTimeout(() => {
+          if (!imSocketTask) {
+            return
+          }
+          if (imSocketTask.readyState === 1) {
+            imSocketTask.send(
+              JSON.stringify({
+                content: 'HEART_BEAT',
+                msgType: 0
+              })
+            )
+            heartCheck.reset().start() // 如果获取到消息，说明连接是正常的，重置心跳检测
+          } else {
+            imSocketTask.close()
+            imSocketTask = null
+            lockReconnect = false
+            onReconnect()
+          }
+        }, this.timeout)
+      }
+    }
+    imSocketTask.onopen = () => {
+      heartCheck.reset().start() // 成功建立连接后，重置心跳检测
+      imSocketTask.send(
+        JSON.stringify({
+          content: 'HEART_BEAT',
+          msgType: 0
+        })
+      )
+    }
 
-  imSocketTask.onmessage = res => {
-    heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-    const result = JSON.parse(res.data)
-    if (result.code === 10) {
-      return
-    }
-    if (result.code === 11) {
-      return
-    }
-    if (result.code === 12) {
-      return
-    }
-    if (result.code === 15) {
-      ElMessage.error($t('chat.notYourResponsibility'))
-      noAccountable.value = false
-      return false
-    }
-    if (result.code === '00000' && result.data) {
-      message.value = 1
-      if (
-        result.data.newMessage &&
-        notificationDebounce.value &&
-        !localStorage.getItem('cloudShop')
-      ) {
-        notificationDebounce.value = null // 防止连续发送的消息导致右下方弹窗不断
-        popNotice($t('chat.notification'), $t('chat.haveANewUnreadMessage')) // 启用通知
+    imSocketTask.onmessage = res => {
+      heartCheck.reset().start() // 成功建立连接后，重置心跳检测
+      const result = JSON.parse(res.data)
+      if (result.code === 10) {
+        return
       }
-      newMessage.value = true
-      clearInterval(messageReminding.value)
-      if (notification.value) {
-        showMessage()
+      if (result.code === 11) {
+        return
       }
-      messageRemindingFn()
+      if (result.code === 12) {
+        return
+      }
+      if (result.code === 15) {
+        ElMessage.error($t('chat.notYourResponsibility'))
+        noAccountable.value = false
+        return false
+      }
+      if (result.code === '00000' && result.data) {
+        message.value = 1
+        if (
+          result.data.newMessage &&
+          notificationDebounce.value &&
+          !localStorage.getItem('cloudShop')
+        ) {
+          notificationDebounce.value = null // 防止连续发送的消息导致右下方弹窗不断
+          popNotice($t('chat.notification'), $t('chat.haveANewUnreadMessage')) // 启用通知
+        }
+        newMessage.value = true
+        clearInterval(messageReminding.value)
+        if (notification.value) {
+          showMessage()
+        }
+        messageRemindingFn()
+      }
     }
-  }
-  imSocketTask.onerror = () => {
-    onReconnect()
+    imSocketTask.onerror = () => {
+      onReconnect()
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('创建ws连接失败', err)
   }
 }
 

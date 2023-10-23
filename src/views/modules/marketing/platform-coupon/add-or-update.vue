@@ -652,7 +652,7 @@ const init = (couponId) => {
       dataForm.couponDiscount = data.couponDiscount
       dataForm.startTime = data.startTime
       dataForm.endTime = data.endTime
-      dataForm.launchTime = data.launchTime
+      dataForm.launchTime = data.putonStatus === 0 ? data.launchTime : datetimeRange.startTime
       dataForm.afterReceiveDays = data.afterReceiveDays
       dataForm.validDays = data.validDays
       dataForm.totalStock = data.totalStock
@@ -661,7 +661,17 @@ const init = (couponId) => {
       dataForm.status = data.status
       dataForm.putonStatus = data.putonStatus
       dataForm.spuIds = data.spuIds
-      launchTimeValue.value = dataForm.launchTime ? dataForm.launchTime.substring(11, dataForm.launchTime.length - 3) : ''
+
+      if (dataForm.launchTime) {
+        if (data.putonStatus === 0) {
+          launchTimeValue.value = dataForm.launchTime.substring(11, dataForm.launchTime.length - 3)
+        } else {
+          launchTimeValue.value = datetimeRange.currentTime
+        }
+      } else {
+        launchTimeValue.value = ''
+      }
+
       startTimeValue.value = dataForm.startTime ? dataForm.startTime.substring(11, dataForm.startTime.length - 3) : ''
       endTimeValue.value = dataForm.endTime ? dataForm.endTime.substring(11, dataForm.endTime.length - 3) : ''
       dataForm.launchTime = getParseTime(dataForm.launchTime, '{y}-{m}-{d}')

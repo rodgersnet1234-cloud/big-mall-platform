@@ -6,6 +6,15 @@
         {{ $t('order.order.refundDetails') }}
       </div>
     </div>
+    <div
+      v-if="platInterveneSts===1 && stillAveTime"
+      class="plat-intervene"
+    >
+      <el-icon :size="14">
+        <WarningFilled />
+      </el-icon>
+      <span>用户申请平台介入售后，请在{{ dataForm.platformProcessingEndTime }}前处理</span>
+    </div>
     <div class="order-refund-info">
       <div class="refundId">
         <span class="title">{{ $t('order.order.refundId') }}</span>
@@ -44,66 +53,14 @@
               </div>
             </div>
             <div class="refund-progress">
-              <div
-                v-if="dataForm.applyType === 1"
-                class="item"
-              >
-                <el-steps
-                  :active="onlyRefundStepsStatus"
-                  align-center
-                  :process-status="onlyRefundProcessStatus"
-                >
-                  <el-step
-                    :title="
-                      $t('order.order.buyer') +
-                        $t('order.order.requestARefund')
-                    "
-                  />
-                  <el-step
-                    :title=" $t('order.order.merchant') +
-                      $t('order.order.confirmTreatmented')"
-                  />
-                  <el-step :title="$t('order.order.refundsuccessfully')" />
-                </el-steps>
-              </div>
-              <div
-                v-else
-                class="item"
-              >
-                <el-steps
-                  :active="stepsStatus"
-                  align-center
-                  :process-status="dataForm.returnMoneySts === -1 ? 'error' : 'wait'"
-                >
-                  <el-step
-                    :title="
-                      $t('order.order.buyer') +
-                        $t('order.order.requestARefundT')
-                    "
-                  />
-                  <el-step
-                    :title="
-                      $t('order.order.merchant') +
-                        $t('order.order.agreeToReturnAndRefund')
-                    "
-                  />
-                  <el-step :title="$t('order.order.shipped')" />
-                  <el-step
-                    :title="
-                      $t('order.order.merchant') +
-                        $t('order.order.confirmTreatmented')
-                    "
-                  />
-                  <el-step :title="$t('order.order.refundsuccessfully')" />
-                </el-steps>
-              </div>
+              <refund-steps :refund-detail="dataForm" />
             </div>
           </div>
         </div>
         <div class="order-state">
           <div class="state-cont">
             <div class="order-info">
-              <div class="order-details">
+              <div class="order-details refund-record-left">
                 <div class="detail-title">
                   <span class="prompt">{{ $t("order.order.refundDetails") }}</span>
                 </div>
@@ -161,38 +118,40 @@
                         <span class="title">{{ $t('order.order.refundInstructions') }}：</span>
                         <span class="text">{{ dataForm.buyerDesc }}</span>
                       </div>
+                      <div class="text-width-item">
+                        <span class="title">{{ $t('order.order.refundCertificate') }}：</span>
+                        <div v-if="dataForm.imgUrls?.length">
+                          <el-image
+                            v-for="(picItem,picInx) in dataForm.imgUrls"
+                            :key="picInx"
+                            :src="picItem"
+                            class="img-box"
+                            :preview-src-list="dataForm.imgUrls"
+                          >
+                            <template #error>
+                              <img
+                                class="img-slot"
+                                src="~@/assets/images/def.png"
+                              >
+                            </template>
+                          </el-image>
+                        </div>
+                        <div v-else>
+                          无
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- 退款凭证 -->
               <div class="buyers">
-                <div class="detail-title">
-                  {{ $t('order.order.refundCertificate') }}
+                <div class="refund-record-title detail-title">
+                  <span>退款记录</span>
                 </div>
-                <div class="buyers-info">
-                  <div v-if="dataForm.imgUrls?.length">
-                    <el-image
-                      v-for="(picItem,picInx) in dataForm.imgUrls"
-                      :key="picInx"
-                      :src="picItem"
-                      class="img-box"
-                      :preview-src-list="dataForm.imgUrls"
-                    >
-                      <template #error>
-                        <img
-                          class="img-slot"
-                          src="~@/assets/images/def.png"
-                        >
-                      </template>
-                    </el-image>
-                  </div>
-                  <div v-else>
-                    无
-                  </div>
+                <div class="refund-record">
+                  <refundRecord :refund-detail="dataForm" />
                 </div>
               </div>
-              <!-- / 退款凭证 -->
             </div>
             <div
               v-if="dataForm.orderRefundAddr && dataForm.orderRefundAddr.deliveryName"
@@ -416,61 +375,80 @@
                 </el-table-column>
               </el-table>
             </div>
+            <template v-if="platInterveneSts===1 && stillAveTime">
+              <div class="sellerRemark">
+                <div class="remark-title star">
+                  申请审批：
+                </div>
+                <div class="remark-content">
+                  <el-radio-group
+                    v-model="auditForm.isAgreeRefund"
+                    @change="refundAuditChange"
+                  >
+                    <el-radio
+                      :label="1"
+                    >
+                      商家承担退款
+                    </el-radio>
+                    <el-radio
+                      v-if="dataForm.supplierId && dataForm.waitPurchase!==1 && dataForm.supplierHandleStatus!=-1"
+                      :label="2"
+                    >
+                      商家、供应商共同承担退款
+                    </el-radio>
+                    <el-radio
+                      :label="3"
+                    >
+                      不同意
+                    </el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div class="sellerRemark">
+                <div class="remark-title">
+                  退款金额：
+                </div>
+                <div class="remark-content">
+                  <div class="refund-price">
+                    <el-input
+                      v-model="auditForm.refundPrice"
+                      type="number"
+                      placeholder="请输入"
+                      :disabled="auditForm.isAgreeRefund===3"
+                      style="width: 250px;outline-style: none;"
+                      @blur="onRefundPriceBlur"
+                    />
+                    <span class="unit">元</span>
+                  </div>
+                  <span class="pri-tips">平台售后可按需修改退款金额</span>
+                </div>
+              </div>
+              <div class="sellerRemark">
+                <div class="remark-title star">
+                  平台留言：
+                </div>
+                <div class="remark-content">
+                  <el-input
+                    v-model="auditForm.platMsg"
+                    type="textarea"
+                    style="width: 100%;outline-style: none;"
+                    :rows="5"
+                    maxlength="250"
+                    show-word-limit
+                  />
+                </div>
+              </div>
+              <div class="btn-bar">
+                <el-button
+                  type="primary"
+                  @click="onHandleAudit()"
+                >
+                  {{ $t("order.order.confirmTreatment") }}
+                </el-button>
+              </div>
+            </template>
           </div>
         </div>
-        <!-- 退款日志 -->
-        <div class="order-log">
-          <div class="log-title">
-            <span>{{ $t("order.order.refundLog") }}</span>
-          </div>
-          <div class="log-cont">
-            <div v-if="dataForm.createTime">
-              <span>{{ dataForm.createTime }}
-                {{ $t("order.order.submitARefundRequestWa") }}</span>
-            </div>
-            <div v-if="dataForm.applyType === 2 && dataForm.handelTime && !dataForm.closeType">
-              <span>{{ dataForm.handelTime }}
-                {{ $t("order.order.merchantHasProcessedWaBuy") }}</span>
-            </div>
-
-            <div v-if="dataForm.applyType === 1 && dataForm.handelTime && !dataForm.closeType && dataForm.buyerReason !== 7">
-              <span>{{ dataForm.handelTime }}
-                {{ $t("order.order.merchantHasProcessedWaSh") }}</span>
-            </div>
-            <div v-if="dataForm.deliveryTime">
-              <span>{{ dataForm.deliveryTime }}
-                {{ $t("order.order.buyerShipmentWaPro") }}</span>
-            </div>
-            <div v-if="dataForm.receiveTime">
-              <span>{{ dataForm.receiveTime }}
-                {{ $t("order.order.merchantHasReceivedWaShGr") }}</span>
-            </div>
-            <div v-if="dataForm.applyType === 2 && !dataForm.receiveTime && dataForm.isReceived === 0">
-              <span>{{ dataForm.updateTime }}
-                {{ $t("order.order.merchantHasProcessedWaSh") }}</span>
-            </div>
-            <div v-if="dataForm.decisionTime">
-              <span>{{ dataForm.decisionTime }}
-                {{ $t("order.order.agreeToRefund") }}</span>
-            </div>
-            <div v-if="dataForm.refundTime">
-              <span>{{ dataForm.refundTime }}
-                {{ $t("order.order.refundsuccessfully") }}</span>
-            </div>
-            <div v-if="dataForm.returnMoneySts === -1 && dataForm.closeType === 1">
-              <span>{{ dataForm.closeTime }} {{ $t("order.order.refundClosed") }} {{ $t("order.order.buyerHasWithdrawn") }}
-              </span>
-            </div>
-            <div v-if="dataForm.handelTime && dataForm.returnMoneySts === -1">
-              <span>{{ dataForm.updateTime }}
-                {{ dataForm.closeType === 1 ? $t("order.order.buyerHasWithdrawn"):
-                  dataForm.closeType === 2 ? $t("order.order.merchantRejected") : $t("order.order.requestTimeOut")
-                }}{{ '，'+ $t("order.order.refundClosed") }}
-              </span>
-            </div>
-          </div>
-        </div>
-      <!-- 退款日志 / -->
       </div>
     </div>
   </div>
@@ -480,64 +458,157 @@
 import Big from 'big.js'
 import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import refundRecord from './conponents/refund-record/index.vue'
+import refundSteps from './conponents/refund-steps/index.vue'
 
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
-const dataForm = ref({})
-
-const onlyRefundStepsStatus = computed(() => {
-  let index = 0
-  if (dataForm.value.handelTime) {
-    index++
-  }
-  if (dataForm.value.cancelTime || dataForm.value.refundTime || dataForm.value.rejectTime || dataForm.value.refundTime) {
-    index += 2
-  }
-  return index
-})
-
-const onlyRefundProcessStatus = computed(() => {
-  switch (dataForm.value.returnMoneySts) {
-    case 1:
-    case 2:
-      return 'finish'
-    case 5:
-      return 'success'
-    default:
-      return 'error'
-  }
-})
-
-const stepsStatus = computed(() => {
-  let index = 1
-  if (dataForm.value.handelTime) {
-    index++
-  }
-  if (dataForm.value.deliveryTime) {
-    index++
-  }
-  if ((dataForm.value.deliveryTime && dataForm.value.closeTime && dataForm.value.closeType === 2) || dataForm.value.receiveTime || dataForm.value.returnMoneySts === 5) {
-    index++
-  }
-  // 退款成功的情况下进度条也要加2
-  if (dataForm.value.returnMoneySts === 5) {
-    index += 2
-  }
-  return index
-})
 
 const route = useRoute()
 onMounted(() => {
   if (route.query.refundId) {
-    getRefundOrderInfo(route.query.refundId)
+    dataForm.value.refundId = route.query.refundId
+    getRefundOrderInfo()
   }
 })
+
+onBeforeUnmount(() => {
+  intervenEndTimer && clearTimeout(intervenEndTimer)
+  intervenFinishTimer && clearTimeout(intervenFinishTimer)
+})
+
+// 平台介入开始时间倒计时
+let intervenEndTimer = null
+const intervenEndTimeCountdown = () => {
+  const nowTime = new Date().getTime() // 当前时间
+  const endTime = new Date(dataForm.value.interventionEndTime).getTime() // 设置截止时间
+  const leftTime = endTime - nowTime // 时间差
+
+  if (leftTime >= 0) {
+    // 递归每秒调用countTime方法，显示动态时间效果,
+    intervenEndTimer = setTimeout(intervenEndTimeCountdown, 1000)
+  } else {
+    intervenEndTimer && clearTimeout(intervenEndTimer)
+    getRefundOrderInfo() // 重新获取详情
+  }
+}
+// 平台介入结束时间倒计时
+let intervenFinishTimer = null
+const stillAveTime = ref(false)
+const intervenFinishTimeCountdown = () => {
+  const nowTime = new Date().getTime() // 当前时间
+  const endTime = new Date(dataForm.value.platformProcessingEndTime).getTime() // 设置截止时间
+  const leftTime = endTime - nowTime // 时间差
+
+  if (leftTime >= 0) {
+    stillAveTime.value = true
+    // 递归每秒调用countTime方法，显示动态时间效果,
+    intervenFinishTimer = setTimeout(intervenFinishTimeCountdown, 1000)
+  } else {
+    stillAveTime.value = false
+    intervenFinishTimer && clearTimeout(intervenFinishTimer)
+  }
+}
+
+// 审批变化
+const refundAuditChange = (sts) => {
+  if (sts === 3) {
+    auditForm.refundPrice = ''
+  }
+}
+
+// 退款金额限制
+const onRefundPriceBlur = () => {
+  if (auditForm.refundPrice < 0) {
+    auditForm.refundPrice = 0
+  } else if (auditForm.refundPrice > dataForm.value.refundActualTotal) {
+    auditForm.refundPrice = new Big(dataForm.value.refundActualTotal || dataForm.value.refundAmount).div(100)
+  }
+}
+
+// 提交平台介入结果
+const auditForm = reactive({
+  isAgreeRefund: 1,
+  refundPrice: '',
+  platMsg: ''
+})
+let isSubmit = false
+const onHandleAudit = () => {
+  if (!auditForm.platMsg.trim()) {
+    ElMessage({
+      message: '请填写留言信息',
+      type: 'error',
+      duration: 1500
+    })
+    return
+  }
+  if (isSubmit) return
+  if (auditForm.isAgreeRefund === 3) {
+    onSubmit()
+    return
+  }
+  checkIsLastOrderItem(onSubmit)
+}
+
+const onSubmit = () => {
+  const submitData = {
+    refundId: dataForm.value.refundId,
+    sysType: 2,
+    platformInterventionRefundType: auditForm.isAgreeRefund, // 平台介入退款方式
+    refundAmount: formatPrice(auditForm.refundPrice, 0) || dataForm.value.refundAmount, // 平台介入退款金额
+    platformMessage: auditForm.platMsg
+  }
+  isSubmit = true
+  api.audit(submitData).then(() => {
+    ElMessage({
+      message: '操作成功',
+      type: 'success',
+      duration: 1500,
+      onClose: () => {
+        isSubmit = false
+        onGoBack()
+      }
+    })
+  }).catch(() => {
+    isSubmit = false
+  })
+}
+
+const router = useRouter()
+const onGoBack = () => {
+  router.replace('/order/refund-order')
+}
+
+// 是否为最后一个退款项
+const checkIsLastOrderItem = (fn) => {
+  api.checkIsLastOrderItem(dataForm.value.refundId).then((data) => {
+    if (data && dataForm.value.freightAmount) {
+      const calcVal = new Big(dataForm.value.freightAmount).minus(dataForm.value.platformFreeFreightAmount).valueOf()
+      if (formatPrice(calcVal, 1).toFixed(2) + '' !== '0.00') {
+        ElMessageBox.confirm($t('order.order.lastProdRefundTip').replace('[d]', formatPrice(calcVal, 1).toFixed(2) + ' '), $t('table.tips'), {
+          confirmButtonText: $t('table.confirm'),
+          cancelButtonText: $t('table.cancel'),
+          type: 'warning'
+        }).then(() => {
+          fn()
+        }).catch(() => {
+        })
+      } else {
+        fn()
+      }
+    } else {
+      fn()
+    }
+  })
+}
 
 const prodLength = ref(false) // 是否为单个赠品
 const orderRefundAddrPhotos = ref([])
 const isReceived = ref(0)
-const getRefundOrderInfo = (id) => {
-  dataForm.value.refundId = id
+// 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功
+const platInterveneSts = ref(0)
+const dataForm = ref({})
+const getRefundOrderInfo = () => {
   if (dataForm.value.refundId) {
     api.info(dataForm.value.refundId).then((data) => {
       dataForm.value = data
@@ -568,6 +639,18 @@ const getRefundOrderInfo = (id) => {
         dataForm.value.imgUrls = onHandleImgUrl(imgUrls)
       } else {
         dataForm.value.imgUrls = []
+      }
+      platInterveneSts.value = data.platformInterventionStatus
+      if (platInterveneSts.value === 1) {
+        const nowTime = new Date().getTime() // 当前时间
+        if (data.interventionEndTime) {
+          const endTime = new Date(data.interventionEndTime).getTime() // 添加凭证结束时间
+          endTime - nowTime > 0 && intervenEndTimeCountdown()
+          if (endTime - nowTime < 0 && data.platformProcessingEndTime) {
+            const finishTime = new Date(data.platformProcessingEndTime).getTime() // 平台处理介入结束时间
+            finishTime - nowTime > 0 && intervenFinishTimeCountdown()
+          }
+        }
       }
     })
   }

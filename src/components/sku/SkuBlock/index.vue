@@ -224,7 +224,8 @@ const rebuildSku = (sku, index) => {
   ) {
     ElMessage({
       message: '规格名不能重复',
-      duration: 800
+      duration: 800,
+      type: 'error'
     })
     data.value[index] = []
     return
@@ -262,7 +263,7 @@ onBeforeMount(() => {
   }
 })
 
-provide('ease', props)
+provide('ease', { ...props, setSalesAttrs: data })
 
 </script>
 

@@ -259,58 +259,26 @@ const onSubmit = Debounce(() => {
     if (!valid || isSubmit.value) {
       return
     }
-    if (dataForm.shopRefundAddrId) {
-      api.isConfigByOutlet(dataForm.shopRefundAddrId).then((data) => {
-        if (data && checkAddrChange()) {
-          ElMessageBox.confirm($t('platform.shopAddr.changeAddrTip'), $t('platform.shopAddr.changeAddrTipTitle'), {
-            confirmButtonText: $t('table.confirm'),
-            cancelButtonText: $t('table.cancel'),
-            type: 'warning'
-          }).then(() => {
-            onRequest()
-          }).catch(() => {
-          })
-        } else {
-          onRequest()
+    isSubmit.value = true
+    const request = dataForm.shopRefundAddrId ? api.update(dataForm) : api.save(dataForm)
+    request.then(() => {
+      visible.value = false
+      ElMessage({
+        message: $t('table.actionSuccess'),
+        type: 'success',
+        duration: 1500,
+        onClose: () => {
+          blVisible.value = true
+          emit('refreshDataList')
+          dataFormRef.value?.resetFields()
         }
       })
-    } else {
-      onRequest()
-    }
+      isSubmit.value = false
+    }).catch(() => {
+      isSubmit.value = false
+    })
   })
 }, 1000)
-const onRequest = () => {
-  isSubmit.value = true
-  const request = dataForm.shopRefundAddrId ? api.update(dataForm) : api.save(dataForm)
-  request.then(() => {
-    visible.value = false
-    ElMessage({
-      message: $t('table.actionSuccess'),
-      type: 'success',
-      duration: 1500,
-      onClose: () => {
-        blVisible.value = true
-        emit('refreshDataList')
-        dataFormRef.value?.resetFields()
-      }
-    })
-    isSubmit.value = false
-  }).catch(() => {
-    isSubmit.value = false
-  })
-}
-const checkAddrChange = () => {
-  if (initDataForm.province !== dataForm.province) {
-    return true
-  }
-  if (initDataForm.city !== dataForm.city) {
-    return true
-  }
-  if (initDataForm.area !== dataForm.area) {
-    return true
-  }
-  return initDataForm.addr !== dataForm.addr
-}
 
 </script>
 <style lang="scss" scoped>

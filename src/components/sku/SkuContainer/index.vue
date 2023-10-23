@@ -49,8 +49,9 @@
         class="sku-item"
       >
         <el-popover
-          :visible="visiable"
           placement="bottom"
+          :disabled="selectNum>100"
+          trigger="click"
           :width="250"
         >
           <div style="text-align: right; margin: 0">
@@ -63,6 +64,7 @@
               default-first-option
               :popper-append-to-body="false"
               placeholder="规格值"
+              :teleported="false"
               style="width:100%"
               @change="createSkuLeaf"
               @visible-change="status => !status && handleSelectSku()"
@@ -83,7 +85,7 @@
               type="primary"
               style="width: 20px;height: 20px;font-size: 13px"
               circle
-              @click="visiable=true"
+              @click="addSku"
             >
               <el-icon>
                 <Plus />
@@ -133,6 +135,62 @@ const optionText = computed(() => {
   return ease.optionText
 })
 
+// 添加后的sku数量
+const selectNum = computed(() => {
+  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return ease.setSalesAttrs.value[0].leaf.length + 1
+  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+    // 过滤掉当前的规格名
+    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    // 规格值数量
+    let num = 0
+    attrsLsit.forEach((el) => {
+      if (num === 0) {
+        num = el.leaf.length
+      } else {
+        num = num * el.leaf.length
+      }
+    })
+    return (props.sku.leaf.length + 1) * num
+  } else {
+    return 0
+  }
+})
+
+// 当前sku数量
+const skuNum = computed(() => {
+  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return ease.setSalesAttrs.value[0].leaf.length
+  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+    // 过滤掉当前的规格名
+    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    // 规格值数量
+    let num = 0
+    attrsLsit.forEach((el) => {
+      if (num === 0) {
+        num = el.leaf.length
+      } else {
+        num = num * el.leaf.length
+      }
+    })
+    return (props.sku.leaf.length ? props.sku.leaf.length : 1) * num
+  } else {
+    return 0
+  }
+})
+
+const addSku = () => {
+  if (selectNum.value > 100) {
+    ElMessage.error(
+      `${'当前已添加' +
+      skuNum.value +
+      '组商品规格'}（${'最多可添加' +
+      100 +
+      '组'}），该规格名下不可添加`
+    )
+  }
+}
+
 const skuOptions = ref([])
 const visiable = ref(false)
 const fetchLeafById = (id) => {
@@ -144,7 +202,7 @@ const fetchLeafById = (id) => {
 }
 watch(() => props.sku, () => {
   fetchLeafById(props.sku[optionValue.value])
-}, { immediate: true })
+})
 
 const handleHideVisiable = () => {
   visiable.value = false
@@ -173,6 +231,27 @@ const filterSkuOptions = (data) => {
   })
   return {
     oldSellData, addSelData
+  }
+}
+
+const skuOptionsNum = (numPra) => {
+  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return ease.setSalesAttrs.value[0].leaf.length + numPra
+  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+    // 过滤掉当前的规格名
+    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    // 规格值数量
+    let num = 0
+    attrsLsit.forEach((el) => {
+      if (num === 0) {
+        num = el.leaf.length
+      } else {
+        num = num * el.leaf.length
+      }
+    })
+    return (props.sku.leaf.length + numPra) * num
+  } else {
+    return 0
   }
 }
 
@@ -215,6 +294,16 @@ const createSkuLeaf = (selVal) => {
 }
 
 const handleSelectSku = () => {
+  if (skuOptionsNum(leafValue.value.length) > 100) {
+    ElMessage.error(
+      `${'当前已添加' +
+      skuNum.value +
+      '组商品规格'}（${'最多可添加' +
+      100 +
+      '组'}），该规格名下不可添加`
+    )
+    return
+  }
   const skuPar = props.sku
   const skuLeaf = skuOptions.value.filter(item => leafValue.value.indexOf(item[optionValue.value]) >= 0)
 

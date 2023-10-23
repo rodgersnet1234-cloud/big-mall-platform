@@ -222,12 +222,20 @@ const dataForm = ref({
   couponList: []
 })
 const couponSelectVisible = ref(false)
+// eslint-disable-next-line no-unused-vars
+const validPrice = (rule, value, callback) => {
+  if (value < 0.01) {
+    callback(new Error($t('user.recharge.rechargeAmountLimited')))
+  } else {
+    callback()
+  }
+}
 const dataRule = {
   rechargeTitle: [
     { required: true, message: $t('user.recharge.titCanNoBlank'), trigger: 'blur' }
   ],
   rechargeAmount: [
-    { request: true, message: $t('user.recharge.rechargeAmountLimited'), trigger: 'blur' }
+    { validator: validPrice, trigger: 'blur' }
   ],
   img: [
     { required: true, message: $t('user.recharge.bgImgCannotEmpty'), trigger: 'blur' }

@@ -202,7 +202,7 @@
         <template #default="scope">
           <el-input-number
             v-model="scope.row.priceFee"
-            :min="isScore ? 0 : 0.01"
+            :min="isScore ? 0.00 : 0.01"
             :max="9999999.99"
             :step="0.1"
             :precision="2"
@@ -225,7 +225,7 @@
             v-model="scope.row.scoreFee"
             :min="1"
             :max="99999999"
-            :step="0.1"
+            :step="1"
             :precision="0"
             :disabled="scope.row.status===0 || isDisabled"
             controls-position="right"
@@ -358,6 +358,9 @@ const props = defineProps({
   }
 })
 
+watch(() => props.isScore, () => {
+}, { deep: true })
+
 let originList = []
 const route = useRoute()
 const view = ref(!(route.path === '/product/list' || route.path === '/product-insights'))
@@ -374,7 +377,7 @@ const setLeafList = computed(() => {
   const { data } = props
   const leaf = []
   data.forEach((item) => {
-    if (item.leaf.length) {
+    if (item.leaf?.length) {
       leaf.unshift([{ id: -1, is_show: false, text: '全部' }, ...item.leaf])
     }
   })
@@ -390,7 +393,7 @@ const genLists = (filterPar, flattenPar) => {
   const baseData = {
     stock: 0, // 库存
     marketPriceFee: 0, // 市场价
-    priceFee: 0.01, // 销售价
+    priceFee: props.isScore ? 0.00 : 0.01, // 销售价
     scoreFee: 1, // 积分价
     volume: 0, // 体积
     weight: 0, // 重量
@@ -512,9 +515,9 @@ watch(() => lists.value, (data) => {
 }, { deep: true })
 
 watch(() => setLeafList.value, () => {
-  if (setLeafList.length > 1) {
+  if (setLeafList.value.length > 1) {
     inputWidth.value = '95px'
-  } else if (setLeafList.length > 2) { /* empty */ } else {
+  } else if (setLeafList.value.length > 2) { /* empty */ } else {
     inputWidth.value = '90px'
   }
 }, { immediate: true, deep: true })
@@ -624,7 +627,7 @@ const setNow = () => {
   const stockIntValPar = parseInt(stockIntVal.value)
   const markedPriceIntValPar = parseInt(markedPriceIntVal.value)
   const priceIntValPar = parseFloat(priceIntVal.value)
-  const scorePriceIntValPar = parseFloat(scorePriceIntVal.value)
+  const scorePriceIntValPar = scorePriceIntVal.value
   const skuCodeIntValPar = parseInt(skuCodeIntVal.value)
   const barCodeIntValPar = parseInt(barCodeIntVal.value)
   const volumeIntValPar = parseInt(volumeIntVal.value)
@@ -643,7 +646,7 @@ const setNow = () => {
       // setItem(item, index)
       item.marketPriceFee = markedPriceIntValPar >= 0 ? markedPriceIntValPar : item.marketPriceFee || 0
       item.priceFee = priceIntValPar >= 0.01 ? priceIntValPar : item.priceFee || 0.01 // 销售价
-      item.scoreFee = scorePriceIntValPar >= 0.01 ? scorePriceIntValPar : item.scoreFee || 0.01 // 积分价
+      item.scoreFee = scorePriceIntValPar >= 1 ? scorePriceIntValPar : (item.scoreFee || 1) // 积分价
       item.volume = volumeIntValPar >= 0 ? volumeIntValPar : item.volume // 体积
       item.weight = weightIntValPar >= 0 ? weightIntValPar : item.weight // 重量
       item.partyCode = skuCodeIntValPar || item.partyCode // 商品编码

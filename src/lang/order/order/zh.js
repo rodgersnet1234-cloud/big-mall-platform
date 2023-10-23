@@ -367,5 +367,6 @@ export default {
   uploadTips1: '请选择操作,同时只能上传一个文件',
   selectFile: '选取文件',
   exportUndeliveryOrder: '导出待发货订单',
-  import: '导入'
+  import: '导入',
+  lastProdRefundTip: '该退款申请项是订单中最后一件商品，同意退款后运费￥[d]会一并退还给用户'
 }

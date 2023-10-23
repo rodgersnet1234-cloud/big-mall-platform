@@ -123,6 +123,16 @@
               <span>{{ row.phoneNum || '-' }}</span>
             </template>
           </el-table-column>
+          <!-- 状态 -->
+          <el-table-column
+            :label="$t('platform.shopUser.status')"
+            prop="status"
+            align="center"
+          >
+            <template #default="{row}">
+              <span>{{ ['禁用', '启用'][row.status] }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             :label="$t('table.actions')"
             align="center"
