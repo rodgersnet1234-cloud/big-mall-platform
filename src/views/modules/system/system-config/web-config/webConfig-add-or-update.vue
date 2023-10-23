@@ -266,6 +266,14 @@
         />
         <span class="img-tip">{{ $t('admin.recommImgSize') }}100*100</span>
       </el-form-item>
+      <el-form-item
+        :label="$t('rbac.webConfig.uniTitleContent')+'-'+$t('rbac.webConfig.chinese')"
+        prop="titleContentCn"
+      >
+        <el-input
+          v-model="dataForm.titleContentCn"
+        />
+      </el-form-item>
     </span>
     <el-form-item>
       <el-button
@@ -462,7 +470,6 @@ const onSubmit = () => {
         return
       }
     }
-
     // pc端配置判断
     if (dataForm.value.configType === 3) {
       if (!dataForm.value.loginLogoImg) {
