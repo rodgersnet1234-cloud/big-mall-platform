@@ -70,7 +70,7 @@
     <div class="main-content">
       <div class="operation-bar">
         <el-button
-          v-permission="['platform:shopManage:save']"
+          v-permission="['platform:supplierManage:save']"
           type="primary"
           @click="createStore()"
         >

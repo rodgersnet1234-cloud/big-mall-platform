@@ -147,6 +147,8 @@ const init = (userId, hasAccount) => {
         dataForm.username = data.username
         dataForm.password = data.password
         dataForm.hasAccount = hasAccount
+        dataForm.status = data.status
+        dataForm.isAdmin = data.isAdmin
       } else {
         dataForm.hasAccount = 0
       }

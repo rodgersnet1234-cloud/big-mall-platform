@@ -181,9 +181,11 @@
             <div class="part-tit">
               <span class="part-tit-num">2</span><span class="part-tit-name">商品销售规格与库存</span>
             </div>
-            <div class="part-form-div">
+            <div
+              v-if="salesAttrs.length"
+              class="part-form-div"
+            >
               <div
-                v-if="salesAttrs.length"
                 class="part-form-item-tit"
               >
                 销售规格

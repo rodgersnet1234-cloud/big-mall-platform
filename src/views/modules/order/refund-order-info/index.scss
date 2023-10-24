@@ -27,6 +27,20 @@
       opacity: 1;
     }
   }
+  .plat-intervene {
+    font-size: 14px;
+    color: #e6a23c;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #FDF6EC;
+    padding: 20px;
+    margin-bottom: 19px;
+    &:deep(.el-icon) {
+      font-size: 14px;
+      margin-right: 2px;
+    }
+  }
   .order-refund-info{
     height: 100%;
     width: 100%;
@@ -100,6 +114,9 @@
             padding-top: 20px;
             padding-bottom: 20px;
             border-right: 1px solid #e9eaec;
+            &.refund-record-left{
+              min-height: 400px;
+            }
           }
           .detail-cont {
             position: relative;
@@ -110,9 +127,19 @@
               .text-width {
                 margin-bottom: 10px;
                 .text-width-item {
+                  display: flex;
+                  .title{
+                    white-space: nowrap;
+                  }
                   line-height: 27px;
                   .text {
                     word-break: break-word;
+                  }
+                  .img-box{
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 8px;
+                    margin-bottom: 8px;
                   }
                 }
               }
@@ -122,6 +149,7 @@
             width: 1030px;
             padding-left: 45px;
             padding-top: 20px;
+            position: relative;
             .buyers-info {
               margin-top: 15px;
               position: relative;
@@ -131,6 +159,17 @@
                 margin-right: 12px;
                 margin-bottom: 12px;
               }
+            }
+            .refund-record-title{
+              padding-bottom: 15px;
+            }
+            .refund-record{
+              width: 100%;
+              height: calc(100% - 54px);
+              overflow-y: auto;
+              position: absolute;
+              left: 0;
+              padding-left: 45px;
             }
           }
         }
@@ -190,20 +229,44 @@
             }
           }
         }
-      }
-    }
-    .order-log {
-      .log-title {
-        margin-top: 20px;
-        width: 100%;
-        line-height: 20px;
-        font-weight: bold;
-      }
-      .log-cont {
-        margin-top: 15px;
-        color: #666666;
-        div {
-          margin-bottom: 10px;
+        .sellerRemark {
+          margin-top: 20px;
+          display: flex;
+          align-items: flex-start;
+          .remark-title {
+            line-height: 32px;
+            padding-left: 8px;
+            position: relative;
+            &.star::before{
+              content: "*";
+              color: #f56c6c;
+              position: absolute;
+              left: 0;
+            }
+          }
+          .remark-content{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            .refund-price{
+              display: flex;
+              align-items: center;
+              .unit{
+                display: inline-block;
+                width: 24px;
+                text-align: right;
+              }
+            }
+            .pri-tips{
+              color: #9797a1;
+              margin-top: 4px;
+              font-size: 12px;
+            }
+          }
+        }
+        .btn-bar{
+          padding-left: 70px;
+          margin-top: 20px;
         }
       }
     }

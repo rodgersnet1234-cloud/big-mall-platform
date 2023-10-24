@@ -101,4 +101,12 @@
   :deep(.el-dialog){
     padding: 30px 20px;
   }
+
+  :deep(.view-content.el-dialog){
+      .el-dialog__body {
+        padding: 10px 0;
+        margin-bottom: -22px;
+      }
+    }   
+  
 }

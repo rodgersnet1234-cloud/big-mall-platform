@@ -69,7 +69,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 70%;
+        width: 100%;
       }
       .nav-list-ul-zh li {
         overflow: hidden;
@@ -85,7 +85,8 @@
       .nav-item-li {
         float: left;
         font-size: 14px;
-        min-width: 120px;
+        width: 12.5%;
+        max-width: 120px;
         text-align: center;
         height: 40px;
         line-height: 40px;

@@ -132,7 +132,7 @@
           </div>
         </div>
       </div>
-      <el-form-item :label="$t('order.order.deliveryMethod') + ':'">
+      <el-form-item :label="$t('order.order.deliveryMethod') + '：'">
         <el-radio-group
           v-model="dataForm.tempDeliveryType"
           @change="clear()"
@@ -390,7 +390,7 @@ const init = (order) => {
   orderApi.getOrderItemAndAddress(order.orderId).then(data => {
     dataForm.orderAddr = data.orderAddr
     dataList.value = data.orderItems
-    dataForm.deliveryType = dataForm.deliveryType = isPrint.value === 1 ? 0 : parseInt(data.deliveryType)
+    dataForm.deliveryType = isPrint.value === 1 ? 0 : parseInt(data.deliveryType)
     dataForm.tempDeliveryType = dataForm.deliveryType === 0 || dataForm.deliveryType === 1 ? 1 : dataForm.deliveryType
     dataList.value.forEach(element => {
       element.changeNum = element.count
@@ -443,8 +443,8 @@ const getNoDeliverySts = () => {
     }
   }
   if (flag) {
-    dataForm.tempDeliveryType = 1
-    dataForm.deliveryType = 1
+    dataForm.deliveryType = isPrint.value === 1 ? 0 : parseInt(dataForm.deliveryType)
+    dataForm.tempDeliveryType = dataForm.deliveryType === 0 || dataForm.deliveryType === 1 ? 1 : dataForm.deliveryType
   }
   isDisableNoCourier.value = flag
 }

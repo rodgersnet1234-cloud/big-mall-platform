@@ -1,10 +1,10 @@
+<!-- 父组件无需使用new TMap时，直接引入即可，父组件使用了new TMap则需要判断TMap是否加载完成 -->
 <template>
   <div id="container" />
 </template>
 
 <script setup>
 import { onMounted, watch } from 'vue'
-const TMap = window.TMap
 const props = defineProps({
   latLng: {
     type: Object,
@@ -20,7 +20,6 @@ const props = defineProps({
     default: () => []
   }
 })
-
 const emits = defineEmits(['changeLatLng', 'setPolygonPath'])
 
 // 监听坐标变化，更新标记
@@ -28,11 +27,12 @@ watch(() => props.latLng, (val) => {
   if (val) {
     cocateTimer && clearTimeout(cocateTimer)
     cocateTimer = null
-    onUpdateMarker(new TMap.LatLng(val.lat, val.lng))
+    if (TMap) {
+      onUpdateMarker(new TMap.LatLng(val.lat, val.lng))
+    }
   }
 })
 
-const defMapCenter = new TMap.LatLng(23.136783, 113.327955) // 默认中心点坐标
 let map = null
 let cocateTimer = null
 const init = () => {
@@ -42,16 +42,19 @@ const init = () => {
       center: mapCenter,
       zoom: 10
     })
+    cocateTimer = setTimeout(() => {
+      onUpdateMarker(mapCenter)
+    }, 1500)
   } else {
     nextTick(() => {
       map = new TMap.Map('container', {
         zoom: 13
       })
     })
+    cocateTimer = setTimeout(() => {
+      onLocate()
+    }, 1500)
   }
-  cocateTimer = setTimeout(() => {
-    onLocate()
-  }, 1500)
 
   nextTick(() => {
     // 处理标记
@@ -68,9 +71,35 @@ const init = () => {
     })
   })
 }
+let TMap = window.TMap
+
+let defMapCenter = null // 默认中心点坐标
 onMounted(() => {
-  init()
+  if (TMap) {
+    defMapCenter = new TMap.LatLng(23.136783, 113.327955)
+    ipLocation = new TMap.service.IPLocation()
+    geocoder = new TMap.service.Geocoder()
+    init()
+  } else {
+    document.getElementById('qqMap').src = `https://map.qq.com/api/gljs?v=1.exp&libraries=service,tools&key=${import.meta.env.VITE_APP_MAP_KEY}`
+    onGetTMap()
+  }
 })
+let time = null
+const onGetTMap = () => {
+  time = setTimeout(() => {
+    TMap = window.TMap
+    if (TMap) {
+      time = null
+      defMapCenter = new TMap.LatLng(23.136783, 113.327955)
+      ipLocation = new TMap.service.IPLocation()
+      geocoder = new TMap.service.Geocoder()
+      init()
+    } else {
+      onGetTMap()
+    }
+  }, 500)
+}
 
 let markerLayer = null // 标记图层
 let infoWindow = null // 窗体信息
@@ -192,7 +221,7 @@ const onSetZoom = (zoom) => {
   map.setZoom(zoom)
 }
 
-const ipLocation = new TMap.service.IPLocation() // 新建一个IP定位类
+let ipLocation = null // 新建一个IP定位类
 function onLocate () {
   ipLocation
     .locate({})
@@ -207,7 +236,7 @@ function onLocate () {
     })
 }
 
-const geocoder = new TMap.service.Geocoder() // 新建一个正逆地址解析类
+let geocoder = null // 新建一个正逆地址解析类
 // 坐标转地址
 const onGetAddress = (location) => {
   location = new TMap.LatLng(location.lat, location.lng)
@@ -215,7 +244,7 @@ const onGetAddress = (location) => {
   return new Promise((resolve, reject) => {
     geocoder.getAddress({ location }) // 将给定的坐标位置转换为地址
       .then((res) => {
-      // 显示搜索到的地址
+        // 显示搜索到的地址
         resolve(res.result)
       }).catch(err => {
         reject(err)
@@ -227,7 +256,7 @@ const onGetLocation = (address) => {
   return new Promise((resolve, reject) => {
     geocoder.getLocation({ address }) // 将给定的坐标位置转换为地址
       .then((res) => {
-      // 显示坐标数值
+        // 显示坐标数值
         map.setCenter(res.result.location)
         resolve(res.result.location)
       }).catch(err => {
@@ -235,7 +264,11 @@ const onGetLocation = (address) => {
       })
   })
 }
-
+onUnmounted(() => {
+  if (time) {
+    clearTimeout(time)
+  }
+})
 defineExpose({
   onSetZoom,
   onGetAddress,
@@ -250,6 +283,7 @@ defineExpose({
 #container{
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 </style>
 <!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->

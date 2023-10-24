@@ -34,6 +34,21 @@
       </el-form-item>
       <!-- 发货地址 -->
       <el-form-item
+        v-if="dataForm.outletConfigId"
+        :label="$t('order.order.deliveryAddress')"
+        prop="printAddr"
+      >
+        <div class="part-form-delivery">
+          <el-input
+            v-if="dataForm.outletConfigId"
+            v-model="dataForm.printAddr"
+            disabled
+            style="width: 330px"
+          />
+        </div>
+      </el-form-item>
+      <el-form-item
+        v-if="!dataForm.outletConfigId"
         :label="$t('order.order.deliveryAddress')"
         prop="shopAddrId"
       >
@@ -42,7 +57,6 @@
             v-model="dataForm.shopAddrId"
             :placeholder="$t('tip.select')"
             style="max-width: 450px;width: 100%"
-            :disabled="dataForm.outletConfigId"
           >
             <el-option
               v-for="item in addrList"
@@ -52,7 +66,6 @@
             />
           </el-select>
           <div
-            v-if="!dataForm.outletConfigId"
             class="lb"
           >
             <el-button
@@ -172,7 +185,8 @@ const dataForm = ref({
   partnerKey: '',
   net: '',
   paperSize: 1,
-  isDefault: 0
+  isDefault: 0,
+  printAddr: ''
 })
 const deliveryCompanyType = [{
   value: 1,

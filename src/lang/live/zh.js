@@ -1,5 +1,13 @@
 export default {
   liveRoom: {
+    view: '查看',
+    viewLRoomInfo: '直播间信息',
+    anchorName: '主播昵称',
+    liveTime: '直播的时间',
+    liveBackgroundImage: '直播背景图',
+    anchorSharingPicture: '主播分享图',
+    liveCoverImage: '直播封面图',
+    prod: '直播商品',
     roomName: '直播间名称',
     over: '结束',
     anchorNickname: '主播昵称',

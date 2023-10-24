@@ -258,9 +258,6 @@ const searchParam = reactive({
 })
 
 const sendTypes = [{
-  value: 0,
-  label: $t('biz.notify.sendToCustom')
-}, {
   value: 1,
   label: $t('biz.notify.orderPay')
 }, {
