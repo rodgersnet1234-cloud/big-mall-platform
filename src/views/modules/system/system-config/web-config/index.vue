@@ -57,7 +57,7 @@
 
 <script setup>
 
-import AddOrUpdate from './webConfig-add-or-update.vue'
+import AddOrUpdate from './components/webConfig-add-or-update.vue'
 
 const activeName = ref('webConfigShop')
 
