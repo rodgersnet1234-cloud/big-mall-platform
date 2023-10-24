@@ -246,6 +246,13 @@
                       @click="customerService()"
                     >
                       转接客服
+                      <el-tooltip
+                        effect="dark"
+                        :content="$t('chat.transferTips')"
+                        placement="right"
+                      >
+                        <el-icon><QuestionFilled /></el-icon>
+                      </el-tooltip>
                     </div>
                   </div>
                   <label

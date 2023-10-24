@@ -39,6 +39,7 @@ export default {
   sorryYouHaveBeenDisconnected: '对不起您已断开连接，正在重连',
   notYourResponsibility: '不是你负责的客户',
   transferToCustomerService: '转接客服',
+  transferTips: '可设置多个客服，在后台[系统一员工列表]添加有客服角色权限的账号，有其他客服账号在线时可进行转接。',
   connetBroken: '连接已断开，请刷新页面重试',
   otherParIsNoOL: '对方不在线',
   idIsLoginInElse: '账户已在别处登录',

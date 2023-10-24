@@ -23,6 +23,7 @@ export default {
   none: 'None',
   image: 'Image',
   pleaseSelectAcustomerService: 'Please select a customer service transfer',
+  transferTips: 'Multiple customer service can be set up to add accounts with customer service role privileges in the background [system a staff list], and other customer service accounts can be transferred when they are online.',
   messageBox: 'Message box',
   pendingPayment: 'Pending Payment',
   pendingDelivery: 'Pending Delivery',
