@@ -857,251 +857,288 @@
               </div>
             </div>
             <div class="si-content">
-              <div>
+              <div class="contract-time-box">
                 <el-date-picker
-                  v-model="contractTimeRange"
-                  type="daterange"
-                  value-format="YYYY-MM-DD"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  v-model="shopBasicInfo.contractStartTime"
+                  style="width:170px;"
+                  type="date"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  placeholder="开始日期"
                   disabled
                 />
+                <span style="margin: 0 10px">-</span>
+                <div class="end-time">
+                  <el-date-picker
+                    v-model="shopBasicInfo.contractEndTime"
+                    style="width:170px;"
+                    type="date"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    :placeholder="shopBasicInfo.contractStartTime&& !shopBasicInfo.contractEndTime ? '' : '结束日期'"
+                    disabled
+                  />
+                  <span
+                    v-if="shopBasicInfo.contractStartTime&& !shopBasicInfo.contractEndTime"
+                    class="text disable"
+                  >
+                    无固定期限
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- 商家类型 -->
+            <div class="contracted-items s-item">
+              <div class="tips">
+                <div class="tit">
+                  <span class="asterisk">*</span>店铺类型
+                </div>
+              </div>
+              <div class="si-content">
+                <div>
+                  <el-radio
+                    v-model="shopBasicInfo.type"
+                    :label="1"
+                    disabled
+                  >
+                    自营商家
+                  </el-radio>
+                  <el-radio
+                    v-model="shopBasicInfo.type"
+                    :label="2"
+                    disabled
+                  >
+                    第三方商家
+                  </el-radio>
+                </div>
               </div>
             </div>
           </div>
-          <!-- 商家类型 -->
-          <div class="contracted-items s-item">
+        </div>
+        <!-- /签约信息 -->
+
+        <!-- 财务信息 -->
+        <div
+          v-if="navStatus === 3"
+          class="financial-info"
+        >
+          <div class="table-box">
             <div class="tips">
-              <div class="tit">
-                <span class="asterisk">*</span>店铺类型
-              </div>
+              <p class="tit">
+                <span class="asterisk">*</span>结算银行账户
+              </p>
+              <p
+                v-if="paySettlementType!==1"
+                class="txt weak"
+              >
+                已添加
+                <span class="txt-bold">{{ settlementAccounts.length }}</span>
+                个结算账户，最多可添加
+                <span class="txt-bold">5</span>
+                个结算账户
+              </p>
+              <p
+                v-if="paySettlementType===1"
+                class="txt weak"
+              >
+                已添加
+                <span class="txt-bold">{{ settlementAccounts.length }}</span>
+                个结算账户，最多可添加
+                <span class="txt-bold">10</span>
+                个结算账户
+                <span>
+                  ，
+                  <span class="txt-bold">1</span>
+                  个法人账户
+                </span>
+              </p>
             </div>
-            <div class="si-content">
-              <div>
-                <el-radio
-                  v-model="shopBasicInfo.type"
-                  :label="1"
-                  disabled
-                >
+            <el-table
+              :data="settlementAccounts"
+              style="width: 100%"
+              header-cell-class-name="table-header"
+              row-class-name="table-row"
+            >
+              <el-table-column
+                prop="bankName"
+                label="银行"
+              />
+              <el-table-column
+                align="left"
+                prop="recipientName"
+                :min-width="paySettlementType===1?'130':null"
+                label="账户名"
+              >
+                <template #default="scope">
+                  <div class="recipient-name">
+                    <span>{{ scope.row.recipientName }}</span>
+                    <div
+                      v-if="paySettlementType===1&&scope.row.bankCardPro===0"
+                      class="tip"
+                    >
+                      法人账户
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="cardNo"
+                label="账号"
+              />
+              <el-table-column
+                prop="branchName"
+                label="银行开户行"
+              />
+              <el-table-column
+                prop="isDefault"
+                label="主账号"
+                width="100px"
+              >
+                <template #default="scope">
+                  {{ scope.row.isDefault ? '是' : '否' }}
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+      <!-- /财务信息 -->
+      </div>
+
+      <!-- 脚部 -->
+      <div
+        v-if="pageType === 'toAudit' && shopStatus.shopStatus !== 5"
+        class="footer"
+      >
+        <div class="foot-box">
+          <div
+            class="btn"
+            @click="openAuditPopup(1)"
+          >
+            审核
+          </div>
+          <div
+            class="btn"
+            @click="openAuditPopup(-1)"
+          >
+            驳回
+          </div>
+        </div>
+      </div>
+
+      <!-- 审核弹窗 -->
+      <el-dialog
+        v-model="auditDialogVisible"
+        width="700"
+
+        :close-on-click-modal="false"
+        destroy-on-close
+        :show-close="false"
+        class="audit-dialog"
+      >
+        <template #header>
+          <div class="head">
+            <span class="tit">商家审核</span>
+            <span class="sub-tit">请补充签约信息</span>
+          </div>
+        </template>
+        <div class="content">
+          <el-form
+            ref="auditformRef"
+            label-width="100px"
+            :model="auditform"
+            :rules="auditformRules"
+            @submit.prevent
+          >
+            <el-form-item
+              label="签约有效期"
+              prop="date"
+            >
+              <div class="contract-time-box">
+                <el-date-picker
+                  v-model="contractStartTime"
+                  style="width:170px;"
+                  type="date"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  placeholder="开始日期"
+                  :clearable="false"
+                />
+                <span style="margin: 0 10px">-</span>
+                <div class="end-time">
+                  <el-date-picker
+                    ref="endTimeRef"
+                    v-model="contractEndTime"
+                    style="width:170px;"
+                    type="date"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    :placeholder="endTimeFlag&&contractStartTime&& !contractEndTime ? '' : '结束日期'"
+                    clearable
+                    @change="endTimeFlag = false"
+                    @focus="endTimeFlag = false"
+                    @blur="onEndTimePickerBlur"
+                  />
+                  <span
+                    v-if="endTimeFlag&&contractStartTime&& !contractEndTime"
+                    class="text"
+                    @click="focusEndTime"
+                  >
+                    无固定期限
+                  </span>
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="商家类型"
+              prop="shopType"
+            >
+              <el-radio-group v-model="auditform.shopType">
+                <el-radio label="1">
                   自营商家
                 </el-radio>
-                <el-radio
-                  v-model="shopBasicInfo.type"
-                  :label="2"
-                  disabled
-                >
+                <el-radio label="2">
                   第三方商家
                 </el-radio>
-              </div>
-            </div>
-          </div>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
         </div>
-      </div>
-      <!-- /签约信息 -->
 
-      <!-- 财务信息 -->
-      <div
-        v-if="navStatus === 3"
-        class="financial-info"
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="auditDialogVisible = false">取消</el-button>
+            <el-button
+              type="primary"
+              @click="reviewStoreApplications(1)"
+            >提交</el-button>
+          </span>
+        </template>
+      </el-dialog>
+      <!-- 驳回弹窗 -->
+      <el-dialog
+        ref="reviewDialogRef"
+        v-model="reviewDialogVisible"
+        title="请填写驳回原因"
+        width="500px"
+        :close-on-click-modal="false"
+        destroy-on-close
+        class="remarks"
       >
-        <div class="table-box">
-          <div class="tips">
-            <p class="tit">
-              <span class="asterisk">*</span>结算银行账户
-            </p>
-            <p
-              v-if="paySettlementType!==1"
-              class="txt weak"
-            >
-              已添加
-              <span class="txt-bold">{{ settlementAccounts.length }}</span>
-              个结算账户，最多可添加
-              <span class="txt-bold">5</span>
-              个结算账户
-            </p>
-            <p
-              v-if="paySettlementType===1"
-              class="txt weak"
-            >
-              已添加
-              <span class="txt-bold">{{ settlementAccounts.length }}</span>
-              个结算账户，最多可添加
-              <span class="txt-bold">10</span>
-              个结算账户
-              <span>
-                ，
-                <span class="txt-bold">1</span>
-                个法人账户
-              </span>
-            </p>
-          </div>
-          <el-table
-            :data="settlementAccounts"
-            style="width: 100%"
-            header-cell-class-name="table-header"
-            row-class-name="table-row"
-          >
-            <el-table-column
-              prop="bankName"
-              label="银行"
-            />
-            <el-table-column
-              align="left"
-              prop="recipientName"
-              :min-width="paySettlementType===1?'130':null"
-              label="账户名"
-            >
-              <template #default="scope">
-                <div class="recipient-name">
-                  <span>{{ scope.row.recipientName }}</span>
-                  <div
-                    v-if="paySettlementType===1&&scope.row.bankCardPro===0"
-                    class="tip"
-                  >
-                    法人账户
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="cardNo"
-              label="账号"
-            />
-            <el-table-column
-              prop="branchName"
-              label="银行开户行"
-            />
-            <el-table-column
-              prop="isDefault"
-              label="主账号"
-              width="100px"
-            >
-              <template #default="scope">
-                {{ scope.row.isDefault ? '是' : '否' }}
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
-      <!-- /财务信息 -->
+        <el-input
+          v-model="remarks"
+          type="textarea"
+          :rows="2"
+          maxlength="200"
+          placeholder="请填写驳回原因"
+        />
+
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="reviewDialogVisible = false">取消</el-button>
+            <el-button
+              type="primary"
+              @click="reviewStoreApplications(-1)"
+            >提交</el-button>
+          </span>
+        </template>
+      </el-dialog>
     </div>
-
-    <!-- 脚部 -->
-    <div
-      v-if="pageType === 'toAudit' && shopStatus.shopStatus !== 5"
-      class="footer"
-    >
-      <div class="foot-box">
-        <div
-          class="btn"
-          @click="openAuditPopup(1)"
-        >
-          审核
-        </div>
-        <div
-          class="btn"
-          @click="openAuditPopup(-1)"
-        >
-          驳回
-        </div>
-      </div>
-    </div>
-
-    <!-- 审核弹窗 -->
-    <el-dialog
-      v-model="auditDialogVisible"
-      width="600px"
-
-      :close-on-click-modal="false"
-      destroy-on-close
-      :show-close="false"
-      class="audit-dialog"
-    >
-      <template #header>
-        <div class="head">
-          <span class="tit">商家审核</span>
-          <span class="sub-tit">请补充签约信息</span>
-        </div>
-      </template>
-      <div class="content">
-        <el-form
-          ref="auditformRef"
-          label-width="100px"
-          :model="auditform"
-          :rules="auditformRules"
-          @submit.prevent
-        >
-          <el-form-item
-            label="签约有效期"
-            prop="date"
-          >
-            <div>
-              <el-date-picker
-                v-model="auditform.date"
-                type="daterange"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                @change="getContractDate"
-              />
-            </div>
-          </el-form-item>
-          <el-form-item
-            label="商家类型"
-            prop="shopType"
-          >
-            <el-radio-group v-model="auditform.shopType">
-              <el-radio label="1">
-                自营商家
-              </el-radio>
-              <el-radio label="2">
-                第三方商家
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="auditDialogVisible = false">取消</el-button>
-          <el-button
-            type="primary"
-            @click="reviewStoreApplications(1)"
-          >提交</el-button>
-        </span>
-      </template>
-    </el-dialog>
-    <!-- 驳回弹窗 -->
-    <el-dialog
-      ref="reviewDialogRef"
-      v-model="reviewDialogVisible"
-      title="请填写驳回原因"
-      width="500px"
-      :close-on-click-modal="false"
-      destroy-on-close
-      class="remarks"
-    >
-      <el-input
-        v-model="remarks"
-        type="textarea"
-        :rows="2"
-        maxlength="200"
-        placeholder="请填写驳回原因"
-      />
-
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="reviewDialogVisible = false">取消</el-button>
-          <el-button
-            type="primary"
-            @click="reviewStoreApplications(-1)"
-          >提交</el-button>
-        </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -1151,11 +1188,17 @@ const auditDialogVisible = ref(false)
 // 签约有效期
 const contractStartTime = ref('')
 const contractEndTime = ref('')
-const contractTimeRange = ref([])
 
+const validContractTime = (rule, value, callback) => {
+  if (!contractStartTime.value) {
+    callback(new Error($t('请选择签约有效期')))
+  } else {
+    callback()
+  }
+}
 const auditformRules = reactive({
   date: [
-    { required: true, message: '请选择签约有效期', trigger: 'change' }
+    { validator: validContractTime, trigger: 'blur' }
   ],
   shopType: [
     { required: true, message: '请选择商家类型', trigger: 'change' }
@@ -1248,9 +1291,6 @@ const getauditInfor = () => {
 const queryShopBasicInfo = () => {
   api.getManageDetail({ shopId }).then(data => {
     shopBasicInfo.value = data
-    if (data.contractStartTime && data.contractEndTime) {
-      contractTimeRange.value = [data.contractStartTime, data.contractEndTime]
-    }
   })
 }
 
@@ -1338,10 +1378,12 @@ const queryShopFinancialInfo = () => {
 /**
  * 打开审核弹窗
  */
+const endTimeFlag = ref(true)
 const openAuditPopup = (status) => {
   if (status === 1) {
     // 审核
     auditDialogVisible.value = true
+    endTimeFlag.value = true
     return
   }
   if (status === -1) {
@@ -1350,11 +1392,15 @@ const openAuditPopup = (status) => {
     reviewDialogVisible.value = true
   }
 }
-const getContractDate = (date) => {
-  contractStartTime.value = date[0]
-  contractEndTime.value = date[1]
+const endTimeRef = ref(null)
+const focusEndTime = () => {
+  endTimeRef.value?.focus()
 }
-
+const onEndTimePickerBlur = () => {
+  if (!contractEndTime.value) {
+    endTimeFlag.value = true
+  }
+}
 const auditformRef = ref(null)
 /**
  * 提交店铺申请审核
@@ -1747,5 +1793,22 @@ const dataUpdate = Debounce(function () {
   .business-info-list .basic-info-item  .tit {
     min-width: 140px;
     text-align: right;
+  }
+  .contract-time-box{
+    display: flex;
+    align-items: center;
+    .end-time {
+      position: relative;
+      .text {
+        position: absolute;
+        left: 30px;
+        line-height: 32px;
+        font-size: 14px;
+        &.disable{
+          color: #a8abb2;
+          cursor: no-drop;
+        }
+      }
+    }
   }
 </style>

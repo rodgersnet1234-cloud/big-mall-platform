@@ -757,17 +757,37 @@
             </div>
           </div>
           <div class="si-content">
-            <div>
+            <div style="display: flex;align-items: center;">
               <el-date-picker
-                v-model="contractTimeRange"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                v-model="signingInfo.contractStartTime"
+                style="width:170px;"
+                type="date"
                 value-format="YYYY-MM-DD HH:mm:ss"
+                placeholder="开始日期"
                 :clearable="false"
-                @change="getContractTimeRange"
               />
+              <span style="margin: 0 10px">-</span>
+              <span class="end-time">
+                <el-date-picker
+                  ref="endTimeRef"
+                  v-model="signingInfo.contractEndTime"
+                  style="width:170px;"
+                  type="date"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  :placeholder="endTimeFlag &&signingInfo.contractStartTime&& !signingInfo.contractEndTime ? '' : '结束日期'"
+                  clearable
+                  @change="endTimeFlag = false"
+                  @focus="endTimeFlag = false"
+                  @blur="onEndTimePickerBlur"
+                />
+                <span
+                  v-if="endTimeFlag &&signingInfo.contractStartTime&& !signingInfo.contractEndTime"
+                  class="text"
+                  @click="focusEndTime"
+                >
+                  无固定期限
+                </span>
+              </span>
             </div>
           </div>
         </div>
@@ -1075,7 +1095,6 @@ const shopStatus = ref({})
 
 // 店铺基本信息
 const shopBasicInfo = ref({})
-const contractTimeRange = ref([])
 
 // eslint-disable-next-line no-unused-vars
 const validateMobile = (rule, value, callback) => {
@@ -1406,6 +1425,7 @@ const switchNav = (value) => {
     getSignCategoryList()
     // 查询品牌签约信息
     getSignBrandList()
+    endTimeFlag.value = true
   } else if (value === 3) {
     // 查询财务信息
     queryShopFinancialInfo()
@@ -1441,11 +1461,8 @@ const queryShopBasicInfo = () => {
       lng: data.shopLng
     }
     signingInfo.type = data.type
-    if (data.contractStartTime && data.contractEndTime) {
-      signingInfo.contractStartTime = data.contractStartTime
-      signingInfo.contractEndTime = data.contractEndTime
-      contractTimeRange.value = [data.contractStartTime, data.contractEndTime]
-    }
+    signingInfo.contractStartTime = data.contractStartTime
+    signingInfo.contractEndTime = data.contractEndTime
     shopBasicInfo.value.currentAddr = [
       data.provinceId,
       data.cityId,
@@ -1493,6 +1510,12 @@ const queryShopBusinessInfo = () => {
 const endTimeRef = ref(null)
 const focusEndTime = () => {
   endTimeRef.value?.focus()
+}
+
+const onEndTimePickerBlur = () => {
+  if (!signingInfo.contractEndTime) {
+    endTimeFlag.value = true
+  }
 }
 
 // 获取工商信息的审核信息
@@ -1602,12 +1625,6 @@ const queryShopFinancialInfo = () => {
       selectBank.value = data[0].bankName
     }
   })
-}
-
-// 获取签约有效期
-const getContractTimeRange = (date) => {
-  signingInfo.contractStartTime = date[0]
-  signingInfo.contractEndTime = date[1]
 }
 
 const shopBasicInfoRef = ref(null)
