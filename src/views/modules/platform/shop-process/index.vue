@@ -701,7 +701,7 @@
                             v-model="scope.row.cardNo"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             placeholder="输入账号"
-                            maxlength="19"
+                            maxlength="23"
                             clearable
                           />
                         </el-form-item>
