@@ -67,6 +67,23 @@
             />
           </el-select>
         </el-form-item>
+
+        <el-form-item :label="$t('order.order.supplierDeliveryType') + '：'">
+          <!-- 发货方式 -->
+          <el-select
+            v-model="searchForm.supplierDeliveryType"
+            clearable
+            :placeholder="$t('order.order.supplierDeliveryTypeMsg')"
+          >
+            <el-option
+              v-for="item in supplierDeliveryType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+
         <el-form-item
           :label="$t('order.order.theRecipientSName') + '：'"
         >
@@ -733,6 +750,13 @@ const options = [{
   value: 8,
   label: '待采购'
 }]
+const supplierDeliveryType = [{
+  value: 1,
+  label: '供应商发货'
+}, {
+  value: 2,
+  label: '商家发货'
+}]
 const orderMold = [{
   value: 0,
   label: '实物商品'
@@ -801,7 +825,8 @@ const searchForm = reactive({
   payType: null,
   refundStatus: null,
   shopName: null,
-  supplierName: null
+  supplierName: null,
+  supplierDeliveryType: null
 })
 
 const appStore = useAppStore()
@@ -846,6 +871,7 @@ const onGetDataList = (type = 0, newData = false) => {
     status: status.value,
     isPreSale: searchForm.isPreSale,
     deliveryType: searchForm.deliveryType,
+    supplierDeliveryType: searchForm.supplierDeliveryType,
     refundStatus: searchForm.refundStatus,
     startTime: dateRange.value === null ? null : dateRange.value[0], // 开始时间
     endTime: dateRange.value === null ? null : dateRange.value[1] // 结束时间
@@ -974,6 +1000,7 @@ const onGetSoldExcel = () => {
       status: status.value,
       deliveryType: searchForm.deliveryType,
       refundStatus: searchForm.refundStatus,
+      supplierDeliveryType: searchForm.supplierDeliveryType,
       startTime: dateRange.value === null ? null : dateRange.value[0], // 开始时间
       endTime: dateRange.value === null ? null : dateRange.value[1], // 结束时间
       exOrderType: 3,
@@ -1012,6 +1039,7 @@ const onHandleSearchForm = (data) => {
   searchForm.refundStatus = data.refundStatus
   searchForm.shopName = data.shopName
   searchForm.supplierName = data.supplierName
+  searchForm.supplierDeliveryType = data.supplierDeliveryType
 }
 </script>
 
