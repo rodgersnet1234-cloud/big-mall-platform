@@ -883,7 +883,7 @@ const getProdSaleRankData = () => {
   })
 }
 // 退单店铺排行
-const subjectStatus = ref(0)
+const subjectStatus = ref(1)
 const shopStatus = ref(0)
 const refundShopRankData = ref([])
 onMounted(() => {
