@@ -37,7 +37,6 @@ export default {
   sorryYouHaveBeenDisconnected: 'Sorry you have been disconnected, reconnecting now',
   notYourResponsibility: 'Customers who are not your responsibility',
   transferToCustomerService: 'Transfer to Customer Service',
-  transferTips: 'Multiple customer service can be set up, add accounts with customer service role privileges in the background [system a administrator list], and transfer when there are other customer service accounts online.',
   connetBroken: 'The connection has been broken, please refresh the page and try again',
   otherParIsNoOL: 'The other party is not online',
   idIsLoginInElse: 'The account is already logged in elsewhere',
