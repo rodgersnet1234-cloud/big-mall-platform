@@ -27,10 +27,10 @@
         <el-tooltip
           class="item"
           effect="dark"
-          content="请先填写并保存相关配置信息后再开启，开启后将采用通联的支付体系并不能关闭，请谨慎开启。"
+          content="开启后将采用通联的支付体系并不能关闭，请谨慎开启。"
           placement="top"
         >
-          <el-icon><InfoFilled /></el-icon>
+          <i class="el-icon-info" />
         </el-tooltip>
       </div>
       <el-form-item

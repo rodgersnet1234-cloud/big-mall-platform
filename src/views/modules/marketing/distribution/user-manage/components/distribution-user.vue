@@ -11,6 +11,19 @@
       >
         <div class="input-row">
           <el-form-item
+            label="分销员昵称："
+            class="search-form-item"
+            prop="nickName"
+          >
+            <el-input
+              v-model="searchForm.nickName"
+              type="text"
+              placeholder="分销员昵称"
+              maxlength="11"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item
             label="分销员手机号："
             class="search-form-item"
             prop="userMobile"
@@ -255,7 +268,8 @@ const searchForm = reactive({
   pageNum: 1,
   userMobile: '',
   inviteeMobile: '',
-  state: ''
+  state: '',
+  nickName: ''
 })
 const searchFormRef = ref(null)
 const onResetSearch = (formEl) => {

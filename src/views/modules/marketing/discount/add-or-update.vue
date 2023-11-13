@@ -81,7 +81,7 @@
               v-model="dataForm.startTime"
               type="datetime"
               :placeholder="$t('discount.discount.chooseStartDate')"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               disabled
             />
           </el-form-item>
@@ -95,7 +95,7 @@
               v-model="dataForm.endTime"
               type="datetime"
               :placeholder="$t('discount.discount.chooseEndDate')"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               disabled
             />
           </el-form-item>

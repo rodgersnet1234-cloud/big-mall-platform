@@ -244,7 +244,29 @@
                 快递发货
               </el-checkbox>
             </el-form-item>
+            <el-form-item label="运费设置">
+              <el-radio
+                v-model="dataForm.tableRate"
+                :label="0"
+              >
+                包邮
+              </el-radio>
+              <el-radio
+                v-model="dataForm.tableRate"
+                :label="-1"
+                @change="onHandleFreight"
+              >
+                固定运费
+              </el-radio>
+              <el-radio
+                v-model="dataForm.tableRate"
+                :label="1"
+              >
+                运费模板
+              </el-radio>
+            </el-form-item>
             <el-form-item
+              v-if="dataForm.tableRate>0"
               label="运费模板"
               prop="deliveryTemplateId"
             >
@@ -292,6 +314,21 @@
                 <div class="log-tem-tips">
                   运费模板支持按地区设置运费，按购买件数计算运费，按重量计算运费等
                 </div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              v-if="dataForm.tableRate===-1"
+              label="固定运费"
+              prop="deliveryAmount"
+            >
+              <div class="freight-inp">
+                <el-input
+                  v-model="dataForm.deliveryAmount"
+                  :min="0.01"
+                  maxlength="10"
+                  placeholder="请输入金额"
+                  @blur="handleInputValue(dataForm.deliveryAmount,'deliveryAmount',0.01,9999)"
+                />
               </div>
             </el-form-item>
           </div>
@@ -385,6 +422,9 @@ const rules = reactive({
   deliveryTemplateId: [
     { required: true, message: '请选择运费模板', trigger: 'change' }
   ],
+  deliveryAmount: [
+    { required: true, message: '请输入金额', trigger: 'change' }
+  ],
   imgUrls: [
     { required: true, message: '请选择商品轮播图', trigger: 'onChange' }
   ]
@@ -413,6 +453,8 @@ const curLang = ref([1])
 
 const dataFormRef = ref(null)
 const dataForm = ref({
+  tableRate: -1, // 0 包邮 -1 固定运费 大于0运费模板id
+  deliveryAmount: 0.01,
   spuId: route.query.spuId || null, // 商品id
   shopCategoryId: null, // 店铺分类id
   nameZh: '', // 中文商品名称
@@ -477,6 +519,11 @@ const init = () => {
 
       // 配送方式
       dataForm.value.deliveryMode = JSON.parse(data.deliveryMode)
+
+      // 运费设置
+      dataForm.value.tableRate = data.deliveryTemplateId > 0 ? 1 : data.deliveryTemplateId
+      dataForm.value.deliveryTemplateId = data.deliveryTemplateId > 0 ? data.deliveryTemplateId : ''
+      dataForm.value.deliveryAmount = new Big(data.deliveryAmount || 0).div(100).valueOf()
 
       // 根据分类获取基本属性列表
       data.spuAttrValues.forEach(spuAttrValue => {
@@ -1165,6 +1212,14 @@ const changeFormatOfFormData = () => {
     dataFormPar.spuLangList = []
     dataFormPar.spuLangList.push({ lang: 1, spuName: dataForm.value.nameZh, sellingPoint: dataForm.value.sellingPointZh, detail: dataForm.value.detailZh })
     dataFormPar.spuLangList.push({ lang: 2, spuName: dataForm.value.nameEn, sellingPoint: dataForm.value.sellingPointEn, detail: dataForm.value.detailEn })
+
+    // 运费设置
+    dataFormPar.deliveryTemplateId = dataFormPar.tableRate > 0 ? dataFormPar.deliveryTemplateId : dataFormPar.tableRate
+    if (dataFormPar.tableRate === -1) {
+      dataFormPar.deliveryAmount = new Big(dataFormPar.deliveryAmount || 0).times(100).valueOf()
+    } else {
+      dataFormPar.deliveryAmount = ''
+    }
     // 请求提交表单
     onSubmit(dataFormPar)
   })
@@ -1276,6 +1331,49 @@ const onPicturePreview = (imgUrl) => {
   })
 }
 
+const onHandleFreight = () => {
+  dataForm.value.deliveryAmount = dataForm.value.deliveryAmount < 0.01 ? 0.01 : dataForm.value.deliveryAmount
+}
+
+/**
+ * 处理输入框数据
+ * @param data
+ * @param dataFields
+ * @param min 最小值
+ * @param max 最大值
+ */
+const handleInputValue = (data, dataFields, min, max) => {
+  dataForm.value[dataFields] = checkInput(data)
+  if (data || data === 0) {
+    // 保留两位小数
+    if (data > max) {
+      dataForm.value[dataFields] = max
+    }
+    if (data < min) {
+      dataForm.value[dataFields] = min
+    }
+  }
+}
+/**
+ * 只允许输入正数和小数(保留小数点后两位)
+ */
+const checkInput = (num) => {
+  if (num) {
+    let tmpVal = String(num).replace(/[^\d^\\.]/g, '')
+    const reg = /^(0|([1-9]\d*))(\.\d{1,2})?$/ // 最多允许后输入两位小数
+    if (!reg.test(tmpVal)) {
+      tmpVal = tmpVal + ''
+      tmpVal = tmpVal.substring(0, tmpVal.indexOf('.') + 3)
+      const n = (tmpVal.split('.')).length - 1
+      if (n > 1) {
+        tmpVal = tmpVal.substring(0, tmpVal.indexOf('.'))
+      }
+    }
+    return tmpVal
+  } else {
+    return ''
+  }
+}
 </script>
 
 <style lang="scss" scoped>

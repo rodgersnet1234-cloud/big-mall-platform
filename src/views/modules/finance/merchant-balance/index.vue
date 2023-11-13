@@ -138,7 +138,7 @@
                 type="primary"
                 @click="onSearch()"
               >
-                <i class="el-icon-search" />搜索
+                搜索
               </el-button>
               <el-button @click="onClear">
                 {{ $t('table.reset') }}

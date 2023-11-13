@@ -182,7 +182,7 @@
         >
           <el-date-picker
             v-model="dataForm.startTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
             type="datetime"
             placeholder="选择开始时间"
             disabled
@@ -196,7 +196,7 @@
         >
           <el-date-picker
             v-model="dataForm.endTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
             type="datetime"
             placeholder="选择结束时间"
             disabled

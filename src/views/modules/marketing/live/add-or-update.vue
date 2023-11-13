@@ -58,7 +58,7 @@
                 disabled
                 type="date"
                 :picker-options="pickerOptions"
-                value-format="yyyy-MM-dd"
+                value-format="YYYY-MM-DD"
                 style="width:144px"
               />
               <el-time-select
@@ -82,7 +82,7 @@
                 disabled
                 type="date"
                 :picker-options="pickerOptions"
-                value-format="yyyy-MM-dd"
+                value-format="YYYY-MM-DD"
                 style="width:144px"
               />
               <el-time-select
@@ -109,7 +109,7 @@
             disabled
           />
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           :label="$t('liveRoom.anchorSharingPicture')"
           prop="shareImg"
         >
@@ -117,7 +117,7 @@
             v-model="dataForm.shareImg"
             disabled
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           :label="$t('liveRoom.liveCoverImage')"
           prop="feedsImg"
@@ -203,7 +203,7 @@ const { pickerOptions, liveRoomProdList, dataForm, startTimeValue, endTimeValue,
 const dataFormRef = ref()
 const init = (data) => {
   if (data) {
-    Data.dataForm = data
+    Data.dataForm = JSON.parse(JSON.stringify(data))
     Data.dataForm.roomId = data.roomId
   } else {
     Data.dataForm.liveStatus = 0

@@ -11,6 +11,17 @@
       >
         <div class="input-row">
           <el-form-item
+            :label="'分销员昵称' + '：'"
+            prop="nickName"
+          >
+            <el-input
+              v-model="searchForm.nickName"
+              placeholder="分销员昵称"
+              maxlength="11"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item
             :label="'分销员手机号' + '：'"
             prop="userMobile"
           >
@@ -216,7 +227,8 @@ const searchForm = reactive({
   // 0无 1金额 2手续费 3提现时间 4更新时间
   sortParam: 3,
   // 0无 1 正序 2倒序
-  sortType: 2
+  sortType: 2,
+  nickName: null
 })
 // 返回参数
 const pageData = ref({

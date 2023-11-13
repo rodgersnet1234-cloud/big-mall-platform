@@ -35,23 +35,6 @@
         />
       </el-form-item>
       <el-form-item
-        :label="$t('delivery.transport.type')"
-        prop="isFreeFee"
-        required="required"
-      >
-        <el-radio-group
-          v-model="dataForm.isFreeFee"
-          @change="changeFreeFee"
-        >
-          <el-radio :label="0">
-            {{ $t("delivery.transport.buyerPrice") }}
-          </el-radio>
-          <el-radio :label="1">
-            {{ $t("delivery.transport.shopPrice") }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item
         :label="$t('delivery.transport.chargePrice')"
         prop="chargeType"
       >
@@ -501,7 +484,6 @@ const handleCheckChange = (hasFreeCondition) => {
 }
 
 const dataFormRef = ref(null)
-let transFeesSave = [{ cityList: [], addrNameList: [], status: 1 }]
 let transfeesBin = [] // 可配送区域运费，禁止选中列表
 let transfeeFreesBin = [] // 指定条件包邮，禁止选中列表
 const init = (id) => {
@@ -520,8 +502,6 @@ const init = (id) => {
       transFeeFrees: [{ freeCityList: [], freeAddrNameList: [] }]
     }
   })
-  // 重置买家承担运费时的数据
-  transFeesSave = [{ cityList: [], addrNameList: [], status: 1 }]
   transfeesBin = []
   transfeeFreesBin = []
   getTransport()
@@ -713,29 +693,6 @@ const addOrUpdateTransfeeFree = (rowIndex) => {
       transfeeFreesBin
     )
   })
-}
-
-// 改变模板类型， 0 买家承担运费 1 卖家包邮
-const changeFreeFee = (val) => {
-  dataForm.value.hasFreeCondition = false
-  if (val) {
-    // 保存买家承担运费时的数据
-    transFeesSave = [...dataForm.value.transFees]
-    dataForm.value.chargeType = 0
-    dataForm.value.transFees = [
-      {
-        cityList: [],
-        status: 0,
-        firstPiece: 1,
-        firstFee: 0,
-        continuousPiece: 1,
-        continuousFee: 0
-      }
-    ]
-  } else {
-    dataForm.value.transFees = [...transFeesSave]
-    changeChargeType(dataForm.value.chargeType)
-  }
 }
 
 /**

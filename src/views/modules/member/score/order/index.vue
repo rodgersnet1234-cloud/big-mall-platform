@@ -105,6 +105,7 @@
               value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
+              :default-time="defaultTime"
             />
             <el-button
               class="ml10"
@@ -852,6 +853,10 @@ import Big from 'big.js'
 
 const vPermission = checkPermission
 
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+]
 const options = [
   {
     value: 1,

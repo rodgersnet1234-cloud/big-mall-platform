@@ -11,6 +11,7 @@
         <div class="chat-box-left">
           <!-- 左侧用户信息栏 -->
           <ul
+            v-if="friends.length"
             v-infinite-scroll="scrollUserList"
             infinite-scroll-immediate="false"
             class="shop-list"
@@ -46,6 +47,17 @@
               </div>
             </li>
           </ul>
+          <div
+            v-else
+            class="empty-contacts"
+          >
+            <img
+              src="@/assets/empty/empty_contacts.png"
+              alt="暂无联系人"
+              class="empty-img"
+            >
+            <span class="empty-txt">暂无联系人</span>
+          </div>
         </div>
 
         <!-- 消息盒子右侧信息回复栏 -->
@@ -246,6 +258,13 @@
                       @click="customerService()"
                     >
                       转接客服
+                      <el-tooltip
+                        effect="dark"
+                        :content="$t('chat.transferTips')"
+                        placement="right"
+                      >
+                        <el-icon><QuestionFilled /></el-icon>
+                      </el-tooltip>
                     </div>
                   </div>
                   <label
