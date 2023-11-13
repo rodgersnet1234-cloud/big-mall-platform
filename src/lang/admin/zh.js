@@ -43,6 +43,7 @@ export default {
   amountSpent: '花费金额（元）',
   rechargeSource: '充值来源',
   rechargeTime: '充值时间',
+  unpay: '未支付',
   weChatPay: '微信支付',
   aliPay: '支付宝支付',
   balancePay: '余额支付',

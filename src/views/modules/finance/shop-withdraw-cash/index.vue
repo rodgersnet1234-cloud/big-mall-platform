@@ -41,7 +41,7 @@
                 type="primary"
                 @click="onSubmit(true)"
               >
-                <i class="el-icon-search" />搜索
+                搜索
               </el-button>
               <el-button
                 @click="onClear"
@@ -53,7 +53,7 @@
                 type="primary"
                 @click="onSetUpHandle()"
               >
-                <i class="el-icon-search" />提现设置
+                提现设置
               </el-button>
             </el-form-item>
             <set-up

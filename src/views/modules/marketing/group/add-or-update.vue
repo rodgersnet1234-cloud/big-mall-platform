@@ -29,7 +29,7 @@
       >
         <el-date-picker
           v-model="dataForm.startTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           type="datetime"
           class="date-picker"
           :disabled="true"
@@ -43,7 +43,7 @@
       >
         <el-date-picker
           v-model="dataForm.endTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           type="datetime"
           class="date-picker"
           :disabled="true"

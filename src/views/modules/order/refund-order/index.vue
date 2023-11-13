@@ -116,6 +116,7 @@
               value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
+              :default-time="defaultTime"
             />
           </el-form-item>
           <el-form-item>
@@ -641,6 +642,10 @@ import { formatPrice } from '@/utils/index.js'
 import OrderInfo from '../order/components/order-info.vue'
 import { useRouter } from 'vue-router'
 
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+]
 const options = [{
   value: 1,
   label: $t('order.order.buyerApplication')

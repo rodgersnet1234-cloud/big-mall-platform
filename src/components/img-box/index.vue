@@ -81,7 +81,9 @@
                 v-if="isLoading"
                 class="elx-img-list-loading"
               >
-                <div class="el-icon-loading" />
+                <el-icon class="el-icon-loading">
+                  <Loading />
+                </el-icon>
               </div>
               <div
                 v-for="(img) in imgRes"

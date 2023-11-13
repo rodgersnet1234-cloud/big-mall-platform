@@ -8,7 +8,7 @@
         content="开启通联支付后将无需设置此处支付配置信息"
         placement="right"
       >
-        <i class="el-icon-question" />
+        <el-icon><QuestionFilled /></el-icon>
       </el-tooltip>
     </div>
     <el-form

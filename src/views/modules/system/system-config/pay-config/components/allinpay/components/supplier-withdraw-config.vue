@@ -8,7 +8,7 @@
         content="建议单笔提现最低设置1元，避免平台亏损"
         placement="right"
       >
-        <span><i class="el-icon-question" /></span>
+        <el-icon><QuestionFilled /></el-icon>
       </el-tooltip>
     </div>
     <el-form

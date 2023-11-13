@@ -11,6 +11,17 @@
       >
         <div class="input-row">
           <el-form-item
+            :label="'分销员昵称' + '：'"
+            prop="nickName"
+          >
+            <el-input
+              v-model="searchForm.nickName"
+              placeholder="分销员昵称"
+              maxlength="11"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item
             :label="'分销员手机号' + '：'"
             prop="userMobile"
           >
@@ -167,7 +178,8 @@ let tempSearchForm = null // 保存上次点击查询的请求条件
 const searchForm = reactive({
   pageSize: 10,
   pageNum: 1,
-  userMobile: null
+  userMobile: null,
+  nickName: null
 })
 const searchFormRef = ref(null)
 const onResetSearch = (formEl) => {

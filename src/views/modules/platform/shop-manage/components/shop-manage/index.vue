@@ -268,7 +268,8 @@
                 type="primary"
                 @click="toShopEditPage(row.shopId)"
               >
-                <i class="el-icon-edit" />编辑
+                <el-icon><Edit /></el-icon>
+                编辑
               </el-button>
               <el-button
                 v-if="row.shopStatus === 1 || row.shopStatus === 0"
@@ -277,7 +278,8 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offline')"
               >
-                <i class="el-icon-lock" />下线店铺
+                <el-icon><Lock /></el-icon>
+                下线店铺
               </el-button>
               <el-button
                 v-if="(row.shopStatus === 2 || row.shopStatus === 5)&&(paySettlementType!==1 || (paySettlementType===1 && row.companyInfoProcessStatus!==0))"
@@ -286,7 +288,8 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"
               >
-                <i class="el-icon-unlock" />下线管理
+                <el-icon><Unlock /></el-icon>
+                下线管理
               </el-button>
               <!-- isPreferred是否优选好店 0否 1是 -->
               <el-button
@@ -296,7 +299,8 @@
                 type="primary"
                 @click="preferredById(row)"
               >
-                <i class="el-icon-setting" />{{ row.isPreferred === 0 ?'设为好店': row.isPreferred === 1 ? '取消好店' : '' }}
+                <el-icon><Setting /></el-icon>
+                {{ row.isPreferred === 0 ?'设为好店': row.isPreferred === 1 ? '取消好店' : '' }}
               </el-button>
               <el-button
                 v-permission="['platform:shopManage:updatePassword']"
@@ -304,7 +308,8 @@
                 type="primary"
                 @click="accountManageHandle(row.shopId)"
               >
-                <i class="el-icon-setting" />账号管理
+                <el-icon><Setting /></el-icon>
+                账号管理
               </el-button>
             </template>
           </el-table-column>

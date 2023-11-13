@@ -164,7 +164,8 @@
               v-model="dataForm.payingCardNo"
               type="text"
               :placeholder="'请输入付款账号'"
-              maxlength="19"
+              maxlength="23"
+              show-word-limit
               :disabled="oldStatus !== 0"
             />
           </el-form-item>
@@ -249,7 +250,7 @@ const dataForm = ref({
 const oldStatus = ref(0)
 // eslint-disable-next-line no-unused-vars
 const validateCardNo = (rule, value, callback) => {
-  if (!(/^([0-9]{1})(\d{12,18})$/).test(value)) {
+  if (!(/^([0-9]{1})(\d{12,23})$/).test(value)) {
     callback(new Error('请输入正确的银行卡号'))
   } else {
     callback()

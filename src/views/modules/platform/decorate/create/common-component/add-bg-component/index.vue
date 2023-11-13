@@ -13,10 +13,12 @@
             >
           </template>
         </el-image>
-        <i
+        <el-icon
           class="el-icon-delete"
           @click="handleRemmoveImage"
-        />
+        >
+          <Delete />
+        </el-icon>
       </div>
     </template>
     <div

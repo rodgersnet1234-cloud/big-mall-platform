@@ -103,6 +103,7 @@ import ImgUpload from '@/components/img-upload/index.vue'
 import { ElMessage } from 'element-plus'
 
 const ease = inject('ease')
+const setSalesAttrs = inject('setSalesAttrs')
 
 const route = useRoute()
 
@@ -137,11 +138,11 @@ const optionText = computed(() => {
 
 // 添加后的sku数量
 const selectNum = computed(() => {
-  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
-    return ease.setSalesAttrs.value[0].leaf.length + 1
-  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+  if (setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return setSalesAttrs.value[0].leaf.length + 1
+  } else if (setSalesAttrs.value.length > 1) { // 有多个规格名时
     // 过滤掉当前的规格名
-    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    const attrsLsit = setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
     // 规格值数量
     let num = 0
     attrsLsit.forEach((el) => {
@@ -159,11 +160,11 @@ const selectNum = computed(() => {
 
 // 当前sku数量
 const skuNum = computed(() => {
-  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
-    return ease.setSalesAttrs.value[0].leaf.length
-  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+  if (setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return setSalesAttrs.value[0].leaf.length
+  } else if (setSalesAttrs.value.length > 1) { // 有多个规格名时
     // 过滤掉当前的规格名
-    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    const attrsLsit = setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
     // 规格值数量
     let num = 0
     attrsLsit.forEach((el) => {
@@ -235,11 +236,11 @@ const filterSkuOptions = (data) => {
 }
 
 const skuOptionsNum = (numPra) => {
-  if (ease.setSalesAttrs.value.length === 1) { // 只有一个规格名时
-    return ease.setSalesAttrs.value[0].leaf.length + numPra
-  } else if (ease.setSalesAttrs.value.length > 1) { // 有多个规格名时
+  if (setSalesAttrs.value.length === 1) { // 只有一个规格名时
+    return setSalesAttrs.value[0].leaf.length + numPra
+  } else if (setSalesAttrs.value.length > 1) { // 有多个规格名时
     // 过滤掉当前的规格名
-    const attrsLsit = ease.setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
+    const attrsLsit = setSalesAttrs.value.filter((el) => el.id !== props.sku.id)
     // 规格值数量
     let num = 0
     attrsLsit.forEach((el) => {

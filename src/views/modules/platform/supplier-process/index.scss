@@ -501,6 +501,19 @@
       .s-item {
         .si-content {
           margin-top: 12px;
+          .contract-time-box{
+            display: flex;
+            align-items: center;
+            .end-time {
+              position: relative;
+              .text {
+                position: absolute;
+                left: 30px;
+                line-height: 32px;
+                font-size: 14px;
+              }
+            }
+          }
         }
       }
     }

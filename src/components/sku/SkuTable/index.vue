@@ -139,6 +139,7 @@
     <!-- 表格 -->
     <el-table
       ref="elTableRef"
+      :key="tableRefKey"
       border
       :data="lists"
       class="tab-con"
@@ -456,6 +457,9 @@ const computeRowspan = () => {
 
 const columns = ref([])
 const elTableRef = ref(null)
+const tableRefKey = computed(() => {
+  return Symbol(columns.value)
+})
 watch(() => filter.value, async (newVal) => {
   columns.value = newVal.map(item => item[props.optionText])
   lists.value = await genLists(filter.value, props.flatten)

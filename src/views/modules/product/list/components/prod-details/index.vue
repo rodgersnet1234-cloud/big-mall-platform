@@ -235,7 +235,7 @@
                   content="每个规格库存的总和"
                   placement="top"
                 >
-                  <i class="el-icon-question" />
+                  <el-icon><QuestionFilled /></el-icon>
                 </el-tooltip>
               </div>
               <el-input

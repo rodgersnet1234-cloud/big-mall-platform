@@ -59,6 +59,7 @@
               value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
+              :default-time="defaultTime"
             />
           </el-form-item>
           <el-form-item>
@@ -207,8 +208,12 @@
 import * as http from '@/api/live/index.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import AddOrUpdate from './add-or-update.vue'
-let tempSearchForm = null // 保存上次点击查询的请求条件
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+]
 
+let tempSearchForm = null // 保存上次点击查询的请求条件
 // 返回参数
 const pageLoading = ref(false)
 const pageData = ref({

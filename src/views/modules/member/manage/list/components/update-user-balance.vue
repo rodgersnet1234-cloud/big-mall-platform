@@ -34,7 +34,7 @@
             :content="$t('user.userManager.balanceTip8')"
             placement="top"
           >
-            <i class="el-icon-question" />
+            <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>
         <!-- 修改指定会员余额 - 正数代表增加，负数代表减少，只能输入数字，最多两位小数 -->
@@ -48,7 +48,7 @@
             :content="$t('user.userManager.balanceTip7')"
             placement="top"
           >
-            <i class="el-icon-question" />
+            <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>
         <!-- <span v-else>{{ $t("user.userManager.balanceTip1") }}</span> -->

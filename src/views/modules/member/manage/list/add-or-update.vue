@@ -188,7 +188,7 @@
                   :content="$t('user.userManager.couponTip3')"
                 >
                   <template #reference>
-                    <i class="el-icon-question" />
+                    <el-icon><QuestionFilled /></el-icon>
                   </template>
                 </el-popover>
               </h4>
