@@ -11,7 +11,7 @@ export default {
   revName: '修改名称',
   inputNewName: '请输入新的图片名称',
   superiorLimit: '可选择照片数量已达上限',
-  onlyPictures: '只支持图片格式、大小不能超过2m,其他文件已清除',
+  onlyPictures: '只支持图片格式,其他文件已清除',
   onlySupported: '仅支持',
   pic: '图片',
   notExceed: '大小不能超过',

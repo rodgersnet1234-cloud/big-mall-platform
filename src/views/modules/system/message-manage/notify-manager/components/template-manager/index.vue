@@ -11,7 +11,7 @@
       >
         <div class="input-row">
           <el-form-item
-            label="消息类型"
+            label="消息类型："
             prop="sendType"
           >
             <el-select
@@ -28,7 +28,7 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            label="发送类型"
+            label="发送类型："
             prop="msgType"
           >
             <el-select
@@ -45,7 +45,7 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            label="消息状态"
+            label="消息状态："
             prop="status"
           >
             <el-select

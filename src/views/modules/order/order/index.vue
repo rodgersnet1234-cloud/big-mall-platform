@@ -1012,7 +1012,8 @@ const onGetSoldExcel = () => {
       startTime: dateRange.value === null ? null : dateRange.value[0], // 开始时间
       endTime: dateRange.value === null ? null : dateRange.value[1], // 结束时间
       exOrderType: 3,
-      orderMold: searchForm.orderMold
+      orderMold: searchForm.orderMold,
+      isPreSale: searchForm.isPreSale
     }).then((data) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
       const fileName = $t('order.order.orderInfCollationXls')

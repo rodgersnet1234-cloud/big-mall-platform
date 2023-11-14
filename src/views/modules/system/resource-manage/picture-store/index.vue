@@ -493,7 +493,7 @@ let oriImgName = null // 图片原名称
 const options = reactive({
   multiple: true, // 是否支持选取多个图片
   limit: 20, // 最多可选择图片数量
-  maxSize: 2, // 最大尺寸（M）
+  maxSize: 99999, // 最大尺寸（M）
   activeTab: 'pick',
   enableUpload: false, // 是否启用图片上传
   callback: null
@@ -1142,7 +1142,7 @@ const beforeRemove = () => {
  */
 const beforeUpload = async (file) => {
   const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
-  const isSize = file.size / (1024 * 1024) < 2
+  const isSize = file.size / (1024 * 1024) < options.maxSize
   if (!isImage) {
     if (sizeFlag === 0) {
       message($t('biz.imgbox.onlyPictures'), true)
@@ -1179,12 +1179,12 @@ const uploadTypeTip = () => {
   return $t('biz.imgbox.onlySupported') + ' jpg/png/gif ' + $t('biz.imgbox.pic')
 }
 
-const uploadSizeTip = () => {
-  return $t('biz.imgbox.notExceed') + '2M'
-}
+// const uploadSizeTip = () => {
+//   return $t('biz.imgbox.notExceed') + '2M'
+// }
 
 const uploadTips = () => {
-  const tips = [uploadTypeTip(), uploadSizeTip()]
+  const tips = [uploadTypeTip()]
   if (!options.multiple) {
     return tips.join('，')
   }

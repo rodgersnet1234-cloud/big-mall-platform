@@ -219,7 +219,7 @@
             align="center"
           >
             <template #default="{row}">
-              <span>{{ row.stocks || '-' }}</span>
+              <span>{{ row.stocks || 0 }}</span>
             </template>
           </el-table-column>
 

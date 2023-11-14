@@ -45,7 +45,7 @@
             <template #error>
               <div class="image-slot">
                 <img
-                  style="width: 16px"
+                  style="margin-left: 5px"
                   src="@/assets/micro-page/def.png"
                   alt=""
                 >
