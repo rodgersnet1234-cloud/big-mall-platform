@@ -447,11 +447,16 @@ const onClear = () => {
       padding: 24px;
       .search-bar {
         margin-bottom: 20px;
+        :deep(.el-form-item__content .el-input){
+          width: 160px;
+        }
       }
-      :deep(.date-range-param .el-form-item__label:before) {
-        color: #F56C6C;
-        margin-right: 4px;
-        content: '*';
+      .date-range-param{
+        :deep(.el-form-item__label:before) {
+          color: #F56C6C;
+          margin-right: 4px;
+          content: '*';
+        }
       }
       :deep(.date-picker-type .el-input--suffix) {
         width: 120px !important;

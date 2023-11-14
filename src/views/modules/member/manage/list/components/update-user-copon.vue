@@ -70,12 +70,6 @@
               align="center"
               :label="$t('coupon.coupon.couponName')"
             />
-            <el-table-column
-              prop="subTitle"
-              header-align="center"
-              align="center"
-              :label="$t('user.userManager.couponDscription')"
-            />
             <!-- 优惠类型 1:代金券 2:折扣券 3:兑换券 -->
             <el-table-column
               :label="$t('coupon.coupon.couponType')"
