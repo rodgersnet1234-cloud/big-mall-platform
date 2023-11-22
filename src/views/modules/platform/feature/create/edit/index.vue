@@ -908,7 +908,7 @@ const viewContent = async (data) => {
  */
 const getInfo = () => {
   request({
-    url: '/mall4cloud_admin/mp/shop_renovation',
+    url: '/mall4cloud_admin/mp/shop_renovation/get_h5',
     params: {
       renovationId
     },
@@ -953,7 +953,7 @@ const getInfo = () => {
 // 获取模板详情
 const getTemplateDetail = () => {
   request({
-    url: '/mall4cloud_admin/mp/shop_template',
+    url: '/mall4cloud_admin/mp/shop_template/get_h5',
     params: {
       templateId
     },

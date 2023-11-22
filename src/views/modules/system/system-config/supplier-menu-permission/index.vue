@@ -206,7 +206,7 @@ const pageQuery = ref({
   method: null,
   pageSize: 10,
   pageNum: 1,
-  bizType: 1
+  bizType: 3
 })
 // 返回参数
 const pageVO = ref({

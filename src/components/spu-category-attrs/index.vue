@@ -93,7 +93,7 @@ const getValueOfBasicAttrs = (attrs, st) => {
       margin-right: 10px;
       .flx {
         display: flex;
-        align-items: center;
+        align-items: baseline;
         :deep(.sec-tit) {
           position: relative;
           margin-right: 15px;

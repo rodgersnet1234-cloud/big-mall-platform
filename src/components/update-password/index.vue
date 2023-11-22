@@ -32,8 +32,9 @@
       >
         <el-input
           v-model="dataForm.password"
+          v-input-rule
           type="password"
-          maxlength="16"
+          maxlength="20"
         />
       </el-form-item>
       <el-form-item
@@ -42,8 +43,9 @@
       >
         <el-input
           v-model="dataForm.newPassword"
+          v-input-rule
           type="password"
-          maxlength="16"
+          maxlength="20"
         />
       </el-form-item>
       <el-form-item
@@ -53,7 +55,7 @@
         <el-input
           v-model="dataForm.confirmPassword"
           type="password"
-          maxlength="16"
+          maxlength="20"
         />
       </el-form-item>
     </el-form>
@@ -77,7 +79,7 @@
 <script setup>
 import { encrypt } from '@/utils/crypto'
 import * as api from '@/api/auth/auth'
-import { noSpacesBothSides } from '@/utils/validate'
+import { noSpacesBothSides, validPassword2 } from '@/utils/validate'
 import { ElMessage } from 'element-plus'
 const userStore = useUserStore()
 const userName = computed(() => userStore.userName)
@@ -107,12 +109,13 @@ const validatePassword2 = (rule, value, callback) => {
   if (!password) {
     dataForm.newPassword = password
     callback(new Error($t('login.passwordTips')))
-  }
-  // 如果校验到两侧有空格，提示用户
-  if (noSpacesBothSides(dataForm.newPassword)) {
+  } else if (noSpacesBothSides(dataForm.newPassword)) { // 如果校验到两侧有空格，提示用户
     callback(new Error($t('register.passwordErrorTips2')))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
+  } else {
+    callback()
   }
-  callback()
 }
 // eslint-disable-next-line no-unused-vars
 const validateConfirmPassword = (rule, value, callback) => {
@@ -134,17 +137,16 @@ const validateConfirmPassword = (rule, value, callback) => {
 const dataRule = reactive({
   password: [
     { required: true, message: $t('login.pawNoNull'), trigger: 'blur' },
-    { min: 6, max: 16, message: $t('resetPassword.passwordTips3'), trigger: 'blur' },
+    { min: 6, max: 20, message: $t('resetPassword.passwordTips3'), trigger: 'blur' },
     { validator: validatePassword, trigger: 'blur' }
   ],
   newPassword: [
     { required: true, message: $t('login.pawNoNull'), trigger: 'blur' },
-    { min: 6, max: 16, message: $t('resetPassword.passwordTips3'), trigger: 'blur' },
     { validator: validatePassword2, trigger: 'blur' }
   ],
   confirmPassword: [
     { required: true, message: $t('login.passwordEmpty'), trigger: 'blur' },
-    { min: 6, max: 16, message: $t('resetPassword.passwordTips3'), trigger: 'blur' },
+    { min: 6, max: 20, message: $t('resetPassword.passwordTips3'), trigger: 'blur' },
     { validator: validateConfirmPassword, trigger: 'blur' }
   ]
 })

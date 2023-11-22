@@ -51,6 +51,7 @@
       </el-form-item>
     </el-form>
     <el-button
+      v-permission="['platform:growthConfig:save']"
       @click="onSubmit()"
     >
       {{ $t('table.save') }}

@@ -1021,6 +1021,7 @@
           >
             <div class="foot-box">
               <div
+                v-permission="['platform:shopAllinpay:apply']"
                 class="btn"
                 @click="toNextStep"
               >

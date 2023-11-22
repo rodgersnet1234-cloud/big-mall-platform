@@ -83,6 +83,7 @@
       </el-form-item>
       <!-- 提现设置end -->
       <el-button
+        v-permission="['platform:config:save']"
         @click="onSubmit()"
       >
         {{ $t('platform.config.save') }}

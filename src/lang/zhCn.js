@@ -83,7 +83,8 @@ export default {
   },
   resetPassword: {
     passwordError: '确认密码不一致',
-    passwordTips3: '密码长度为6-16位'
+    passwordTips3: '密码长度为6-20位',
+    passwordVerification: '密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写'
   },
   register: {
     passwordErrorTips2: '不允许使用空格作为密码的开头或结尾'

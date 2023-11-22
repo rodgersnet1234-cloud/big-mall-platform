@@ -86,7 +86,8 @@ export default {
   },
   resetPassword: {
     passwordError: 'The confirmation password is inconsistent',
-    passwordTips3: 'The password length is 6-16 digits'
+    passwordTips3: 'The password length is 6-20 digits',
+    passwordVerification: 'The password is composed of at least two characters of letters plus numbers or symbols, 6-20 half width characters, case sensitive'
   },
   register: {
     passwordErrorTips2: 'Spaces are not allowed as the beginning or end of a password'

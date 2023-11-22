@@ -237,6 +237,7 @@
       </el-table-column>
 
       <el-table-column
+        v-if="!isMold"
         prop="volume"
         label="体积(m³)"
         class="tab-int-box"
@@ -256,6 +257,7 @@
       </el-table-column>
 
       <el-table-column
+        v-if="!isMold"
         prop="weight"
         label="重量(kg)"
         class="tab-int-box"
@@ -354,6 +356,11 @@ const props = defineProps({
     default: false
   },
   isDisabled: {
+    type: Boolean,
+    default: false
+  },
+  // 是否为虚拟商品
+  isMold: {
     type: Boolean,
     default: false
   }

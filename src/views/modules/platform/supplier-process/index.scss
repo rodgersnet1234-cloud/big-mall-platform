@@ -74,6 +74,9 @@
       display: block;
       width: 90%;
       margin: 50px auto;
+      .password-par :deep(.el-form-item__error){
+        text-wrap: nowrap
+      }
     }
 
     // 进度条

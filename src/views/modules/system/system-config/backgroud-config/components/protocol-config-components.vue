@@ -13,6 +13,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-button
+      v-permission="['platform:config:save']"
       style="margin-top: 10px"
       type="primary"
       @click="onSubmit"

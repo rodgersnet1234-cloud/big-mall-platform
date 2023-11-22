@@ -926,6 +926,7 @@
           >
             <div class="foot-box">
               <div
+                v-permission="['platform:supplierAllinpay:apply']"
                 class="btn"
                 @click="toNextStep"
               >

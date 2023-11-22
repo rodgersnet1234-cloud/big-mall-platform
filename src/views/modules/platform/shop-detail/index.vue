@@ -517,6 +517,7 @@
           >
             <p class="tit" />
             <span
+              v-permission="['platform:idCardStatus:update']"
               class="update-btn"
               @click="dataUpdate"
             >
