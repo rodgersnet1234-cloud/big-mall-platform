@@ -45,7 +45,8 @@
       >
         <el-input
           v-model="dataForm.password"
-          maxlength="16"
+          v-input-rule
+          maxlength="20"
           type="password"
           show-password
           autocomplete="new-password"
@@ -87,7 +88,7 @@
 
 <script setup>
 import * as api from '@/api/platform/sys-user-account'
-import { MOBILE_REGEXP, USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides } from '@/utils/validate'
+import { MOBILE_REGEXP, USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides, validPassword2 } from '@/utils/validate'
 import { encrypt } from '@/utils/crypto'
 import { ElMessage } from 'element-plus'
 
@@ -108,6 +109,8 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('密码不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
   } else {
     callback()
   }
@@ -125,7 +128,6 @@ const rules = {
     { pattern: MOBILE_REGEXP, message: '手机号格式有误', trigger: 'blur' }
   ],
   password: [
-    { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ]
 }

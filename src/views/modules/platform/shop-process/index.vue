@@ -893,12 +893,14 @@
                 <el-form-item
                   label="登陆密码"
                   prop="passwordPar"
+                  class="password-par"
                 >
                   <el-input
                     v-model="shopUserRegisterInfo.passwordPar"
+                    v-input-rule
                     type="password"
-                    maxlength="16"
-                    placeholder="输入6-16位登录密码"
+                    maxlength="20"
+                    placeholder="输入6-20位登录密码"
                     autocomplete="new-password"
                   />
                 </el-form-item>
@@ -970,7 +972,7 @@ import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-shop'
 import { treeDataTranslate } from '@/utils'
-import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard } from '@/utils/validate'
+import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard, validPassword2 } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto.js'
 import { ElMessage } from 'element-plus'
@@ -1133,6 +1135,8 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('内容不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
   } else {
     callback()
   }
@@ -1351,7 +1355,6 @@ const shopUserRegisterRule = reactive({
   ],
   passwordPar: [
     { required: true, message: '登陆密码不能为空', trigger: 'blur' },
-    { min: 6, max: 16, message: '登录密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ],
   mobile: [

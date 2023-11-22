@@ -198,7 +198,7 @@
               </el-button>
               <el-button
                 v-if="(row.supplierStatus === 2 || row.supplierStatus === 5)&&(paySettlementType!==1 || (paySettlementType===1 && row.companyInfoProcessStatus!==0))"
-                v-permission="['platform:shopManage:openStore']"
+                v-permission="['platform:supplierManage:openStore']"
                 link
                 type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"

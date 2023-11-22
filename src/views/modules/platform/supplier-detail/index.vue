@@ -410,6 +410,7 @@
           >
             <p class="tit" />
             <span
+              v-permission="['supplier:idCardStatus:update']"
               class="update-btn"
               @click="dataUpdate"
             >

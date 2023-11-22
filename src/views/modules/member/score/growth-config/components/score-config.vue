@@ -205,6 +205,7 @@
       </el-form-item>
     </el-form>
     <el-button
+      v-permission="['platform:scoreConfig:save']"
       @click="onSubmit()"
     >
       {{ $t("table.save") }}

@@ -47,10 +47,11 @@
         >
           <el-input
             v-model="dataForm.password"
-            maxlength="16"
+            v-input-rule
+            maxlength="20"
             type="password"
             autocomplete="new-password"
-            placeholder="请输入6-16位登录密码"
+            placeholder="请输入6-20位登录密码"
           />
         </el-form-item>
         <!-- 确认密码 -->
@@ -61,7 +62,8 @@
         >
           <el-input
             v-model="dataForm.confirmPsw"
-            maxlength="16"
+            v-input-rule
+            maxlength="20"
             type="password"
             placeholder="请再次输入登录密码"
           />
@@ -91,6 +93,7 @@
 import * as api from '@/api/platform/audit-shop.js'
 import { encrypt } from '@/utils/crypto.js'
 import { ElMessage } from 'element-plus'
+import { validPassword2 } from '@/utils/validate.js'
 
 const emit = defineEmits(['closeAccountManagePopup'])
 
@@ -114,6 +117,8 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('密码不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
   } else if (dataForm.value.confirmPsw &&
         value === dataForm.value.confirmPsw) {
     // 如两次输入密码相同,清除确认密码框校验
@@ -133,7 +138,6 @@ const validConfirmPsw = (rule, value, callback) => {
 const rules = {
   password: [
     { required: true, message: '请输入登录密码', trigger: 'blur' },
-    { min: 6, max: 16, message: '登录密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ],
   confirmPsw: [

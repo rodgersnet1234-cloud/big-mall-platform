@@ -89,6 +89,7 @@
       </el-form-item>
 
       <el-button
+        v-permission="['platform:config:save']"
         @click="onSubmit(dataFormRef)"
       >
         {{ $t('platform.config.save') }}

@@ -181,7 +181,7 @@ const totalPage = ref(0)
  */
 const getMiniPagesList = () => {
   request({
-    url: '/mall4cloud_admin/mp/shop_renovation/page',
+    url: '/mall4cloud_admin/mp/shop_renovation/page_h5',
     method: 'get',
     params: Object.assign(
       {

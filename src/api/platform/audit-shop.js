@@ -36,14 +36,6 @@ export function auditData (data) {
   })
 }
 
-// 根据审核id查询详情信息
-export function getDetail (shopId) {
-  return request({
-    url: `/mall4cloud_admin/p/shop_auditing/${shopId}`,
-    method: 'GET'
-  })
-}
-
 // 校验店铺名
 export function examineShopName (param) {
   return request({

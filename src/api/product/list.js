@@ -143,7 +143,7 @@ export function downModel () {
 // 商品审核
 export function auditSpu (data) {
   return request({
-    url: '/mall4cloud_product/p/spu/auditSpu',
+    url: '/mall4cloud_product/p/spu/audit_spu',
     method: 'put',
     data
   })

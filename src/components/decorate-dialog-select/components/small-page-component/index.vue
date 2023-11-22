@@ -127,7 +127,7 @@ const getSmallPage = (val) => {
     url = '/mall4cloud_admin/mp/shop_renovation/page'
     type = 1
   } else if (props.deviceType === 'mobile') {
-    url = '/mall4cloud_admin/mp/shop_renovation/page'
+    url = '/mall4cloud_admin/mp/shop_renovation/page_h5'
     type = 2
   }
   request({

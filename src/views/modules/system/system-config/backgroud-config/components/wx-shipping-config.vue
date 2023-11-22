@@ -24,6 +24,7 @@
       </el-form-item>
     </el-form>
     <el-button
+      v-permission="['platform:config:save']"
       @click="onSubmit()"
     >
       保存

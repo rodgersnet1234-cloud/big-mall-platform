@@ -107,7 +107,7 @@ const templateList = ref([]) // 列表页
 const getMiniPageList = () => {
   const { pageNum, pageSize } = perProps
   request({
-    url: '/mall4cloud_admin/mp/shop_template/page',
+    url: '/mall4cloud_admin/mp/shop_template/page_h5',
     methods: 'get',
     params: {
       pageNum, // 当前页

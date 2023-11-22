@@ -50,6 +50,7 @@
               </el-button>
               <el-button
                 v-if="paySettlementType!==1"
+                v-permission="['platform:supplierWithdraw:save']"
                 type="primary"
                 @click="onSetUpHandle()"
               >
@@ -136,7 +137,7 @@
               <template #default="scope">
                 <el-button
                   v-if="scope.row.status === 0"
-                  v-permission="['finance:shopWithdrawCash:audit']"
+                  v-permission="['platform:supplierWithdraw:audit']"
                   type="primary"
                   link
                   @click="onHandleAudit(scope.row.cashId)"
