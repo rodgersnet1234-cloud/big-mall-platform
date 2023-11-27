@@ -417,7 +417,9 @@
               <span class="asterisk">*</span>营业期限：
             </p>
             <p class="txt">
-              {{ businessInfo.startTime && businessInfo.startTime.slice(0,10) + ' - ' + (!businessInfo.endTime ? '无固定期限' : businessInfo.endTime.slice(0, 10)) }}
+              {{
+                businessInfo.startTime && businessInfo.startTime.slice(0, 10) + ' - ' + (!businessInfo.endTime ? '无固定期限' : businessInfo.endTime.slice(0, 10))
+              }}
             </p>
           </div>
           <div class="basic-info-item">
@@ -918,113 +920,113 @@
       </div>
       <!-- /签约信息 -->
 
-        <!-- 财务信息 -->
-        <div
-          v-if="navStatus === 3"
-          class="financial-info"
-        >
-          <div class="table-box">
-            <div class="tips">
-              <p class="tit">
-                <span class="asterisk">*</span>结算银行账户
-              </p>
-              <p
-                v-if="paySettlementType!==1"
-                class="txt weak"
-              >
-                已添加
-                <span class="txt-bold">{{ settlementAccounts.length }}</span>
-                个结算账户，最多可添加
-                <span class="txt-bold">5</span>
-                个结算账户
-              </p>
-              <p
-                v-if="paySettlementType===1"
-                class="txt weak"
-              >
-                已添加
-                <span class="txt-bold">{{ settlementAccounts.length }}</span>
-                个结算账户，最多可添加
-                <span class="txt-bold">10</span>
-                个结算账户
-                <span>
-                  ，
-                  <span class="txt-bold">1</span>
-                  个法人账户
-                </span>
-              </p>
-            </div>
-            <el-table
-              :data="settlementAccounts"
-              style="width: 100%"
-              header-cell-class-name="table-header"
-              row-class-name="table-row"
-            >
-              <el-table-column
-                prop="bankName"
-                label="银行"
-              />
-              <el-table-column
-                align="left"
-                prop="recipientName"
-                :min-width="paySettlementType===1?'130':null"
-                label="账户名"
-              >
-                <template #default="scope">
-                  <div class="recipient-name">
-                    <span>{{ scope.row.recipientName }}</span>
-                    <div
-                      v-if="paySettlementType===1&&scope.row.bankCardPro===0"
-                      class="tip"
-                    >
-                      法人账户
-                    </div>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="cardNo"
-                label="账号"
-              />
-              <el-table-column
-                prop="branchName"
-                label="银行开户行"
-              />
-              <el-table-column
-                prop="isDefault"
-                label="主账号"
-                width="100px"
-              >
-                <template #default="scope">
-                  {{ scope.row.isDefault ? '是' : '否' }}
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </div>
-      <!-- /财务信息 -->
-      </div>
-
-      <!-- 脚部 -->
+      <!-- 财务信息 -->
       <div
-        v-if="pageType === 'toAudit' && shopStatus.shopStatus !== 5"
-        class="footer"
+        v-if="navStatus === 3"
+        class="financial-info"
       >
-        <div class="foot-box">
-          <div
-            class="btn"
-            @click="openAuditPopup(1)"
-          >
-            审核
+        <div class="table-box">
+          <div class="tips">
+            <p class="tit">
+              <span class="asterisk">*</span>结算银行账户
+            </p>
+            <p
+              v-if="paySettlementType!==1"
+              class="txt weak"
+            >
+              已添加
+              <span class="txt-bold">{{ settlementAccounts.length }}</span>
+              个结算账户，最多可添加
+              <span class="txt-bold">5</span>
+              个结算账户
+            </p>
+            <p
+              v-if="paySettlementType===1"
+              class="txt weak"
+            >
+              已添加
+              <span class="txt-bold">{{ settlementAccounts.length }}</span>
+              个结算账户，最多可添加
+              <span class="txt-bold">10</span>
+              个结算账户
+              <span>
+                ，
+                <span class="txt-bold">1</span>
+                个法人账户
+              </span>
+            </p>
           </div>
-          <div
-            class="btn"
-            @click="openAuditPopup(-1)"
+          <el-table
+            :data="settlementAccounts"
+            style="width: 100%"
+            header-cell-class-name="table-header"
+            row-class-name="table-row"
           >
-            驳回
-          </div>
+            <el-table-column
+              prop="bankName"
+              label="银行"
+            />
+            <el-table-column
+              align="left"
+              prop="recipientName"
+              :min-width="paySettlementType===1?'130':null"
+              label="账户名"
+            >
+              <template #default="scope">
+                <div class="recipient-name">
+                  <span>{{ scope.row.recipientName }}</span>
+                  <div
+                    v-if="paySettlementType===1&&scope.row.bankCardPro===0"
+                    class="tip"
+                  >
+                    法人账户
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="cardNo"
+              label="账号"
+            />
+            <el-table-column
+              prop="branchName"
+              label="银行开户行"
+            />
+            <el-table-column
+              prop="isDefault"
+              label="主账号"
+              width="100px"
+            >
+              <template #default="scope">
+                {{ scope.row.isDefault ? '是' : '否' }}
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </div>
+      <!-- /财务信息 -->
+    </div>
+
+    <!-- 脚部 -->
+    <div
+      v-if="pageType === 'toAudit' && shopStatus.shopStatus !== 5"
+      class="footer"
+    >
+      <div class="foot-box">
+        <div
+          class="btn"
+          @click="openAuditPopup(1)"
+        >
+          审核
+        </div>
+        <div
+          class="btn"
+          @click="openAuditPopup(-1)"
+        >
+          驳回
+        </div>
+      </div>
+    </div>
 
     <!-- 审核弹窗 -->
     <el-dialog
@@ -1102,45 +1104,44 @@
         </el-form>
       </div>
 
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="auditDialogVisible = false">取消</el-button>
-            <el-button
-              type="primary"
-              @click="reviewStoreApplications(1)"
-            >提交</el-button>
-          </span>
-        </template>
-      </el-dialog>
-      <!-- 驳回弹窗 -->
-      <el-dialog
-        ref="reviewDialogRef"
-        v-model="reviewDialogVisible"
-        title="请填写驳回原因"
-        width="500px"
-        :close-on-click-modal="false"
-        destroy-on-close
-        class="remarks"
-      >
-        <el-input
-          v-model="remarks"
-          type="textarea"
-          :rows="2"
-          maxlength="200"
-          placeholder="请填写驳回原因"
-        />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="auditDialogVisible = false">取消</el-button>
+          <el-button
+            type="primary"
+            @click="reviewStoreApplications(1)"
+          >提交</el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <!-- 驳回弹窗 -->
+    <el-dialog
+      ref="reviewDialogRef"
+      v-model="reviewDialogVisible"
+      title="请填写驳回原因"
+      width="500px"
+      :close-on-click-modal="false"
+      destroy-on-close
+      class="remarks"
+    >
+      <el-input
+        v-model="remarks"
+        type="textarea"
+        :rows="2"
+        maxlength="200"
+        placeholder="请填写驳回原因"
+      />
 
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="reviewDialogVisible = false">取消</el-button>
-            <el-button
-              type="primary"
-              @click="reviewStoreApplications(-1)"
-            >提交</el-button>
-          </span>
-        </template>
-      </el-dialog>
-    </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="reviewDialogVisible = false">取消</el-button>
+          <el-button
+            type="primary"
+            @click="reviewStoreApplications(-1)"
+          >提交</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -1491,10 +1492,12 @@ const dataUpdate = Debounce(function () {
 .app-container {
   margin-bottom: 30px;
 }
+
 .app-container.shop-detail {
   font-size: 14px;
   color: #333;
   min-height: 852px;
+
   .red-tag-txt {
     color: #ff4949;
   }
@@ -1506,11 +1509,13 @@ const dataUpdate = Debounce(function () {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
+
     .nav {
       position: relative;
       display: inline-block;
       display: flex;
       white-space: nowrap;
+
       .nav-item {
         margin: 0;
         font-size: 14px;
@@ -1519,14 +1524,16 @@ const dataUpdate = Debounce(function () {
         color: #999;
         cursor: pointer;
       }
+
       .nav-item.active {
         color: #155bd4;
-        background: rgba(24,144,255, 0.06);
+        background: rgba(24, 144, 255, 0.06);
         border-radius: 4px 4px 0 0;
         border-bottom: 2px solid #155bd4;
       }
     }
   }
+
   .nav-box::before {
     position: absolute;
     right: 0;
@@ -1542,66 +1549,81 @@ const dataUpdate = Debounce(function () {
     p {
       margin: 0;
     }
+
     .asterisk {
       color: #FF2120;
       padding-right: 5px;
     }
+
     .tips {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       width: 100%;
+
       .tit {
         font-size: 16px;
         min-width: 80px;
       }
+
       .txt.weak {
         font-size: 12px;
         color: #999;
         margin-left: 10px;
       }
+
       .txt-bold {
         color: #333;
       }
     }
+
     .si-content {
       margin-top: 20px;
       margin-bottom: 25px;
     }
+
     .table-box {
       display: block;
       width: 100%;
       margin: 20px 0;
+
       :deep(.el-table th), :deep(.el-table td) {
         border-color: #f0f0f0;
         height: 40px;
         line-height: 40px;
       }
+
       :deep(.el-table td) {
         height: 56px;
         line-height: 56px;
       }
+
       :deep(.el-table__row:last-child) {
         td {
           border-bottom: 0;
         }
       }
+
       :deep(.el-table th) {
         background: #fafafa;
       }
+
       :deep(.el-table__body-wrapper) {
         max-height: 245px;
         overflow-y: scroll;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
       }
+
       :deep(.el-table__body-wrapper::-webkit-scrollbar) {
         display: none; /* Chrome Safari */
       }
+
       :deep(.el-table__body) {
         width: 100%;
       }
     }
+
     // 图片
     .tab-img {
       width: auto;
@@ -1624,9 +1646,11 @@ const dataUpdate = Debounce(function () {
         padding: 20px 40px;
         line-height: 1em;
         margin-top: 20px;
+
         p.tit {
           width: 95px;
         }
+
         .weak {
           color: #666;
         }
@@ -1638,20 +1662,25 @@ const dataUpdate = Debounce(function () {
     .contract-info {
       margin-top: 20px;
     }
+
     // 财务信息
     .financial-info {
       margin: 20px 0;
+
       .tips {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         padding-bottom: 20px;
+
         .txt {
           margin-right: 5px;
         }
       }
+
       .table-box {
         margin-top: 10px;
+
         :deep(.el-table__body-wrapper) {
           max-height: 504px;
         }
@@ -1672,10 +1701,12 @@ const dataUpdate = Debounce(function () {
     box-shadow: 4px 2px 5px 5px #eee;
     background: #fff;
     margin-left: -24px;
+
     .foot-box {
       display: flex;
       align-items: center;
       justify-content: flex-start;
+
       .btn {
         padding: 10px 20px;
         margin-right: 10px;
@@ -1683,10 +1714,12 @@ const dataUpdate = Debounce(function () {
         cursor: pointer;
         font-size: 14px;
       }
+
       .btn:first-child {
         background: #155bd4;
         color: #fff;
       }
+
       .btn:last-child {
         border: 1px solid #d9d9d9;
       }
@@ -1694,128 +1727,153 @@ const dataUpdate = Debounce(function () {
   }
 
 }
+
 // 审核弹窗
 .audit-dialog {
   :deep(.el-dialog__header) {
     padding: 0;
     padding-bottom: 0;
   }
+
   :deep(.el-dialog__body) {
     padding-top: 0;
     padding-bottom: 0;
   }
+
   .head {
     line-height: 1em;
     font-size: 16px;
     color: #333;
+
     .sub-tit {
       color: #999;
       font-size: 12px;
       margin-left: 10px;
     }
   }
+
   :deep(.el-form) {
     margin-top: 20px;
   }
 }
- // 信息 && 工商
-  .business-info-list,
-  .basic-info-list {
+
+// 信息 && 工商
+.business-info-list,
+.basic-info-list {
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 20px 0;
+
+  .txt.weak {
+    font-size: 12px;
+    color: #999;
+    margin-left: 10px;
+  }
+
+  .left-info {
+    min-width: 330px;
+    width: 550px;
+    margin-right: 20px;
+    text-align: left;
+  }
+
+  .right-info {
+    width: 40%;
+    min-width: 300px;
+
+    .img-static {
+      display: block;
+      width: 120px;
+      min-width: 100px;
+      height: auto;
+      cursor: pointer;
+      border: 1px dashed #d9d9d9;
+    }
+  }
+
+  .basic-info-item {
     display: flex;
-    align-items: start;
     justify-content: flex-start;
-    width: 100%;
-    margin: 20px 0;
-    .txt.weak {
-      font-size: 12px;
-      color: #999;
-      margin-left: 10px;
+    padding: 15px 30px;
+    line-height: 24px;
+
+    .tit {
+      min-width: 90px;
+      text-align: right;
     }
-    .left-info {
-      min-width: 330px;
-      width: 550px;
-      margin-right: 20px;
-      text-align: left;
+
+    .txt {
+      display: block;
+      word-break: break-all;
+      letter-spacing: 1px;
     }
-    .right-info {
-      width: 40%;
-      min-width: 300px;
-      .img-static {
-        display: block;
-        width: 120px;
-        min-width: 100px;
-        height: auto;
-        cursor: pointer;
-        border: 1px dashed #d9d9d9;
-      }
-    }
-    .basic-info-item {
+
+    // 背景图
+    .bg-img {
       display: flex;
+      align-items: flex-start;
       justify-content: flex-start;
-      padding: 15px 30px;
-      line-height: 24px;
-      .tit {
-        min-width: 90px;
-        text-align: right;
+
+      .bg-img-item {
+        margin-right: 15px;
       }
-      .txt {
+
+      .img-tips {
         display: block;
-        word-break: break-all;
-        letter-spacing: 1px;
-      }
-      // 背景图
-      .bg-img {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        .bg-img-item {
-          margin-right: 15px;
-        }
-        .img-tips {
-          display: block;
-          text-align: center;
-          font-size: 12px;
-          color: #666;
-          line-height: 1.5em;
-          margin-top: 8px;
-          p  {
-            margin: 0;
-            padding: 0;
-          }
-        }
-      }
-      .update-btn {
-        cursor: pointer;
-      }
-      .el-icon-refresh-right {
-        color: #409eff;
-        font-weight: 600;
-        margin-right: 5px;
-      }
-    }
-  }
-  .basic-info-item > .img-static:not(:last-child) {
-    margin-right: 30px;
-  }
-  .business-info-list .basic-info-item  .tit {
-    min-width: 140px;
-    text-align: right;
-  }
-  .contract-time-box{
-    display: flex;
-    align-items: center;
-    .end-time {
-      position: relative;
-      .text {
-        position: absolute;
-        left: 30px;
-        line-height: 32px;
-        font-size: 14px;
-        &.disable{
-          color: #a8abb2;
-          cursor: no-drop;
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+        line-height: 1.5em;
+        margin-top: 8px;
+
+        p {
+          margin: 0;
+          padding: 0;
         }
       }
     }
+
+    .update-btn {
+      cursor: pointer;
+    }
+
+    .el-icon-refresh-right {
+      color: #409eff;
+      font-weight: 600;
+      margin-right: 5px;
+    }
   }
+}
+
+.basic-info-item > .img-static:not(:last-child) {
+  margin-right: 30px;
+}
+
+.business-info-list .basic-info-item .tit {
+  min-width: 140px;
+  text-align: right;
+}
+
+.contract-time-box {
+  display: flex;
+  align-items: center;
+
+  .end-time {
+    position: relative;
+
+    .text {
+      position: absolute;
+      left: 30px;
+      line-height: 32px;
+      font-size: 14px;
+
+      &.disable {
+        color: #a8abb2;
+        cursor: no-drop;
+      }
+    }
+  }
+}
 </style>
