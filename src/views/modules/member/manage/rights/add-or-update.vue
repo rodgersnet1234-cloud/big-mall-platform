@@ -104,7 +104,7 @@
                 content="注意：已选择的优惠券过期或取消投放时，列表中该优惠券会被移除"
                 placement="top"
               >
-                <i class="el-icon-warning" />
+                <el-icon><Warning /></el-icon>
               </el-tooltip>
             </span>
             <el-table

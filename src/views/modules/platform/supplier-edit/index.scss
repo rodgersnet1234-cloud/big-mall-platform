@@ -366,6 +366,23 @@
               margin-left: 5px;
             }
           }
+          .contract-time-box{
+            display: flex;
+            align-items: center;
+            .end-time {
+              position: relative;
+              .text {
+                position: absolute;
+                left: 30px;
+                line-height: 32px;
+                font-size: 14px;
+                &.disable{
+                  color: #a8abb2;
+                  cursor: no-drop;
+                }
+              }
+            }
+          }
         }
       }
       .s-brand-item {

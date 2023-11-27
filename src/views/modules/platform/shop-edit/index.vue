@@ -190,10 +190,11 @@
                     >
                       <template #append>
                         <div
-                          style="cursor: pointer;"
+                          style="display: flex;cursor: pointer;align-items: center;"
                           @click="onMapLocation()"
                         >
-                          <i class="el-icon-location" />定位
+                          <el-icon><Location /></el-icon>
+                          定位
                         </div>
                       </template>
                     </el-input>
@@ -360,7 +361,8 @@
                 prop="capital"
               >
                 <el-input
-                  v-model.number="companyInfoForm.capital"
+                  v-model="companyInfoForm.capital"
+                  prop="capital"
                   style="width:200px"
                   @input="changeNum"
                   @keydown="channelInputLimit"
@@ -1020,6 +1022,7 @@
           >
             <div class="foot-box">
               <div
+                v-permission="['platform:shopAllinpay:apply']"
                 class="btn"
                 @click="toNextStep"
               >
@@ -1252,6 +1255,13 @@ const pickerOptions = reactive({
     )
   }
 })
+const valiStartTime = (rule, value, callback) => {
+  if (companyInfoForm.value.endTime && new Date(companyInfoForm.value.startTime).getTime() >= new Date(companyInfoForm.value.endTime).getTime()) {
+    callback(new Error('营业起始日期不能大于营业终止时间'))
+  } else {
+    callback()
+  }
+}
 const companyInfoRule = reactive({
   creditCode: [
     { required: true, message: '请填写统一社会信用代码', trigger: 'blur' },
@@ -1269,7 +1279,8 @@ const companyInfoRule = reactive({
     { validator: validateNotEmpty, trigger: 'blur' }
   ],
   startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' }
+    { required: true, message: '开始日期不能为空', trigger: 'change' },
+    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '营业执照需要上传', trigger: 'change' }
@@ -1691,6 +1702,14 @@ const updateCompanyInfo = () => {
  * 更新签约信息
  */
 const updateSigningInfo = () => {
+  if (signingInfo.contractEndTime && new Date(signingInfo.contractStartTime).getTime() > new Date(signingInfo.contractEndTime).getTime()) {
+    ElMessage({
+      message: '签约结束时间不能在签约开始时间之前',
+      type: 'error',
+      duration: 1000
+    })
+    return
+  }
   signingInfo.shopId = shopId.value
   api.updateSigningInfo(signingInfo).then(() => {
     ElMessage({

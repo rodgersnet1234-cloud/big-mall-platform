@@ -183,7 +183,8 @@
                 type="primary"
                 @click="toShopEditPage(row.supplierId)"
               >
-                <i class="el-icon-edit" />编辑
+                <el-icon><Edit /></el-icon>
+                编辑
               </el-button>
               <el-button
                 v-if="row.supplierStatus === 1 || row.supplierStatus === 0"
@@ -192,16 +193,18 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offline')"
               >
-                <i class="el-icon-lock" />下线供应商
+                <el-icon><Lock /></el-icon>
+                下线供应商
               </el-button>
               <el-button
                 v-if="(row.supplierStatus === 2 || row.supplierStatus === 5)&&(paySettlementType!==1 || (paySettlementType===1 && row.companyInfoProcessStatus!==0))"
-                v-permission="['platform:shopManage:openStore']"
+                v-permission="['platform:supplierManage:openStore']"
                 link
                 type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"
               >
-                <i class="el-icon-unlock" />下线管理
+                <el-icon><Unlock /></el-icon>
+                下线管理
               </el-button>
               <el-button
                 v-permission="['platform:shopManage:updatePassword']"
@@ -209,7 +212,8 @@
                 type="primary"
                 @click="accountManageHandle(row.supplierId)"
               >
-                <i class="el-icon-setting" />账号管理
+                <el-icon><Setting /></el-icon>
+                账号管理
               </el-button>
             </template>
           </el-table-column>

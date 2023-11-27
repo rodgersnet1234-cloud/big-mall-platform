@@ -285,7 +285,7 @@
                 prop="capital"
               >
                 <el-input
-                  v-model.number="companyInfoForm.capital"
+                  v-model="companyInfoForm.capital"
                   style="width:200px"
                   @input="changeNum"
                   @keydown="channelInputLimit"
@@ -674,17 +674,37 @@
             </div>
           </div>
           <div class="si-content">
-            <div>
+            <div class="contract-time-box">
               <el-date-picker
-                v-model="contractTimeRange"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                v-model="signingInfo.contractStartTime"
+                style="width:170px;"
+                type="date"
                 value-format="YYYY-MM-DD HH:mm:ss"
+                placeholder="开始日期"
                 :clearable="false"
-                @change="getContractTimeRange"
               />
+              <span style="margin: 0 10px">-</span>
+              <span class="end-time">
+                <el-date-picker
+                  ref="endTimeRef"
+                  v-model="signingInfo.contractEndTime"
+                  style="width:170px;"
+                  type="date"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  :placeholder="endTimeFlag &&signingInfo.contractStartTime&& !signingInfo.contractEndTime ? '' : '结束日期'"
+                  clearable
+                  @change="endTimeFlag = false"
+                  @focus="endTimeFlag = false"
+                  @blur="onEndTimePickerBlur"
+                />
+                <span
+                  v-if="endTimeFlag &&signingInfo.contractStartTime&& !signingInfo.contractEndTime"
+                  class="text"
+                  @click="focusEndTime"
+                >
+                  无固定期限
+                </span>
+              </span>
             </div>
           </div>
         </div>
@@ -907,6 +927,7 @@
           >
             <div class="foot-box">
               <div
+                v-permission="['platform:supplierAllinpay:apply']"
                 class="btn"
                 @click="toNextStep"
               >
@@ -982,7 +1003,6 @@ const supplierStatus = ref({})
 
 // 店铺基本信息
 const shopBasicInfo = ref({})
-const contractTimeRange = ref([])
 
 // eslint-disable-next-line no-unused-vars
 const validateMobile = (rule, value, callback) => {
@@ -1121,6 +1141,13 @@ const pickerOptions = reactive({
     )
   }
 })
+const valiStartTime = (rule, value, callback) => {
+  if (companyInfoForm.value.endTime && new Date(companyInfoForm.value.startTime).getTime() >= new Date(companyInfoForm.value.endTime).getTime()) {
+    callback(new Error('营业起始日期不能大于营业终止时间'))
+  } else {
+    callback()
+  }
+}
 const companyInfoRule = reactive({
   creditCode: [
     { required: true, message: '请填写统一社会信用代码', trigger: 'blur' },
@@ -1138,7 +1165,8 @@ const companyInfoRule = reactive({
     { validator: validateNotEmpty, trigger: 'blur' }
   ],
   startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' }
+    { required: true, message: '开始日期不能为空', trigger: 'change' },
+    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '营业执照需要上传', trigger: 'change' }
@@ -1266,11 +1294,8 @@ const queryShopBasicInfo = () => {
   api.getManageDetail({ supplierId: supplierId.value }).then(data => {
     shopBasicInfo.value = data
     signingInfo.type = data.type
-    if (data.contractStartTime && data.contractEndTime) {
-      signingInfo.contractStartTime = data.contractStartTime
-      signingInfo.contractEndTime = data.contractEndTime
-      contractTimeRange.value = [data.contractStartTime, data.contractEndTime]
-    }
+    signingInfo.contractStartTime = data.contractStartTime
+    signingInfo.contractEndTime = data.contractEndTime
     shopBasicInfo.value.currentAddr = [
       data.provinceId,
       data.cityId,
@@ -1315,6 +1340,11 @@ const queryShopBusinessInfo = () => {
 const endTimeRef = ref(null)
 const focusEndTime = () => {
   endTimeRef.value?.focus()
+}
+const onEndTimePickerBlur = () => {
+  if (!signingInfo.contractEndTime) {
+    endTimeFlag.value = true
+  }
 }
 
 // 限制长度
@@ -1416,12 +1446,6 @@ const queryShopFinancialInfo = () => {
   })
 }
 
-// 获取签约有效期
-const getContractTimeRange = (date) => {
-  signingInfo.contractStartTime = date[0]
-  signingInfo.contractEndTime = date[1]
-}
-
 const shopBasicInfoRef = ref(null)
 const companyInfoFormRef = ref(null)
 /**
@@ -1485,6 +1509,14 @@ const updateCompanyInfo = () => {
  * 更新签约信息
  */
 const updateSigningInfo = () => {
+  if (signingInfo.contractEndTime && new Date(signingInfo.contractStartTime).getTime() > new Date(signingInfo.contractEndTime).getTime()) {
+    ElMessage({
+      message: '签约结束时间不能在签约开始时间之前',
+      type: 'error',
+      duration: 1000
+    })
+    return
+  }
   signingInfo.supplierId = supplierId.value
   api.updateSigningInfo(signingInfo).then(() => {
     ElMessage({

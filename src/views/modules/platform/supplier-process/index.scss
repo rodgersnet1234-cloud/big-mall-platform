@@ -74,6 +74,9 @@
       display: block;
       width: 90%;
       margin: 50px auto;
+      .password-par :deep(.el-form-item__error){
+        text-wrap: nowrap
+      }
     }
 
     // 进度条
@@ -501,6 +504,19 @@
       .s-item {
         .si-content {
           margin-top: 12px;
+          .contract-time-box{
+            display: flex;
+            align-items: center;
+            .end-time {
+              position: relative;
+              .text {
+                position: absolute;
+                left: 30px;
+                line-height: 32px;
+                font-size: 14px;
+              }
+            }
+          }
         }
       }
     }

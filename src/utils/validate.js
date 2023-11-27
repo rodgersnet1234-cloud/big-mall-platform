@@ -167,7 +167,7 @@ export function isArray (arg) {
  * @returns {Boolean}
  */
 export function validPassword (password) {
-  return password.length >= 6 && password.length <= 16
+  return password.length >= 6 && password.length <= 20
 }
 
 /**
@@ -251,4 +251,14 @@ export function checkIDCard (idcode) {
 
   // 返回验证结果，校验码和格式同时正确才算是合法的身份证号码
   return !!(last === lastNo && format)
+}
+
+/**
+ *
+ * @param {String} 密码
+ * @returns {Boolean} 检查密码格式是否正确(检查密码格式是否正确 密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写)
+ */
+export function validPassword2 (s) {
+  const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![\W]+$)[0-9A-Za-z\W]{6,20}$/
+  return reg.test(s)
 }

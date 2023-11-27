@@ -104,7 +104,7 @@
               type="primary"
               @click="onSubmit(true)"
             >
-              <i class="el-icon-search" />搜索
+              搜索
             </el-button>
             <el-button
               @click="onClear"

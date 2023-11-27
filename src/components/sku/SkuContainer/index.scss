@@ -111,3 +111,7 @@
     }
   }
 }
+
+:deep(.popover-select .el-select-dropdown__item){
+  text-align: left;
+}

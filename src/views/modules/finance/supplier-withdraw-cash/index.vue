@@ -41,7 +41,7 @@
                 type="primary"
                 @click="onSubmit(true)"
               >
-                <i class="el-icon-search" />搜索
+                搜索
               </el-button>
               <el-button
                 @click="onClear"
@@ -50,10 +50,11 @@
               </el-button>
               <el-button
                 v-if="paySettlementType!==1"
+                v-permission="['platform:supplierWithdraw:save']"
                 type="primary"
                 @click="onSetUpHandle()"
               >
-                <i class="el-icon-search" />提现设置
+                提现设置
               </el-button>
             </el-form-item>
             <set-up
@@ -136,7 +137,7 @@
               <template #default="scope">
                 <el-button
                   v-if="scope.row.status === 0"
-                  v-permission="['finance:shopWithdrawCash:audit']"
+                  v-permission="['platform:supplierWithdraw:audit']"
                   type="primary"
                   link
                   @click="onHandleAudit(scope.row.cashId)"

@@ -221,6 +221,7 @@
                     :is-no-sku-value="isNoSkuValue"
                     :spu-id="parseInt(dataForm.spuId)"
                     :is-category-id="!!dataForm.categoryId"
+                    :is-mold="dataForm.spuMold===1"
                     @on-change-data="handleChangeData"
                   />
                 </div>
@@ -235,7 +236,7 @@
                   content="每个规格库存的总和"
                   placement="top"
                 >
-                  <i class="el-icon-question" />
+                  <el-icon><QuestionFilled /></el-icon>
                 </el-tooltip>
               </div>
               <el-input
@@ -263,12 +264,31 @@
                 >
                   快递发货
                 </el-checkbox>
+                <el-checkbox
+                  v-model="dataForm.deliveryMode.hasCityDelivery"
+                  disabled
+                >
+                  同城配送
+                </el-checkbox>
+                <el-checkbox
+                  v-model="dataForm.deliveryMode.hasUserPickUp"
+                  disabled
+                >
+                  到店自提
+                </el-checkbox>
               </el-form-item>
               <el-form-item
+                v-if="dataForm.deliveryTemplateId && dataForm.deliveryTemplateId !== -1"
                 label="运费模板"
                 prop="deliveryTemplateId"
               >
                 <span>{{ dataForm.deliveryTemplateName }}</span>
+              </el-form-item>
+              <el-form-item
+                v-if="dataForm.deliveryTemplateId === -1"
+                label="固定运费"
+              >
+                <span>{{ dataForm.deliveryAmount }}</span>
               </el-form-item>
             </div>
             <!-- 虚拟商品的用户留言 -->
@@ -399,6 +419,8 @@ const init = (spuId) => {
       }
       // 配送方式
       dataForm.value.deliveryMode = JSON.parse(data.deliveryMode)
+      // 固定运费
+      dataForm.value.deliveryAmount = new Big(data.deliveryAmount || 0).div(100).valueOf()
       // 回显分类
       getCategoryBack()
       // 商品分类选择按钮
@@ -766,7 +788,7 @@ const handleChangeData = (data) => {
  * 运费模板
  */
 const getTransportData = () => {
-  if (dataForm.value.deliveryTemplateId) {
+  if (dataForm.value.deliveryTemplateId && dataForm.value.deliveryTemplateId !== -1) {
     transportGet(dataForm.value.deliveryTemplateId).then(data => {
       dataForm.value.deliveryTemplateName = data.transName
     })

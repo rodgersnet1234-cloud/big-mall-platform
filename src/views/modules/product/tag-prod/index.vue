@@ -236,7 +236,7 @@ const getPage = () => {
     }
     pageLoading.value = false
   }).catch(err => {
-    if (err.code === 'A00007' && err.fail) {
+    if (err.code === 'A00007' && !err.success) {
       router.push('/product/spu-tag')
     }
   })

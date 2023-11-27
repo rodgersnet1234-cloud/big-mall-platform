@@ -43,6 +43,7 @@ export default {
   amountSpent: 'Amount spent ($)',
   rechargeSource: 'Recharge source',
   rechargeTime: 'Recharge time',
+  unpay: 'unpay',
   weChatPay: 'WeChat Pay',
   aliPay: 'Pay with Ali-Pay',
   balancePay: 'Balance Pay',

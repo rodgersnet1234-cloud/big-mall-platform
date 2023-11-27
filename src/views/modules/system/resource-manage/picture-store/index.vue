@@ -13,7 +13,7 @@
       <div class="upload-btn">
         <div class="up-btn">
           <el-button
-            v-permission="['resource:img:uploadImg']"
+            v-permission="['resource:file:save']"
             type="primary"
             plain
             @click="uploadFileBtn"
@@ -24,7 +24,7 @@
             上传图片
           </el-button>
           <el-button
-            v-permission="['resource:img:saveImgGroup']"
+            v-permission="['resource:fileGroup:save']"
             plain
             @click="selectOrCreateGroup(1)"
           >
@@ -80,13 +80,13 @@
               >{{ gItem.name }}</span>
               <span class="sidebar-operate">
                 <el-icon
-                  v-permission="['resource:img:editImgGroup']"
+                  v-permission="['resource:fileGroup:update']"
                   class="el-icon-edit"
                   @click="selectOrCreateGroup(1,gItem.attachFileGroupId,gIdx)"
                 ><EditPen />
                 </el-icon>
                 <el-icon
-                  v-permission="['resource:img:deleteImgGroup']"
+                  v-permission="['resource:fileGroup:delete']"
                   class="el-icon-delete"
                   @click="onDeleteFileGroup(gItem.attachFileGroupId)"
                 >
@@ -117,12 +117,12 @@
                 @change="AllImgs"
               >全选</el-checkbox></span>
               <span
-                v-permission="['resource:img:deleteImgs']"
+                v-permission="['resource:file:delete']"
                 class="text"
                 @click="delectImgs"
               >删除</span>
               <span
-                v-permission="['resource:img:moveImgs']"
+                v-permission="['resource:file:batchMove']"
                 class="text"
                 @click="showMoveImgs"
               >移动</span>
@@ -146,7 +146,7 @@
               </div>
               <div class="operate">
                 <el-link
-                  v-permission="['resource:img:editImg']"
+                  v-permission="['resource:file:update']"
                   type="info"
                   class="edit"
                   @click="changeName(img)"
@@ -154,7 +154,7 @@
                   {{ $t("table.edit") }}
                 </el-link>
                 <el-link
-                  v-permission="['resource:img:deleteImg']"
+                  v-permission="['resource:file:delete']"
                   type="danger"
                   class="del"
                   @click="delectImg(img.fileName, img.fileId)"
@@ -162,7 +162,6 @@
                   {{ $t("table.delete") }}
                 </el-link>
               </div>
-              <!-- <div class="label" v-if="img.label">{{img.label}}</div> -->
               <span
                 v-if="img.selected"
                 class="selected"
@@ -216,7 +215,7 @@
               </el-select>
               <el-button
                 v-if="!selectGroupName"
-                v-permission="['resource:img:saveImgGroup']"
+                v-permission="['resource:fileGroup:save']"
                 style="margin-left: 10px"
                 link
                 type="primary"
@@ -460,7 +459,6 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { ossInfo, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, aliImgUpdate, minIoImgUpdate } from '@/api/biz/oss'
 import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteImgs, batchMoveImgs } from '@/api/resource/picture-store'
-// import permission from '@/directive/permission/index.js'
 import imageCompression from 'browser-image-compression'
 import { Debounce } from '@/utils/debounce'
 
@@ -495,7 +493,7 @@ let oriImgName = null // 图片原名称
 const options = reactive({
   multiple: true, // 是否支持选取多个图片
   limit: 20, // 最多可选择图片数量
-  maxSize: 2, // 最大尺寸（M）
+  maxSize: 99999, // 最大尺寸（M）
   activeTab: 'pick',
   enableUpload: false, // 是否启用图片上传
   callback: null
@@ -545,10 +543,6 @@ onMounted(() => {
   loadImageGroup()
   loadListImage()
 })
-
-// mounted() {
-//   loadListImage()
-// },
 
 /**
  * 加载图片分组列表
@@ -737,7 +731,6 @@ const loadListImage = (newData = false) => {
       fileName: fileName.value || null,
       attachFileGroupId: dataForm.attachFileGroupId || '',
       type: fileType.value
-
     }
   } else {
     tempSearchForm.pageNum = pageQuery.current ? pageQuery.current : 1
@@ -988,7 +981,6 @@ const selectedImageIndex = (img) => {
  */
 const onPageNumChange = (page) => {
   pageQuery.current = page
-  fileIds = [] // 跳转分页时清空选中id
   loadListImage()
 }
 
@@ -1150,7 +1142,7 @@ const beforeRemove = () => {
  */
 const beforeUpload = async (file) => {
   const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
-  const isSize = file.size / (1024 * 1024) < 2
+  const isSize = file.size / (1024 * 1024) < options.maxSize
   if (!isImage) {
     if (sizeFlag === 0) {
       message($t('biz.imgbox.onlyPictures'), true)

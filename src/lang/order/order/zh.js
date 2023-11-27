@@ -4,7 +4,7 @@ export default {
   logisticsInformation: '物流信息',
   orderDetails: '订单详情',
   checkDvyId: '请输入正确的快递单号！',
-  seleOrd: '请选择需要发货的订单',
+  seleOrd: '请选择需要发货的商品',
   oderNumNo: '订单可发货数量不足',
   numNotZero: '发货数量不能为0',
   fhNumNotZero: '发货数量不能为空',

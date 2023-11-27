@@ -479,16 +479,38 @@
                 </div>
               </div>
               <div class="si-content">
-                <el-date-picker
-                  v-model="supplierDetail.contractTimeRange"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  value-format="YYYY-MM-DD HH:mm:ss"
-                  :clearable="false"
-                  @change="getContractTimeRange"
-                />
+                <div class="contract-time-box">
+                  <el-date-picker
+                    v-model="supplierDetail.contractStartTime"
+                    style="width:170px;"
+                    type="date"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="开始日期"
+                    :clearable="false"
+                  />
+                  <span style="margin: 0 10px">-</span>
+                  <span class="end-time">
+                    <el-date-picker
+                      ref="endTimeRef"
+                      v-model="supplierDetail.contractEndTime"
+                      style="width:170px;"
+                      type="date"
+                      value-format="YYYY-MM-DD HH:mm:ss"
+                      :placeholder="endTimeFlag &&supplierDetail.contractStartTime&& !supplierDetail.contractEndTime ? '' : '结束日期'"
+                      clearable
+                      @change="endTimeFlag = false"
+                      @focus="endTimeFlag = false"
+                      @blur="onEndTimePickerBlur"
+                    />
+                    <span
+                      v-if="endTimeFlag &&supplierDetail.contractStartTime&& !supplierDetail.contractEndTime"
+                      class="text"
+                      @click="focusEndTime"
+                    >
+                      无固定期限
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -773,12 +795,14 @@
                 <el-form-item
                   label="登陆密码"
                   prop="passwordPar"
+                  class="password-par"
                 >
                   <el-input
                     v-model="supplierUserRegisterInfo.passwordPar"
+                    v-input-rule
                     type="password"
-                    maxlength="16"
-                    placeholder="输入6-16位登录密码"
+                    maxlength="20"
+                    placeholder="输入6-20位登录密码"
                     autocomplete="new-password"
                   />
                 </el-form-item>
@@ -850,7 +874,7 @@ import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-supplier'
 import { treeDataTranslate } from '@/utils'
-import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard } from '@/utils/validate'
+import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard, validPassword2 } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto'
 import { ElMessage } from 'element-plus'
@@ -883,8 +907,6 @@ const supplierDetail = reactive({
   detailAddress: '',
   supplierLogo: '',
   intro: '',
-  // 签约有效期起始日期
-  contractTimeRange: [],
   type: ''
 })
 
@@ -914,6 +936,8 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('内容不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
   } else {
     callback()
   }
@@ -1080,6 +1104,13 @@ const pickerOptions = reactive({
     )
   }
 })
+const valiStartTime = (rule, value, callback) => {
+  if (supplierCompany.endTime && new Date(supplierCompany.startTime).getTime() >= new Date(supplierCompany.endTime).getTime()) {
+    callback(new Error('营业起始日期不能大于营业终止时间'))
+  } else {
+    callback()
+  }
+}
 // 工商信息校验
 const shopCompanyRule = reactive({
   creditCode: [
@@ -1098,7 +1129,8 @@ const shopCompanyRule = reactive({
     { validator: validEmptyTab, trigger: 'blur' }
   ],
   startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' }
+    { required: true, message: '开始日期不能为空', trigger: 'change' },
+    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '上传营业执照', trigger: 'change' }
@@ -1216,7 +1248,6 @@ const shopUserRegisterRule = reactive({
   ],
   passwordPar: [
     { required: true, message: '登陆密码不能为空', trigger: 'blur' },
-    { min: 6, max: 16, message: '登录密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ],
   mobile: [
@@ -1263,10 +1294,14 @@ const handleAddrChange = (value) => {
   }
 }
 
-// 获取签约有效期
-const getContractTimeRange = (date) => {
-  supplierDetail.contractStartTime = date[0]
-  supplierDetail.contractEndTime = date[1]
+const endTimeRef = ref(null)
+const focusEndTime = () => {
+  endTimeRef.value?.focus()
+}
+const onEndTimePickerBlur = () => {
+  if (!supplierDetail.contractEndTime) {
+    endTimeFlag.value = true
+  }
 }
 
 /**
@@ -1338,8 +1373,10 @@ const deleteBankInfoItem = (index) => {
 /**
  * 上一步
  */
+const endTimeFlag = ref(true)
 const toPrevStep = () => {
   applyStep.value -= 1
+  endTimeFlag.value = true
 }
 
 const supplierDetailRef = ref(null)
@@ -1381,19 +1418,30 @@ const toNextStep = () => {
           return
         }
         applyStep.value += 1
+        endTimeFlag.value = true
       }
     })
     return
   }
   if (applyStep.value === 3) {
     // 第三步 签约信息
-    if ((!supplierDetail.contractTimeRange || !supplierDetail.contractTimeRange.length) && paySettlementType !== 1) {
+    if (!supplierDetail.contractStartTime && paySettlementType !== 1) {
       ElMessage({
         message: '请选择签约有效期！',
         type: 'error',
         duration: 1000
       })
       return
+    }
+    if (supplierDetail.contractEndTime && paySettlementType !== 1) {
+      if (new Date(supplierDetail.contractStartTime).getTime() > new Date(supplierDetail.contractEndTime).getTime()) {
+        ElMessage({
+          message: '签约结束时间不能在签约开始时间之前',
+          type: 'error',
+          duration: 1000
+        })
+        return
+      }
     }
     handleSignedDate()
     if (paySettlementType === 1) {

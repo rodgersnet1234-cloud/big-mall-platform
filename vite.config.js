@@ -6,14 +6,18 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import viteCompression from 'vite-plugin-compression'
+import legacy from '@vitejs/plugin-legacy'
 
 // eslint
 import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-
   plugins: [
+    legacy({
+      // 兼容浏览器列表
+      targets: ['Android >= 7', 'chrome >= 51', 'firefox >= 54', 'ios >= 10']
+    }),
     vue(),
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), 'src/icons/svg')],
@@ -90,7 +94,7 @@ export default defineConfig({
       }
     },
     sourcemap: false,
-    target: 'es2015',
+    minify: 'terser',
     reportCompressedSize: false
   }
 })

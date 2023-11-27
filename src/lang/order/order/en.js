@@ -4,7 +4,7 @@ export default {
   logisticsInformation: 'Logistics Information',
   orderDetails: 'Order details',
   checkDvyId: 'Please input the correct delivery order number!',
-  seleOrd: 'Please select the order that needs to be shipped',
+  seleOrd: 'Please select the goods to be shipped',
   oderNumNo: 'The order can be shipped is not enough',
   numNotZero: 'The shipping quantity cannot be 0',
   fhNumNotZero: 'The shipping quantity cannot be empty',

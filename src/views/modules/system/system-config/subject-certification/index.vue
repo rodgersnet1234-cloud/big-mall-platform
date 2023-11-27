@@ -1,4 +1,3 @@
-
 <template>
   <div class="page-subject-certification">
     <div class="title-tips">

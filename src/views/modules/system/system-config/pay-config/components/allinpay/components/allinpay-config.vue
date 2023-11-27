@@ -144,6 +144,7 @@
         />
       </el-form-item>
       <el-button
+        v-permission="['platform:config:save']"
         @click="onSubmit('ALLINPAY_CONFIG')"
       >
         {{ $t('platform.config.save') }}

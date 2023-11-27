@@ -462,7 +462,11 @@ const clear = () => {
   } else if (dataForm.tempDeliveryType === 4) {
     dataForm.deliveryType = 4
   } else {
-    dataForm.deliveryType = 0
+    if (isPrint.value === 1) {
+      dataForm.deliveryType = 0
+    } else {
+      dataForm.deliveryType = 1
+    }
   }
   dataForm.deliveryNo = null
   dataForm.deliveryCompanyId = ''

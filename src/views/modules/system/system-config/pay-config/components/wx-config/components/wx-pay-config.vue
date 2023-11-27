@@ -8,7 +8,7 @@
         content="开启通联支付后将无需设置此处支付配置信息"
         placement="right"
       >
-        <i class="el-icon-question" />
+        <el-icon><QuestionFilled /></el-icon>
       </el-tooltip>
     </div>
     <el-form
@@ -126,6 +126,7 @@
         />
       </el-form-item>
       <el-button
+        v-permission="['platform:config:save']"
         @click="onSubmit()"
       >
         {{ $t('platform.config.save') }}

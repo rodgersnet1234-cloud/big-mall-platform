@@ -70,12 +70,6 @@
               align="center"
               :label="$t('coupon.coupon.couponName')"
             />
-            <el-table-column
-              prop="subTitle"
-              header-align="center"
-              align="center"
-              :label="$t('user.userManager.couponDscription')"
-            />
             <!-- 优惠类型 1:代金券 2:折扣券 3:兑换券 -->
             <el-table-column
               :label="$t('coupon.coupon.couponType')"
@@ -128,6 +122,7 @@
                   controls-position="right"
                   :min="scope.row.stocks>0?1:0"
                   :max=" scope.row.stocks>0?(scope.row.stocks >= scope.row.limitNum ? scope.row.limitNum:scope.row.stocks):0"
+                  @blur="onChangeEachObtain(scope.row)"
                 />
               </template>
             </el-table-column>
@@ -264,6 +259,11 @@ const onSelectChangeHandle = (selection) => {
       dataListSelections.splice(dataSelectedProdIndex, 1)
     }
   })
+}
+const onChangeEachObtain = (row) => {
+  if (!row.eachObtain && row.eachObtain !== 0) {
+    row.eachObtain = row.stocks > 0 ? 1 : 0
+  }
 }
 // 确定事件
 const onSubmitProds = () => {

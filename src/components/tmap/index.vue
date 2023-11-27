@@ -268,6 +268,8 @@ onUnmounted(() => {
   if (time) {
     clearTimeout(time)
   }
+  // 销毁地图
+  if (map) map.destroy()
 })
 defineExpose({
   onSetZoom,

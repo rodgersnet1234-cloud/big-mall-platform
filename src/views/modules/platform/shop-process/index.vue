@@ -722,7 +722,7 @@
                             v-model="scope.row.cardNo"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             placeholder="输入账号"
-                            maxlength="19"
+                            maxlength="23"
                             clearable
                           />
                         </el-form-item>
@@ -893,12 +893,14 @@
                 <el-form-item
                   label="登陆密码"
                   prop="passwordPar"
+                  class="password-par"
                 >
                   <el-input
                     v-model="shopUserRegisterInfo.passwordPar"
+                    v-input-rule
                     type="password"
-                    maxlength="16"
-                    placeholder="输入6-16位登录密码"
+                    maxlength="20"
+                    placeholder="输入6-20位登录密码"
                     autocomplete="new-password"
                   />
                 </el-form-item>
@@ -970,7 +972,7 @@ import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-shop'
 import { treeDataTranslate } from '@/utils'
-import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard } from '@/utils/validate'
+import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard, validPassword2 } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto.js'
 import { ElMessage } from 'element-plus'
@@ -1133,6 +1135,8 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('内容不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
+  } else if (!validPassword2(value)) {
+    callback(new Error($t('resetPassword.passwordVerification')))
   } else {
     callback()
   }
@@ -1210,6 +1214,13 @@ const pickerOptions = reactive({
     )
   }
 })
+const valiStartTime = (rule, value, callback) => {
+  if (shopCompany.value.endTime && new Date(shopCompany.value.startTime).getTime() >= new Date(shopCompany.value.endTime).getTime()) {
+    callback(new Error('营业起始日期不能大于营业终止时间'))
+  } else {
+    callback()
+  }
+}
 // 工商信息校验
 const shopCompanyRule = reactive({
   creditCode: [
@@ -1228,7 +1239,8 @@ const shopCompanyRule = reactive({
     { validator: validEmptyTab, trigger: 'blur' }
   ],
   startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' }
+    { required: true, message: '开始日期不能为空', trigger: 'change' },
+    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '上传营业执照', trigger: 'change' }
@@ -1343,7 +1355,6 @@ const shopUserRegisterRule = reactive({
   ],
   passwordPar: [
     { required: true, message: '登陆密码不能为空', trigger: 'blur' },
-    { min: 6, max: 16, message: '登录密码长度为6-16位', trigger: 'blur' },
     { validator: validPassword, trigger: 'blur' }
   ],
   mobile: [
@@ -1584,6 +1595,16 @@ const toNextStep = () => {
         duration: 1000
       })
       return
+    }
+    if (shopDetail.value.contractEndTime && paySettlementType !== 1) {
+      if (new Date(shopDetail.value.contractStartTime).getTime() > new Date(shopDetail.value.contractEndTime).getTime()) {
+        ElMessage({
+          message: '签约结束时间不能在签约开始时间之前',
+          type: 'error',
+          duration: 1000
+        })
+        return
+      }
     }
     handleSignedDate()
     if (paySettlementType === 1) {

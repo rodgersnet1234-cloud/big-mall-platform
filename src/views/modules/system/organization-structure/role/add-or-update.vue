@@ -37,6 +37,7 @@
       <el-form-item label="授权">
         <el-tree
           ref="menuListTreeRef"
+          style="flex:1"
           :data="menuWithPermissions"
           :props="menuListTreeProps"
           node-key="menuId"

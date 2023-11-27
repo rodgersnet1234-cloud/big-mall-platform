@@ -129,7 +129,7 @@ import * as api from '@/api/platform/shop-addr'
 import * as addrApi from '@/api/delivery/transport'
 import { Debounce } from '@/utils/debounce'
 import { validNoEmptySpace } from '@/utils/validate'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshDataList'])
 

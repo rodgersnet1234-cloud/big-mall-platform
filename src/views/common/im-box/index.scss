@@ -19,6 +19,24 @@
       background: #ffffff;
       opacity: 1;
       border-right: 1px solid #eceef0;
+      .empty-contacts{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        margin-top: -80px;
+        .empty-img{
+          width: 120px;
+          height: 120px;
+        }
+        .empty-txt{
+          margin-top: 12px;
+          font-size: 14px;
+          color: #666;
+        }
+      }
     }
 
     .chat-box-right {

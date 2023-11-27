@@ -518,10 +518,12 @@
           >
             <p class="tit" />
             <span
+              v-permission="['platform:idCardStatus:update']"
               class="update-btn"
               @click="dataUpdate"
             >
-              <i class="el-icon-refresh-right" /><span>{{ businessInfo.updateTime }}数据更新</span>
+              <el-icon class="el-icon-refresh-right"><Refresh /></el-icon>
+              <span>{{ businessInfo.updateTime }}数据更新</span>
             </span>
           </div>
         </div>
@@ -885,35 +887,36 @@
                 </div>
               </div>
             </div>
-            <!-- 商家类型 -->
-            <div class="contracted-items s-item">
-              <div class="tips">
-                <div class="tit">
-                  <span class="asterisk">*</span>店铺类型
-                </div>
+          </div>
+          <!-- 商家类型 -->
+          <div class="contracted-items s-item">
+            <div class="tips">
+              <div class="tit">
+                <span class="asterisk">*</span>店铺类型
               </div>
-              <div class="si-content">
-                <div>
-                  <el-radio
-                    v-model="shopBasicInfo.type"
-                    :label="1"
-                    disabled
-                  >
-                    自营商家
-                  </el-radio>
-                  <el-radio
-                    v-model="shopBasicInfo.type"
-                    :label="2"
-                    disabled
-                  >
-                    第三方商家
-                  </el-radio>
-                </div>
+            </div>
+            <div class="si-content">
+              <div>
+                <el-radio
+                  v-model="shopBasicInfo.type"
+                  :label="1"
+                  disabled
+                >
+                  自营商家
+                </el-radio>
+                <el-radio
+                  v-model="shopBasicInfo.type"
+                  :label="2"
+                  disabled
+                >
+                  第三方商家
+                </el-radio>
               </div>
             </div>
           </div>
         </div>
-        <!-- /签约信息 -->
+      </div>
+      <!-- /签约信息 -->
 
         <!-- 财务信息 -->
         <div
@@ -1023,82 +1026,81 @@
         </div>
       </div>
 
-      <!-- 审核弹窗 -->
-      <el-dialog
-        v-model="auditDialogVisible"
-        width="700"
-
-        :close-on-click-modal="false"
-        destroy-on-close
-        :show-close="false"
-        class="audit-dialog"
-      >
-        <template #header>
-          <div class="head">
-            <span class="tit">商家审核</span>
-            <span class="sub-tit">请补充签约信息</span>
-          </div>
-        </template>
-        <div class="content">
-          <el-form
-            ref="auditformRef"
-            label-width="100px"
-            :model="auditform"
-            :rules="auditformRules"
-            @submit.prevent
+    <!-- 审核弹窗 -->
+    <el-dialog
+      v-model="auditDialogVisible"
+      width="700"
+      :close-on-click-modal="false"
+      destroy-on-close
+      :show-close="false"
+      class="audit-dialog"
+    >
+      <template #header>
+        <div class="head">
+          <span class="tit">商家审核</span>
+          <span class="sub-tit">请补充签约信息</span>
+        </div>
+      </template>
+      <div class="content">
+        <el-form
+          ref="auditformRef"
+          label-width="100px"
+          :model="auditform"
+          :rules="auditformRules"
+          @submit.prevent
+        >
+          <el-form-item
+            label="签约有效期"
+            prop="date"
           >
-            <el-form-item
-              label="签约有效期"
-              prop="date"
-            >
-              <div class="contract-time-box">
+            <div class="contract-time-box">
+              <el-date-picker
+                v-model="contractStartTime"
+                style="width:170px;"
+                type="date"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                placeholder="开始日期"
+                :clearable="false"
+              />
+              <span style="margin: 0 10px">-</span>
+              <div class="end-time">
                 <el-date-picker
-                  v-model="contractStartTime"
+                  ref="endTimeRef"
+                  v-model="contractEndTime"
                   style="width:170px;"
                   type="date"
                   value-format="YYYY-MM-DD HH:mm:ss"
-                  placeholder="开始日期"
-                  :clearable="false"
+                  :placeholder="endTimeFlag&&contractStartTime&& !contractEndTime ? '' : '结束日期'"
+                  clearable
+                  @change="endTimeFlag = false"
+                  @focus="endTimeFlag = false"
+                  @blur="onEndTimePickerBlur"
                 />
-                <span style="margin: 0 10px">-</span>
-                <div class="end-time">
-                  <el-date-picker
-                    ref="endTimeRef"
-                    v-model="contractEndTime"
-                    style="width:170px;"
-                    type="date"
-                    value-format="YYYY-MM-DD HH:mm:ss"
-                    :placeholder="endTimeFlag&&contractStartTime&& !contractEndTime ? '' : '结束日期'"
-                    clearable
-                    @change="endTimeFlag = false"
-                    @focus="endTimeFlag = false"
-                    @blur="onEndTimePickerBlur"
-                  />
-                  <span
-                    v-if="endTimeFlag&&contractStartTime&& !contractEndTime"
-                    class="text"
-                    @click="focusEndTime"
-                  >
-                    无固定期限
-                  </span>
-                </div>
+                <span
+                  v-if="endTimeFlag&&contractStartTime&& !contractEndTime"
+                  class="text"
+                  @click="focusEndTime"
+                >
+                  无固定期限
+                </span>
               </div>
-            </el-form-item>
-            <el-form-item
-              label="商家类型"
-              prop="shopType"
-            >
-              <el-radio-group v-model="auditform.shopType">
-                <el-radio label="1">
-                  自营商家
-                </el-radio>
-                <el-radio label="2">
-                  第三方商家
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
-        </div>
+            </div>
+          </el-form-item>
+          <el-form-item
+            label="商家类型"
+            prop="shopType"
+          >
+            <el-radio-group v-model="auditform.shopType">
+              <el-radio label="1">
+                自营商家
+              </el-radio>
+              <el-radio label="2">
+                第三方商家
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </div>
 
         <template #footer>
           <span class="dialog-footer">
@@ -1192,6 +1194,9 @@ const contractEndTime = ref('')
 const validContractTime = (rule, value, callback) => {
   if (!contractStartTime.value) {
     callback(new Error($t('请选择签约有效期')))
+  } else if (contractEndTime.value && new Date(contractStartTime.value).getTime() > new Date(contractEndTime.value).getTime()) {
+    // 判断签约结束时间是否在签约开始时间之前
+    callback(new Error($t('签约结束时间不能在签约开始时间之前')))
   } else {
     callback()
   }
@@ -1392,6 +1397,7 @@ const openAuditPopup = (status) => {
     reviewDialogVisible.value = true
   }
 }
+
 const endTimeRef = ref(null)
 const focusEndTime = () => {
   endTimeRef.value?.focus()
@@ -1401,6 +1407,7 @@ const onEndTimePickerBlur = () => {
     endTimeFlag.value = true
   }
 }
+
 const auditformRef = ref(null)
 /**
  * 提交店铺申请审核
@@ -1715,7 +1722,7 @@ const dataUpdate = Debounce(function () {
   .business-info-list,
   .basic-info-list {
     display: flex;
-    align-items: top;
+    align-items: start;
     justify-content: flex-start;
     width: 100%;
     margin: 20px 0;

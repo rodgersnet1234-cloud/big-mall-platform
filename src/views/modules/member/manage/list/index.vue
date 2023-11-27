@@ -58,10 +58,10 @@
               v-model="dateRange"
               type="datetimerange"
               value-format="YYYY-MM-DD HH:mm:ss"
-
               :range-separator="$t('date.tip')"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
+              :default-time="defaultTime"
             />&nbsp;&nbsp;&nbsp;
             <el-button
               @click="onSetDateRange(1)"
@@ -523,6 +523,10 @@ import UpdateTag from './components/update-user-tags.vue'
 import moment from 'moment'
 import ExcelUserImport from '@/views/modules/member/manage/list/components/excel-user-import.vue'
 
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+]
 const vElSelectLoadmore = {
   mounted: (el, binding) => {
     // 获取element-ui定义好的scroll盒子

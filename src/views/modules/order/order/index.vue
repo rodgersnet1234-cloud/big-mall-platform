@@ -67,7 +67,6 @@
             />
           </el-select>
         </el-form-item>
-
         <el-form-item :label="$t('order.order.supplierDeliveryType') + '：'">
           <!-- 发货方式 -->
           <el-select
@@ -83,7 +82,6 @@
             />
           </el-select>
         </el-form-item>
-
         <el-form-item
           :label="$t('order.order.theRecipientSName') + '：'"
         >
@@ -187,6 +185,7 @@
               value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"
+              :default-time="defaultTime"
             />
             <el-button
               class="ml10"
@@ -565,7 +564,7 @@
                 <div class="item">
                   <div class="buyer-info">
                     <div class="buyer-name">
-                      {{ order.consignee }}
+                      {{ order.orderMold===1? order.userName : order.consignee }}
                     </div>
                     <div
                       v-if="order.orderMold!==1"
@@ -706,6 +705,12 @@ import * as api from '@/api/order/order'
 import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import AddOrUpdate from './components/order-info.vue'
+import Pagination from '@/components/pagination/index.vue'
+
+const defaultTime = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+]
 let orderId = null
 let oldPar = {}
 const deliveryType = [{
@@ -775,6 +780,9 @@ const orderType = [{
   label: $t('order.order.spikeOrder')
 }]
 const payType = [{
+  value: -1,
+  label: $t('admin.unpay')
+}, {
   value: 1,
   label: $t('admin.weChatPay')
 }, {
@@ -999,12 +1007,13 @@ const onGetSoldExcel = () => {
       mobile: searchForm.mobile,
       status: status.value,
       deliveryType: searchForm.deliveryType,
-      refundStatus: searchForm.refundStatus,
       supplierDeliveryType: searchForm.supplierDeliveryType,
+      refundStatus: searchForm.refundStatus,
       startTime: dateRange.value === null ? null : dateRange.value[0], // 开始时间
       endTime: dateRange.value === null ? null : dateRange.value[1], // 结束时间
       exOrderType: 3,
-      orderMold: searchForm.orderMold
+      orderMold: searchForm.orderMold,
+      isPreSale: searchForm.isPreSale
     }).then((data) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
       const fileName = $t('order.order.orderInfCollationXls')

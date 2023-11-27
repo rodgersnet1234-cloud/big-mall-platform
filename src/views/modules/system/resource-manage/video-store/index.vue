@@ -13,7 +13,7 @@
       <div class="upload-btn">
         <div class="up-btn">
           <el-button
-            v-permission="['resource:video:uploadVideo']"
+            v-permission="['resource:videoFile:save']"
             plain
             type="primary"
             @click="uploadFileBtn"
@@ -24,7 +24,7 @@
             上传视频
           </el-button>
           <el-button
-            v-permission="['resource:video:saveVideoGroup']"
+            v-permission="['resource:videoFileGroup:save']"
             plain
             @click="selectOrCreateGroup(1)"
           >
@@ -79,13 +79,13 @@
               >{{ gItem.name }}</span>
               <span class="sidebar-operate">
                 <el-icon
-                  v-permission="['resource:video:editVideoGroup']"
+                  v-permission="['resource:videoFileGroup:update']"
                   class="el-icon-edit"
                   @click="selectOrCreateGroup(1,gItem.attachFileGroupId,gIdx)"
                 ><EditPen />
                 </el-icon>
                 <el-icon
-                  v-permission="['resource:video:deleteVideoGroup']"
+                  v-permission="['resource:videoFileGroup:delete']"
                   class="el-icon-delete"
                   @click="onDeleteFileGroup(gItem.attachFileGroupId)"
                 >
@@ -116,12 +116,12 @@
                 @change="AllImgs"
               >全选</el-checkbox></span>
               <span
-                v-permission="['resource:video:deleteVideos']"
+                v-permission="['resource:videoFile:delete']"
                 class="text"
                 @click="delectImgs"
               >删除</span>
               <span
-                v-permission="['resource:video:moveVideos']"
+                v-permission="['resource:videoFile:batchMove']"
                 class="text"
                 @click="showMoveImgs"
               >移动</span>
@@ -135,7 +135,6 @@
                 class="thumb-wp"
                 @click.prevent.stop="onClickListImage(img)"
               >
-                <!-- <img v-if="img.filePath" :src="(img.filePath).indexOf('http')===-1 ? resourcesUrl + img.filePath : img.filePath" alt="img.name" /> -->
                 <video
                   :src="resourcesUrl + img.filePath"
                   controls="controls"
@@ -151,7 +150,7 @@
               </div>
               <div class="operate">
                 <el-link
-                  v-permission="['resource:Video:editVideo']"
+                  v-permission="['resource:videoFile:update']"
                   type="info"
                   class="edit"
                   @click="changeName(img)"
@@ -159,7 +158,7 @@
                   {{ $t("table.edit") }}
                 </el-link>
                 <el-link
-                  v-permission="['resource:Video:deleteVideo']"
+                  v-permission="['resource:videoFile:delete']"
                   type="danger"
                   class="del"
                   @click="delectImg(img.fileName, img.fileId)"
@@ -167,7 +166,6 @@
                   {{ $t("table.delete") }}
                 </el-link>
               </div>
-              <!-- <div class="label" v-if="img.label">{{img.label}}</div> -->
               <span
                 class="selected-def"
                 @click="onClickListImage(img)"
@@ -230,7 +228,7 @@
               </el-button>
               <el-button
                 v-if="!selectGroupName"
-                v-permission="['resource:video:saveVideoGroup']"
+                v-permission="['resource:videoFileGroup:save']"
                 link
                 type="primary"
                 @click="selectOrCreateGroup(1)"

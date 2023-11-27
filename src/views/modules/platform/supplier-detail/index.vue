@@ -410,10 +410,12 @@
           >
             <p class="tit" />
             <span
+              v-permission="['supplier:idCardStatus:update']"
               class="update-btn"
               @click="dataUpdate"
             >
-              <i class="el-icon-refresh-right" /><span>{{ businessInfo.updateTime }}数据更新</span>
+              <el-icon class="el-icon-refresh-right"><Refresh /></el-icon>
+              <span>{{ businessInfo.updateTime }}数据更新</span>
             </span>
           </div>
         </div>
@@ -742,17 +744,32 @@
               </div>
             </div>
             <div class="si-content">
-              <div>
+              <div class="contract-time-box">
                 <el-date-picker
-                  v-model="contractTimeRange"
-                  type="datetimerange"
-                  format="YYYY-MM-DD"
+                  v-model="shopBasicInfo.contractStartTime"
+                  style="width:170px;"
+                  type="date"
                   value-format="YYYY-MM-DD HH:mm:ss"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  placeholder="开始日期"
                   disabled
                 />
+                <span style="margin: 0 10px">-</span>
+                <div class="end-time">
+                  <el-date-picker
+                    v-model="shopBasicInfo.contractEndTime"
+                    style="width:170px;"
+                    type="date"
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    :placeholder="shopBasicInfo.contractStartTime&& !shopBasicInfo.contractEndTime ? '' : '结束日期'"
+                    disabled
+                  />
+                  <span
+                    v-if="shopBasicInfo.contractStartTime&& !shopBasicInfo.contractEndTime"
+                    class="text disable"
+                  >
+                    无固定期限
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -896,16 +913,37 @@
             label="签约有效期"
             prop="date"
           >
-            <div>
+            <div class="contract-time-box">
               <el-date-picker
-                v-model="auditform.date"
-                type="daterange"
+                v-model="contractStartTime"
+                style="width:170px;"
+                type="date"
                 value-format="YYYY-MM-DD HH:mm:ss"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                @change="getContractDate"
+                placeholder="开始日期"
+                :clearable="false"
               />
+              <span style="margin: 0 10px">-</span>
+              <div class="end-time">
+                <el-date-picker
+                  ref="endTimeRef"
+                  v-model="contractEndTime"
+                  style="width:170px;"
+                  type="date"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  :placeholder="endTimeFlag&&contractStartTime&& !contractEndTime ? '' : '结束日期'"
+                  clearable
+                  @change="endTimeFlag = false"
+                  @focus="endTimeFlag = false"
+                  @blur="onEndTimePickerBlur"
+                />
+                <span
+                  v-if="endTimeFlag&&contractStartTime&& !contractEndTime"
+                  class="text"
+                  @click="focusEndTime"
+                >
+                  无固定期限
+                </span>
+              </div>
             </div>
           </el-form-item>
         </el-form>
@@ -998,12 +1036,21 @@ const auditDialogVisible = ref(false)
 // 签约有效期
 const contractStartTime = ref('')
 const contractEndTime = ref('')
-const contractTimeRange = ref([])
 // 供应商类型
 // const merchantType = ref(0)
+const validContractTime = (rule, value, callback) => {
+  if (!contractStartTime.value) {
+    callback(new Error($t('请选择签约有效期')))
+  } else if (contractEndTime.value && new Date(contractStartTime.value).getTime() > new Date(contractEndTime.value).getTime()) {
+    // 判断签约结束时间是否在签约开始时间之前
+    callback(new Error($t('签约结束时间不能在签约开始时间之前')))
+  } else {
+    callback()
+  }
+}
 const auditformRules = reactive({
   date: [
-    { required: true, message: '请选择签约有效期', trigger: 'change' }
+    { validator: validContractTime, trigger: 'change' }
   ],
   supplierType: [
     { required: true, message: '请选择供应商类型', trigger: 'change' }
@@ -1059,9 +1106,6 @@ const queryShopAuditStatus = () => {
 const queryShopBasicInfo = () => {
   api.getManageDetail({ supplierId: supplierId.value }).then(data => {
     shopBasicInfo.value = data
-    if (data.contractStartTime && data.contractEndTime) {
-      contractTimeRange.value = [data.contractStartTime, data.contractEndTime]
-    }
   })
 }
 
@@ -1157,6 +1201,7 @@ const queryShopFinancialInfo = () => {
 const openAuditPopup = (status) => {
   if (status === 1) {
     // 审核
+    endTimeFlag.value = true
     auditDialogVisible.value = true
     return
   }
@@ -1166,9 +1211,16 @@ const openAuditPopup = (status) => {
     reviewDialogVisible.value = true
   }
 }
-const getContractDate = (date) => {
-  contractStartTime.value = date[0]
-  contractEndTime.value = date[1]
+
+const endTimeFlag = ref(true)
+const endTimeRef = ref(null)
+const focusEndTime = () => {
+  endTimeRef.value?.focus()
+}
+const onEndTimePickerBlur = () => {
+  if (!contractEndTime.value) {
+    endTimeFlag.value = true
+  }
 }
 
 const auditformRef = ref(null)
@@ -1485,7 +1537,7 @@ const dataUpdate = Debounce(function () {
 .business-info-list,
 .basic-info-list {
   display: flex;
-  align-items: top;
+  align-items: start;
   justify-content: flex-start;
   width: 100%;
   margin: 20px 0;
@@ -1536,6 +1588,24 @@ const dataUpdate = Debounce(function () {
   }
   .business-info-item .tit {
     min-width: 140px;
+  }
+}
+
+.contract-time-box{
+  display: flex;
+  align-items: center;
+  .end-time {
+    position: relative;
+    .text {
+      position: absolute;
+      left: 30px;
+      line-height: 32px;
+      font-size: 14px;
+      &.disable{
+        color: #a8abb2;
+        cursor: no-drop;
+      }
+    }
   }
 }
 

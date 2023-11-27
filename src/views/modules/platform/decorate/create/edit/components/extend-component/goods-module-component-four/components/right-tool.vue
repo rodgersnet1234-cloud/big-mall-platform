@@ -24,7 +24,7 @@
         >
           <template #error>
             <div class="image-slot">
-              <i class="el-icon-picture-outline" />
+              <el-icon><PictureFilled /></el-icon>
             </div>
           </template>
         </el-image>

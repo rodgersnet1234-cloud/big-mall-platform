@@ -9,9 +9,7 @@
         :init="init"
         api-key="i6mv006qcwsfu1t7ebisntg5w261vpowkwirnx9cnse3ho5o"
       />
-      <div
-        class="add-or-upload"
-      >
+      <div class="add-or-upload">
         <add-or-upload
           v-show="isLoaded"
           @success-c-b-k="imageSuccessCBK"
@@ -124,20 +122,27 @@ const imageSuccessCBK = (arr) => {
 .components-tiny-mce {
   .tox-fullscreen .add-or-upload {
     z-index: 9999 !important;
-    position:fixed !important;
+    position: fixed !important;
     right: 0;
     top: 0;
 
-}
-.tinymce-container {
-  position: relative;
-   .add-or-upload {
-     position: absolute;
-     top: 10px;
-     right: 10px;
+  }
+
+  .tinymce-container {
+    position: relative;
+
+    .add-or-upload {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
   }
+
+  .tox .tox-mbtn{
+    width: auto !important;
+  }
 }
+
 .tox-tinymce-aux {
   z-index: 9999 !important;
 }

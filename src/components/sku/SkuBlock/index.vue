@@ -263,7 +263,8 @@ onBeforeMount(() => {
   }
 })
 
-provide('ease', { ...props, setSalesAttrs: data })
+provide('ease', props)
+provide('setSalesAttrs', data)
 
 </script>
 

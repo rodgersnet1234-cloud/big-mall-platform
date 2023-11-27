@@ -20,10 +20,12 @@
               src="@/assets/pc-micro-page/goods_list_three_active.png"
               alt="图片加载失败"
             >
-            <i
+            <el-icon
               v-show="goodsForm.listType === 3"
               class="el-icon-check"
-            />
+            >
+              <Check />
+            </el-icon>
           </div>
           <div
             :class="{'style-items': true, 'active': goodsForm.listType === 4 }"
@@ -39,10 +41,12 @@
               src="@/assets/pc-micro-page/goods_list_four_active.png"
               alt="图片加载失败"
             >
-            <i
+            <el-icon
               v-show="goodsForm.listType === 4"
               class="el-icon-check"
-            />
+            >
+              <Check />
+            </el-icon>
           </div>
           <div
             :class="{'style-items': true, 'active': goodsForm.listType === 5 }"
@@ -58,10 +62,12 @@
               src="@/assets/pc-micro-page/goods_list_five_active.png"
               alt="图片加载失败"
             >
-            <i
+            <el-icon
               v-show="goodsForm.listType === 5"
               class="el-icon-check"
-            />
+            >
+              <Check />
+            </el-icon>
           </div>
         </div>
         <el-radio-group

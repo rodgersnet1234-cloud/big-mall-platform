@@ -26,6 +26,7 @@
             <el-form-item prop="userName">
               <el-input
                 v-model="loginInfo.userName"
+                v-input-rule
                 :placeholder="$t('login.username')"
               />
             </el-form-item>
@@ -33,6 +34,7 @@
               <el-input
                 ref="passwordRef"
                 v-model="loginInfo.passWord"
+                v-input-rule
                 :type="passwordType"
                 :placeholder="$t('login.password')"
                 maxlength="16"
