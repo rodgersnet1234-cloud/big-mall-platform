@@ -1,10 +1,11 @@
 import request from '@/utils/request'
+import axios from 'axios'
 
-export function ossInfo (fileNum) {
+export function getBatchPreSignUrl (fileNames) {
   return request({
-    url: '/mall4cloud_biz/ua/oss/info',
+    url: '/mall4cloud_biz/ua/oss/get_batch_pre_sign_url',
     method: 'get',
-    params: { fileNum }
+    params: { fileNames }
   })
 }
 
@@ -53,15 +54,8 @@ export function deleteFileGroup (param) {
  * @param url 请求的url
  * @param data 图片文件
  */
-export function minIoImgUpdate (url, data) {
-  return request({
-    headers: {
-      'Content-Type': data.type
-    },
-    url,
-    method: 'put',
-    data
-  })
+export function awsImgUpdate (url, data) {
+  return axios.put(url, data)
 }
 
 // aliOss上传文件

@@ -716,13 +716,13 @@ const stepsStatus = computed(() => {
   }
 })
 
-let deliveryExpresse = []
+const deliveryExpresse = ref('')
 const offsetCount = ref(0) // 偏移量
 const carouserRef = ref(null)
-watch(deliveryExpresse, () => {
+watch(deliveryExpresse.value, () => {
   nextTick(() => {
     offsetCount.value = 0 // 初始化变量
-    if (deliveryExpresse) {
+    if (deliveryExpresse.value) {
       carouserRef.value.style.left = '0px'
     }
   })
@@ -762,7 +762,7 @@ const getDataList = () => {
       loadingDelivery.value = true
       api.deliveryExpresseInfo({ orderId: dataForm.value.orderId }).then((data) => {
         dataForm.value.deliveryExpresses = data
-        deliveryExpresse = data[0]
+        deliveryExpresse.value = data[0]
         loadingDelivery.value = false
       })
     }
@@ -776,14 +776,14 @@ const loadingDelivery = ref(false)
 const onClickListDelivery = (delivery, index) => {
   loadingDelivery.value = true
   deliveryOrder(delivery.deliveryOrderId).then((data) => {
-    deliveryExpresse = data
+    deliveryExpresse.value = data
     loadingDelivery.value = false
   })
   indexs.value = index
 }
 // 商品切换
 const prevItem = () => {
-  const len = deliveryExpresse.orderItems.length
+  const len = deliveryExpresse.value.orderItems.length
   if (len - 5 > 0) {
     if (offsetCount.value > 0) {
       offsetCount.value--
@@ -799,7 +799,7 @@ const prevItem = () => {
 }
 
 const nextItem = () => {
-  const len = deliveryExpresse.orderItems.length
+  const len = deliveryExpresse.value.orderItems.length
   if (len - 5 > 0) {
     if (offsetCount.value < len - 5) {
       offsetCount.value++

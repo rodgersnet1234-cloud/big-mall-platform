@@ -342,15 +342,13 @@
 </template>
 
 <script setup>
-import { ossInfo, pageFileGroup, saveFileGroup, updateFileGroup, aliImgUpdate, minIoImgUpdate } from '@/api/biz/oss'
+import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, awsImgUpdate } from '@/api/biz/oss'
 import { save, page as pageApi } from '@/api/biz/attach-file'
 import { checkPermission } from '@/directive/permission/index.js'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshPic'])
-
 const vPermission = checkPermission
-
 const dataForm = reactive({
   policy: '',
   signature: '',
@@ -678,24 +676,19 @@ const onPageNumChange = (pagePar) => {
 
 let sizeFlag = 0
 const attachFiles = ref([])
-const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 let ossList = null
 /**
  * 获取上传视频数据
  */
 const onUploadConfirm = () => {
-  const fileNum = uploadFiles.value.length
+  const fileNames = uploadFiles.value?.map((item) => {
+    return item.name
+  }).join(',')
   sizeFlag = 0
   attachFiles.value = []
   isSubmit = true
-  ossInfo(fileNum).then(response => {
-    if (resourcesActionType === '0') {
-      dataForm.policy = response.policy
-      dataForm.signature = response.signature
-      dataForm.ossaccessKeyId = response.accessid
-      dataForm.dir = response.dir
-    }
-    ossList = response.ossList
+  getBatchPreSignUrl(fileNames).then(response => {
+    ossList = response
     nextTick(() => {
       uploadRef.value.submit()
       isSubmit = false
@@ -723,36 +716,16 @@ const uploadFile = (event) => {
   if (!ossList || ossList.length <= 0) {
     message('数据异常，请刷洗后重试')
   }
-  if (resourcesActionType === '0') {
-    // 上传视频成功
-    attachFile.filePath = '/' + dataForm.dir + ossList[0].fileName
-    const formdata = new FormData()
-    formdata.append('policy', dataForm.policy)
-    formdata.append('signature', dataForm.signature)
-    formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
-    formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl.value)
-    formdata.append('key', ossList[0].dir + ossList[0].fileName)
-    formdata.append('file', file)
-    aliImgUpdate(resourcesUrl.value, formdata).then(() => {
-      saveFileData(file, attachFile.filePath)
-    }).catch(error => {
-      // 上传视频失败
-      if (!error) {
-        event.onError()
-      }
-    })
-  } else if (resourcesActionType === '1') {
-    attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
-    minIoImgUpdate(ossList[0].actionUrl, file).then(() => {
-      saveFileData(file, attachFile.filePath)
-    }).catch(error => {
-      // 上传视频失败
-      if (!error) {
-        event.onError()
-      }
-    })
-  }
+
+  attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
+  awsImgUpdate(ossList[0].preSignUrl, file).then(() => {
+    saveFileData(file, attachFile.filePath)
+  }).catch(error => {
+    // 上传视频失败
+    if (!error) {
+      event.onError()
+    }
+  })
   attachFiles.value.push(attachFile)
   ossList.splice(0, 1)
   if (ossList <= 0) {

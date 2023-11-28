@@ -6,7 +6,6 @@
     <el-form
       ref="dataFormRef"
       label-width="180px"
-      size="mini"
       class="set-form"
       label-position="left"
       :rules="dataRule"

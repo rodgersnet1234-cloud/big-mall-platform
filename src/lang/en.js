@@ -70,6 +70,17 @@ export default {
     m: 'nearly 30',
     a: 'whole'
   },
+  sysManagement: {
+    fileUpload: 'file upload',
+    nullTips: 'cannot be empty',
+    save: 'Save',
+    aliOss: 'Alioss',
+    qcloudCOS: 'TencentCloudCOS',
+    qiniuKODO: 'QiniuKODO',
+    hwObs: 'HuaweiOBS',
+    OtherCloudServers: 'Other Cloud Servers',
+    IncludingCloud: '(Including: Alibaba Cloud OSS, Tencent Cloud COS, Huawei Cloud OBS, Qiniu Cloud KODO)'
+  },
   login: {
     title: 'Login Form',
     logIn: 'Login',
