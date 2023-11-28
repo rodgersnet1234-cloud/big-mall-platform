@@ -289,7 +289,7 @@
 </template>
 
 <script setup>
-import { aliImgUpdate, minIoImgUpdate, ossInfo, pageFileGroup, saveFileGroup, updateFileGroup } from '@/api/biz/oss'
+import { awsImgUpdate, getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup } from '@/api/biz/oss'
 import { save, page as apiPage } from '@/api/biz/attach-file'
 import { checkPermission } from '@/directive/permission/index.js'
 import imageCompression from 'browser-image-compression'
@@ -301,8 +301,6 @@ const emit = defineEmits(['refreshPic', 'refreshPic'])
 
 const vPermission = checkPermission
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 const groupForm = reactive({
   attachFileGroupId: '', // 选择分组的值
   name: '' // 分组名称
@@ -316,7 +314,7 @@ const rules = reactive({
 const options = reactive({
   multiple: true, // 是否支持选取多个图片
   limit: 20, // 最多可选择图片数量
-  maxSize: 99999, // 最大尺寸（M）
+  maxSize: 512, // 最大尺寸（kb）
   activeTab: 'pick',
   enableUpload: false, // 是否启用图片上传
   callback: null
@@ -628,21 +626,19 @@ let ossList = null
  */
 const onUploadConfirm = () => {
   const fileNum = uploadFiles.value.length
+
   if (fileNum === 0) {
     return ElMessage({
       message: '请选择图片上传',
       type: 'warning'
     })
   }
+  const fileNames = uploadFiles.value?.map((item) => {
+    return item.name
+  }).join(',')
   attachFiles = []
-  ossInfo(fileNum).then(response => {
-    if (resourcesActionType === '0') {
-      dataForm.policy = response.policy
-      dataForm.signature = response.signature
-      dataForm.ossaccessKeyId = response.accessid
-      dataForm.dir = response.dir
-    }
-    ossList = response.ossList
+  getBatchPreSignUrl(fileNames).then(response => {
+    ossList = response
     notImg = true
     nextTick(() => {
       uploadRef.value?.submit()
@@ -667,22 +663,8 @@ const httpRequest = (event) => {
   if (ossList.length <= 0) {
     message('数据异常，请刷新后重试')
   }
-  // aliOss 上传
-  if (resourcesActionType === '0') {
-    attachFile.filePath = '/' + dataForm.dir + ossList[0].fileName
-    const formdata = new FormData()
-    formdata.append('policy', dataForm.policy)
-    formdata.append('signature', dataForm.signature)
-    formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
-    formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl)
-    formdata.append('key', ossList[0].dir + ossList[0].fileName)
-    formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata)
-  } else if (resourcesActionType === '1') {
-    attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
-    minIoImgUpdate(ossList[0].actionUrl, file)
-  }
+  attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
+  awsImgUpdate(ossList[0].preSignUrl, file)
   attachFiles.push(attachFile)
   ossList.splice(0, 1)
   if (ossList <= 0) {
@@ -704,11 +686,11 @@ const beforeUpload = async (file) => {
     }
     return Promise().reject()
   }
-  const isSize = file.size / (1024 * 1024) < options.maxSize
+  const isSize = file.size / 1024 < options.maxSize
   if (!isSize) {
     try {
       const resultBlob = await imageCompression(file, {
-        maxSizeMB: 2 // 压缩大小
+        maxSizeMB: 0.5 // 压缩大小
       })
       return new File([resultBlob], file.name, {
         type: file.type

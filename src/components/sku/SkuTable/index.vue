@@ -656,7 +656,7 @@ const setNow = () => {
     })) {
       // setItem(item, index)
       item.marketPriceFee = markedPriceIntValPar >= 0 ? markedPriceIntValPar : item.marketPriceFee || 0
-      item.priceFee = priceIntValPar >= 0.01 ? priceIntValPar : item.priceFee || 0.01 // 销售价
+      item.priceFee = priceIntValPar >= 0.01 ? priceIntValPar : item.priceFee || 0 // 销售价
       item.scoreFee = scorePriceIntValPar >= 1 ? scorePriceIntValPar : (item.scoreFee || 1) // 积分价
       item.volume = volumeIntValPar >= 0 ? volumeIntValPar : item.volume // 体积
       item.weight = weightIntValPar >= 0 ? weightIntValPar : item.weight // 重量

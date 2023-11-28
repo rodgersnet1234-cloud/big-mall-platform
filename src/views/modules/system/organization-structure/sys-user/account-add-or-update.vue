@@ -109,7 +109,7 @@ const validPassword = (rule, value, callback) => {
     callback(new Error('密码不能全为空格'))
   } else if (noSpacesBothSides(value)) {
     callback(new Error('不允许使用空格作为密码的开头或结尾'))
-  } else if (!validPassword2(value)) {
+  } else if (!(dataForm.userId && !value) && !validPassword2(value)) {
     callback(new Error($t('resetPassword.passwordVerification')))
   } else {
     callback()

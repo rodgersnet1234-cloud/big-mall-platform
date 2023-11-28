@@ -375,7 +375,7 @@
 
 <script setup>
 import * as api from '@/api/im-box/index.js'
-import { aliImgUpdate, minIoImgUpdate, ossInfo } from '@/api/biz/oss.js'
+import { awsImgUpdate, getBatchPreSignUrl } from '@/api/biz/oss.js'
 import { getToken } from '@/utils/auth.js'
 import { Base64 } from 'js-base64'
 import imageCompression from 'browser-image-compression'
@@ -387,12 +387,10 @@ const route = useRoute()
 
 const employeeIdShop = null // 当前商家id
 const chatImg = ref(customerPng) // 官方头像
-const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 const WebSocketUrl = import.meta.env.VITE_APP_WEBSOCKET_URL
 
 const defaultTitle = document.title // 存储默认标题
 
-const dataForm = {}
 const isSingle = ref(true)
 
 onMounted(() => {
@@ -1076,15 +1074,8 @@ const fileRef = ref(null)
  * 获取上传图片数据
  */
 const onUploadConfirm = () => {
-  const fileNum = fileRef.value.files.length
-  ossInfo(fileNum).then(data => {
-    if (resourcesActionType === '0') {
-      dataForm.policy = data.policy
-      dataForm.signature = data.signature
-      dataForm.ossaccessKeyId = data.accessid
-      dataForm.dir = data.dir
-    }
-    ossList = data.ossList
+  getBatchPreSignUrl([fileRef.value.files[0].name]).then(data => {
+    ossList = data
     nextTick(() => {
       httpRequest(fileRef.value?.files[0])
     })
@@ -1104,11 +1095,11 @@ const httpRequest = async (event) => {
     ElMessage.error($t('biz.imgbox.onlyPictures'), true)
     return
   }
-  const isSize = file.size / (1024 * 1024) < 2
+  const isSize = file.size / 1024 < 512
   if (!isSize) {
     try {
       const resultBlob = await imageCompression(file, {
-        maxSizeMB: 2 // 压缩大小
+        maxSizeMB: 0.5 // 压缩大小
       })
       file = new File([resultBlob], file.name, {
         type: file.type
@@ -1124,41 +1115,18 @@ const httpRequest = async (event) => {
   if (ossList.length <= 0) {
     ElMessage.error('数据异常，请刷新后重试')
   }
-  // aliOss 上传
-  if (resourcesActionType === '0') {
-    attachFile.filePath = '/' + dataForm.dir + ossList[0].fileName
-    const formdata = new FormData()
-    formdata.append('policy', dataForm.policy)
-    formdata.append('signature', dataForm.signature)
-    formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
-    formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl)
-    formdata.append('key', ossList[0].dir + ossList[0].fileName)
-    formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata).then(() => {
-      uploadSuccess()
-      if (ossList <= 0) {
-        event.onSuccess()
-      }
-    }).catch((error) => {
-      if (!error) {
-        event.onError()
-      }
-    })
-  } else {
-    // mioIo 上传
-    attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
-    minIoImgUpdate(ossList[0].actionUrl, file).then(() => {
-      uploadSuccess()
-      if (ossList <= 0) {
-        event.onSuccess()
-      }
-    }).catch((error) => {
-      if (!error) {
-        event.onError()
-      }
-    })
-  }
+
+  attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
+  awsImgUpdate(ossList[0].preSignUrl, file).then(() => {
+    uploadSuccess()
+    if (ossList <= 0) {
+      event.onSuccess()
+    }
+  }).catch((error) => {
+    if (!error) {
+      event.onError()
+    }
+  })
 }
 
 /**

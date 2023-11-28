@@ -8,6 +8,17 @@
         <span>交易结束</span>
         <span>{{ closingSts }}</span>
       </div>
+      <div
+        v-if="refundDetail.platformMessage"
+        class="form-box"
+      >
+        <div class="form-item">
+          <span class="label">
+            平台留言：
+          </span>
+          <span class="content">{{ refundDetail.platformMessage }}</span>
+        </div>
+      </div>
       <div class="time">
         {{ refundDetail.interventionFinishTime }}
       </div>

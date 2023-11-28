@@ -290,37 +290,38 @@ const init = (menuId) => {
       })
       menuList.value = treeDataTranslate(data)
       pageLoading.value = false
-    })
-    if (dataForm.value.menuId) {
-      api.get(menuId).then(data => {
+
+      if (dataForm.value.menuId) {
+        api.get(menuId).then(data => {
         // 不是目录，才显示组件路径（data.component返回Layout就为目录）
-        if (data.component !== 'Layout') {
-          dataForm.value.type = 1
-          dataForm.value.componentUrl = data.component
-        } else {
-          dataForm.value.type = 0
-          dataForm.value.componentUrl = ''
-        }
-        dataForm.value.menuId = data.menuId
-        dataForm.value.title = data.title
-        dataForm.value.name = data.name
-        dataForm.value.parentId = data.parentId
-        dataForm.value.url = data.path
-        dataForm.value.isMenuHide = data.hidden
-        dataForm.value.seq = data.seq
-        dataForm.value.icon = data.icon
-        // idList方法返回的选中菜单数组格式(内容:[{id: value, name: value}])
-        // el-cascader回显的数组只需一个id的数字数组，因此需要把id取出来
-        const selectedMenuList = idList(menuList, data.parentId).reverse()
-        const tempSelectedMenu = []
-        selectedMenuList.forEach(item => {
-          tempSelectedMenu.push(item.id)
+          if (data.component !== 'Layout') {
+            dataForm.value.type = 1
+            dataForm.value.componentUrl = data.component
+          } else {
+            dataForm.value.type = 0
+            dataForm.value.componentUrl = ''
+          }
+          dataForm.value.menuId = data.menuId
+          dataForm.value.title = data.title
+          dataForm.value.name = data.name
+          dataForm.value.parentId = data.parentId
+          dataForm.value.url = data.path
+          dataForm.value.isMenuHide = data.hidden
+          dataForm.value.seq = data.seq
+          dataForm.value.icon = data.icon
+          // idList方法返回的选中菜单数组格式(内容:[{id: value, name: value}])
+          // el-cascader回显的数组只需一个id的数字数组，因此需要把id取出来
+          const selectedMenuList = idList(menuList.value, data.parentId).reverse()
+          const tempSelectedMenu = []
+          selectedMenuList.forEach(item => {
+            tempSelectedMenu.push(item.id)
+          })
+          selectedMenu.value = tempSelectedMenu
         })
-        selectedMenu.value = tempSelectedMenu
-      })
-    } else {
-      selectedMenu.value = []
-    }
+      } else {
+        selectedMenu.value = []
+      }
+    })
   })
 }
 // 弹框内容初始化

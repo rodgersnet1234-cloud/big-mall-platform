@@ -74,6 +74,7 @@ const init = reactive({
   advlist_bullet_styles: 'square',
   resize: true, // 调整宽高 > true 调整高 | false 不可调整宽高 | both 宽高可调
   language: 'zh_CN', // 中文
+  paste_data_images: false, // 禁止粘贴图片
   init_instance_callback: editor => {
     isLoaded.value = true
     if (props.modelValue) {

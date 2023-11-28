@@ -162,6 +162,17 @@ export default {
     m: '近30天',
     a: '全部'
   },
+  sysManagement: {
+    fileUpload: '文件上传',
+    nullTips: '不能为空',
+    save: '保存',
+    aliOss: '阿里云OSS',
+    qcloudCOS: '腾讯云COS',
+    qiniuKODO: '七牛云KODO',
+    hwObs: '华为云OBS',
+    OtherCloudServers: '其他云服务器',
+    IncludingCloud: '（包括：阿里云OSS,腾讯云COS,华为云OBS,七牛云KODO）'
+  },
   rbac: {
     role,
     menu,
