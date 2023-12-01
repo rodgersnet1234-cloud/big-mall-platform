@@ -64,6 +64,8 @@
 import { sendCode, updateMallName } from '@/api/multishop/shop-event'
 import { ElMessage } from 'element-plus'
 import { mallUserStore } from '@/stores/modules/mall-user.js'
+import { validNoEmptySpace } from '@/utils/validate'
+
 const emit = defineEmits(['updateName'])
 const visible = ref(false)
 const countdown = ref(0)
@@ -72,8 +74,19 @@ const dataForm = reactive({
   newName: '',
   validCode: ''
 })
+// eslint-disable-next-line no-unused-vars
+const validEmptyTab = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('内容不能全为空格'))
+  } else {
+    callback()
+  }
+}
 const dataRules = reactive({
-  newName: [{ required: true, message: '请输入商城名称', trigger: 'blur' }],
+  newName: [
+    { required: true, message: '请输入商城名称', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
   validCode: [
     { required: true, message: '请输入验证码', trigger: 'blur' }
   ]
