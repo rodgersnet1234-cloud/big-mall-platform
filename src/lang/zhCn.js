@@ -84,6 +84,8 @@ export default {
     thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
   },
   resetPassword: {
+    passwordTips: '请输入新密码',
+    passwordTips2: '请确认密码',
     passwordError: '确认密码不一致',
     passwordTips3: '密码长度为6-20位',
     passwordVerification: '密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写'
