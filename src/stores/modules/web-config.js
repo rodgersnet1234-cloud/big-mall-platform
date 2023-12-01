@@ -23,7 +23,7 @@ export const useWebConfigStore = defineStore('webConfigStore', {
       this.webConfig = webConfigDataForm
       const lang = localStorage.getItem('cloudLang')
       if (lang !== 'en') {
-        document.title = webConfigDataForm.titleContentCn || 'Mall4j白洞版-平台端'
+        document.title = webConfigDataForm.titleContentCn || 'Mall4j多元版-平台端'
       } else {
         document.title = webConfigDataForm.titleContentEn || 'Mall4j White hole version Supplier side'
       }
