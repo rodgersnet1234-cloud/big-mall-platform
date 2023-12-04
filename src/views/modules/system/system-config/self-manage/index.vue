@@ -206,6 +206,7 @@ import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 import { ElMessage } from 'element-plus'
 import Cookies from 'vue-cookies'
+import { checkFileUrl } from '@/utils'
 
 const miniAppShow = ref(true)
 const appletInformation = ref({})
@@ -241,20 +242,18 @@ const miniAppShowState = (state) => {
 const onDownload = () => {
   if (appletInformation.value) {
     api.onDownloadZip().then(res => {
-      const blob = new Blob([res], { type: 'application/zip' })
-      const elink = document.createElement('a')
-      elink.style.display = 'none'
-      elink.download = '小程序代码包'
-      elink.href = URL.createObjectURL(blob)
-      document.body.appendChild(elink)
-      elink.click()
-      URL.revokeObjectURL(elink.href) // 释放URL 对象
-      document.body.removeChild(elink)
+      const win = window.open(
+        checkFileUrl(res.filePath),
+        '_blank',
+        'noopener,noreferrer'
+      )
+      if (win) win.opener = null
     })
   } else {
     ElMessage.error('微信小程序配置信息有误')
   }
 }
+
 const mpShow = ref(true)
 let mpInformation = reactive({})
 const mpImgUrl = ref('')
