@@ -5,7 +5,7 @@
     </div>
     <el-form
       ref="dataFormRef"
-      label-width="188px"
+      label-width="200"
       class="set-form"
       :rules="dataRule"
       label-position="right"
@@ -34,6 +34,31 @@
           controls-position="right"
         />
       </el-form-item>
+      <el-form-item
+        class="el-form-item-lable-no-padding"
+        label="是否启用微信小程序发货对接"
+        prop="wechatShippingAudit"
+      >
+        <el-tooltip
+          effect="dark"
+          placement="right"
+        >
+          <template #content>
+            <div style="max-width:500px">
+              此功能是微信限制需要对接小程序发货的时候才启用，非必要请不要启用
+            </div>
+          </template>
+          <el-icon>
+            <QuestionFilled />
+          </el-icon>
+        </el-tooltip>
+        <el-switch
+          v-model="dataForm.wechatShippingAudit"
+          style="padding-left: 20px"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           v-permission="['platform:sysConfig:save']"
@@ -55,7 +80,8 @@ import { ElMessage } from 'element-plus'
 const emit = defineEmits(['miniAppShowState'])
 const dataForm = ref({
   appId: null,
-  secret: null
+  secret: null,
+  wechatShippingAudit: false
 })
 const dataRule = {
   appId: [

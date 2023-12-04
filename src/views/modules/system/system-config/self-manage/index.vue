@@ -232,6 +232,7 @@ const miniAppShowState = (state) => {
     getBase64(res).then(base64 => {
       miniAppImgUrl.value = base64
     }).catch(err => {
+      // eslint-disable-next-line no-console
       console.log(err, 'err')
     })
   })
@@ -269,6 +270,7 @@ const mpShowState = (state) => {
     getBase64(res).then(base64 => {
       mpImgUrl.value = base64
     }).catch(err => {
+      // eslint-disable-next-line no-console
       console.log(err, 'err')
     })
   })
