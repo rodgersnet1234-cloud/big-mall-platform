@@ -84,6 +84,8 @@ export default {
     thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
   },
   resetPassword: {
+    passwordTips: '请输入新密码',
+    passwordTips2: '请确认密码',
     passwordError: '确认密码不一致',
     passwordTips3: '密码长度为6-20位',
     passwordVerification: '密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写'
@@ -161,6 +163,17 @@ export default {
     n: '近7天',
     m: '近30天',
     a: '全部'
+  },
+  sysManagement: {
+    fileUpload: '文件上传',
+    nullTips: '不能为空',
+    save: '保存',
+    aliOss: '阿里云OSS',
+    qcloudCOS: '腾讯云COS',
+    qiniuKODO: '七牛云KODO',
+    hwObs: '华为云OBS',
+    OtherCloudServers: '其他云服务器',
+    IncludingCloud: '（包括：阿里云OSS,腾讯云COS,华为云OBS,七牛云KODO）'
   },
   register: {
     reg: '供应商注册',

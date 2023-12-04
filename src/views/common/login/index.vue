@@ -14,7 +14,7 @@
       </div>
       <div class="login-info">
         <div class="title">
-          {{ webConfig.titleContentCn || 'Mall4j白洞版-平台端登录' }}
+          {{ webConfig.titleContentCn || 'Mall4j多元版-平台端登录' }}
         </div>
         <div class="input-box">
           <el-form

@@ -496,7 +496,7 @@
 <script setup>
 import { getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { ossInfo, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, aliImgUpdate, minIoImgUpdate } from '@/api/biz/oss'
+import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, aliImgUpdate, awsImgUpdate } from '@/api/biz/oss'
 import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteVedio, batchMoveVedio } from '@/api/resource/video-store'
 
@@ -521,7 +521,6 @@ const attachFiles = ref([])
 const fileIndex = ref(0) // 视频位置索引，用于获取文件数组中当前上传文件的位置
 const completeCount = ref(0) // 传输完成数量，用于控制文件全部上传成功才进入onSuccess方法
 const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 const showGroupVisible = ref(false) // 选择/创建分组弹窗
 const showGroupType = ref(0) // 0选择分组 1创建分组 2修改分组
 const groupForm = ref({
@@ -1070,7 +1069,11 @@ const onPageNumChange = (page) => {
 }
 
 // 视频预上传
+let fileNames = []
 const onUploadChange = (file, fileList) => {
+  fileNames = fileList?.map((item) => {
+    return item.name
+  }).join(',')
   fileNum.value = fileList.length
   if (isSubmit.value) {
     return
@@ -1104,14 +1107,8 @@ const onUploadConfirm = () => {
   }
   sizeFlag.value = 0
   attachFiles.value = []
-  ossInfo(fileNum.value).then(response => {
-    if (resourcesActionType === '0') {
-      dataForm.policy = response.policy
-      dataForm.signature = response.signature
-      dataForm.ossaccessKeyId = response.accessid
-      dataForm.dir = response.dir
-    }
-    ossList = response.ossList
+  getBatchPreSignUrl(fileNames).then(response => {
+    ossList = response
     notImg.value = true
     nextTick(() => {
       uploadRef.value?.submit()
@@ -1158,50 +1155,21 @@ const uploadFile = (event) => {
     message('数据异常，请刷新后重试')
   }
 
-  // aliOss 上传
-  if (resourcesActionType === '0') {
-    // 上传视频成功
-    attachFile.filePath = '/' + dataForm.dir + ossList[currentIndex].fileName
-    const formdata = new FormData()
-    formdata.append('policy', dataForm.policy)
-    formdata.append('signature', dataForm.signature)
-    formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
-    formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl)
-    formdata.append('key', ossList[currentIndex].dir + ossList[currentIndex].fileName)
-    formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata).then(() => {
-      attachFiles.value.push(attachFile)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-      uploadSuccess()
-    }).catch(() => {
-      completeCount.value++
-      message('第' + (currentIndex + 1) + '个视频上传失败', true)
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-    })
-  } else if (resourcesActionType === '1') {
-    // mioIo 上传
-    attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
-    minIoImgUpdate(ossList[currentIndex].actionUrl, file).then(() => {
-      attachFiles.value.push(attachFile)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-      uploadSuccess()
-    }).catch(() => {
-      message('第' + (currentIndex + 1) + '个视频上传失败', true)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-    })
-  }
+  attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
+  awsImgUpdate(ossList[currentIndex].preSignUrl, file).then(() => {
+    attachFiles.value.push(attachFile)
+    completeCount.value++
+    if (completeCount.value === ossList.length) {
+      event.onSuccess()
+    }
+    uploadSuccess()
+  }).catch(() => {
+    message('第' + (currentIndex + 1) + '个视频上传失败', true)
+    completeCount.value++
+    if (completeCount.value === ossList.length) {
+      event.onSuccess()
+    }
+  })
 }
 
 /**

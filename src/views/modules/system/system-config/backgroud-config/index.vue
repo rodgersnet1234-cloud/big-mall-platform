@@ -19,6 +19,9 @@
       <el-tab-pane :label="$t('platform.config.aliLiveConfig')">
         <AliLiveConfig ref="aliLiveConfigRef" />
       </el-tab-pane>
+      <el-tab-pane :label="$t('platform.config.fileUploadConfiguration')">
+        <OssConfig />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -29,6 +32,7 @@ import ProtocolConfig from './components/protocol-config.vue'
 import SensitiveConfig from './components/sensitive-config.vue'
 import SysSwitchConfig from './components/sys-switch-config.vue'
 import AliLiveConfig from './components/ali-live-config.vue'
+import OssConfig from './components/oss-config.vue'
 
 </script>
 <style lang="scss" scoped>

@@ -11,6 +11,7 @@ function setHTML (el, value) {
 export const richDirective = {
   mounted (el, binding) {
     if (binding.value) {
+      oldInnerHTML = binding.value
       setHTML(el, binding.value)
     }
   },
@@ -19,9 +20,12 @@ export const richDirective = {
     if (binding.value === oldInnerHTML && !binding.value) {
       return
     }
-    oldInnerHTML = binding.value
     if (binding.value) {
+      oldInnerHTML = binding.value
       setHTML(el, binding.value)
+    } else {
+      oldInnerHTML = ''
+      setHTML(el, '')
     }
   }
 }

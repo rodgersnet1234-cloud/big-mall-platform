@@ -456,7 +456,7 @@
 <script setup>
 import { getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { ossInfo, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, aliImgUpdate, minIoImgUpdate } from '@/api/biz/oss'
+import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, awsImgUpdate } from '@/api/biz/oss'
 import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteImgs, batchMoveImgs } from '@/api/resource/picture-store'
 import imageCompression from 'browser-image-compression'
@@ -479,8 +479,6 @@ const dataForm = reactive({
 const groupList = ref([]) // 分组列表
 const hideUploadEdit = ref(false) // 上传按钮显示
 let attachFiles = []
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-const resourcesActionType = import.meta.env.VITE_APP_RESOURCES_TYPE
 const showGroupVisible = ref(false) // 选择/创建分组弹窗
 const showGroupType = ref(0) // 0选择分组 1创建分组 2修改分组
 const groupForm = ref({
@@ -493,7 +491,7 @@ let oriImgName = null // 图片原名称
 const options = reactive({
   multiple: true, // 是否支持选取多个图片
   limit: 20, // 最多可选择图片数量
-  maxSize: 99999, // 最大尺寸（M）
+  maxSize: 512, // 最大尺寸（kb）
   activeTab: 'pick',
   enableUpload: false, // 是否启用图片上传
   callback: null
@@ -1005,14 +1003,8 @@ const onUploadConfirm = Debounce(() => {
       type: 'warning'
     })
   }
-  ossInfo(fileNum.value).then(response => {
-    if (resourcesActionType === '0') {
-      dataForm.policy = response.policy
-      dataForm.signature = response.signature
-      dataForm.ossaccessKeyId = response.accessid
-      dataForm.dir = response.dir
-    }
-    ossList = response.ossList
+  getBatchPreSignUrl(fileNames).then(response => {
+    ossList = response
     notImg.value = true
     nextTick(() => {
       uploadRef.value?.submit()
@@ -1063,52 +1055,29 @@ const httpRequest = (event) => {
   }
   // aliOss 上传
 
-  if (resourcesActionType === '0') {
-    // 上传图片成功
-    attachFile.filePath = '/' + dataForm.dir + ossList[currentIndex].fileName
-    const formdata = new FormData()
-    formdata.append('policy', dataForm.policy)
-    formdata.append('signature', dataForm.signature)
-    formdata.append('ossaccessKeyId', dataForm.ossaccessKeyId)
-    formdata.append('dir', dataForm.dir)
-    formdata.append('host', resourcesUrl)
-    formdata.append('key', ossList[currentIndex].dir + ossList[currentIndex].fileName)
-    formdata.append('file', file)
-    aliImgUpdate(resourcesUrl, formdata).then(() => {
-      attachFiles.push(attachFile)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-      uploadSuccess()
-    }).catch(() => {
-      completeCount.value++
-      message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-    })
-  } else if (resourcesActionType === '1') {
-    attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
-    minIoImgUpdate(ossList[currentIndex].actionUrl, file).then(() => {
-      attachFiles.push(attachFile)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-      uploadSuccess()
-    }).catch(() => {
-      message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
-      completeCount.value++
-      if (completeCount.value === ossList.length) {
-        event.onSuccess()
-      }
-    })
-  }
+  attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
+  awsImgUpdate(ossList[currentIndex].preSignUrl, file).then(() => {
+    attachFiles.push(attachFile)
+    completeCount.value++
+    if (completeCount.value === ossList.length) {
+      event.onSuccess()
+    }
+    uploadSuccess()
+  }).catch(() => {
+    message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
+    completeCount.value++
+    if (completeCount.value === ossList.length) {
+      event.onSuccess()
+    }
+  })
 }
 // 图片预上传
 // eslint-disable-next-line no-unused-vars
+let fileNames
 const onUploadChange = (file, fileList) => {
+  fileNames = fileList?.map((item) => {
+    return item.name
+  }).join(',')
   if (fileList.length >= 20) {
     hideUploadEdit.value = true
   }
@@ -1142,7 +1111,7 @@ const beforeRemove = () => {
  */
 const beforeUpload = async (file) => {
   const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
-  const isSize = file.size / (1024 * 1024) < options.maxSize
+  const isSize = file.size / 1024 < options.maxSize
   if (!isImage) {
     if (sizeFlag === 0) {
       message($t('biz.imgbox.onlyPictures'), true)
@@ -1154,7 +1123,7 @@ const beforeUpload = async (file) => {
   if (!isSize) {
     try {
       const resultBlob = await imageCompression(file, {
-        maxSizeMB: 2 // 压缩大小
+        maxSizeMB: 0.5 // 压缩大小
       })
       const fs = new File([resultBlob], file.name, {
         type: file.type

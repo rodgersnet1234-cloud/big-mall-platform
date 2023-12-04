@@ -369,7 +369,7 @@ const setDate = (data) => {
   dataForm.amountMin = data.amountMin
   dataForm.paymentExplain = data.paymentExplain
   dataForm.number = data.number
-  dataForm.withdrawal = data.withdrawal
+  dataForm.withdrawal = data.withdrawal || 2
   if (dataForm.spuVOList == null) {
     dataForm.spuVOList = []
   }
@@ -573,14 +573,6 @@ const checkAmount = () => {
   .el-radio__label){
     padding-left: 5px;
     font-size: 13px;
-  }
-  :deep(.el-checkbox__inner,
-  .el-radio__inner) {
-    border: 2px solid #b2aebc;
-  }
-  :deep(.el-checkbox__inner::after) {
-    left: 3px;
-    top: 0;
   }
   :deep(.el-input__inner) {
     border-radius: 0;

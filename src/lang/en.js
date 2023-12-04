@@ -70,6 +70,17 @@ export default {
     m: 'nearly 30',
     a: 'whole'
   },
+  sysManagement: {
+    fileUpload: 'file upload',
+    nullTips: 'cannot be empty',
+    save: 'Save',
+    aliOss: 'Alioss',
+    qcloudCOS: 'TencentCloudCOS',
+    qiniuKODO: 'QiniuKODO',
+    hwObs: 'HuaweiOBS',
+    OtherCloudServers: 'Other Cloud Servers',
+    IncludingCloud: '(Including: Alibaba Cloud OSS, Tencent Cloud COS, Huawei Cloud OBS, Qiniu Cloud KODO)'
+  },
   login: {
     title: 'Login Form',
     logIn: 'Login',
@@ -86,6 +97,8 @@ export default {
     thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
   },
   resetPassword: {
+    passwordTips: 'Please enter a new password',
+    passwordTips2: 'Please confirm the password',
     passwordError: 'The confirmation password is inconsistent',
     passwordTips3: 'The password length is 6-20 digits',
     passwordVerification: 'The password is composed of at least two characters of letters plus numbers or symbols, 6-20 half width characters, case sensitive'

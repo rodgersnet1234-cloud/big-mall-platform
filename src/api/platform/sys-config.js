@@ -48,9 +48,8 @@ export function getPaySettlementType () {
 // 下载代码包
 export function onDownloadZip () {
   return request({
-    url: '/mall4cloud_biz/ua/oss/download',
-    method: 'get',
-    responseType: 'blob'
+    url: '/mall4cloud_biz/p/attach_file/get_mini_code_file_info',
+    method: 'get'
   })
 }
 // 获取小程序信息
