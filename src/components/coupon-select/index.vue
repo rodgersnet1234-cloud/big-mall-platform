@@ -49,16 +49,6 @@
           :label="$t('coupon.coupon.couponName')"
         />
         <el-table-column
-          prop="subTitle"
-          header-align="center"
-          align="center"
-          :label="$t('coupon.coupon.couponDscription')"
-        >
-          <template #default="{row}">
-            <div>{{ row.subTitle||'-' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
           prop="getWay"
           header-align="center"
           align="center"

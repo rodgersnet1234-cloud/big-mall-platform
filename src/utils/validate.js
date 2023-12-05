@@ -256,9 +256,9 @@ export function checkIDCard (idcode) {
 /**
  *
  * @param {String} 密码
- * @returns {Boolean} 检查密码格式是否正确(检查密码格式是否正确 密码由字母加数字或符号至少两种以上字符组成6-20位半角字符，区分大小写)
+ * @returns {Boolean} 检查密码格式是否正确(检查密码格式是否正确 密码由字母、数字和特殊符号三种字符组成8-20位半角字符，区分大小写)
  */
 export function validPassword2 (s) {
-  const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![\W]+$)[0-9A-Za-z\W]{6,20}$/
+  const reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,20}/
   return reg.test(s)
 }

@@ -10,7 +10,7 @@
         @click="clickUpload()"
       >
         <el-icon><UploadFilled /></el-icon>
-        {{ $t('table.upload') }}
+        上传图片
       </el-button>
     </el-tooltip>
 
@@ -21,7 +21,7 @@
       @click="clickUpload()"
     >
       <el-icon><UploadFilled /></el-icon>
-      {{ $t('table.upload') }}
+      上传图片
     </el-button>
     <!-- 弹窗, 新增图片 -->
     <img-box

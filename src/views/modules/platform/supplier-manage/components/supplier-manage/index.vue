@@ -183,7 +183,6 @@
                 type="primary"
                 @click="toShopEditPage(row.supplierId)"
               >
-                <el-icon><Edit /></el-icon>
                 编辑
               </el-button>
               <el-button
@@ -193,7 +192,6 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offline')"
               >
-                <el-icon><Lock /></el-icon>
                 下线供应商
               </el-button>
               <el-button
@@ -203,7 +201,6 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"
               >
-                <el-icon><Unlock /></el-icon>
                 下线管理
               </el-button>
               <el-button
@@ -212,7 +209,6 @@
                 type="primary"
                 @click="accountManageHandle(row.supplierId)"
               >
-                <el-icon><Setting /></el-icon>
                 账号管理
               </el-button>
             </template>

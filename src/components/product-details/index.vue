@@ -12,7 +12,6 @@
         <!-- 详情 -->
         <el-form-item
           v-if="disabled"
-          label="商品详情"
         >
           <div
             v-rich="dataFormPar.detailZh"
@@ -28,7 +27,7 @@
 
         <el-form-item
           v-else
-          label="商品详情"
+          label-width="0"
         >
           <div class="prod-det-box">
             <div class="prod-content">
@@ -36,8 +35,8 @@
                 v-if="!disabled"
                 ref="contentZhRef"
                 v-model="dataFormPar.detailZh"
+                :height="600"
                 :disabled="!dataFormPar.categoryId"
-                :width="850"
               />
             </div>
 
@@ -60,7 +59,6 @@
 
 <script setup>
 import TinyMce from '@/components/tiny-mce/index.vue'
-
 const props = defineProps({
   dataForm: {
     type: Object,
@@ -81,7 +79,7 @@ const props = defineProps({
     }
   }
 })
-const emit = defineEmits('update:dataForm')
+const emit = defineEmits(['update:dataForm'])
 const activeName = ref('Zh')
 const dataFormPar = ref(props.dataForm)
 
@@ -149,11 +147,11 @@ watch(() => props.dataForm, (newVal) => {
     }
 
     .preview-con {
-      height: auto;
-      // max-height: 580px;
+      height: 540px;
       overflow-y: auto;
       padding: 0 10px;
       box-sizing: border-box;
+      word-wrap: break-word;
     }
   }
 }

@@ -27,22 +27,24 @@
         @submit.prevent
       >
         <el-form-item label="单笔提现">
-          <el-input v-model.trim="dataForm.withdrawCashLeast">
-            <template #suffix>
-              <i style="font-style:normal;margin-right: 10px;">元</i>
-            </template>
-          </el-input>
-          元，不高于
-          <el-input-number
-            v-model.trim="dataForm.withdrawCashMax"
-            @blur="
-              onHandleMaxValue(
-                dataForm.withdrawCashMax,
-                999999,
-                1
-              )"
-          />
-          元
+          <div class="withdraw-input-con">
+            不低于
+            <el-input-number
+              v-model.trim="dataForm.withdrawCashLeast"
+              :max="999999"
+            />
+            元，不高于
+            <el-input-number
+              v-model.trim="dataForm.withdrawCashMax"
+              @blur="
+                onHandleMaxValue(
+                  dataForm.withdrawCashMax,
+                  999999,
+                  1
+                )"
+            />
+            元
+          </div>
         </el-form-item>
         <el-form-item label="提现频次">
           <el-select v-model="dataForm.frequency">

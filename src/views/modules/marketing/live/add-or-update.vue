@@ -142,7 +142,7 @@
             >
               <el-card
                 :body-style="{ padding: '0px' }"
-                style="height: 160px; width: 120px"
+                style="height: 140px; width: 120px"
               >
                 <ImgShow
                   :src="liveProd.mainImgUrl"
@@ -291,7 +291,6 @@ const back = () => {
   .card-prod-bottom {
     .card-prod-name {
       display: block;
-      line-height: 1em;
       padding: 0 5px;
       overflow: hidden;
       text-overflow:ellipsis;
