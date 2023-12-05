@@ -42,12 +42,6 @@
             {{ $t(`pcdecorate.goodsList.goodsName`) }}
           </el-checkbox>
           <el-checkbox
-            label="1"
-            style="width: 33.3%;text-align: center"
-          >
-            {{ $t(`pcdecorate.goodsList.goodsDescription`) }}
-          </el-checkbox>
-          <el-checkbox
             label="2"
             style="width: 33.3%;text-align: center"
           >

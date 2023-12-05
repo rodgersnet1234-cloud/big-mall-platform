@@ -42,7 +42,6 @@
       <div class="operation-bar print-info">
         <el-button
           v-permission="['platform:printer:save']"
-          :disabled="isPrint === 0"
           type="primary"
           @click="onAddOrUpdate()"
         >
@@ -209,6 +208,13 @@ const getPageData = (newData = false) => {
 const addOrUpdateRef = ref(null)
 const addOrUpdateVisible = ref(false)
 const onAddOrUpdate = (printerId) => {
+  if (isPrint.value === 0) {
+    return ElMessage({
+      message: '系统尚未开启电子面单功能，请在系统—后台配置—物流配置处开启',
+      type: 'error',
+      duration: 1500
+    })
+  }
   addOrUpdateVisible.value = true
   nextTick(() => {
     addOrUpdateRef.value?.init(printerId)

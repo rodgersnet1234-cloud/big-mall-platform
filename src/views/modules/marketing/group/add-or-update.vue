@@ -330,7 +330,6 @@ defineExpose({ init })
 .card-prod-bottom {
   position: relative;
   text-align: left;
-  top: -15px;
 
   .card-prod-name {
     margin: auto;
