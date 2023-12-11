@@ -268,7 +268,6 @@
                 type="primary"
                 @click="toShopEditPage(row.shopId)"
               >
-                <el-icon><Edit /></el-icon>
                 编辑
               </el-button>
               <el-button
@@ -278,7 +277,6 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offline')"
               >
-                <el-icon><Lock /></el-icon>
                 下线店铺
               </el-button>
               <el-button
@@ -288,7 +286,6 @@
                 type="primary"
                 @click="offlineManageHandle(row, 'offlineManage')"
               >
-                <el-icon><Unlock /></el-icon>
                 下线管理
               </el-button>
               <!-- isPreferred是否优选好店 0否 1是 -->
@@ -299,7 +296,6 @@
                 type="primary"
                 @click="preferredById(row)"
               >
-                <el-icon><Setting /></el-icon>
                 {{ row.isPreferred === 0 ?'设为好店': row.isPreferred === 1 ? '取消好店' : '' }}
               </el-button>
               <el-button
@@ -308,7 +304,6 @@
                 type="primary"
                 @click="accountManageHandle(row.shopId)"
               >
-                <el-icon><Setting /></el-icon>
                 账号管理
               </el-button>
             </template>

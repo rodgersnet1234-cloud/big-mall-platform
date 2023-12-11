@@ -70,7 +70,7 @@
                       />
                       <span
                         style="cursor: pointer;"
-                        @click.stop="handleCityClick(provinceItem.children,cityItem,$event)"
+                        @click.stop="handleCityClick(provinceItem.children,cityItem,cityIndex,$event)"
                       >
                         <span
                           class="check-label"
@@ -301,8 +301,8 @@ const handleProvinceClick = (province) => {
 }
 
 // 处理市点击
-const handleCityClick = (cityList, curCity, e) => {
-  handleAreaBoxShow(e)
+const handleCityClick = (cityList, curCity, cityIndex, e) => {
+  handleAreaBoxShow(e, cityIndex)
   const flag = curCity.show
   cityList.forEach(item => {
     item.show = false
@@ -318,36 +318,39 @@ const areaStyle = reactive({
   left: '20px'
 })
 // 角标样式
-const areaMarkStyle = {
+const areaMarkStyle = reactive({
   top: '20px',
   left: '20px'
-}
-// 处理区地址盒子显示
-const handleAreaBoxShow = (e) => {
+})
+/**
+ * 处理区级盒子显示
+ * @param {Node} e 当前激活节点信息
+ * @param {Number} index 市列表索引
+ */
+const handleAreaBoxShow = (e, index) => {
   // 当前点击的节点
   const nodeName = e.target.nodeName.toLowerCase()
-  // 市列表索引
-  const index = e.target.dataset.inx
-  // 区单体所占宽度
+  // 市单体所占宽度
   const offsetLeft = cityRef.value[index]?.offsetWidth
-
+  let offsetVal = 0 // 用于计算点击箭头时区块显示的位置
   // 显示区列表的左偏移值
   if (nodeName === 'span') {
     areaStyle.left = e.clientX - e.offsetX + offsetLeft + 14 + 'px'
     areaMarkStyle.left = e.clientX - e.offsetX + offsetLeft + 9 + 'px'
-  } else if (nodeName === 'i') {
-    areaStyle.left = e.clientX - e.offsetX + e.target.offsetWidth + 'px'
-    areaMarkStyle.left = e.clientX - e.offsetX + e.target.offsetWidth + 9 + 'px'
+  } else {
+    areaStyle.left = e.clientX - e.offsetX + 28 + 'px'
+    areaMarkStyle.left = e.clientX - e.offsetX + 23 + 'px'
+    offsetVal = -8
   }
   nextTick(() => {
     // 加setTimeout防止有时获取到的高度为0
     setTimeout(() => {
       // 显示区列表盒子的高度
       const areaBoxH = areaBoxRef.value[index]?.offsetHeight
-      // 14为角标的高度
-      areaStyle.top = e.clientY - e.offsetY - areaBoxH / 2 + 14 + 'px'
+      // 显示区列表的上偏移值
+      areaStyle.top = e.clientY - e.offsetY - areaBoxH / 2 + 18 + offsetVal + 'px'
       // 角标
-      areaMarkStyle.top = e.clientY - e.offsetY + 8 + 'px'
+      areaMarkStyle.top = e.clientY - e.offsetY + 12 + offsetVal + 'px'
     })
   })
 }
