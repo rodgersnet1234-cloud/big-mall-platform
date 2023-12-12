@@ -26,11 +26,11 @@ const props = defineProps({
   },
   width: {
     type: [String, Number],
-    default: '100%'
+    default: 'auto'
   },
   height: {
     type: [String, Number],
-    default: '100%'
+    default: 'auto'
   },
   radius: {
     type: [String, Number],
@@ -90,6 +90,8 @@ const wrapStyle = computed(() => {
   const style = {}
   style.width = addUnit(props.width)
   style.height = addUnit(props.height)
+  style.maxWidth = '100%'
+  style.maxHeight = '100%'
   // 如果是显示圆形，设置一个很多的半径值即可
   style.borderRadius = addUnit(props.radius)
   // 如果设置圆角，必须要有hidden，否则可能圆角无效

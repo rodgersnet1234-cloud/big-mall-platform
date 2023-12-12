@@ -348,7 +348,7 @@
                       <div class="license-content">
                         <img-upload
                           v-model="supplierCompany.businessLicense"
-                          @input="imgChange(2, 'businessLicense')"
+                          @input="imgChange('businessLicense')"
                         />
                         <div class="example-box">
                           <img
@@ -375,7 +375,7 @@
                         >
                           <img-upload
                             v-model="supplierCompany.identityCardFront"
-                            @input="imgChange(2, 'identityCardFront')"
+                            @input="imgChange('identityCardFront')"
                           />
                         </el-form-item>
                         <el-form-item
@@ -385,7 +385,7 @@
                         >
                           <img-upload
                             v-model="supplierCompany.identityCardLater"
-                            @input="imgChange(2, 'identityCardLater')"
+                            @input="imgChange('identityCardLater')"
                           />
                         </el-form-item>
                       </div>
@@ -1607,15 +1607,11 @@ const changeBank = (value) => {
 }
 /**
 * 图片的值发生改变，重新校验对应表单字段
-* @param {*} applyStep 表单类型 2-工商信息
 * @param {*} prop 图片字段名
 */
-const imgChange = (applyStep, prop) => {
-  if (applyStep.value === 2) {
-    supplierCompanyRef.value?.validateField(prop)
-  }
+const imgChange = (prop) => {
+  supplierCompanyRef.value?.validateField(prop)
 }
-
 </script>
 
 <style lang="scss" scoped>

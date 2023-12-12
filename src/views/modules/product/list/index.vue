@@ -172,6 +172,7 @@
           v-model="checkAll"
           :indeterminate="isIndeterminate"
           class="all-check-btn"
+          :disabled="!page?.list?.length"
           @change="handleCheckAllChange"
         >
           当页全选
@@ -495,6 +496,7 @@
           <el-checkbox
             v-model="checkAll"
             :indeterminate="isIndeterminate"
+            :disabled="!page?.list?.length"
             class="all-check-btn"
             @change="handleCheckAllChange"
           >
@@ -707,7 +709,7 @@ const toReleaseProdPage = (spuId) => {
 const onSelectSome = (value) => {
   const count = value.length
   checkedCount.value = count
-  checkAll.value = count === page.list.length
+  checkAll.value = count === page.list.length && !!page?.list?.length
   isIndeterminate.value = checkedCount > 0 && checkedCount < page.list.length
   // 提取出商品id列表
   const prodList = []

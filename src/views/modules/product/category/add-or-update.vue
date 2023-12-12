@@ -61,7 +61,10 @@
         prop="imgUrl"
       >
         <div>
-          <img-upload v-model="dataForm.imgUrl" />
+          <img-upload
+            v-model="dataForm.imgUrl"
+            @input="onPropChage('imgUrl')"
+          />
           <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>
         </div>
       </el-form-item>
@@ -313,7 +316,13 @@ const closeDialog = () => {
   showCategorySelectBtn.value = true
   dataFormRef.value.resetFields()
 }
-
+/**
+ * 触发表单校验
+ * @param prop 校验项
+ */
+const onPropChage = (prop) => {
+  dataFormRef.value?.validateField(prop)
+}
 </script>
 
 <style lang="scss" scoped>

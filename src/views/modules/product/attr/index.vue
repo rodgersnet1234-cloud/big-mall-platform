@@ -18,10 +18,10 @@
               clearable
             />
           </el-form-item>
-          <el-form-item label="搜索参数：">
+          <el-form-item label="是否搜索：">
             <el-select
               v-model="pageQuery.searchType"
-              placeholder="请选择搜索参数"
+              placeholder="请选择是否搜索"
               :clearable="true"
             >
               <el-option

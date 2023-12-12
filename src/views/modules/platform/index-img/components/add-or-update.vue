@@ -23,7 +23,10 @@
           label="轮播图片"
           prop="imgUrl"
         >
-          <img-upload v-model="dataForm.imgUrl" />
+          <img-upload
+            v-model="dataForm.imgUrl"
+            @input="onPropChage('imgUrl')"
+          />
           <div
             class=""
             style="width: 100%"
@@ -288,6 +291,14 @@ const onSubmit = Debounce(() => {
     })
   })
 }, 1000)
+
+/**
+ * 触发表单校验
+ * @param prop 校验项
+ */
+const onPropChage = (prop) => {
+  dataFormRef.value?.validateField(prop)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -316,4 +327,7 @@ const onSubmit = Debounce(() => {
     }
   }
 }
+:deep(.el-card__body img) {
+  vertical-align: baseline;
+ }
 </style>
