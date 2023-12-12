@@ -1,22 +1,38 @@
 <template>
   <div class="group-container">
-    <div class="spec-name">
+    <div
+      v-if="sku[optionValue] && sku[optionValue] !== 0"
+      class="spec-name"
+    >
+      <div
+        class="tag-item-tit"
+      >
+        规格值：
+      </div>
       <div
         v-for="(item, index) in sku.leaf"
         :key="index"
-        class="spec-name-int"
+        :class="['spec-name-int',hasSkuImage?'ft-spec-val-item':''] "
       >
-        <el-tag
-          :type="item.type"
-          effect="plain"
-          :closable="!!view"
-          @close="handleRemoveSkuLeaf(index)"
-        >
-          {{ item[optionText] }}
-        </el-tag>
-        <div class="img-box">
+        <div class="spec-name-box">
+          <div class="text-hid">
+            {{ item[optionText] }}
+          </div>
           <div
-            v-if="hasSkuImage"
+            class="del-btn"
+            @click="handleRemoveSkuLeaf(index)"
+          >
+            <el-icon class="el-icon-close">
+              <Close />
+            </el-icon>
+          </div>
+        </div>
+        <div
+          v-if="hasSkuImage"
+
+          class="img-box"
+        >
+          <div
             class="spec-imgbox"
           >
             <img-upload
@@ -81,16 +97,12 @@
             v-if="view"
             #reference
           >
-            <el-button
-              type="primary"
-              style="width: 20px;height: 20px;font-size: 13px"
-              circle
+            <el-icon
+              class="button-add  el-icon-plus"
               @click="addSku"
             >
-              <el-icon>
-                <Plus />
-              </el-icon>
-            </el-button>
+              <Plus />
+            </el-icon>
           </template>
         </el-popover>
       </div>

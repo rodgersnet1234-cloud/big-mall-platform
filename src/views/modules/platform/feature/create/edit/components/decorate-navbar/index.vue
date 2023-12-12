@@ -29,7 +29,7 @@
       <div class="flex-grow" />
       <el-menu-item>
         <div class="top-tip">
-          提示：长按可拖拽组件
+          提示：长按微页面中已添加的组件可移动位置
         </div>
       </el-menu-item>
 

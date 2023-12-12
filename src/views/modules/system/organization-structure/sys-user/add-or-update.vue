@@ -28,7 +28,10 @@
         prop="avatar"
         label-width="80px"
       >
-        <img-upload v-model="dataForm.avatar" />
+        <img-upload
+          v-model="dataForm.avatar"
+          @input="onPropChage('avatar')"
+        />
       </el-form-item>
       <!-- 员工编号 -->
       <el-form-item
@@ -162,4 +165,11 @@ const onSubmit = Debounce(function () {
   })
 }, 1000)
 defineExpose({ init })
+/**
+ * 触发表单校验
+ * @param prop 校验项
+ */
+const onPropChage = (prop) => {
+  dataFormRef.value?.validateField(prop)
+}
 </script>

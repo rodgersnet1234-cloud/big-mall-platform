@@ -437,9 +437,9 @@ const handleDialogSubmit = ({ type, value }) => {
     cacheImageActiveBox.value[currentImgIndex].title = value.smallPageItem.name
     cacheImageActiveBox.value[currentImgIndex].link = value.smallPageItem.renovationId
   } else if (type === '6') { // 自定义链接
-    cacheImageActiveBox[currentImgIndex].type = '6'
-    cacheImageActiveBox[currentImgIndex].title = value.customLink.url
-    cacheImageActiveBox[currentImgIndex].link = value.customLink
+    cacheImageActiveBox.value[currentImgIndex].type = '6'
+    cacheImageActiveBox.value[currentImgIndex].title = value.customLink.url
+    cacheImageActiveBox.value[currentImgIndex].link = value.customLink
   }
   dialogVisible.value = false
 }

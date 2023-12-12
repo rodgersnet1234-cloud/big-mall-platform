@@ -168,7 +168,7 @@ const init = (rowIndexPar, cityList, typePar, banArr) => {
 
 const markClick = (e) => {
   // 点击当前弹窗外的部分关闭展开的列表
-  if (e.target.className === 'el-dialog__wrapper') {
+  if (e.target.className === 'el-overlay-dialog') {
     handleCheckChange(menuList.value, { show: false })
   }
 }
