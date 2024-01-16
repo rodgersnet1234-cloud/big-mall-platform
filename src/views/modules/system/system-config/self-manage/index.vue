@@ -206,7 +206,7 @@ import miniApp from './components/wx-ma-config.vue'
 import mp from './components/wx-mp-config.vue'
 import { ElMessage } from 'element-plus'
 import Cookies from 'vue-cookies'
-import { checkFileUrl } from '@/utils'
+import { addDomain } from '@/utils'
 
 const miniAppShow = ref(true)
 const appletInformation = ref({})
@@ -244,7 +244,7 @@ const onDownload = () => {
   if (appletInformation.value) {
     api.onDownloadZip().then(res => {
       const win = window.open(
-        checkFileUrl(res.filePath),
+        addDomain(res.filePath),
         '_blank',
         'noopener,noreferrer'
       )

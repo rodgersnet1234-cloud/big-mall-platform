@@ -86,7 +86,6 @@ const loginInfo = reactive({
   captchaVerification: '', // 验证码
   sysType: 2
 })
-const isLoginBgImg = ref(true)
 const passwordType = ref('password')
 const passwordRef = ref(null)
 // eslint-disable-next-line no-unused-vars

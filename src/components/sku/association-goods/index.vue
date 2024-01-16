@@ -79,7 +79,6 @@
 
 <script setup>
 import { formatPrice } from '@/utils/index.js'
-import Big from 'big.js'
 
 const dialogTableVisible = ref(false)
 // 打开弹窗

@@ -152,6 +152,10 @@
     "setupStore": true,
     "store": true,
     "useCancelFocusIntervalStore": true,
-    "validPassword2": true
+    "validPassword2": true,
+    "getTenantId": true,
+    "mallUserStore": true,
+    "removeTenantId": true,
+    "setTenantId": true
   }
 }
