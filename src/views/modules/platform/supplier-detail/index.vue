@@ -132,39 +132,6 @@
             </div>
             <div class="basic-info-item">
               <p class="tit">
-                <span class="asterisk">*</span>联系邮箱：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.email }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>所在地区：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.province }}{{ shopBasicInfo.city }}{{ shopBasicInfo.area }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>详细地址：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.detailAddress }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
                 供应商简介：
               </p>
               <p
@@ -345,8 +312,8 @@
               v-if="businessInfo && businessInfo.businessLicense"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="checkFileUrl(businessInfo.businessLicense)"
-              :preview-src-list="[checkFileUrl(businessInfo.businessLicense)] "
+              :src="addDomain(businessInfo.businessLicense)"
+              :preview-src-list="[addDomain(businessInfo.businessLicense)]"
             >
               <template #error>
                 <div class="image-slot">
@@ -372,8 +339,8 @@
               v-if="businessInfo && businessInfo.identityCardFront"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="checkFileUrl(businessInfo.identityCardFront) "
-              :preview-src-list="[checkFileUrl(businessInfo.identityCardFront)]"
+              :src="addDomain(businessInfo.identityCardFront)"
+              :preview-src-list="[addDomain(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -386,8 +353,8 @@
               v-if="businessInfo && businessInfo.identityCardLater"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="checkFileUrl(businessInfo.identityCardLater) "
-              :preview-src-list="[checkFileUrl(businessInfo.identityCardLater)]"
+              :src="addDomain(businessInfo.identityCardLater)"
+              :preview-src-list="[addDomain(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -488,9 +455,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="[img]"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -569,9 +536,9 @@
                     v-if="scope.row.imgUrl"
                     class="tab-img"
                     style="width: 60px; height: 60px"
-                    :src="checkFileUrl(scope.row.imgUrl)"
+                    :src="addDomain(scope.row.imgUrl)"
                     preview-teleported
-                    :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
+                    :preview-src-list="[addDomain(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -593,9 +560,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="[img]"
+                      :preview-src-list="scope.row.imgs"
                     >
                       <template #error>
                         <img
@@ -660,9 +627,9 @@
                       v-if="scope.row.imgUrl"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="checkFileUrl(scope.row.imgUrl)"
+                      :src="addDomain(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
+                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -685,9 +652,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="checkFileUrl(img) "
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="[checkFileUrl(img)]"
+                      :preview-src-list="[addDomain(img)]"
                     >
                       <template #error>
                         <img
@@ -995,8 +962,6 @@
 import { Debounce } from '@/utils/debounce'
 import * as api from '@/api/platform/audit-supplier'
 import { ElMessage } from 'element-plus'
-import { checkFileUrl } from '@/utils'
-// 图片前缀
 const supplierId = ref(useRoute().query.supplierId || 0)
 // 页面类型 查看详情/审核申请
 const pageType = ref(useRoute().query.pageType || '')
@@ -1129,12 +1094,7 @@ const queryCategoryContractInfo = () => {
   api.queryCategoryContract({ shopId: supplierId.value, sysType: 3 }).then(data => {
     categoryContract.value = data
     categoryContract.value.forEach(el => {
-      const imgUrls = el.qualifications ? el.qualifications.split(',') : []
-      if (imgUrls.length) {
-        el.imgs = handleImgUrl(imgUrls)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
 }
@@ -1153,12 +1113,7 @@ const queryBrandSigningInfo = () => {
     })
     platformBrandList.value = data.platformBrandList
     platformBrandList.value.forEach(el => {
-      const plaImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (plaImgs.length) {
-        el.imgs = handleImgUrl(plaImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
     customizeBrandList.value = data.customizeBrandList
     customizeBrandList.value.forEach(el => {
@@ -1167,23 +1122,9 @@ const queryBrandSigningInfo = () => {
         parentName = `${el.categories[0].categories[0].name}>${el.categories[0].categories[1].name}>${el.categories[0].name}`
       }
       el.parentName = parentName
-      const cusImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (cusImgs.length) {
-        el.imgs = handleImgUrl(cusImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
-}
-
-const handleImgUrl = (imgUrls) => {
-  const imgs = []
-  imgUrls.forEach((img) => {
-    const image = checkFileUrl(img)
-    imgs.push(image)
-  })
-  return imgs
 }
 
 /**
@@ -1324,7 +1265,6 @@ const dataUpdate = Debounce(function () {
     width: 100%;
     .nav {
       position: relative;
-      display: inline-block;
       display: flex;
       white-space: nowrap;
       .nav-item {
@@ -1481,9 +1421,7 @@ const dataUpdate = Debounce(function () {
     width: 100%;
     position: fixed;
     bottom: 0;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 10px 20px;
     box-shadow: 4px 2px 5px 5px #eee;
     background: #fff;
     margin-left: -24px;
@@ -1513,7 +1451,6 @@ const dataUpdate = Debounce(function () {
 .audit-dialog {
   ::v-deep(.el-dialog__header) {
     padding: 0;
-    padding-bottom: 0;
   }
   ::v-deep(.el-dialog__body) {
     padding-top: 0;

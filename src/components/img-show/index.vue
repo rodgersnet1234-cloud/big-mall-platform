@@ -1,7 +1,7 @@
 <template>
   <img
     v-if="imgPath"
-    :src="imgPath"
+    :src="addDomain(imgPath)"
     :class="classList"
     :alt="imgAlt"
     :style="wrapStyle"
@@ -61,15 +61,10 @@ const emit = defineEmits(['handleClick'])
 // 图片地址
 const imgPath = ref('')
 
-const resourcesUrl = ref(import.meta.env.VITE_APP_RESOURCES_URL)
 watch(
   () => props.src,
   (path) => {
-    if (path && !/^https?:\/\//.test(path) && props.isNeedHandle) {
-      imgPath.value = resourcesUrl.value + path
-    } else {
-      imgPath.value = path
-    }
+    imgPath.value = path
   },
   {
     immediate: true

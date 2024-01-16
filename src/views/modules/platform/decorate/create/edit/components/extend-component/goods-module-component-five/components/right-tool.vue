@@ -21,7 +21,7 @@
             class="item-operation has-bg"
           >
             <el-image
-              :src="goodsForm.bgImg"
+              :src="addDomain(goodsForm.bgImg)"
               fit="fill"
             >
               <template #error>
@@ -150,9 +150,8 @@ const handleAddImg = () => {
   elxImgboxRef.value?.init(1, 1)
 }
 // 选择图片之后的回调
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL // 服务地址
 const refreshPic = (imagePath) => {
-  goodsForm.value.bgImg = resourcesUrl + imagePath
+  goodsForm.value.bgImg = addDomain(imagePath)
 }
 // 删除图片
 const dialogVisible = ref(false) // 弹窗是否显示

@@ -30,7 +30,7 @@
               >
               <img
                 v-else
-                :src="item.pic"
+                :src="addDomain(item.pic)"
                 class="shop-icon"
                 alt
                 @error="item.pic=''"
@@ -114,7 +114,7 @@
                         >
                         <img
                           v-else
-                          :src="row.userHeadUrl"
+                          :src="addDomain(row.userHeadUrl)"
                           class="avatar"
                           alt
                           @error="row.userHeadUrl = ''"
@@ -132,7 +132,7 @@
                           class="bubble"
                         >
                           <el-image
-                            :src="row.content"
+                            :src="addDomain(row.content)"
                             class="longimage"
                             :preview-src-list="[row.content]"
                           >
@@ -222,7 +222,7 @@
                             class="bubble"
                           >
                             <el-image
-                              :src="row.content"
+                              :src="addDomain(row.content)"
                               class="longimage"
                               :preview-src-list="[row.content]"
                             >
@@ -240,7 +240,7 @@
                       <!-- 头像 -->
                       <div class="right">
                         <img
-                          :src="chatImg"
+                          src="@/assets/im_box/customer-service.png"
                           class="avatar"
                           alt
                         >
@@ -378,15 +378,14 @@ import * as api from '@/api/im-box/index.js'
 import { awsImgUpdate, getBatchPreSignUrl } from '@/api/biz/oss.js'
 import { getToken } from '@/utils/auth.js'
 import { Base64 } from 'js-base64'
-import imageCompression from 'browser-image-compression'
+import ImageCompressor from 'compressorjs'
+
 import { ElMessage, ElMessageBox } from 'element-plus'
-import customerPng from '@/assets/im_box/customer-service.png'
 
 const router = useRouter()
 const route = useRoute()
 
 const employeeIdShop = null // 当前商家id
-const chatImg = ref(customerPng) // 官方头像
 const WebSocketUrl = import.meta.env.VITE_APP_WEBSOCKET_URL
 
 const defaultTitle = document.title // 存储默认标题
@@ -534,7 +533,6 @@ const getNewUser = async () => {
 
 let ortherUser = false // 别的账号登录判断
 let noAccountable = true // 转接判断
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 let current = 1 // 聊天内容当前页
 const msgList = ref([])
 const pages = ref(null)
@@ -627,10 +625,10 @@ const openWs = () => {
       }
 
       if (result.data.shopLogo) {
-        result.data.shopLogo = resourcesUrl + result.data.shopLogo
+        result.data.shopLogo = addDomain(result.data.shopLogo)
       }
       if (result.data.userHeadUrl) {
-        result.data.userHeadUrl = resourcesUrl + result.data.userHeadUrl
+        result.data.userHeadUrl = addDomain(result.data.userHeadUrl)
       }
 
       if (result.code === 4) {
@@ -687,17 +685,13 @@ const openWs = () => {
         result.data.list.forEach(item => {
           const a = isJSON(item.content)
           if (item.userHeadUrl) {
-            item.userHeadUrl = resourcesUrl + item.userHeadUrl
+            item.userHeadUrl = addDomain(item.userHeadUrl)
           }
           if (a && JSON.parse(item.content) instanceof Object) {
             item.prodInfo = JSON.parse(item.content)
           }
 
           item.timeStr = tsToDate(item.timestamp, 'M月D日 h:m')
-
-          if (item.type === 1 && !a) {
-            item.content = item.content.indexOf(resourcesUrl) === 0 ? item.content : resourcesUrl + item.content
-          }
 
           msgIds.push(item.itemId)
           // 进行未读消息的加减
@@ -945,7 +939,7 @@ const getMsgItems = () => {
  */
 const pushMsgItem = (msgListPar, msgItemPar) => {
   if (msgItemPar.type === 1) {
-    msgItemPar.content = resourcesUrl + msgItemPar.content
+    msgItemPar.content = addDomain(msgItemPar.content)
   }
 
   const a = isJSON(msgItemPar.content)
@@ -1022,7 +1016,7 @@ const addMessage = (messageInfoPar, type) => {
   const shopInfo = {}
   const msgItem = {
     shopName: shopInfo.shopName,
-    shopLogo: resourcesUrl + shopInfo.shopLogo,
+    shopLogo: addDomain(shopInfo.shopLogo),
     type: messageInfoPar.msgType,
     userUnread: 0,
     employeeId: employeeIdShop,
@@ -1097,10 +1091,27 @@ const httpRequest = async (event) => {
   }
   const isSize = file.size / 1024 < 512
   if (!isSize) {
+    // 0.5m~5m，从0.8开始循环。5m~10m，从0.6开始循环。10m以上就直接0.4。
+    // 最低使用0.4
+    let quality
+    if (file.size / 1024 / 1024 < 5) {
+      quality = 0.8
+    } else if (file.size / 1024 / 1024 < 10) {
+      quality = 0.6
+    } else {
+      quality = 0.4
+    }
     try {
-      const resultBlob = await imageCompression(file, {
-        maxSizeMB: 0.5 // 压缩大小
-      })
+      let resultBlob
+      let index = true
+      while (index) {
+        resultBlob = await ImageCompressorFn(file, quality)
+        if (resultBlob.size / 1024 < 512 || quality <= 0.4) {
+          index = false
+        } else {
+          quality = (quality * 10 - 2) / 10
+        }
+      }
       file = new File([resultBlob], file.name, {
         type: file.type
       })
@@ -1126,6 +1137,22 @@ const httpRequest = async (event) => {
     if (!error) {
       event.onError()
     }
+  })
+}
+
+const ImageCompressorFn = (file, quality) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-new
+    new ImageCompressor(file, {
+      quality, // 压缩大小
+      convertSize: 512000,
+      success (result) {
+        resolve(result)
+      },
+      error (err) {
+        reject(err)
+      }
+    })
   })
 }
 
@@ -1234,7 +1261,7 @@ const transferDetermination = () => {
  */
 const toProdDetail = (prodInfo, type, orderType) => {
   let routeUrl
-  if (type) {
+  if (type || prodInfo.orderFlag) {
     routeUrl = router.resolve({
       path: orderType === 3 || prodInfo.spuType === 3 ? '/member/score/order' : '/order/order',
       query: {

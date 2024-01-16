@@ -81,7 +81,7 @@ const checkData = reactive({
   serviceCheck: [10, 12]
 })
 
-const dateType = ref(4)
+const dateType = ref(5)
 const changeData = (val) => {
   emit('getTimeList', {
     startTime: val[0],

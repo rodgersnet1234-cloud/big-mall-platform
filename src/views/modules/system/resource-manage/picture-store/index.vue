@@ -101,7 +101,6 @@
         <div
           v-if="options.activeTab==='pick'"
           class="pick-block"
-          name="pick"
         >
           <div class="elx-main elx-img-list">
             <div
@@ -459,7 +458,7 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, awsImgUpdate } from '@/api/biz/oss'
 import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteImgs, batchMoveImgs } from '@/api/resource/picture-store'
-import imageCompression from 'browser-image-compression'
+import ImageCompressor from 'compressorjs'
 import { Debounce } from '@/utils/debounce'
 
 let images = [] // 已选图片
@@ -719,7 +718,7 @@ const onDeleteFileGroup = (groupId) => {
 let tempSearchForm = null
 /**
  * 加载图片列表数据
- * @param page
+ * @param newData
  */
 const loadListImage = (newData = false) => {
   if (newData || !tempSearchForm) {
@@ -1056,7 +1055,7 @@ const httpRequest = (event) => {
   // aliOss 上传
 
   attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
-  awsImgUpdate(ossList[currentIndex].preSignUrl, file).then(() => {
+  awsImgUpdate(ossList[currentIndex].preSignUrl, file, event).then(() => {
     attachFiles.push(attachFile)
     completeCount.value++
     if (completeCount.value === ossList.length) {
@@ -1121,19 +1120,51 @@ const beforeUpload = async (file) => {
     return Promise().reject()
   }
   if (!isSize) {
+    // 0.5m~5m，从0.8开始循环。5m~10m，从0.6开始循环。10m以上就直接0.4。
+    // 最低使用0.4
+    let quality
+    if (file.size / 1024 / 1024 < 5) {
+      quality = 0.8
+    } else if (file.size / 1024 / 1024 < 10) {
+      quality = 0.6
+    } else {
+      quality = 0.4
+    }
     try {
-      const resultBlob = await imageCompression(file, {
-        maxSizeMB: 0.5 // 压缩大小
-      })
-      const fs = new File([resultBlob], file.name, {
+      let resultBlob
+      let index = true
+      while (index) {
+        resultBlob = await ImageCompressorFn(file, quality)
+        if (resultBlob.size / 1024 < 512 || quality <= 0.4) {
+          index = false
+        } else {
+          quality = (quality * 10 - 2) / 10
+        }
+      }
+      return new File([resultBlob], file.name, {
         type: file.type
       })
-      return fs
     } catch (error) {
       return Promise().reject()
     }
   }
   return true
+}
+
+const ImageCompressorFn = (file, quality) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-new
+    new ImageCompressor(file, {
+      quality, // 压缩大小
+      convertSize: 512000,
+      success (result) {
+        resolve(result)
+      },
+      error (err) {
+        reject(err)
+      }
+    })
+  })
 }
 
 const uploadNumberLimit = () => {
@@ -1169,8 +1200,6 @@ const uploadTips = () => {
 /**
  * 上传错误处理
  * @param err
- * @param file
- * @param fileList
  */
 const onUploadError = (err) => {
   message($t('biz.imgbox.requestError'), true)

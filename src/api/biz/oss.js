@@ -51,11 +51,21 @@ export function deleteFileGroup (param) {
 
 /**
  * minIo上传文件
- * @param url 请求的url
- * @param data 图片文件
+ * @param {String}url 请求的url
+ * @param {File} data 图片文件
+ * @param {UploadRequestOptions} options
+ * @returns {*}
  */
-export function awsImgUpdate (url, data) {
-  return axios.put(url, data)
+export function awsImgUpdate (url, data, options) {
+  return axios.put(url, data, {
+    onUploadProgress: (progressEvent) => {
+      // <el-upload/> 配置上传文件进度
+      if (options) {
+        const complete = (((progressEvent.loaded / progressEvent.total) * 100) | 0)
+        options.onProgress({ percent: complete })
+      }
+    }
+  })
 }
 
 // aliOss上传文件

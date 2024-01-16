@@ -4,6 +4,13 @@
     :title="dataForm.id? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
   >
+    <el-alert
+      title="设置分组后需进行商品管理，设置商品数量少于三件时，该分组不显示"
+      type="warning"
+      show-icon
+      :closable="false"
+      class="alert-tip"
+    />
     <el-form
       ref="dataFormRef"
       :model="dataForm"
@@ -153,3 +160,9 @@ const onSubmit = () => {
 }
 defineExpose({ init })
 </script>
+
+<style scoped lang="scss">
+  .alert-tip {
+    margin-bottom: 18px;
+  }
+</style>

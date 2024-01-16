@@ -151,7 +151,7 @@
         </div>
         <div class="module-left-content">
           <el-image
-            :src="moduleForm.leftConfig.imgMessage.img"
+            :src="addDomain(moduleForm.leftConfig.imgMessage.img)"
             fit="fill"
           >
             <template #error>
@@ -198,7 +198,7 @@
           </div>
           <div class="right-top-right">
             <el-image
-              :src="moduleForm.topConfig.imgMessage.img"
+              :src="addDomain(moduleForm.topConfig.imgMessage.img)"
               fit="fill"
             >
               <template #error>
@@ -244,7 +244,7 @@
           </div>
           <div class="right-top-right">
             <el-image
-              :src="moduleForm.bottomConfig.imgMessage.img"
+              :src="addDomain(moduleForm.bottomConfig.imgMessage.img)"
               fit="fill"
             >
               <template #error>

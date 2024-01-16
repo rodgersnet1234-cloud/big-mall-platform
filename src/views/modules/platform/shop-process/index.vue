@@ -104,105 +104,6 @@
                 @submit.prevent
               >
                 <div class="ci-wrapper">
-                  <div class="left-info">
-                    <el-form-item
-                      label="商家名称"
-                      prop="merchantName"
-                    >
-                      <el-input
-                        v-model="shopDetail.merchantName"
-                        placeholder="请输入10字以内的商家名称"
-                        maxlength="10"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="店铺名称"
-                      prop="shopName"
-                    >
-                      <el-input
-                        v-model="shopDetail.shopName"
-                        placeholder="请输入20字以内的店铺名称"
-                        maxlength="20"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="联系人"
-                      prop="contactName"
-                    >
-                      <el-input
-                        v-model="shopDetail.contactName"
-                        placeholder="请输入联系人姓名"
-                        maxlength="10"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="联系方式"
-                      prop="contactPhone"
-                    >
-                      <el-input
-                        v-model="shopDetail.contactPhone"
-                        oninput="value=value.replace(/[^\d]/g,'')"
-                        placeholder="请输入11位手机号码"
-                        maxlength="11"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="联系邮箱"
-                      prop="email"
-                    >
-                      <el-input
-                        v-model.trim="shopDetail.email"
-                        placeholder="请输入联系邮箱"
-                        maxlength="30"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="所在地区"
-                      prop="currentAddr"
-                    >
-                      <el-cascader
-                        ref="cascaderAddrRef"
-                        v-model="shopDetail.currentAddr"
-                        :options="addrList"
-                        :props="addrListTreeProps"
-                        style="width:100%"
-                        placeholder="请选择所在地区"
-                        @change="handleAddrChange"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="详细地址"
-                      prop="detailAddress"
-                    >
-                      <el-input
-                        v-model="shopDetail.detailAddress"
-                        placeholder="请输入50字以内的详细地址"
-                        maxlength="50"
-                        @blur="onMapLocation(true)"
-                      >
-                        <template #append>
-                          <div
-                            class="location-btn"
-                            @click="onMapLocation()"
-                          >
-                            <el-icon>
-                              <Location />
-                            </el-icon>
-                            定位
-                          </div>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                    <el-form-item>
-                      <div class="map">
-                        <tmap
-                          ref="tmapRef"
-                          :lat-lng="latLng"
-                          @change-lat-lng="onChangeLatLng"
-                        />
-                      </div>
-                    </el-form-item>
-                  </div>
                   <div class="right-info">
                     <el-form-item
                       label="店铺logo"
@@ -252,6 +153,49 @@
                         </el-form-item>
                       </div>
                     </div>
+                  </div>
+                  <div class="left-info">
+                    <el-form-item
+                      label="商家名称"
+                      prop="merchantName"
+                    >
+                      <el-input
+                        v-model="shopDetail.merchantName"
+                        placeholder="请输入10字以内的商家名称"
+                        maxlength="10"
+                      />
+                    </el-form-item>
+                    <el-form-item
+                      label="店铺名称"
+                      prop="shopName"
+                    >
+                      <el-input
+                        v-model="shopDetail.shopName"
+                        placeholder="请输入20字以内的店铺名称"
+                        maxlength="20"
+                      />
+                    </el-form-item>
+                    <el-form-item
+                      label="联系人"
+                      prop="contactName"
+                    >
+                      <el-input
+                        v-model="shopDetail.contactName"
+                        placeholder="请输入联系人姓名"
+                        maxlength="10"
+                      />
+                    </el-form-item>
+                    <el-form-item
+                      label="联系方式"
+                      prop="contactPhone"
+                    >
+                      <el-input
+                        v-model="shopDetail.contactPhone"
+                        oninput="value=value.replace(/[^\d]/g,'')"
+                        placeholder="请输入11位手机号码"
+                        maxlength="11"
+                      />
+                    </el-form-item>
                     <el-form-item
                       label="店铺简介"
                       prop="intro"
@@ -282,7 +226,7 @@
               label-width="auto"
               @submit.prevent
             >
-              <div class="ci-wrapper">
+              <div class="ci-wrapper company">
                 <div class="left-info">
                   <el-form-item
                     label="统一社会信用代码"
@@ -898,9 +842,10 @@
                   <el-input
                     v-model="shopUserRegisterInfo.passwordPar"
                     v-input-rule
+                    :show-password="true"
                     type="password"
                     maxlength="20"
-                    placeholder="输入6-20位登录密码"
+                    placeholder="输入8-20位登录密码"
                     autocomplete="new-password"
                   />
                 </el-form-item>
@@ -969,9 +914,7 @@
 <script setup>
 import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
 import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
-import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-shop'
-import { treeDataTranslate } from '@/utils'
 import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard, validPassword2 } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto.js'
@@ -985,28 +928,19 @@ const router = useRouter()
 const isNotEdit = ref(false) // 是否不可以编辑信息, 当申请状态为待审核时不能编辑
 
 const shopUserRegisterInfoRef = ref(null)
-const cascaderAddrRef = ref([]) // 选中地址
 
 // 第一步---基本信息
-const addrList = ref([])
-const addrListTreeProps = reactive({
-  value: 'areaId',
-  label: 'areaName'
-})
 const shopDetail = ref({
   merchantName: '',
   shopName: '',
   contactName: '',
   contactPhone: '',
-  email: '',
   province: '',
   provinceId: '',
   city: '',
   cityId: '',
   area: '',
   areaId: '',
-  currentAddr: '',
-  detailAddress: '',
   shopLng: '',
   shopLat: '',
   shopLogo: '',
@@ -1162,17 +1096,6 @@ const shopDetailRule = reactive({
   contactPhone: [
     { required: true, message: '请填写联系方式', trigger: 'blur' },
     { validator: validateMobile, trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: '联系邮箱不能为空', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'blur' }
-  ],
-  currentAddr: [
-    { required: true, message: '请选择所在地区', trigger: ['blur', 'change'] }
-  ],
-  detailAddress: [
-    { required: true, message: '详细地址不能为空', trigger: ['blur', 'change'] },
-    { validator: validEmptyTab, trigger: 'blur' }
   ],
   shopLogo: [
     { required: true, message: '请上传店铺Logo', trigger: ['blur', 'change'] }
@@ -1369,95 +1292,6 @@ const shopUserRegisterRule = reactive({
 
 const allinPayStore = useAllinpayStore()
 const paySettlementType = allinPayStore.paySettlementType // 是否开启通联支付 1：开启 0：关闭
-
-onMounted(() => {
-  // 请求地址列表
-  queryAddressList()
-})
-
-// 腾讯地图
-const tmapRef = ref(null)
-const latLng = ref({
-  lng: 113.327955,
-  lat: 23.136783
-})
-const onMapLocation = (isTrue) => {
-  let address = ''
-  const { provinceId, province, cityId, city, areaId, area, detailAddress } = shopDetail.value
-  if (isTrue) {
-    // 选择省市区时，定位地图
-    if (provinceId) {
-      address = province
-      tmapRef.value.onSetZoom(6)
-      if (cityId) {
-        address = address + city
-        tmapRef.value.onSetZoom(10)
-        if (areaId) {
-          address = address + area
-          tmapRef.value.onSetZoom(18)
-          if (detailAddress) {
-            // 详细地址
-            address = address + detailAddress
-            tmapRef.value.onSetZoom(18)
-          }
-        }
-      }
-    }
-    if (address) {
-      tmapRef.value.onGetLocation(address).then(res => {
-        onChangeLatLng(res)
-      })
-    }
-  } else {
-    if (!provinceId || !cityId || !areaId) {
-      ElMessage({
-        message: $t('admin.selePCD'),
-        type: 'error',
-        duration: 1000
-      })
-      return
-    }
-    tmapRef.value.onGetAddress(latLng.value).then(res => {
-      shopDetail.value.detailAddress = res.formatted_addresses?.recommend || res.address
-    })
-    tmapRef.value.onSetZoom(18)
-  }
-}
-
-// 修改经纬度
-const onChangeLatLng = (latLngInfo) => {
-  const { lng, lat } = latLngInfo
-  latLng.value = {
-    lat,
-    lng
-  }
-  shopDetail.value.shopLng = lng
-  shopDetail.value.shopLat = lat
-}
-/**
- * 请求地址列表
- */
-const queryAddressList = () => {
-  addrApi.listAreaOfEnable({}).then(data => {
-    addrList.value = treeDataTranslate(data, 'areaId', 'parentId')
-  })
-}
-
-/**
- * 监听地址改变
- */
-const handleAddrChange = (value) => {
-  if (value.length > 0) {
-    const labels = cascaderAddrRef.value.getCheckedNodes()[0].pathLabels
-    shopDetail.value.province = labels[0]
-    shopDetail.value.provinceId = value[0]
-    shopDetail.value.city = labels[1]
-    shopDetail.value.cityId = value[1]
-    shopDetail.value.area = labels[2]
-    shopDetail.value.areaId = value[2]
-  }
-  onMapLocation(true)
-}
 
 const endTimeRef = ref(null)
 const focusEndTime = () => {

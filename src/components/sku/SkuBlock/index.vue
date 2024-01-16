@@ -170,7 +170,7 @@ const props = defineProps({
 const emit = defineEmits(['input', 'on-change', 'on-change', 'on-change', 'update:hasSkuImg', 'update:modelValue'])
 
 const route = useRoute()
-const view = ref(!(route.path === '/product/list' || route.path === '/product-insights'))
+const view = ref(!(route.path === '/product/list' || route.path === '/data-analysis/product-insights'))
 const data = ref(props.salesAttrs)
 const skuTreeData = ref(props.skuTree)
 const hasSkuId = ref(true)

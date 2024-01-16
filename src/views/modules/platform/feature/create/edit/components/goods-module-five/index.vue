@@ -30,7 +30,7 @@
               </div>
               <el-image
                 v-else
-                :src="formData.leftMessage.img"
+                :src="addDomain(formData.leftMessage.img)"
                 fit="fill"
               >
                 <template #error>
@@ -76,7 +76,7 @@
               </div>
               <el-image
                 v-else
-                :src="formData.rightMessage.img"
+                :src="addDomain(formData.rightMessage.img)"
                 fit="fill"
               >
                 <template #error>
@@ -289,7 +289,6 @@ const myCheckResult = ($isPass) => {
 
 const addLength = ref(12)
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const goodsNumber = ref(0) // 限制多少个商品
 
 const currentOperation = ref('')
@@ -355,9 +354,9 @@ const handleRightRemoveSelected = () => {
 // 图片选择回调
 const refreshPic = (imagePath) => {
   if (currentOperation.value === 'addImg1') {
-    formData.leftMessage.img = resourcesUrl + imagePath
+    formData.leftMessage.img = addDomain(imagePath)
   } else if (currentOperation.value === 'addImg2') {
-    formData.rightMessage.img = resourcesUrl + imagePath
+    formData.rightMessage.img = addDomain(imagePath)
   }
 }
 

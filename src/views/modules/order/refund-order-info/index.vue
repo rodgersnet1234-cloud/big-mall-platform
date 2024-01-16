@@ -124,7 +124,7 @@
                           <el-image
                             v-for="(picItem,picInx) in dataForm.imgUrls"
                             :key="picInx"
-                            :src="picItem"
+                            :src="addDomain(picItem)"
                             class="img-box"
                             :preview-src-list="dataForm.imgUrls"
                           >
@@ -205,7 +205,7 @@
                     <el-image
                       v-for="(picItem,picInx) in orderRefundAddrPhotos"
                       :key="picInx"
-                      :src="picItem"
+                      :src="addDomain(picItem)"
                       class="img-box"
                       :preview-src-list="orderRefundAddrPhotos"
                     >
@@ -260,20 +260,39 @@
                         </div>
                       </div>
                     </div>
+
+                    <!-- 组合 -->
+                    <div
+                      v-if="scope.row.comboList"
+                      class="gift-prod"
+                    >
+                      <div
+                        v-for="(item,index) in scope.row.comboList"
+                        :key="index"
+                        class="item"
+                      >
+                        <div class="giveaway-item-name">
+                          【组合】{{ item.spuName }}
+                        </div>
+                        <span class="giveaway-item-sku-count">{{ item.skuName }} ×{{ item.count }}</span>
+                      </div>
+                    </div>
+                    <!-- / 组合 -->
+
                     <!-- 赠品 -->
                     <div
                       v-if="scope.row.giveawayList && !prodLength"
-                      class="gift-prod table-cell-text"
+                      class="gift-prod"
                     >
                       <div
                         v-for="(item,index) in scope.row.giveawayList"
                         :key="index"
                         class="item"
                       >
-                        <div class="name prod-info-text">
+                        <div class="giveaway-item-name">
                           【赠品】{{ item.spuName }}
                         </div>
-                        <span class="num">{{ item.skuName }} ×{{ item.count }}</span>
+                        <span class="giveaway-item-sku-count">{{ item.skuName }} ×{{ item.count }}</span>
                       </div>
                     </div>
                   <!-- / 赠品 -->
@@ -455,14 +474,13 @@
 </template>
 
 <script setup>
+import { formatPrice } from '@/utils/index.js'
+
 import Big from 'big.js'
 import * as api from '@/api/order/order-refund'
-import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import refundRecord from './conponents/refund-record/index.vue'
 import refundSteps from './conponents/refund-steps/index.vue'
-
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const route = useRoute()
 onMounted(() => {
@@ -659,12 +677,7 @@ const getRefundOrderInfo = () => {
 const onHandleImgUrl = (imgUrls) => {
   const imgs = []
   imgUrls.forEach((img) => {
-    if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-      const image = resourcesUrl + img
-      imgs.push(image)
-    } else {
-      imgs.push(img)
-    }
+    imgs.push(addDomain(img))
   })
   return imgs
 }

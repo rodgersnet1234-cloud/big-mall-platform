@@ -3,7 +3,7 @@
     <el-tabs
       id="tabs"
       type="card"
-      style="marginTop:-15px"
+      style="margin-top: -15px;"
     >
       <el-tab-pane :label="$t('platform.config.chineseConfig')">
         <tiny-mce
@@ -70,9 +70,9 @@ const init = () => {
 // 表单提交
 const onSubmit = () => {
   api.save({
-    paramKey: props.params.keyEN,
-    paramValue: contentEN.value,
-    remark: props.params.remarkEN
+    paramKey: props.params.keyCN,
+    paramValue: contentCN.value,
+    remark: props.params.remarkCN
   }).then(data => {
     if (data) {
       init()

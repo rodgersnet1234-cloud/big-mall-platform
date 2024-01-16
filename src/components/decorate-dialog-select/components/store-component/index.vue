@@ -54,7 +54,7 @@
           <template #default="scope">
             <div class="shopName-content">
               <el-image
-                :src="scope.row.shopLogo"
+                :src="addDomain(scope.row.shopLogo)"
                 fit="fill"
               >
                 <template #error>

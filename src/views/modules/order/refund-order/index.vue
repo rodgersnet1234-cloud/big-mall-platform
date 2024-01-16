@@ -12,7 +12,7 @@
           <el-input
             v-model="searchForm.refundId"
             :placeholder="$t('order.order.refundId')"
-            maxlength="20"
+            maxlength="19"
             clearable
           />
         </el-form-item>
@@ -70,7 +70,7 @@
           <el-input
             v-model="searchForm.orderId"
             :placeholder="$t('order.order.number')"
-            maxlength="20"
+            maxlength="19"
             clearable
           />
         </el-form-item>
@@ -422,6 +422,25 @@
                         <span>{{ orderItem.count }}{{ $t("constant.piece") }}</span>
                       </div>
                     </div>
+                    <!-- 组合信息 -->
+                    <div
+                      v-if="orderItem.comboList"
+                      class="order-prod-item-give-con"
+                    >
+                      <div
+                        v-for="(comboItem, comboIndex) in orderItem.comboList"
+                        :key="comboIndex"
+                        class="giveaway-item"
+                      >
+                        <div class="giveaway-item-name">
+                          【组合】{{ comboItem.spuName }}
+                        </div>
+                        <div class="giveaway-item-sku-count">
+                          {{ comboItem.skuName || '' }} x{{ comboItem.count }}
+                        </div>
+                      </div>
+                    </div>
+
                     <!-- 赠品信息 -->
                     <div
                       v-if="orderItem.giveawayList"
@@ -639,7 +658,8 @@
 import moment from 'moment'
 import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
-import OrderInfo from '../order/components/order-info.vue'
+import OrderInfo from '../order/components/order-info/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { useRouter } from 'vue-router'
 
 const defaultTime = [

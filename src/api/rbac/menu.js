@@ -8,10 +8,11 @@ export function menuList (searchParam) {
   })
 }
 
-export function listWithPermissions () {
+export function listWithPermissions (params) {
   return request({
     url: '/mall4cloud_auth/mp/menu/list_with_permissions',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

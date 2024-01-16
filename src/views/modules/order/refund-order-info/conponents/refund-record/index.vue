@@ -296,17 +296,13 @@ const applyInterventionImgs = computed(() => {
 
 // 拒绝凭证
 const rejectImgs = computed(() => {
-  return props.refundDetail.shopImgUrls?.split(',').map(item => {
-    return import.meta.env.VITE_APP_RESOURCES_URL + item
-  })
+  return props.refundDetail.shopImgUrls?.split(',')
 })
 
 // 图片处理
 const onHandleImgs = (imgStr) => {
   if (imgStr) {
-    return imgStr.split(',').map(url => {
-      return import.meta.env.VITE_APP_RESOURCES_URL + url
-    })
+    return imgStr.split(',').map
   }
   return []
 }

@@ -32,9 +32,8 @@
               class="img-box"
               :class="{empty: !formData.prodIds[0].prodName}"
             >
-              <!-- <img :src="item.pic" /> -->
               <el-image
-                :src="item.pic"
+                :src="addDomain(item.pic)"
                 style="width: 100px;height: 100px;"
                 fit="fill"
               >
@@ -77,7 +76,7 @@
             >
               <img-show
                 :is-need-handle="item.pic !== defPng"
-                :src="item.pic"
+                :src="addDomain(item.pic)"
               />
             </div>
             <div class="active-price-con">
@@ -138,7 +137,7 @@
           <div class="img-box">
             <el-image
               class="goods-pic"
-              :src="item.pic"
+              :src="addDomain(item.pic)"
               fit="fill"
             >
               <template #error>

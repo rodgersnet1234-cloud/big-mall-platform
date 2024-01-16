@@ -254,7 +254,7 @@ const getPageData = (init = false) => {
 
     if (init && selectProds.value.length) {
       nextTick(() => {
-        selectProds.forEach(row => {
+        selectProds.value?.forEach(row => {
           const index = pageData.value.dataList.findIndex((prodItem) => prodItem.spuId === row.spuId)
           prodTableRef.value?.toggleRowSelection(pageData.value.dataList[index], true)
         })

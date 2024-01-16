@@ -101,7 +101,7 @@
             <div class="goods-items">
               <div class="goods-items-img">
                 <el-image
-                  :src="item.imgs"
+                  :src="addDomain(item.imgs)"
                   fit="fill"
                 >
                   <template #error>
@@ -179,6 +179,7 @@
 </template>
 <script setup>
 import { formatPrice } from '@/utils/index.js'
+
 const props = defineProps({
   config: { // 配置信息
     type: Object,

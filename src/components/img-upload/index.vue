@@ -8,7 +8,7 @@
       >
         <img-show
           v-if="modelValue"
-          :src="getImgSrc()"
+          :src="modelValue"
           :class-list="['pic']"
         />
         <el-icon
@@ -29,14 +29,12 @@
       v-model="visible"
       :append-to-body="visible"
     >
-      <img-show :src="getImgSrc()" />
+      <img-show :src="modelValue" />
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const elxImgboxVisible = ref(false)
 const visible = ref(false)
 
@@ -68,19 +66,6 @@ const elxImgboxHandle = () => {
   nextTick(() => {
     elxImgboxRef.value?.init(1)
   })
-}
-
-/**
- * 获取图片路径
- */
-const getImgSrc = () => {
-  if (!props.modelValue) {
-    return ''
-  }
-  if (props.modelValue && props.modelValue.indexOf('http') === -1 && props.modelValue.indexOf('https') === -1) {
-    return resourcesUrl + props.modelValue
-  }
-  return props.modelValue
 }
 
 const openImg = () => {

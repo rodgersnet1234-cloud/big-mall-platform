@@ -36,6 +36,7 @@
             v-model="dataForm.rechargeAmount"
             :min="0.01"
             @change="inputChange(1)"
+            @input="dataForm.rechargeAmount = dataForm.rechargeAmount.replace(/^0*(?=\d)|[^\d.]/g,'')"
           />
         </el-form-item>
         <el-form-item
@@ -50,6 +51,7 @@
             max="100000000"
             class="input-width"
             @change="inputChange(2)"
+            @input="dataForm.presAmount = dataForm.presAmount.replace(/^0*(?=\d)|[^\d.]/g,'')"
           >
             <template #prepend>
               {{ $t("user.recharge.reward") }}
@@ -70,6 +72,7 @@
             max="100000000"
             class="input-width"
             @change="inputChange(3)"
+            @input="dataForm.presScore = dataForm.presScore.replace(/^0*(?=\d)|[^\d]/g,'')"
           >
             <template #prepend>
               {{ $t("user.recharge.reward") }}
@@ -90,6 +93,7 @@
             max="100000000"
             class="input-width"
             @change="inputChange(4)"
+            @input="dataForm.presGrowth = dataForm.presGrowth.replace(/^0*(?=\d)|[^\d]/g,'')"
           >
             <template #prepend>
               {{ $t("user.recharge.reward") }}

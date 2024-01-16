@@ -196,12 +196,14 @@
               <div class="sku-table">
                 <!-- sku表格 -->
                 <sku-table
+                  v-if="isHaveDefaultWarehouse"
                   :data="salesAttrs"
                   :flatten="flatten"
                   :is-no-sku-value="isNoSkuValue"
                   :spu-id="parseInt(dataForm.spuId)"
                   :is-category-id="!!dataForm.shopCategoryId"
                   :is-score="isScore"
+                  :default-warehouse="defaultWarehouse"
                   @on-change-data="handleChangeData"
                 />
               </div>
@@ -411,6 +413,19 @@ const vPermission = checkPermission
 
 const route = useRoute()
 const router = useRouter()
+
+const defaultWarehouse = ref('')
+const isHaveDefaultWarehouse = ref(false)
+// 未获取默认仓库id，则需要获取默认仓库id
+const getDefaultWarehouse = () => {
+  if (!defaultWarehouse.value) {
+    api.getDefaultWarehouseId().then((res) => {
+      isHaveDefaultWarehouse.value = true
+      defaultWarehouse.value = res.warehouseId
+    })
+  }
+}
+getDefaultWarehouse()
 
 const rules = reactive({
   nameZh: [
@@ -839,6 +854,15 @@ const handleChangeData = (data) => {
     }
     if (sku.stock) {
       totalStock += Number(sku.stock) // 库存累加
+    }
+
+    if ((!sku.stockPointList || !sku.stockPointList.length)) {
+      sku.stockPointList = [{
+        stock: 0,
+        stockPointId: defaultWarehouse.value,
+        stockPointType: 1,
+        type: 0
+      }]
     }
     salePrices.push(sku.priceFee) // 售价
     marketPrices.push(sku.marketPriceFee) // 市场价

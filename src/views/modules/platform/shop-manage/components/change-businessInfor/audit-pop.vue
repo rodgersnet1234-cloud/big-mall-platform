@@ -80,7 +80,7 @@
                   <el-image
                     v-if="modifyInformation.businessLicense"
                     class="logo-image"
-                    :src="modifyInformation.businessLicense.indexOf('http') === 0 ? modifyInformation.businessLicense : resourcesUrl + modifyInformation.businessLicense"
+                    :src="addDomain(modifyInformation.businessLicense)"
                   >
                     <template #error>
                       <img
@@ -101,7 +101,7 @@
                   <el-image
                     v-if="modifyInformation.identityCardFront"
                     class="logo-image"
-                    :src="modifyInformation.identityCardFront.indexOf('http') === 0 ? modifyInformation.identityCardFront : resourcesUrl + modifyInformation.identityCardFront"
+                    :src="addDomain(modifyInformation.identityCardFront)"
                   >
                     <template #error>
                       <img
@@ -113,7 +113,7 @@
                   <el-image
                     v-if="modifyInformation.identityCardLater"
                     class="logo-image"
-                    :src="modifyInformation.identityCardLater.indexOf('http') === 0 ? modifyInformation.identityCardLater : resourcesUrl + modifyInformation.identityCardLater"
+                    :src="addDomain(modifyInformation.identityCardLater)"
                   >
                     <template #error>
                       <img
@@ -197,7 +197,6 @@ const isItemNull = computed(() => {
   }
 })
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 // 店铺id
 const shopId = ref('')
 // 控制显示

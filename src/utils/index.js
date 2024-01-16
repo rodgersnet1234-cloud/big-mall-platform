@@ -611,16 +611,23 @@ export function bigNumberTransform (value) {
   }
   return newValue.join('')
 }
+
 /**
-* 文件地址校验
-* @param fileUrl 获取到的文件路径
-*/
-export function checkFileUrl (fileUrl) {
-  const baseUrl = import.meta.env.VITE_APP_RESOURCES_URL
-  const rex = new RegExp(baseUrl)
-  if (fileUrl && !rex.test(fileUrl.trim())) {
-    return baseUrl + fileUrl
+ * 添加图片域名
+ * @param path 获取到的文件路径
+ */
+export function addDomain (path) {
+  if (path === '') return ''
+  const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
+  // 适配el-image 图片组件预览功能
+  if (path && typeof path === 'object') {
+    // eslint-disable-next-line no-return-assign
+    return path.map(el => el = addDomain(el))
   } else {
-    return fileUrl
+    if (path && path.indexOf('http') === -1) {
+      return resourcesUrl + path
+    } else {
+      return path
+    }
   }
 }

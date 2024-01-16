@@ -10,7 +10,7 @@
         <img
           v-if="configuration.bsTopBarIcon"
           style="height: 18px;width:59px;margin-right: 10px;"
-          :src="configuration.bsTopBarIcon"
+          :src="addDomain(configuration.bsTopBarIcon)"
           alt
         >
         <a

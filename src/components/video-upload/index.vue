@@ -7,10 +7,10 @@
         @click.stop="videoboxHandle"
       >
         <video
-          v-if="videoSrc"
+          v-if="value"
           ref="myVideoRef"
           class="video"
-          :src="videoSrc"
+          :src="addDomain(value)"
           controls="controls"
         />
         <div
@@ -41,7 +41,6 @@ import VideoBox from '@/components/video-box/index.vue'
 
 const emit = defineEmits(['input', 'update:value'])
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const videoboxVisible = ref(false)
 const visible = ref(false)
 
@@ -55,11 +54,6 @@ const props = defineProps({
     type: Boolean
   }
 })
-const videoSrc = ref('')
-watch(() => props.value, () => {
-  videoSrc.value = getImgSrc()
-}, { deep: true })
-
 const videoboxRef = ref(null)
 // 打开视频选择窗
 const videoboxHandle = () => {
@@ -73,18 +67,6 @@ const videoboxHandle = () => {
   })
 }
 
-/**
- * 获取视频路径
- */
-const getImgSrc = () => {
-  if (!props.value) {
-    return ''
-  }
-  if (props.value.indexOf('http://') === 0 || props.value.indexOf('https://') === 0) {
-    return props.value
-  }
-  return resourcesUrl + props.value
-}
 const openImg = () => {
   visible.value = true
 }

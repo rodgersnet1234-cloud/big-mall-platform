@@ -143,39 +143,6 @@
             </div>
             <div class="basic-info-item">
               <p class="tit">
-                <span class="asterisk">*</span>联系邮箱：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.email }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>所在地区：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.province }}{{ shopBasicInfo.city }}{{ shopBasicInfo.area }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>详细地址：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.detailAddress }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
                 店铺简介：
               </p>
               <p
@@ -208,8 +175,8 @@
                   fit="contain"
                   class="img-static"
                   style="width: 100px; height: 100px"
-                  :src="checkFileUrl(shopBasicInfo.shopLogo)"
-                  :preview-src-list="[checkFileUrl(shopBasicInfo.shopLogo)]"
+                  :src="addDomain(shopBasicInfo.shopLogo)"
+                  :preview-src-list="[addDomain(shopBasicInfo.shopLogo)]"
                 >
                   <template #error>
                     <img
@@ -243,8 +210,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="checkFileUrl(shopBasicInfo.mobileBackgroundPic) "
-                    :preview-src-list=" [checkFileUrl(shopBasicInfo.mobileBackgroundPic)]"
+                    :src="addDomain(shopBasicInfo.mobileBackgroundPic)"
+                    :preview-src-list="[addDomain(shopBasicInfo.mobileBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -266,8 +233,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="checkFileUrl(shopBasicInfo.pcBackgroundPic) "
-                    :preview-src-list="[checkFileUrl(shopBasicInfo.pcBackgroundPic)]"
+                    :src="addDomain(shopBasicInfo.pcBackgroundPic)"
+                    :preview-src-list="[addDomain(shopBasicInfo.pcBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -450,8 +417,8 @@
                 fit="contain"
                 class="img-static"
                 style="width: 100px; height: 100px"
-                :src="checkFileUrl(businessInfo.businessLicense)"
-                :preview-src-list="[checkFileUrl(businessInfo.businessLicense)]"
+                :src="addDomain(businessInfo.businessLicense)"
+                :preview-src-list="[addDomain(businessInfo.businessLicense)]"
               >
                 <template #error>
                   <img
@@ -481,8 +448,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="checkFileUrl(businessInfo.identityCardFront)"
-              :preview-src-list="[checkFileUrl(businessInfo.identityCardFront)]"
+              :src="addDomain(businessInfo.identityCardFront)"
+              :preview-src-list="[addDomain(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -496,8 +463,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="checkFileUrl(businessInfo.identityCardLater)"
-              :preview-src-list="[checkFileUrl(businessInfo.identityCardLater)]"
+              :src="addDomain(businessInfo.identityCardLater)"
+              :preview-src-list="[addDomain(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -598,8 +565,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
-                      :preview-src-list="[img]"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                       preview-teleported
                     >
                       <template #error>
@@ -680,8 +647,8 @@
                     preview-teleported
                     class="tab-img"
                     style="width: 60px; height: 60px;"
-                    :src="checkFileUrl(scope.row.imgUrl)"
-                    :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
+                    :src="addDomain(scope.row.imgUrl)"
+                    :preview-src-list="[addDomain(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -704,8 +671,8 @@
                       preview-teleported
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
-                      :preview-src-list="[img]"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -775,8 +742,8 @@
                       class="tab-img"
                       preview-teleported
                       style="width: 60px; height: 60px"
-                      :src="checkFileUrl(scope.row.imgUrl)"
-                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
+                      :src="addDomain(scope.row.imgUrl)"
+                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -799,8 +766,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="checkFileUrl(img)"
-                      :preview-src-list="[checkFileUrl(img)]"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(imgs)"
                       preview-teleported
                     >
                       <template #error>
@@ -1149,7 +1116,6 @@
 import { Debounce } from '@/utils/debounce'
 import * as api from '@/api/platform/audit-shop'
 import { ElMessage } from 'element-plus'
-import { checkFileUrl } from '@/utils'
 
 const route = useRoute()
 const shopId = route.query.shopId || 0
@@ -1320,12 +1286,7 @@ const queryCategoryContractInfo = () => {
   api.queryCategoryContract({ shopId, sysType: 1 }).then(data => {
     categoryContract.value = data
     categoryContract.value.forEach(el => {
-      const imgUrls = el.qualifications ? el.qualifications.split(',') : []
-      if (imgUrls.length) {
-        el.imgs = handleImgUrl(imgUrls)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
 }
@@ -1344,32 +1305,13 @@ const queryBrandSigningInfo = () => {
     })
     platformBrandList.value = data.platformBrandList
     platformBrandList.value.forEach(el => {
-      const plaImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (plaImgs.length) {
-        el.imgs = handleImgUrl(plaImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
     customizeBrandList.value = data.customizeBrandList
     customizeBrandList.value.forEach(el => {
-      const cusImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (cusImgs.length) {
-        el.imgs = handleImgUrl(cusImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
-}
-
-const handleImgUrl = (imgUrls) => {
-  const imgs = []
-  imgUrls.forEach((img) => {
-    const image = checkFileUrl(img)
-    imgs.push(image)
-  })
-  return imgs
 }
 
 /**
@@ -1492,12 +1434,10 @@ const dataUpdate = Debounce(function () {
 .app-container {
   margin-bottom: 30px;
 }
-
 .app-container.shop-detail {
   font-size: 14px;
   color: #333;
   min-height: 852px;
-
   .red-tag-txt {
     color: #ff4949;
   }
@@ -1509,13 +1449,10 @@ const dataUpdate = Debounce(function () {
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-
     .nav {
       position: relative;
-      display: inline-block;
       display: flex;
       white-space: nowrap;
-
       .nav-item {
         margin: 0;
         font-size: 14px;
@@ -1524,7 +1461,6 @@ const dataUpdate = Debounce(function () {
         color: #999;
         cursor: pointer;
       }
-
       .nav-item.active {
         color: #155bd4;
         background: rgba(24, 144, 255, 0.06);
@@ -1533,7 +1469,6 @@ const dataUpdate = Debounce(function () {
       }
     }
   }
-
   .nav-box::before {
     position: absolute;
     right: 0;
@@ -1549,81 +1484,66 @@ const dataUpdate = Debounce(function () {
     p {
       margin: 0;
     }
-
     .asterisk {
       color: #FF2120;
       padding-right: 5px;
     }
-
     .tips {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       width: 100%;
-
       .tit {
         font-size: 16px;
         min-width: 80px;
       }
-
       .txt.weak {
         font-size: 12px;
         color: #999;
         margin-left: 10px;
       }
-
       .txt-bold {
         color: #333;
       }
     }
-
     .si-content {
       margin-top: 20px;
       margin-bottom: 25px;
     }
-
     .table-box {
       display: block;
       width: 100%;
       margin: 20px 0;
-
       :deep(.el-table th), :deep(.el-table td) {
         border-color: #f0f0f0;
         height: 40px;
         line-height: 40px;
       }
-
       :deep(.el-table td) {
         height: 56px;
         line-height: 56px;
       }
-
       :deep(.el-table__row:last-child) {
         td {
           border-bottom: 0;
         }
       }
-
       :deep(.el-table th) {
         background: #fafafa;
       }
-
       :deep(.el-table__body-wrapper) {
         max-height: 245px;
         overflow-y: scroll;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
       }
-
       :deep(.el-table__body-wrapper::-webkit-scrollbar) {
         display: none; /* Chrome Safari */
       }
-
       :deep(.el-table__body) {
         width: 100%;
       }
     }
-
     // 图片
     .tab-img {
       width: auto;
@@ -1646,11 +1566,9 @@ const dataUpdate = Debounce(function () {
         padding: 20px 40px;
         line-height: 1em;
         margin-top: 20px;
-
         p.tit {
           width: 95px;
         }
-
         .weak {
           color: #666;
         }
@@ -1662,25 +1580,20 @@ const dataUpdate = Debounce(function () {
     .contract-info {
       margin-top: 20px;
     }
-
     // 财务信息
     .financial-info {
       margin: 20px 0;
-
       .tips {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         padding-bottom: 20px;
-
         .txt {
           margin-right: 5px;
         }
       }
-
       .table-box {
         margin-top: 10px;
-
         :deep(.el-table__body-wrapper) {
           max-height: 504px;
         }
@@ -1695,18 +1608,14 @@ const dataUpdate = Debounce(function () {
     width: 100%;
     position: fixed;
     bottom: 0;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 10px 20px;
     box-shadow: 4px 2px 5px 5px #eee;
     background: #fff;
     margin-left: -24px;
-
     .foot-box {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-
       .btn {
         padding: 10px 20px;
         margin-right: 10px;
@@ -1714,12 +1623,10 @@ const dataUpdate = Debounce(function () {
         cursor: pointer;
         font-size: 14px;
       }
-
       .btn:first-child {
         background: #155bd4;
         color: #fff;
       }
-
       .btn:last-child {
         border: 1px solid #d9d9d9;
       }
@@ -1727,31 +1634,25 @@ const dataUpdate = Debounce(function () {
   }
 
 }
-
 // 审核弹窗
 .audit-dialog {
   :deep(.el-dialog__header) {
     padding: 0;
-    padding-bottom: 0;
   }
-
   :deep(.el-dialog__body) {
     padding-top: 0;
     padding-bottom: 0;
   }
-
   .head {
     line-height: 1em;
     font-size: 16px;
     color: #333;
-
     .sub-tit {
       color: #999;
       font-size: 12px;
       margin-left: 10px;
     }
   }
-
   :deep(.el-form) {
     margin-top: 20px;
   }

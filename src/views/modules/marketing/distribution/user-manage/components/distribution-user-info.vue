@@ -42,8 +42,8 @@
         <el-image
           v-if="dataForm.identityCardPicFront"
           style="width: 100px; height: 100px"
-          :src="dataForm.identityCardPicFront"
-          :preview-src-list="srcList"
+          :src="addDomain(dataForm.identityCardPicFront)"
+          :preview-src-list="addDomain(srcList)"
         >
           <template #error>
             <img
@@ -59,8 +59,8 @@
         <el-image
           v-if="dataForm.identityCardPicBack"
           style="width: 100px; height: 100px"
-          :src="dataForm.identityCardPicBack"
-          :preview-src-list="srcList"
+          :src="addDomain(dataForm.identityCardPicBack)"
+          :preview-src-list="addDomain(srcList)"
         >
           <template #error>
             <img
@@ -76,8 +76,8 @@
         <el-image
           v-if="dataForm.identityCardPicHold"
           style="width: 100px; height: 100px"
-          :src="dataForm.identityCardPicHold"
-          :preview-src-list="srcList"
+          :src="addDomain(dataForm.identityCardPicHold)"
+          :preview-src-list="addDomain(srcList)"
         >
           <template #error>
             <img
@@ -93,7 +93,6 @@
 </template>
 
 <script setup>
-
 const visible = ref(false)
 const dataForm = reactive({
   realName: '',
@@ -105,7 +104,6 @@ const dataForm = reactive({
 })
 const srcList = ref([])
 const dataFormRef = ref(null)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const init = (data) => {
   visible.value = true
   nextTick(() => {
@@ -113,9 +111,7 @@ const init = (data) => {
   })
   for (const key in data) {
     if (Object.hasOwnProperty.call(data, key)) {
-      if (data[key] && key.indexOf('identityCardPic') > -1 && data[key].indexOf(resourcesUrl) === -1) {
-        data[key] = resourcesUrl + data[key]
-      }
+      data[key] = addDomain(data[key])
     }
   }
   dataForm.realName = data.realName

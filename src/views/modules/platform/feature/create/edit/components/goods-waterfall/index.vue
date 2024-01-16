@@ -36,7 +36,7 @@
                   class="goods-img-one"
                   :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
                   :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !goodsList[0].prodId}"
-                  :src="item.pic"
+                  :src="addDomain(item.pic||'')"
                   fit="fill"
                 >
                   <template #error>
@@ -259,7 +259,7 @@
 <script setup>
 import request from '@/utils/request'
 import { enableCategories } from '@/api/product/category'
-import { formatPrice } from '@/utils/index'
+import { formatPrice } from '@/utils/index.js'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -456,8 +456,6 @@ const sortStatus = [
   }
 ]
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
 watch(() => formData.categoryShow, () => {
   getGoodsInfo()
 })
@@ -517,7 +515,7 @@ const getGoodsInfo = () => {
         prodName: item.spuName, // 商品名称
         status: item.spuStatus, // 商品状态
         price: item.priceFee, // 商品价格
-        pic: item.mainImgUrl ? (item.mainImgUrl.indexOf('http') >= 0 ? item.mainImgUrl : resourcesUrl + item.mainImgUrl) : '', // 商品图片
+        pic: addDomain(item.mainImgUrl), // 商品图片
         brief: item.sellingPoint // 商品描述
       })
     })

@@ -15,7 +15,7 @@
           <img
             v-if="configuration.bsTopBarIcon"
             style="height: 18px;width:59px;margin-right: 10px"
-            :src="configuration.bsTopBarIcon"
+            :src="addDomain(configuration.bsTopBarIcon)"
             alt=""
           >
           <a
@@ -230,7 +230,6 @@
 </template>
 
 <script setup>
-
 import allCanUseComponents from '../all-can-use-components/index.vue' // 左边组件列表
 import ImgUpload from '@/components/img-upload/index.vue'
 import request from '@/utils/request'

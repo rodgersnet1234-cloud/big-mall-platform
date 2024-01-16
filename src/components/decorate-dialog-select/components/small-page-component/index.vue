@@ -31,16 +31,17 @@
           show-overflow-tooltip
         />
       </el-table>
-      <el-pagination
-        style="margin-top: 15px; text-align: right;"
-        :current-page="perProps.pageNum"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="perProps.pageSize"
-        :total="perProps.total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="sizeChangeHandle"
-        @current-change="currentChangeHandle"
-      />
+      <div class="pagination-box">
+        <el-pagination
+          :current-page="perProps.pageNum"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="perProps.pageSize"
+          :total="perProps.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="sizeChangeHandle"
+          @current-change="currentChangeHandle"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -223,6 +224,11 @@ watch(() => props.activeName, (val) => { // 激活tabbar
     width: 93%;
     margin: 0 auto;
     margin-bottom: 20px;
+    .pagination-box{
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+    }
   }
 }
 </style>

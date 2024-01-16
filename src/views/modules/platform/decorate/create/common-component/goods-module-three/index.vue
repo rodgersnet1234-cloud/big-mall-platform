@@ -16,7 +16,7 @@
           <div class="bottom-items">
             <div class="bottom-items-imgs">
               <el-image
-                :src="item.imgs"
+                :src="addDomain(item.imgs)"
                 fit="cover"
               >
                 <template #error>

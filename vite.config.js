@@ -39,7 +39,7 @@ export default defineConfig({
       ],
       dts: 'src/auto-import/imports.d.ts',
       eslintrc: {
-        enabled: false
+        enabled: true
       }
     }),
     // 自动引入组件

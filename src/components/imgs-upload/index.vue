@@ -84,7 +84,6 @@ const Data = reactive({
   dialogImageUrl: '',
   dialogVisible: false,
   elxImgboxVisible: false,
-  resourcesUrl: import.meta.env.VITE_APP_RESOURCES_URL,
   imageList: []
 })
 
@@ -148,13 +147,7 @@ const getImgArr = () => {
 
 // 获取图片路径
 const getImgSrc = (img) => {
-  if (!img) {
-    return ''
-  }
-  if (img.indexOf('http://') === 0 || img.indexOf('https://') === 0) {
-    return img
-  }
-  return Data.resourcesUrl + img
+  return addDomain(img)
 }
 
 // 删除图片

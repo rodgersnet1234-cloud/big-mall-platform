@@ -95,6 +95,25 @@
         @selection-change="onSelectSome"
       >
         <el-table-column
+          v-if="singleElection === 1"
+          width="50"
+          header-align="center"
+          align="center"
+        >
+          <template #default="scope">
+            <div>
+              <el-radio
+                v-model="singleShopId"
+                :label="scope.row[idKey]"
+                @change="getSelectShopRow(scope.$index,scope.row)"
+              >
+                &nbsp;
+              </el-radio>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="singleElection === 0"
           type="selection"
           :reserve-selection="true"
           width="55"
@@ -179,6 +198,14 @@ const props = defineProps({
   tableList: {
     type: Array,
     default: () => []
+  },
+  shopId: {
+    type: Number,
+    default: 0
+  },
+  singleElection: {
+    type: Number,
+    default: 0
   }
 })
 const multipleTableRef = ref()
@@ -216,6 +243,7 @@ watch(() => dialogVisible, (data) => {
 onMounted(() => {
   getPage()
   tableData.value = props.tableList
+  singleShopId.value = props.shopId
 })
 
 const getPage = () => {
@@ -235,6 +263,10 @@ const onSelectSome = (val) => {
 const onSubmit = () => {
   dialogVisible.value = false
   tableData.value = multipleSelection.value
+  if (props.singleElection === 1) {
+    emit('getIds', singleShopId.value)
+    return
+  }
   const ids = tableData.value.map(item => props.type === 1 ? item.shopId : props.type === 2 ? item.userId : item.supplierId)
   emit('getIds', ids)
 }
@@ -256,6 +288,19 @@ const onDelete = (row) => {
   multipleSelection.value = tableData.value
   const ids = tableData.value.map(item => item[idKey.value])
   emit('getIds', ids)
+}
+
+const singleShopId = ref(null)
+/**
+ * 获取当选的行
+ * @param index
+ * @param row
+ */
+// eslint-disable-next-line no-unused-vars
+const getSelectShopRow = (index, row) => {
+  tableData.value = []
+  tableData.value.push(row)
+  singleShopId.value = row[idKey.value]
 }
 
 </script>

@@ -38,6 +38,17 @@ export function refreshTag (userTagId) {
   })
 }
 
+// 批量刷新标签
+export function batchRefreshTag (tagIds) {
+  return request({
+    url: '/mall4cloud_user/p/user_tag/batch_refresh',
+    method: 'get',
+    params: {
+      tagIds
+    }
+  })
+}
+
 // 保存
 export function save (data) {
   return request({

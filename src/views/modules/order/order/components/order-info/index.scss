@@ -401,6 +401,11 @@
       line-height: 20px;
     }
 
+    .item .remarks {
+      width: 90%;
+      word-wrap: break-word;
+    }
+
     .order-info .info-item .item .text {
       width: 75px;
       white-space: nowrap;

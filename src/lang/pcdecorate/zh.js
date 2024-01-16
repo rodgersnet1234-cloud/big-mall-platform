@@ -82,7 +82,7 @@ export default {
       profile: '个人中心',
       collection: '我的收藏',
       recommand: '新品推荐',
-      limitTime: '打折特惠',
+      limitTime: '限时折扣',
       discount: '优惠团购',
       skill: '秒杀专场',
       coupon: '领劵中心',

@@ -49,6 +49,10 @@
                 label="虚拟商品"
                 :value="1"
               />
+              <el-option
+                label="组合商品"
+                :value="2"
+              />
             </el-select>
           </el-form-item>
           <!-- 商品分类 -->
@@ -413,7 +417,7 @@
           >
             <template #default="{row}">
               <div class="tag-text">
-                {{ row.spuMold === 1 ? "虚拟商品": "实物商品" }}
+                {{ row.spuMold === 1 ? "虚拟商品": (row.spuMold === 2 ? "组合商品" : "实物商品") }}
               </div>
             </template>
           </el-table-column>
@@ -536,6 +540,7 @@
     <offline-manage
       v-if="operateDialogVisible"
       ref="offlineDataRef"
+      :align-center="true"
       @on-or-off-the-shelf="onOrOffTheShelf"
       @offline-data-submit="offlineDataSubmit"
       @audit-online-submit="auditOnlineSubmit"
@@ -572,7 +577,8 @@ const selectedMenu = ref([])
 const categoryList = ref([])
 const categoryListTreeProps = reactive({
   value: 'categoryId',
-  label: 'name'
+  label: 'name',
+  checkStrictly: true
 })
 const prodStatusRadio = ref(0)
 

@@ -1,8 +1,5 @@
 <template>
   <div class="app-container page-supplier-edit">
-    <div class="head-title">
-      供应商详情
-    </div>
     <!-- 导航栏 -->
     <div class="nav-box">
       <div class="nav">
@@ -125,60 +122,13 @@
                   <p class="txt">
                     <el-input
                       v-model="shopBasicInfo.contactPhone"
-                      oninput="value=value.replace(/[^\d]/g,'')"
                       placeholder="请输入常用联系人11位手机号码"
                       maxlength="11"
                       style="width: 400px"
+                      @input="shopBasicInfo.contactPhone=shopBasicInfo.contactPhone.replace(/[^\d|*]/g,'')"
                     />
                   </p>
                 </el-form-item>
-                <el-form-item
-                  label="联系邮箱："
-                  prop="email"
-                >
-                  <p class="txt">
-                    <el-input
-                      v-model.trim="shopBasicInfo.email"
-                      placeholder="请输入常用联系邮箱"
-                      maxlength="30"
-                      style="width: 400px"
-                    />
-                  </p>
-                </el-form-item>
-
-                <el-form-item
-                  label="所在地区："
-                  prop="currentAddr"
-                >
-                  <p class="txt">
-                    <el-cascader
-                      ref="cascaderAddrRef"
-                      v-model="shopBasicInfo.currentAddr"
-                      style="width: 400px"
-                      :options="addrList"
-                      :props="addrListTreeProps"
-                      placeholder="请选择所在地区"
-                      @change="handleAddrChange"
-                    />
-                  </p>
-                </el-form-item>
-
-                <el-form-item
-                  label="详细地址："
-                  prop="detailAddress"
-                >
-                  <p class="txt">
-                    <el-input
-                      v-model="shopBasicInfo.detailAddress"
-                      placeholder="请输入50字以内的详细地址"
-                      maxlength="50"
-                      style="width: 400px"
-                    />
-                  </p>
-                </el-form-item>
-              </div>
-
-              <div class="right-info">
                 <el-form-item
                   label="店铺简介"
                   prop="intro"
@@ -276,7 +226,7 @@
                   v-model="companyInfoForm.legalPhone"
                   maxlength="11"
                   placeholder="输入法人手机号"
-                  @input="(val)=>{companyInfoForm.legalPhone=val.replace(/[^\d]/g,'')}"
+                  @input="(val)=>{companyInfoForm.legalPhone=val.replace(/[^\d|*]/g,'')}"
                 />
               </el-form-item>
               <el-form-item
@@ -501,9 +451,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="checkFileUrl(img)"
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="[checkFileUrl(img)]"
+                      :preview-src-list="addDomain(imgs)"
                     >
                       <template #error>
                         <img
@@ -591,9 +541,9 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
-                      :src="checkFileUrl(scope.row.imgUrl)"
+                      :src="addDomain(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
+                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -620,9 +570,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="checkFileUrl(img)"
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="[checkFileUrl(img)]"
+                      :preview-src-list="[addDomain(img)]"
                     >
                       <template #error>
                         <img
@@ -978,9 +928,7 @@
 
 <script setup>
 import * as api from '@/api/platform/audit-supplier'
-import * as addrApi from '@/api/delivery/transport'
-import { treeDataTranslate } from '@/utils'
-import { isMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
+import { isStarMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
 import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
 import BrandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import moment from 'moment'
@@ -990,7 +938,6 @@ const allinPayStore = useAllinpayStore()
 const paySettlementType = allinPayStore.paySettlementType // 是否开启通联支付 1：开启 0：关闭
 const router = useRouter()
 const route = useRoute()
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const supplierId = ref(route.query.supplierId || 0)
 const navStatus = ref(0)
 const cateAddOrUpdateRef = ref(null)
@@ -1006,7 +953,7 @@ const shopBasicInfo = ref({})
 
 // eslint-disable-next-line no-unused-vars
 const validateMobile = (rule, value, callback) => {
-  if (!isMobile(value)) {
+  if (!isStarMobile(value)) {
     callback(new Error('请输入正确的联系方式'))
   } else {
     callback()
@@ -1073,7 +1020,7 @@ const validIDCard = (rule, value, callback) => {
 }
 // eslint-disable-next-line no-unused-vars
 const validMobile = (rule, value, callback) => {
-  if (!value || !isMobile(value)) {
+  if (!isStarMobile(value)) {
     callback(new Error('请输入正确的手机号'))
   } else {
     callback()
@@ -1095,17 +1042,6 @@ const shopBasicInfoRules = reactive({
     { required: true, message: '请填写联系方式', trigger: 'blur' },
     { validator: validateMobile, trigger: 'blur' }
   ],
-  email: [
-    { required: true, message: '联系邮箱不能为空', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'blur' }
-  ],
-  currentAddr: [
-    { required: true, message: '请选择所在地区', trigger: ['blur', 'change'] }
-  ],
-  detailAddress: [
-    { required: true, message: '详细地址不能为空', trigger: 'blur' },
-    { validator: validateNotEmpty, trigger: 'blur' }
-  ],
   supplierLogo: [
     { required: true, message: '请上传店铺logo', trigger: 'change' }
   ],
@@ -1118,12 +1054,6 @@ const shopBasicInfoRules = reactive({
   intro: [
     { validator: validateNotEmpty, trigger: 'blur' }
   ]
-})
-// 省市区
-const addrList = ref([])
-const addrListTreeProps = reactive({
-  value: 'areaId',
-  label: 'areaName'
 })
 
 const endTimeFlag = ref(true)
@@ -1249,7 +1179,6 @@ const statusRemarks = ref('')
 onMounted(() => {
   // 查询基本信息
   switchNav(0)
-  getAddrList()
   // 店铺审核状态
   queryShopAuditStatus()
 })
@@ -1296,36 +1225,7 @@ const queryShopBasicInfo = () => {
     signingInfo.type = data.type
     signingInfo.contractStartTime = data.contractStartTime
     signingInfo.contractEndTime = data.contractEndTime
-    shopBasicInfo.value.currentAddr = [
-      data.provinceId,
-      data.cityId,
-      data.areaId
-    ]
   })
-}
-
-/**
- * 省市区
- */
-const getAddrList = () => {
-  addrApi.listAreaOfEnable({}).then(data => {
-    addrList.value = treeDataTranslate(data, 'areaId', 'parentId')
-  })
-}
-const cascaderAddrRef = ref(null)
-/**
- * 监听地址改变
- */
-const handleAddrChange = (value) => {
-  if (value.length > 0) {
-    const labels = cascaderAddrRef.value.getCheckedNodes()[0].pathLabels
-    shopBasicInfo.value.province = labels[0]
-    shopBasicInfo.value.provinceId = value[0]
-    shopBasicInfo.value.city = labels[1]
-    shopBasicInfo.value.cityId = value[1]
-    shopBasicInfo.value.area = labels[2]
-    shopBasicInfo.value.areaId = value[2]
-  }
 }
 
 /**
@@ -1479,7 +1379,8 @@ const updateShopApplyInfo = () => {
 
 // 更新基本信息
 const updateShopBasicInfo = () => {
-  api.updateBasicInfo(shopBasicInfo.value).then(() => {
+  const data = JSON.parse(JSON.stringify(shopBasicInfo.value))
+  api.updateBasicInfo(data).then(() => {
     ElMessage({
       message: '基本信息更新成功！',
       type: 'success',

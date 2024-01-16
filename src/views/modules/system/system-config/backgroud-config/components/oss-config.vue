@@ -37,7 +37,7 @@
       </el-form-item>
       <div>
         <el-form-item
-          label="endPoint:"
+          :label="$t('sysManagement.endPoint') + ':'"
           style="width:640px"
           prop="endPoint"
         >
@@ -48,7 +48,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="bucketName:"
+          :label="$t('sysManagement.bucketName') + ':'"
           style="width:640px"
           prop="bucketName"
         >

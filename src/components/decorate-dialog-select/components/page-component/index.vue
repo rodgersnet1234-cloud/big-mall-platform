@@ -31,6 +31,7 @@ import pcModalIntegral from '@/assets/pc-micro-page/pc_modal_integral.png'
 import pcModalMembers from '@/assets/pc-micro-page/pc_modal_members.png'
 import pcModalDistribution from '@/assets/pc-micro-page/pc_modal_distribution.png'
 import pcModalLive from '@/assets/pc-micro-page/pc_modal_live.png'
+
 const props = defineProps({
   activeName: { // 动态切换tab
     type: String,

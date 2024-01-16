@@ -12,7 +12,7 @@
           <el-image
 
             class="hotimg-items"
-            :src="item.url"
+            :src="addDomain(item.url)"
             fit="fill"
           >
             <template #error>
