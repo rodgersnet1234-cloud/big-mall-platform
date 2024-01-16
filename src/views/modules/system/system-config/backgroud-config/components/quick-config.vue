@@ -1,6 +1,12 @@
 <template>
   <div class="mod-pay">
-    <quickbird
+    <el-alert
+      style="margin-bottom: 15px;"
+      title="物流查询配置快递鸟、快递100、阿里快递三选一即可"
+      type="warning"
+      show-icon
+      :closable="false"
+    /><quickbird
       ref="quickbirdRef"
       :change-flag="changeFlag"
       @activation-config="activationConfig"

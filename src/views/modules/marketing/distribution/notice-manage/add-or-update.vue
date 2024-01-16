@@ -168,6 +168,7 @@ const dataForm = reactive({
   isTop: 0,
   content: null
 })
+const contentRef = ref(null)
 const init = (msgId) => {
   dataForm.msgId = msgId || 0
   visible.value = true
@@ -183,6 +184,9 @@ const init = (msgId) => {
       dataForm.msgId = data.msgId
       dataForm.msgTitle = data.msgTitle
       dataForm.content = data.content || ''
+      nextTick(() => {
+        contentRef.value?.setContent(dataForm.content)
+      })
     })
   })
 }

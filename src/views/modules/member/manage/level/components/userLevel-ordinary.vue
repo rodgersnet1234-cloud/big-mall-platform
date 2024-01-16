@@ -4,6 +4,7 @@
       <div class="operation-bar">
         <el-button
           v-permission="['user:level:save']"
+          type="primary"
           @click="onAddRow"
         >
           {{ $t('user.level.addLevel') }}

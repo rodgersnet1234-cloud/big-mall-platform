@@ -201,8 +201,12 @@
     color: #e43130;
     font-size: 12px;
   }
+
+  .color-primary {
+    color: #155bd4;
+    border-color: #155bd4;
+  }
   .prod-cont .items.name {
-    padding: 10px;
     border-bottom: 1px solid #ebedf0;
   }
   .prod-cont .items.name:last-child {
@@ -212,6 +216,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    padding: 10px;
   }
   .prod-image {
     margin-right: 20px;

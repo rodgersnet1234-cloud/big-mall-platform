@@ -537,7 +537,6 @@ const checkAmount = () => {
   .card-prod-bottom {
     position: relative;
     text-align: left;
-    top: -15px;
     .card-prod-name {
       margin: auto;
       padding: 0 4px;

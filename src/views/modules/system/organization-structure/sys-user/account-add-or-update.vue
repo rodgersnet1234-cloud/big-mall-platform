@@ -88,7 +88,7 @@
 
 <script setup>
 import * as api from '@/api/platform/sys-user-account'
-import { MOBILE_REGEXP, USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides, validPassword2 } from '@/utils/validate'
+import { USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides, validPassword2 } from '@/utils/validate'
 import { encrypt } from '@/utils/crypto'
 import { ElMessage } from 'element-plus'
 
@@ -115,6 +115,15 @@ const validPassword = (rule, value, callback) => {
     callback()
   }
 }
+
+// eslint-disable-next-line no-unused-vars
+const validateMobile = (rule, value, callback) => {
+  if (isMobile(value) || (dataForm.hasAccount && isStarMobile(value))) {
+    callback()
+  } else {
+    callback(new Error('请输入正确的联系方式'))
+  }
+}
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -124,7 +133,7 @@ const rules = {
     { pattern: EMAIL_REGEXP, message: '邮箱格式有误', trigger: 'blur' }
   ],
   phone: [
-    { pattern: MOBILE_REGEXP, message: '手机号格式有误', trigger: 'blur' }
+    { validator: validateMobile, trigger: 'blur' }
   ],
   password: [
     // { required: true, message: '密码不能为空', trigger: 'blur' },

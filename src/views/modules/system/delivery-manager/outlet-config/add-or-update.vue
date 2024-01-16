@@ -107,8 +107,8 @@
         <el-input
           v-model.trim="dataForm.mobile"
           maxlength="11"
-          oninput="value=value.replace(/[^\d]/g,'')"
           show-word-limit
+          @input="dataForm.mobile=dataForm.mobile.replace(/[^\d|*]/g,'')"
         />
       </el-form-item>
       <!-- 电子面单客户账户或月结账号 -->
@@ -239,10 +239,10 @@ const deliveryCompanyType = [{
 }]
 
 const validateMobile = (rule, value, callback) => {
-  if (!isMobile(value)) {
-    callback(new Error('请输入正确的手机号'))
-  } else {
+  if (isMobile(value) || (dataForm.value.outletConfigId && isStarMobile(value))) {
     callback()
+  } else {
+    callback(new Error('请输入正确的手机号'))
   }
 }
 const addrList = reactive([])

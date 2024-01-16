@@ -11,27 +11,41 @@
         <div class="top-logo">
           <img
             v-show="config.showLogo === 0"
-            :src="webHeaderConfig.pcLogoImgText"
+            :src="addDomain(webHeaderConfig.pcLogoImgText)"
             alt=""
           >
         </div>
         <div class="top-search">
           <div
             v-show="config.showSearch === 0"
-            class="search-input"
+            class="search-box"
           >
-            <span>{{ $t(`pcdecorate.storeSignate.searchPlaceholder`) }}</span>
-            <div class="search-types">
-              <div class="types-name">
-                商品
+            <div
+              class="search-input"
+            >
+              <span>{{ $t(`pcdecorate.storeSignate.searchPlaceholder`) }}</span>
+              <div class="search-types">
+                <div class="types-name">
+                  商品
+                </div>
+                <img
+                  src="@/assets/pc-micro-page/togger_icon.png"
+                  alt=""
+                >
               </div>
-              <img
-                src="@/assets/pc-micro-page/togger_icon.png"
-                alt=""
-              >
+              <div class="search-btns">
+                {{ $t(`pcdecorate.storeSignate.search`) }}
+              </div>
             </div>
-            <div class="search-btns">
-              {{ $t(`pcdecorate.storeSignate.search`) }}
+            <div
+              v-show="config.showHotWord === 0"
+              class="hot-word"
+            >
+              <div class="con">
+                <span
+                  class="item"
+                >热搜内容</span>
+              </div>
             </div>
           </div>
           <div
@@ -76,7 +90,6 @@
 </template>
 <script setup>
 import request from '@/utils/request'
-
 const props = defineProps({
   itemComponent: { // 组件的信息
     type: Object,
@@ -93,7 +106,6 @@ const props = defineProps({
 })
 
 const config = ref({})
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const webHeaderConfig = ref({}) // 头部配置信息读取接口
 
 const setBackground = computed(() => {
@@ -116,6 +128,7 @@ watch(() => props.itemComponent, (newVal) => {
     config.value = {
       showLogo: 0,
       showSearch: 0,
+      showHotWord: 0,
       showCategory: 0,
       showNavs: 0,
       navList: [],
@@ -141,7 +154,7 @@ const getHeader = () => {
     }
   }).then(data => {
     if (data.pcLogoImgText) {
-      data.pcLogoImgText = data.pcLogoImgText.indexOf('http') > -1 ? data.pcLogoImgText : resourcesUrl + data.pcLogoImgText
+      data.pcLogoImgText = addDomain(data.pcLogoImgText)
     } else {
       data.pcLogoImgText = require('@/assets/website-config/logo-text.png')
     }
@@ -190,6 +203,33 @@ $currentContentWidth: 1200px; // 当前版心宽度
       }
       .top-search {
         display: flex;
+        .search-box{
+          height: 40px;
+        }
+        .hot-word {
+          max-width: 600px;
+          overflow-x: hidden;
+          white-space: nowrap;
+          flex: 1;
+          display: flex;
+          line-height: 40px;
+          .con {
+            overflow: hidden;
+            color: #AAA;
+            .item {
+              max-width: 120px;
+              height: 40px;
+              display: inline-block;
+              margin-left: 12px;
+              transition: all .2s;
+              -webkit-transition: all .2s;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              font-size: 12px;
+            }
+          }
+        }
         .search-input {
           width: 600px;
           height: 40px;

@@ -101,21 +101,10 @@
             align="center"
           >
             <template #default="{ row }">
-              <span
-                v-if="row.distributionInfo.state === 0"
-              >商家下架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 1"
-                type="success"
-              >商家上架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 2"
-                type="danger"
-              >违规下架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 3"
-                type="warning"
-              >待审核</span>
+              <span v-if="row.distributionInfo.state === 0">商家下架</span>
+              <span v-else-if="row.distributionInfo.state === 1">商家上架</span>
+              <span v-else-if="row.distributionInfo.state === 2">违规下架</span>
+              <span v-else-if="row.distributionInfo.state === 3">待审核</span>
             </template>
           </el-table-column>
 

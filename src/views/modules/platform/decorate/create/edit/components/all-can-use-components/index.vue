@@ -144,6 +144,7 @@
 import { configComponentList } from '../configComponent'
 import { VueDraggableNext } from 'vue-draggable-next'
 const emit = defineEmits(['addComponent'])
+
 const componentLists = ref(configComponentList) // [ // 所有可用的组件
 const isDrag = ref(true)
 const currentActiveIndex = ref('') // 当前选中的组件

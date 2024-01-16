@@ -91,7 +91,6 @@
           <button
             v-if="timeType === 4"
             class="el-button el-button--text el-button--small"
-            type="button"
             @click="flushDateTime"
           >
             刷新
@@ -188,7 +187,7 @@ const monthPickerOptions = reactive({
   }
 })
 // 今日实时时间
-let nowDate = null
+const nowDate = ref(null)
 
 // 自定义
 const pickerOptions = reactive({
@@ -234,11 +233,7 @@ watch(() => dateRangePar.value, () => {
 })
 
 const changeData = (val) => {
-  let emitParams = val
-  if ([4, 5, 6].includes(timeType.value)) {
-    emitParams = [null, null]
-  }
-  emit('changeData', emitParams)
+  emit('changeData', val)
 }
 
 // 自然周
@@ -246,7 +241,7 @@ const preWeek = ref('')
 // 自然周默认格式
 const weekRangeFormat = ref('')
 watch(() => preWeek.value, (newVal) => {
-  const startD = moment(newVal).add(1, 'days').format('YYYY-MM-DD')
+  const startD = moment(newVal).format('YYYY-MM-DD')
   const endD = moment(startD).add(6, 'days').endOf('day').format('YYYY-MM-DD')
   weekRangeFormat.value = startD + ' - ' + endD
 })
@@ -339,8 +334,8 @@ const changeDate = (val) => {
  */
 const flushDateTime = () => {
   const date = new Date()
-  nowDate = moment(date).format('YYYY-MM-DD HH:mm:ss')
-  changeDate(nowDate)
+  nowDate.value = moment(date).format('YYYY-MM-DD HH:mm:ss')
+  changeDate(nowDate.value)
 }
 
 /**

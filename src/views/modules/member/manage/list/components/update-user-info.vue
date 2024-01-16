@@ -64,6 +64,8 @@
 <script setup>
 import * as api from '@/api/user/user-manager.js'
 import { ElMessage } from 'element-plus'
+import { isHtmlNull } from '@/utils/index.js'
+
 const emit = defineEmits(['refreshUserInfo'])
 
 const visible = ref(false)

@@ -6,7 +6,7 @@
     >
       <div class="goods-items">
         <el-image
-          :src="item.imgs"
+          :src="addDomain(item.imgs)"
           fit="cover"
         >
           <template #error>
@@ -36,6 +36,7 @@
 </template>
 <script setup>
 import { ElMessage } from 'element-plus'
+
 const props = defineProps({
   addLength: { // 添加限制个数,当为-1的时候，表示可以无限添加
     type: Number,

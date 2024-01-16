@@ -145,8 +145,8 @@
                   :key="index"
                   class="rotating-img"
                   style="width: 100px; height: 100px"
-                  :src="img"
-                  :preview-src-list="dataForm.imgUrls"
+                  :src="addDomain(img)"
+                  :preview-src-list="addDomain(dataForm.imgUrls)"
                 >
                   <template #error>
                     <img
@@ -168,7 +168,7 @@
               </div>
               <div class="part-form-item">
                 <video
-                  :src="resourcesUrl + dataForm.video"
+                  :src="addDomain(dataForm.video)"
                   controls="controls"
                   class="video-box"
                 />
@@ -343,8 +343,6 @@ import picturePreview from '@/components/picture-preview/index.vue'
 import Big from 'big.js'
 import { ElMessage } from 'element-plus'
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
 const route = useRoute()
 const dataForm = ref({
   spuId: route.query.spuId || null, // 商品id
@@ -408,17 +406,7 @@ const init = (spuId) => {
       }, 0)
       // 商品轮播图
       if (data.imgUrls) {
-        const imgUrls = data.imgUrls.split(',')
-        const imgs = []
-        imgUrls.forEach((img) => {
-          if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-            const image = resourcesUrl + img
-            imgs.push(image)
-          } else {
-            imgs.push(img)
-          }
-        })
-        dataForm.value.imgUrls = imgs
+        dataForm.value.imgUrls = data.imgUrls.split(',')
       } else {
         dataForm.value.imgUrls = []
       }
@@ -431,7 +419,7 @@ const init = (spuId) => {
       // 商品分类选择按钮
       showCategorySelectBtn.value = false
       if (data.brand?.imgUrl) {
-        brandImgUrl.value = (data.brand.imgUrl).indexOf('http') === -1 ? resourcesUrl + data.brand.imgUrl : data.brand.imgUrl // 品牌图片
+        brandImgUrl.value = addDomain(data.brand.imgUrl) // 品牌图片
       }
       brandName.value = data.brand?.name // 品牌名字
       // 根据分类获取基本规格列表

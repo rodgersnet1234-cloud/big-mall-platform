@@ -113,7 +113,7 @@
     <template v-else>
       <div class="top-image">
         <el-image
-          :src="config.topImg"
+          :src="addDomain(config.topImg)"
           fit="fill"
         >
           <template #error>
@@ -137,7 +137,7 @@
             <div class="bottom-items">
               <div class="bottom-items-img">
                 <el-image
-                  :src="item.imgs"
+                  :src="addDomain(item.imgs)"
                   fit="fill"
                 >
                   <template #error>

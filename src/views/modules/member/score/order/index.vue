@@ -945,7 +945,7 @@ onMounted(() => {
     getDataList()
   }
   getLogisticsList()
-
+  route.query.orderNumber && onAddOrUpdate(route.query.orderNumber)
   // 监听页面滚动
   window.addEventListener('scroll', scrollToTop)
 })

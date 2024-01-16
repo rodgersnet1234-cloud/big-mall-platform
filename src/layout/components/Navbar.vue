@@ -13,16 +13,16 @@
       <!-- 1.左边部分 -->
       <div class="left-menu">
         <img
-          v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon && webConfig.bsTopBarIcon !== resourcesUrl"
+          v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon"
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="webConfig.bsTopBarIcon"
+          :src="addDomain(webConfig.bsTopBarIcon)"
           alt=""
           @error="webConfig.bsTopBarIcon=''"
         >
         <img
           v-else
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="webConfig.bsTopBarIcon"
+          :src="addDomain(webConfig.bsTopBarIcon)"
           alt=""
         >
         <a
@@ -106,7 +106,6 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { Base64 } from 'js-base64'
 
 const updatePasswordVisible = ref(false)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const webConfigStore = useWebConfigStore()
 const webConfig = computed(() => webConfigStore.webConfig)
 
@@ -271,7 +270,8 @@ const onReconnect = () => {
 }
 
 const openUrl = () => {
-  const win = window.open(location.origin + '/im-box', 'view_window', 'noopener,noreferrer')
+  const path = router.resolve({ path: '/im-box' })
+  const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
   localStorage.removeItem('cloudVsNotificationMessage')
   if (win) win.opener = null
   message.value = null
@@ -291,7 +291,8 @@ const popNotice = (user, content) => {
           notificationDebounce.value = 1
           localStorage.removeItem('cloudVsNotificationMessage')
           message.value = null
-          const win = window.open(location.href.split('#')[0] + '#/im-box', 'view_window', 'noopener,noreferrer')
+          const path = router.resolve({ path: '/im-box' })
+          const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
           if (win) win.opener = null
           // 具体操作
         }, 500)

@@ -326,8 +326,12 @@
       margin-top: 50px;
       .ci-wrapper {
         display: flex;
+        &.company {
+          .left-info {
+            width: 50%;
+          }
+        }
         .left-info {
-          width: 50%;
           margin-left: 10px;
           .price-unit-text {
             font-size: 14px;

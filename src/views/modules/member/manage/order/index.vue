@@ -80,7 +80,7 @@
               >
               <img
                 v-else
-                :src="(row.pic).indexOf('http')===-1 ? resourcesUrl + row.pic : row.pic"
+                :src="addDomain(row.pic)"
                 class="img"
                 style="width:60px;height:60px"
                 alt=""
@@ -195,7 +195,6 @@ const searchParam = ref({
   // 注册结束时间
   createEndTime: null
 })
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 // 返回参数
 const pageVO = ref({
   list: [], // 返回的列表

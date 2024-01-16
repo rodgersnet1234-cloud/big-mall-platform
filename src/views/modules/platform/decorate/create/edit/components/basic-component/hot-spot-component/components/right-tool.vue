@@ -211,7 +211,6 @@ const boxItem = { // 盒子模板
   width: 102,
   height: 102
 }
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const hotForm = ref({
   size: 1920, // 图片尺寸大小
   imgList: [] // 图片
@@ -298,7 +297,7 @@ const handleAddImage = () => {
 const currentEditIndex = ref(0) // 当前编辑的图片
 const refreshPic = (imagePath) => {
   if (isChangeImg) { // 更换图片模式
-    hotForm.value.imgList[currentEditIndex.value].url = resourcesUrl + imagePath
+    hotForm.value.imgList[currentEditIndex.value].url = addDomain(imagePath)
     return
   }
   let arr = []
@@ -308,7 +307,7 @@ const refreshPic = (imagePath) => {
   if (arr.length > 0) { // 说明是多选
     arr.forEach(item => {
       hotForm.value.imgList.push({
-        url: resourcesUrl + item,
+        url: addDomain(item),
         title: '',
         link: '',
         type: '',
@@ -318,7 +317,7 @@ const refreshPic = (imagePath) => {
     })
   } else { // 就是单选
     hotForm.value.imgList.push({
-      url: resourcesUrl + imagePath,
+      url: addDomain(imagePath),
       title: '',
       link: '',
       type: '',

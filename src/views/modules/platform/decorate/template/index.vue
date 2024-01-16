@@ -29,6 +29,7 @@
             <img-show
               :src="item.image"
               :radius="'4'"
+              width="100%"
               :height="'18.1vh'"
             />
             <div class="operation is-active">
@@ -90,7 +91,6 @@ import request from '@/utils/request'
 import ImgShow from '@/components/img-show/index.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 const templateList = ref([]) // 列表页
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const perProps = ref({
   pageNum: 1, // 当前页
   pageSize: 10, // 每页显示多少条
@@ -113,13 +113,6 @@ const getMiniPageList = () => {
       type: 1 // 1表示pc端，2表示移动端
     }
   }).then((data) => {
-    data.list.forEach(item => {
-      if (!item.image) {
-        item.image = ''
-      } else if (item.image.indexOf('http') < 0) {
-        item.image = resourcesUrl + item.image
-      }
-    })
     templateList.value = data.list
     perProps.value.total = data.total
   })

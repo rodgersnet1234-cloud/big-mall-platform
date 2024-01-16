@@ -32,6 +32,9 @@ export const useCommonStore = defineStore('common', {
     },
     updateSidebarFold (fold) {
       this.sidebarFold = fold
+    },
+    replaceSelectMenu (title) {
+      this.selectMenu.splice(this.selectMenu.length - 1, 1, title)
     }
   }
 })

@@ -14,8 +14,19 @@
             v-model="searchForm.orderId"
             :placeholder="$t('order.order.number')"
             :controls="false"
+            maxlength="19"
             oninput="value=value.replace(/[^0-9]/g,'')"
             precision="0"
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item :label="'主单单号' + '：'">
+          <el-input
+            v-model="searchForm.mainOrderId"
+            class="input-text-algin"
+            placeholder="主单单号"
+            oninput="value=value.replace(/[^0-9]/g,'')"
             clearable
           />
         </el-form-item>
@@ -364,128 +375,14 @@
             <span>{{ $t("order.order.createTime") }}:{{ order.createTime }}</span>
             <span>{{ $t("order.order.shopName") }}:{{ order.shopName }}</span>
             <span v-if="order.supplierName">{{ $t("order.order.supplierName") }}:{{ order.supplierName }}</span>
+            <span v-if="order.mainOrderId">主单号:{{ order.mainOrderId }}</span>
           </div>
           <div class="prod-cont">
             <el-row style="width: 100%">
               <el-col :span="10">
-                <div class="prod-item">
-                  <div
-                    v-for="orderItem in order.orderItems"
-                    :key="orderItem.orderItemId"
-                    class="items name"
-                  >
-                    <div class="info">
-                      <div class="prod-image">
-                        <ImgShow :src="orderItem.pic" />
-                      </div>
-                      <div class="prod-name">
-                        <div class="prod-con">
-                          <div class="prod-name-txt">
-                            {{ orderItem.spuName + ' ' + (orderItem.skuName ? orderItem.skuName : '') }}
-                          </div>
-                          <div
-                            v-if="order.orderType === 1 || order.orderType === 2"
-                            class="order-status"
-                          >
-                            {{
-                              order.orderType === 1
-                                ? $t("order.order.groupPurchaseOrder")
-                                : order.orderType === 2
-                                  ? $t("order.order.spikeOrder")
-                                  : ""
-                            }}
-                          </div>
-
-                          <!-- 预售订单 -->
-                          <div
-                            v-if="order.preSaleType === 0 || order.preSaleType === 1"
-                            class="order-status"
-                          >
-                            预售订单
-                          </div>
-
-                          <div
-                            v-if="!orderItem.refundStatus || (orderItem.refundStatus !== 2 && orderItem.refundStatus !== 3)"
-                            class="order-status"
-                          >
-                            {{
-                              orderItem.status === 0 && order.status === 2
-                                ? $t("order.order.pendingReceipt")
-                                : [
-                                  "",
-                                  $t("pay.obligation"),
-                                  order.waitPurchase === 1 ? '待采购':orderItem.beDeliveredNum === 0 ? $t("order.order.shipmentCompleted"):$t("order.order.toBeShipped"),
-                                  $t("order.order.pendingReceipt"),
-                                  "",
-                                  $t("order.order.successfulTransaction"),
-                                  $t("order.order.transactionFailed"),
-                                  $t("group.waitGroup"),
-                                  '',
-                                  '待付尾款'
-                                ][order.status]
-                            }}
-                          </div>
-                          <div
-                            v-else
-                            class="order-status"
-                          >
-                            {{ $t("order.order.transactionFailed") }}
-                          </div>
-                          <div
-                            v-if="order.orderMold === 1"
-                            class="order-status"
-                          >
-                            虚拟商品订单
-                          </div>
-                          <div
-                            v-if="
-                              order.deliveryType === 2 || order.deliveryType === 4
-                            "
-                            class="order-status"
-                          >
-                            {{
-                              order.deliveryType === 2
-                                ? $t("order.order.selfMention")
-                                : order.deliveryType === 4
-                                  ? $t("order.order.sameCityDelivery")
-                                  : ""
-                            }}
-                          </div>
-                          <div
-                            v-if="order.preSaleTime"
-                            class="order-status"
-                          >
-                            {{ $t("order.order.estimatedShippingTime") }}：{{
-                              order.preSaleTime
-                            }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="prod-price">
-                        <span>{{ formatPrice(orderItem.price, 1).toFixed(2) }}</span>
-                        <span>{{ orderItem.count }}{{ $t("constant.piece") }}</span>
-                      </div>
-                    </div>
-                    <!-- 赠品信息 -->
-                    <div
-                      v-if="orderItem.giveawayList"
-                      class="order-prod-item-give-con"
-                    >
-                      <div
-                        v-for="(giveawayItem, giveIndex) in orderItem.giveawayList"
-                        :key="giveIndex"
-                        class="giveaway-item"
-                      >
-                        <div class="giveaway-item-name">
-                          【赠品】{{ giveawayItem.spuName }}
-                        </div>
-                        <div class="giveaway-item-sku-count">
-                          {{ giveawayItem.skuName || '' }} x{{ giveawayItem.count }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <order-prod-card
+                  :order="order"
+                />
               </el-col>
               <el-col
                 :span="3"
@@ -704,8 +601,9 @@ import moment from 'moment'
 import * as api from '@/api/order/order'
 import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import AddOrUpdate from './components/order-info.vue'
+import AddOrUpdate from './components/order-info/index.vue'
 import Pagination from '@/components/pagination/index.vue'
+import OrderProdCard from './components/order-prod-card/index.vue'
 
 const defaultTime = [
   new Date(2000, 1, 1, 0, 0, 0),
@@ -828,6 +726,7 @@ const searchForm = reactive({
   isPreSale: null,
   mobile: null,
   orderId: null,
+  mainOrderId: null,
   orderMold: null,
   orderType: null,
   payType: null,
@@ -846,6 +745,7 @@ onMounted(() => {
   // 获取首页跳转传递的参数
   if (useRoute().query.orderNumber) {
     orderId = useRoute().query.orderNumber
+    onAddOrUpdate(orderId)
   }
   if (Object.keys(useRoute().params).length > 0) {
     onSelectNav(useRoute().params.orderStatus)
@@ -869,6 +769,7 @@ let tempSearchForm = null // 保存上次点击查询的请求条件
 const onGetDataList = (type = 0, newData = false) => {
   let par = {
     orderId: orderId === 1 ? searchForm.orderId : useRoute().query.orderNumber,
+    mainOrderId: searchForm.mainOrderId,
     shopName: searchForm.shopName,
     supplierName: searchForm.supplierName,
     orderType: searchForm.orderType,
@@ -999,6 +900,7 @@ const onGetSoldExcel = () => {
   }).then(() => {
     api.soldExcel({
       orderId: searchForm.orderId,
+      mainOrderId: searchForm.mainOrderId,
       shopName: searchForm.shopName,
       supplierName: searchForm.supplierName,
       orderType: searchForm.orderType,
@@ -1042,6 +944,7 @@ const onHandleSearchForm = (data) => {
   searchForm.isPreSale = data.isPreSale
   searchForm.mobile = data.mobile
   searchForm.orderId = data.orderId
+  searchForm.mainOrderId = data.mainOrderId
   searchForm.orderMold = data.orderMold
   searchForm.orderType = data.orderType
   searchForm.payType = data.payType

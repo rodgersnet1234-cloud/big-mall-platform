@@ -118,13 +118,8 @@
             align="center"
           >
             <template #default="{row}">
-              <span
-                v-if="row.status === 0"
-                type="danger"
-              >{{ $t("product.category.disable") }}</span>
-              <span
-                v-else
-              >{{ $t("product.category.normal") }}</span>
+              <span v-if="row.status === 0">{{ $t("product.category.disable") }}</span>
+              <span v-else>{{ $t("product.category.normal") }}</span>
             </template>
           </el-table-column>
           <!-- 平台 -->
@@ -278,7 +273,7 @@ const clearSearchInfo = () => {
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: 80px;
+    max-height: 80px !important;
     object-fit: contain;
   }
 

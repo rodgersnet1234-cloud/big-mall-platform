@@ -782,7 +782,7 @@ const removeDuplication = (items, validKey) => {
 const onSubmit = Debounce(function () {
   const startDate = dataForm.startTime && startTimeValue.value ? dataForm.startTime + ' ' + startTimeValue.value + ':00' : ''
   const endDate = dataForm.endTime && endTimeValue.value ? dataForm.endTime + ' ' + endTimeValue.value + ':00' : ''
-  if (Date.parse(startDate) >= Date.parse(endDate)) {
+  if (dataForm.validTimeType === 1 && Date.parse(startDate) >= Date.parse(endDate)) {
     ElMessage.error('开始时间不能小于或等于结束时间')
     return
   }
@@ -793,7 +793,11 @@ const onSubmit = Debounce(function () {
     const launchTime = dataForm.launchTime
     const startTime = dataForm.startTime
     const endTime = dataForm.endTime
-    dataForm.launchTime = dataForm.launchTime && launchTimeValue.value ? dataForm.launchTime + ' ' + launchTimeValue.value + ':00' : ''
+    if (dataForm.putonStatus === 4) {
+      dataForm.launchTime = ''
+    } else {
+      dataForm.launchTime = dataForm.launchTime && launchTimeValue.value ? dataForm.launchTime + ' ' + launchTimeValue.value + ':00' : ''
+    }
     dataForm.startTime = startDate
     dataForm.endTime = endDate
     isSubmit.value = true

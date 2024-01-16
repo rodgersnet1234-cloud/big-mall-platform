@@ -16,3 +16,11 @@ export function soldExcel (params) {
     params
   })
 }
+
+export function getSingleProdTrend (params) {
+  return request({
+    url: '/mall4cloud_flow/mp/product_analyse/get_single_prod_trend',
+    method: 'get',
+    params
+  })
+}

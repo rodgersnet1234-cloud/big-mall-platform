@@ -344,9 +344,17 @@
       justify-content: center;
       margin-top: 50px;
       .ci-wrapper {
-        display: flex;
+        &.company {
+          display: flex;
+          .right-info {
+            width: 50%;
+            margin-left: 106px;
+          }
+          .left-info {
+            width: 50%;
+          }
+        }
         .left-info {
-          width: 50%;
           .price-unit-text {
             font-size: 14px;
             color: #666;
@@ -359,8 +367,6 @@
           }
         }
         .right-info {
-          width: 50%;
-          margin-left: 106px;
           .business-license-box {
             .license-content {
               display: flex;

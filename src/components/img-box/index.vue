@@ -292,7 +292,8 @@
 import { awsImgUpdate, getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup } from '@/api/biz/oss'
 import { save, page as apiPage } from '@/api/biz/attach-file'
 import { checkPermission } from '@/directive/permission/index.js'
-import imageCompression from 'browser-image-compression'
+import ImageCompressor from 'compressorjs'
+
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
 import { Top, Check, Plus } from '@element-plus/icons-vue'
@@ -664,7 +665,7 @@ const httpRequest = (event) => {
     message('数据异常，请刷新后重试')
   }
   attachFile.filePath = '/' + ossList[0].dir + ossList[0].fileName
-  awsImgUpdate(ossList[0].preSignUrl, file)
+  awsImgUpdate(ossList[0].preSignUrl, file, event)
   attachFiles.push(attachFile)
   ossList.splice(0, 1)
   if (ossList <= 0) {
@@ -688,10 +689,27 @@ const beforeUpload = async (file) => {
   }
   const isSize = file.size / 1024 < options.maxSize
   if (!isSize) {
+    // 0.5m~5m，从0.8开始循环。5m~10m，从0.6开始循环。10m以上就直接0.4。
+    // 最低使用0.4
+    let quality
+    if (file.size / 1024 / 1024 < 5) {
+      quality = 0.8
+    } else if (file.size / 1024 / 1024 < 10) {
+      quality = 0.6
+    } else {
+      quality = 0.4
+    }
     try {
-      const resultBlob = await imageCompression(file, {
-        maxSizeMB: 0.5 // 压缩大小
-      })
+      let resultBlob
+      let index = true
+      while (index) {
+        resultBlob = await ImageCompressorFn(file, quality)
+        if (resultBlob.size / 1024 < 512 || quality <= 0.4) {
+          index = false
+        } else {
+          quality = (quality * 10 - 2) / 10
+        }
+      }
       return new File([resultBlob], file.name, {
         type: file.type
       })
@@ -700,6 +718,22 @@ const beforeUpload = async (file) => {
     }
   }
   return true
+}
+
+const ImageCompressorFn = (file, quality) => {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-new
+    new ImageCompressor(file, {
+      quality, // 压缩大小
+      convertSize: 512000,
+      success (result) {
+        resolve(result)
+      },
+      error (err) {
+        reject(err)
+      }
+    })
+  })
 }
 
 const uploadNumberLimit = () => {

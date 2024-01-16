@@ -163,7 +163,7 @@
         prop="content"
       >
         <tiny-mce
-          v-if="visible"
+          v-if="tinyMceConLoad"
           ref="contentRef"
           v-model="dataForm.content"
         />
@@ -256,6 +256,7 @@ const rules = {
 }
 const contentRef = ref()
 const dataFormRef = ref()
+const tinyMceConLoad = ref(false)
 const init = (id) => {
   dataForm.id = id || 0
   dataForm.isTop = 0
@@ -273,14 +274,17 @@ const init = (id) => {
   dataForm.supplierDetailList = []
   dataForm.userDtailList = []
   visible.value = true
+  tinyMceConLoad.value = false
   nextTick(() => {
     dataFormRef.value?.resetFields()
     if (!dataForm.id) {
+      tinyMceConLoad.value = true
       return
     }
     api.get(id).then(data => {
       dataForm.title = data.title
       dataForm.content = data.content
+      tinyMceConLoad.value = true
       dataForm.status = data.status
       dataForm.isTop = data.isTop
       dataForm.sendTime = data.sendTime

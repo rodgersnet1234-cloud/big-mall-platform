@@ -39,8 +39,8 @@
     <div class="main-content">
       <div class="operation-bar">
         <el-checkbox
-          :disabled="!pageData?.dataList.length"
           v-model="checkAll"
+          :disabled="!pageData?.dataList.length"
           :indeterminate="isIndeterminate"
           class="all-check-btn"
           @change="handleCheckAllChange"

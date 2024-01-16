@@ -78,7 +78,7 @@
             <el-tooltip
               class="item"
               effect="light"
-              :content="'如选择近1天，则该报表会自动更新为当前天的数据，近2天，则该报表会自动更新为当前天 + 昨天的数据'"
+              :content="timeRangeTips"
               placement="top"
             >
               <span>
@@ -169,6 +169,7 @@ import { Debounce } from '@/utils/debounce'
 import moment from 'moment'
 import { ElMessage } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
+import { computed } from 'vue'
 const emit = defineEmits(['refreshDataList'])
 // eslint-disable-next-line no-unused-vars
 const validateNumber = (rule, value, callback) => {
@@ -253,6 +254,16 @@ const seqChange = () => {
     dataForm.value.seq = 1
   }
 }
+
+const timeRangeTips = computed(() => {
+  if (dataForm.value.timeType === 1) {
+    return '如选择近1天，则该报表会自动更新为当前天的数据，近2天，则该报表会自动更新为当前天 + 昨天的数据'
+  } else if (dataForm.value.timeType === 2) {
+    return '如选择近1周，则该报表会自动更新为当前周的数据，近2周，则该报表会自动更新为当前周 + 上周的数据'
+  } else {
+    return '如选择近1月，则该报表会自动更新为当前月的数据，近2月，则该报表会自动更新为当前月 + 上月的数据'
+  }
+})
 
 /**
  * 指定时间范围输入框验证

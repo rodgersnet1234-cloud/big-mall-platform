@@ -308,15 +308,26 @@
             {{ scope.row.status === 1 ? '禁用' : '启用' }}
           </el-button>
           <span v-else>{{ scope.row.status === 1 ? '启用' : '禁用' }}</span>
+          <span
+            v-if="scope.row.skuComboList && scope.row.skuComboList.length > 0"
+            class="goods-btn"
+            @click="openGoodList(scope.row.skuComboList)"
+          >商品({{ scope.row.skuComboList.length }})</span>
         </template>
       </el-table-column>
     </el-table>
+
+    <association-goods
+      v-if="associationGoodsVisible"
+      ref="associationGoodsRef"
+    />
   </div>
 </template>
 
 <script setup>
 import { flatten as genFlatten } from '@/utils'
 import { getCurrentInstance } from 'vue'
+import AssociationGoods from '../association-goods/index.vue'
 
 const emit = defineEmits(['on-change-data'])
 
@@ -363,6 +374,10 @@ const props = defineProps({
   isMold: {
     type: Boolean,
     default: false
+  },
+  defaultWarehouse: {
+    type: Number,
+    default: 0
   }
 })
 
@@ -371,7 +386,7 @@ watch(() => props.isScore, () => {
 
 let originList = []
 const route = useRoute()
-const view = ref(!(route.path === '/product/list' || route.path === '/product-insights'))
+const view = ref(!(route.path === '/product/list' || route.path === '/data-analysis/product-insights'))
 
 const inputWidth = ref('110px')
 let timer = null
@@ -407,7 +422,8 @@ const genLists = (filterPar, flattenPar) => {
     weight: 0, // 重量
     partyCode: null, // 商品编码
     modelId: null, // 条形码
-    status: 1 // 状态
+    status: 1, // 状态
+    stockPointList: [] // 库存点库存
   }
   if (filterPar.length && genFlatten(filterPar, flattenPar).length) {
     data = genFlatten(filterPar, flattenPar, { extraData: baseData })
@@ -425,7 +441,9 @@ const genLists = (filterPar, flattenPar) => {
         weight: el.weight, // 重量
         partyCode: el.partyCode, // 商品编码
         modelId: el.modelId, // 条形码
-        status: el.status || null // 状态
+        status: el.status || null, // 状态
+        stockPointList: el.stockPointList || [], // 库存点库存
+        skuComboList: el.skuComboList
       }
       data = [baseData]
     })
@@ -491,7 +509,8 @@ watch(() => props.flatten, () => {
         weight: el.weight, // 重量
         partyCode: el.partyCode, // 商品编码
         modelId: el.modelId, // 条形码
-        status: el.status || null // 状态
+        status: el.status || null, // 状态
+        stockPointList: el.stockPointList || []
       }
       lists.value = [baseData]
     })
@@ -582,6 +601,14 @@ const changeScorePrice = (row) => {
 const stockValidAndChange = (scope) => {
   const { $index, row } = scope
 
+  // 修改时更新库存信息（库存点ID为默认仓库id）
+  lists.value[$index].stockPointList = [{
+    stock: row.stock,
+    stockPointId: props.defaultWarehouse,
+    stockPointType: 1,
+    type: 0
+  }]
+
   /** 无属性 */
   if (originList?.length === 1 && !originList?.[0].spuSkuAttrValues && !row.spuSkuAttrValues) {
     lists.value[$index].changeStock = parseInt(row.stock) - parseInt(originList[0].stock)
@@ -607,6 +634,7 @@ const stockValidAndChange = (scope) => {
   // 当前sku与原sku匹配成功（存在originSku）,判断库存
   const originStock = originSku.stock
   if (originStock !== undefined) { // 存在原库存
+    lists.value[$index].stockPointList[0].changeStock = parseInt(row.stock) - parseInt(originStock)
     lists.value[$index].changeStock = parseInt(row.stock) - parseInt(originStock)
   }
 }
@@ -663,6 +691,42 @@ const setNow = () => {
       item.partyCode = skuCodeIntValPar || item.partyCode // 商品编码
       item.modelId = barCodeIntValPar || item.modelId // 商品条形码
       item.stock = stockIntValPar && stockIntValPar >= 0 ? stockIntValPar : item.stock
+
+      let isHaveDefaultWarehouse = false // 库存中是否存在默认仓库
+      if (stockIntVal.value || stockIntVal.value === 0) {
+        for (let i = 0; i < item.stockPointList.length; i++) {
+          if (item.stockPointList[i].skuId) {
+            // 存在skuId，则计算changeStock，并将默认仓库库存设置为Data.stockIntVal
+            if (item.stockPointList[i].type !== 0) {
+              // 非默认仓库，库存改为0
+              /* item.stockPointList[i].changeStock = -(item.stockPointList[i].stock - (item.stockPointList[i].changeStock || 0))
+            item.stockPointList[i].stock = 0 */
+              item.stockPointList.splice(i, 1)
+            } else {
+              item.stockPointList[i].changeStock = stockIntVal.value - item.stockPointList[i].stock + (item.stockPointList[i].changeStock || 0)
+              item.stockPointList[i].stock = stockIntVal.value
+              isHaveDefaultWarehouse = true
+            }
+          } else {
+            if (item.stockPointList[i].type === 0) {
+              isHaveDefaultWarehouse = true
+              item.stockPointList[i].stock = stockIntVal.value // 无skuId的默认仓库（此次修改新增的仓库库存，无需传changeStock）
+              continue
+            }
+            item.stockPointList.splice(i, 1) // 不存在skuId，则删除当前项
+          }
+        }
+        if (!isHaveDefaultWarehouse) {
+          // 不存在默认仓库，则存储一条默认仓库信息
+          item.stockPointList.push({
+            stock: stockIntVal.value,
+            stockPointId: props.defaultWarehouse,
+            stockPointType: 1,
+            type: 0
+          })
+        }
+      }
+
       // 如果存在原库存
       if (spuIdPar && item.stock >= 0 && (stockIntValPar && stockIntValPar >= 0) && parseInt(originList[index]?.stock) >= 0) {
         // 改变的库存数量(新增-原有，changeStock允许负数)
@@ -702,6 +766,15 @@ const skuStatusOperation = (scope) => {
   const { $index } = scope
   const currentStatus = lists.value[$index]?.status
   lists.value[$index].status = currentStatus === 0 ? 1 : 0
+}
+
+const associationGoodsRef = ref(null)
+const associationGoodsVisible = ref(false)
+const openGoodList = (list) => {
+  associationGoodsVisible.value = true
+  nextTick(() => {
+    associationGoodsRef.value.openDialog(list || [])
+  })
 }
 
 const changePrice = (row) => {

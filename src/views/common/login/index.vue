@@ -2,7 +2,7 @@
   <div class="Mall4j page-login login-container">
     <div class="login-frame">
       <div class="login-img">
-        <img :src="webConfig.loginBgImg">
+        <img :src="addDomain(webConfig.loginBgImg)">
       </div>
       <div class="login-info">
         <div class="title">
@@ -19,6 +19,7 @@
               <el-input
                 v-model="loginInfo.userName"
                 v-input-rule
+                :maxlength="16"
                 :placeholder="$t('login.username')"
               />
             </el-form-item>

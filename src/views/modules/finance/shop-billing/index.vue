@@ -143,8 +143,7 @@
               width="140"
             >
               <template #default="scope">
-                <span v-if="scope.row.userAmount === 0 || !scope.row.userAmount">0</span>
-                <span v-else>{{ ['-','+'][scope.row.shopIoType] }}{{ amount((scope.row.userAmount || 0)) }}</span>
+                <span>{{ ['-','+'][scope.row.shopIoType] }}{{ amount((scope.row.userAmount ? scope.row.userAmount : scope.row.shopChangeAmount)) }}</span>
               </template>
             </el-table-column>
             <el-table-column

@@ -274,6 +274,20 @@
               <span>{{ scope.row.refundSuccessRate !== null ? scope.row.refundSuccessRate : 0 }}</span>
             </template>
           </el-table-column>
+          <el-table-column
+            class="table-item"
+            label="操作"
+          >
+            <template #default="scope">
+              <el-button
+                link
+                type="primary"
+                @click="onHandleClick(scope.row)"
+              >
+                趋势图分析
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
 
@@ -290,6 +304,20 @@
       v-if="prodDetailsVisible"
       ref="prodDetailsRef"
     />
+
+    <!--  趋势图分析弹窗  -->
+    <el-dialog
+      v-model="trendVisible"
+      title="商品趋势分析"
+      width="40%"
+    >
+      <el-main v-loading="showLoading">
+        <common-chart
+          :options="prodSurveyChart"
+          style="width: 100%; height: 300px;"
+        />
+      </el-main>
+    </el-dialog>
   </div>
 </template>
 
@@ -298,21 +326,30 @@ import titleBar from '../../public-components/title-bar.vue'
 import checkboxOptionsGroup from './checkbox-options-group.vue'
 import prodDetails from '@/views/modules/product/list/components/prod-details/index.vue'
 import pagination from '@/components/pagination/index.vue'
-import { list, soldExcel } from '@/api/data-analysis/product-effect.js'
+import { list, soldExcel, getSingleProdTrend } from '@/api/data-analysis/product-effect.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Big from 'big.js'
+import moment from 'moment'
 
 const title = ref('商品洞察')
 
 const params = reactive({
   pageNum: 1,
   pageSize: 10,
-  dateType: 4,
+  dateType: 5,
   status: 0,
   group: 0,
   startTime: '',
   endTime: ''
 })
+
+onMounted(() => {
+  initTime()
+})
+const initTime = () => {
+  params.startTime = moment().add(-7, 'd').format('YYYY-MM-DD HH:mm:ss')
+  params.endTime = moment().format('YYYY-MM-DD HH:mm:ss')
+}
 
 let tabelList = []
 const showTableColumn = computed(() => {
@@ -426,6 +463,94 @@ const onToPrice = (price) => {
   Big.DP = 2
   return new Big(price).div(100).toFixed(2)
 }
+
+// 单个商品趋势弹窗
+const trendVisible = ref(false)
+const showLoading = ref(false)
+const onHandleClick = (row) => {
+  trendVisible.value = true
+  showLoading.value = true
+  onSingleProdTrendData(row.spuId)
+}
+
+const prodSurveyChart = ref({})
+/**
+ * 单个商品的趋势图
+ */
+let dateArr = [564, 324, 234, 123] // 趋势图时间数组
+let seriesDataArr = [] // 趋势图数据
+const onGetRealTimechartData = () => {
+  prodSurveyChart.value = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['浏览量', '访客数', '付款人数', '付款商品件数']
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: dateArr,
+      axisLine: {
+        lineStyle: {
+          color: '#999'
+        }
+      },
+      axisTick: {
+        show: false
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLine: { show: false },
+      axisTick: { show: false }
+    },
+    series: seriesDataArr
+  }
+  showLoading.value = false
+}
+/**
+ * 获取单个商品的趋势图数据
+ */
+const onSingleProdTrendData = (spuId) => {
+  showLoading.value = true
+  getSingleProdTrend({
+    spuId,
+    startTime: params.startTime,
+    endTime: params.endTime
+  }).then(data => {
+    dateArr = []
+    seriesDataArr = []
+    const obj1 = onInitObj('浏览量')
+    const obj2 = onInitObj('访客数')
+    const obj3 = onInitObj('付款人数')
+    const obj4 = onInitObj('付款商品件数')
+    data.forEach(i => {
+      dateArr.push(i.currentDay)
+      obj1.data.push(i.browse)
+      obj2.data.push(i.visitor)
+      obj3.data.push(i.payPerson)
+      obj4.data.push(i.payNum)
+    })
+    seriesDataArr.push(obj1)
+    seriesDataArr.push(obj2)
+    seriesDataArr.push(obj3)
+    seriesDataArr.push(obj4)
+    onGetRealTimechartData()
+  })
+}
+/**
+ * 初始化一个obj
+ */
+const onInitObj = (name) => {
+  const obj = {}
+  obj.name = name
+  obj.type = 'line'
+  obj.smooth = true
+  obj.data = []
+  return obj
+}
+
 </script>
 
 <style lang="scss" scoped>

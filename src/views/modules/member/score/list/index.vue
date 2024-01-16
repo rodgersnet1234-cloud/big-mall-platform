@@ -398,6 +398,7 @@
                     <div>
                       <el-input
                         v-model="currentModifyProdSkuList[0].stock"
+                        @blur="onChangeStock(currentModifyProdSkuList[0])"
                       />
                       <div class="popover-bottom">
                         <el-button
@@ -443,6 +444,7 @@
                             style="width:100%"
                             :disabled="scope.row.status!==1"
                             controls-position="right"
+                            @blur="onChangeStock(scope.row)"
                           />
                         </template>
                       </el-table-column>
@@ -1221,7 +1223,8 @@ const modifyProdStock = (spuId, skus) => {
       totalChangeStock += changeStock
       skuList.push({
         changeStock,
-        skuId: skus[i].skuId
+        skuId: skus[i].skuId,
+        stockPointList: skus[i].stockPointList
       })
     }
   }
@@ -1302,6 +1305,12 @@ const modifySeq = (scope) => {
   }).catch(() => {
     isSubmit = false
   })
+}
+
+// 修改规格库存
+const onChangeStock = (row) => {
+  row.stockPointList[0].changeStock = row.stock - (row.stockPointList[0].stock - (row.stockPointList[0].changeStock || 0))
+  row.stockPointList[0].stock = row.stock
 }
 
 // 每页数

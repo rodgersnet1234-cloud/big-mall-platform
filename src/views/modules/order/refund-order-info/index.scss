@@ -216,17 +216,27 @@
             -webkit-box-orient: vertical;
           }
           // 赠品
-          .gift-prod .item {
-            margin-top: 5px;
-            line-height: 1em;
-            .name {
-              display: inline-block;
-              margin-right: 15px;
-              max-width: 400px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              line-height: 20px;
+          .gift-prod {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 0 0 103px;
+            .item {
+              display: flex;
+              margin-top: 5px;
+              line-height: 1em;
+
+              .giveaway-item-name {
+                box-sizing: border-box;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+              }
+              .giveaway-item-sku-count {
+                white-space: nowrap;
+                margin-left: 10px;
+                color: #999;
+              }
             }
           }
         }

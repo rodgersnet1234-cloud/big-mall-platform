@@ -325,8 +325,7 @@
                       </div>
                     </div>
                     <div
-                      v-for="(trace, index) in deliveryExpress.delivery
-                        .traces"
+                      v-for="(trace, index) in deliveryExpress.delivery.traces"
                       :key="index"
                       class="item"
                     >
@@ -513,6 +512,7 @@
                   暂无
                 </div>
               </div>
+
               <div class="info-item">
                 <div class="item-tit">
                   {{ $t("order.order.paymentInformation") }}
@@ -569,6 +569,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="info-item">
                 <div class="item-tit">
                   {{ $t("order.order.buyerInformation") }}
@@ -577,124 +578,16 @@
                   <div class="text">
                     {{ $t("order.order.buyerMessage") }}：
                   </div>
-                  <div class="res">
-                    {{ dataForm.remarks }}
-                  </div>
-                  <div
-                    v-if="dataForm.remarks === null || dataForm.remarks === ''"
-                    class="res"
-                  >
-                    {{ $t("order.order.notYet") }}
+                  <div class="res remarks">
+                    {{ dataForm.remarks || $t("order.order.notYet") }}
                   </div>
                 </div>
               </div>
             </div>
             <div class="goods-list">
-              <el-table
-                :data="prodList"
-                border
-              >
-                <el-table-column
-                  prop=""
-                  :label="$t('constant.product')"
-                >
-                  <template #default="scope">
-                    <div class="df">
-                      <ImgShow
-                        :src="scope.row.pic"
-                        :img-style="{width:'60px',height:'60px'}"
-                      />
-                      <span class="name">
-                        <span
-                          v-if="scope.row.activityType === 5 && scope.row.activityId !== 0"
-                          class="gift-icon"
-                        >赠品</span>
-                        {{ scope.row.spuName + ' ' + (scope.row.skuName === null?' ':scope.row.skuName) }}
-                        <div
-                          v-if="
-                            scope.row.returnMoneySts &&
-                              scope.row.returnMoneySts < 6 &&
-                              scope.row.returnMoneySts > 0
-                          "
-                          class="order-status"
-                        >
-                          {{
-                            [
-                              "",
-                              $t("order.order.buyerApplication"),
-                              $t("order.order.sellerAccepts"),
-                              $t("order.order.selShipment"),
-                              $t("order.order.sellerReceiving"),
-                              $t("order.order.refundsuccessfully"),
-                            ][scope.row.returnMoneySts]
-                          }}
-                        </div>
-                      </span>
-                    </div>
-                    <!-- 赠品 -->
-                    <div
-                      v-if="dataForm.orderItems.length > 1"
-                      class="gift-prod"
-                    >
-                      <div
-                        v-for="(item,index) in scope.row.giveawayList"
-                        :key="index"
-                        class="item"
-                      >
-                        <span class="name">【赠品】{{ item.spuName }}</span>
-                        <span
-                          v-if="item.skuName"
-                          class="name"
-                        >{{ item.skuName }}</span>
-                        <span class="num">×{{ item.count }}</span>
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="price"
-                  :label="$t('order.order.unitPrice')"
-                  width="180"
-                  align="center"
-                >
-                  <template #default="scope">
-                    <span v-if="scope.row.activityType !== 5">{{ formatPrice(scope.row.price, 1).toFixed(2) }}</span>
-                    <span v-else>-</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="count"
-                  :label="$t('order.order.quantity')"
-                  width="180"
-                  align="center"
-                >
-                  <template #default="scope">
-                    <span>{{ scope.row.count }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="count"
-                  :label="$t('order.order.discountedPrice')"
-                  width="180"
-                  align="center"
-                >
-                  <template #default="scope">
-                    <span v-if="scope.row.activityType !== 5">{{ formatPrice(scope.row.shareReduce, 1).toFixed(2) }}</span>
-                    <span v-else>-</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="totalPrice"
-                  :label="$t('order.order.totalPrice')"
-                  width="180"
-                  align="center"
-                >
-                  <template #default="scope">
-                    <span v-if="scope.row.activityType !== 5">{{ formatPrice(scope.row.spuTotalAmount, 1).toFixed(2) }}</span>
-                    <span v-else>-</span>
-                  </template>
-                </el-table-column>
-              </el-table>
+              <order-prod-table
+                :data-form="dataForm"
+              />
               <div class="goods-total">
                 <div class="text-box">
                   <div class="item">
@@ -797,9 +690,10 @@
 
 <script setup>
 import Big from 'big.js'
-import * as api from '@/api/order/order'
-import { deliveryOrder } from '@/api/delivery/delivery-company'
+import * as api from '@/api/order/order.js'
+import { deliveryOrder } from '@/api/delivery/delivery-company.js'
 import { formatPrice } from '@/utils/index.js'
+import OrderProdTable from '../order-prod-table/index.vue'
 
 const carouserRef = ref()
 const deliveryExpress = ref('')
@@ -955,5 +849,5 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-@use './order-info.scss';
+@use 'index';
 </style>

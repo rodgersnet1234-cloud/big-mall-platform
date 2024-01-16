@@ -287,18 +287,6 @@
         <span>运费金额：{{ formatPrice(data.freightAmount, 1).toFixed(2) }} 元</span>
       </div>
       <div class="message">
-        <span>运费变化金额：{{ data.freeFreightAmount > 0 ? '+':'' }}{{ formatPrice(data.freeFreightAmount, 1).toFixed(2) }} 元
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="订单管理中修改的订单运费金额"
-            placement="top"
-          >
-            <span style="font-size:14px;color:#46a6ff;cursor:pointer;"><el-icon class="question"><QuestionFilled /></el-icon></span>
-          </el-tooltip>
-        </span>
-      </div>
-      <div class="message">
         <span>平台运费减免金额：{{ formatPrice(data.platformFreeFreightAmount, 1).toFixed(2) }} 元
           <el-tooltip
             class="item"

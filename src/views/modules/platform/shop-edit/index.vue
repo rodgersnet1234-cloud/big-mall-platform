@@ -1,8 +1,5 @@
 <template>
   <div class="app-container page-shop-edit">
-    <div class="head-title">
-      商家详情
-    </div>
     <!-- 导航栏 -->
     <div class="nav-box">
       <div class="nav">
@@ -90,6 +87,51 @@
             @submit.prevent
           >
             <div class="basic-info-box">
+              <div class="right-info">
+                <el-form-item
+                  label="店铺logo"
+                  prop="shopLogo"
+                >
+                  <div class="business-license-box">
+                    <div class="license-content">
+                      <img-upload v-model="shopBasicInfo.shopLogo" />
+                    </div>
+                    <div class="upload-tips">
+                      仅限jpg、gif、png，仅限上传1张
+                    </div>
+                  </div>
+                </el-form-item>
+                <div class="bg-img">
+                  <div class="business-license-box">
+                    <el-form-item
+                      label="店铺背景图"
+                      prop="mobileBackgroundPic"
+                    >
+                      <div class="license-content">
+                        <img-upload v-model="shopBasicInfo.mobileBackgroundPic" />
+                      </div>
+                      <div class="img-tips">
+                        <p>移动端背景图</p>
+                        <p>(建议尺寸750*380)</p>
+                      </div>
+                    </el-form-item>
+                  </div>
+                  <div class="business-license-box">
+                    <el-form-item
+                      label-width="0"
+                      prop="pcBackgroundPic"
+                    >
+                      <div class="license-content">
+                        <img-upload v-model="shopBasicInfo.pcBackgroundPic" />
+                      </div>
+                      <div class="img-tips">
+                        <p>PC端背景图</p>
+                        <p>(主要展示在店铺外部入口处，建议尺寸590*220)</p>
+                      </div>
+                    </el-form-item>
+                  </div>
+                </div>
+              </div>
               <div class="left-info">
                 <el-form-item
                   label="商家名称"
@@ -138,122 +180,12 @@
                     <el-input
                       v-model="shopBasicInfo.contactPhone"
                       placeholder="请输入常用联系人11位手机号码"
-                      oninput="value=value.replace(/[^\d]/g,'')"
                       maxlength="11"
                       style="width: 400px"
+                      @input="shopBasicInfo.contactPhone=shopBasicInfo.contactPhone.replace(/[^\d|*]/g,'')"
                     />
                   </p>
                 </el-form-item>
-                <el-form-item
-                  label="联系邮箱"
-                  prop="email"
-                >
-                  <p class="txt">
-                    <el-input
-                      v-model.trim="shopBasicInfo.email"
-                      placeholder="请输入常用联系邮箱"
-                      maxlength="30"
-                      style="width: 400px"
-                    />
-                  </p>
-                </el-form-item>
-
-                <el-form-item
-                  label="所在地区"
-                  prop="currentAddr"
-                >
-                  <p class="txt">
-                    <el-cascader
-                      ref="cascaderAddrRef"
-                      v-model="shopBasicInfo.currentAddr"
-                      style="width: 400px"
-                      :options="addrList"
-                      :props="addrListTreeProps"
-                      placeholder="请选择所在地区"
-                      @change="handleAddrChange"
-                    />
-                  </p>
-                </el-form-item>
-
-                <el-form-item
-                  label="详细地址"
-                  prop="detailAddress"
-                >
-                  <p class="txt">
-                    <el-input
-                      v-model="shopBasicInfo.detailAddress"
-                      placeholder="请输入50字以内的详细地址"
-                      maxlength="50"
-                      style="width: 400px"
-                      @blur="onMapLocation(true)"
-                    >
-                      <template #append>
-                        <div
-                          style="display: flex;cursor: pointer;align-items: center;"
-                          @click="onMapLocation()"
-                        >
-                          <el-icon><Location /></el-icon>
-                          定位
-                        </div>
-                      </template>
-                    </el-input>
-                  </p>
-                </el-form-item>
-                <el-form-item>
-                  <div class="map">
-                    <tmap
-                      ref="tmapRef"
-                      :lat-lng="latLng"
-                      @change-lat-lng="onChangeLatLng"
-                    />
-                  </div>
-                </el-form-item>
-              </div>
-
-              <div class="right-info">
-                <el-form-item
-                  label="店铺logo"
-                  prop="shopLogo"
-                >
-                  <div class="business-license-box">
-                    <div class="license-content">
-                      <img-upload v-model="shopBasicInfo.shopLogo" />
-                    </div>
-                    <div class="upload-tips">
-                      仅限jpg、gif、png，仅限上传1张
-                    </div>
-                  </div>
-                </el-form-item>
-                <div class="bg-img">
-                  <div class="business-license-box">
-                    <el-form-item
-                      label="店铺背景图"
-                      prop="mobileBackgroundPic"
-                    >
-                      <div class="license-content">
-                        <img-upload v-model="shopBasicInfo.mobileBackgroundPic" />
-                      </div>
-                      <div class="img-tips">
-                        <p>移动端背景图</p>
-                        <p>(建议尺寸750*380)</p>
-                      </div>
-                    </el-form-item>
-                  </div>
-                  <div class="business-license-box">
-                    <el-form-item
-                      label-width="0"
-                      prop="pcBackgroundPic"
-                    >
-                      <div class="license-content">
-                        <img-upload v-model="shopBasicInfo.pcBackgroundPic" />
-                      </div>
-                      <div class="img-tips">
-                        <p>PC端背景图</p>
-                        <p>(主要展示在店铺外部入口处，建议尺寸590*220)</p>
-                      </div>
-                    </el-form-item>
-                  </div>
-                </div>
                 <el-form-item
                   label="店铺简介"
                   prop="intro"
@@ -262,7 +194,7 @@
                     v-model="shopBasicInfo.intro"
                     type="textarea"
                     :rows="4"
-                    style="width: 100%;"
+                    style="width: 400px"
                     maxlength="200"
                     placeholder="请输入200字以内店铺简介"
                   />
@@ -351,7 +283,7 @@
                   v-model="companyInfoForm.legalPhone"
                   maxlength="11"
                   placeholder="输入法人手机号"
-                  @input="(val)=>{companyInfoForm.legalPhone=val.replace(/[^\d]/g,'')}"
+                  @input="(val)=>{companyInfoForm.legalPhone=val.replace(/[^\d|*]/g,'')}"
                 />
               </el-form-item>
               <el-form-item
@@ -577,9 +509,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
+                      :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :preview-src-list="addDomain(imgs)"
                     >
                       <template #error>
                         <img
@@ -667,9 +599,9 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
-                      :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
+                      :src="addDomain(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -697,8 +629,8 @@
                       :key="index"
                       class="tab-img"
                       preview-teleported
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(imgs)"
                     >
                       <template #error>
                         <img
@@ -1072,21 +1004,15 @@
 
 <script setup>
 import * as api from '@/api/platform/audit-shop'
-import * as addrApi from '@/api/delivery/transport'
-import { treeDataTranslate } from '@/utils'
-// import ImgUpload from '@/components/ImgUpload'
-import { isMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
+import { isStarMobile, isEmail, isCreditCode, validNoEmptySpace, checkIDCard } from '@/utils/validate'
 import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
 import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
 import moment from 'moment'
 import { useAllinpayStore } from '@/stores/modules/allinpay.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-
-// import { countByShopStatus } from '@/api/multishop/shop-detail'
 const cateAddOrUpdateRef = ref(null)
 const brandAddOrUpdateRef = ref(null)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const shopId = ref(useRoute().query.shopId || 0)
 const navStatus = ref(0)
 const router = useRouter()
@@ -1101,7 +1027,7 @@ const shopBasicInfo = ref({})
 
 // eslint-disable-next-line no-unused-vars
 const validateMobile = (rule, value, callback) => {
-  if (!isMobile(value)) {
+  if (!isStarMobile(value)) {
     callback(new Error('请输入正确的联系方式'))
   } else {
     callback()
@@ -1150,7 +1076,7 @@ const validIDCard = (rule, value, callback) => {
 }
 // eslint-disable-next-line no-unused-vars
 const validMobile = (rule, value, callback) => {
-  if (!value || !isMobile(value)) {
+  if (!isStarMobile(value)) {
     callback(new Error('请输入正确的手机号'))
   } else {
     callback()
@@ -1178,17 +1104,6 @@ const shopBasicInfoRules = {
     { required: true, message: '请填写联系方式', trigger: 'blur' },
     { validator: validateMobile, trigger: 'blur' }
   ],
-  email: [
-    { required: true, message: '联系邮箱不能为空', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'blur' }
-  ],
-  currentAddr: [
-    { required: true, message: '请选择所在地区', trigger: ['blur', 'change'] }
-  ],
-  detailAddress: [
-    { required: true, message: '详细地址不能为空', trigger: ['blur', 'change'] },
-    { validator: validateNotEmpty, trigger: 'blur' }
-  ],
   shopLogo: [
     { required: true, message: '请上传店铺logo', trigger: 'change' }
   ],
@@ -1202,11 +1117,6 @@ const shopBasicInfoRules = {
     { validator: validateNotEmpty, trigger: 'blur' }
   ]
 }
-const addrList = ref([])
-const addrListTreeProps = reactive({
-  value: 'areaId',
-  label: 'areaName'
-})
 
 // 店铺工商信息
 const companyInfoForm = ref({
@@ -1366,66 +1276,8 @@ onMounted(() => {
   // 查询基本信息
   switchNav(0)
   queryShopAuditStatus()
-  getAddrList()
 })
 
-// 腾讯地图
-const tmapRef = ref(null)
-const latLng = ref(null)
-const onMapLocation = (isTrue) => {
-  let address = ''
-  const { provinceId, province, cityId, city, areaId, area, detailAddress } = shopBasicInfo.value
-  if (isTrue) {
-    // 选择省市区时，定位地图
-    if (provinceId) {
-      address = province
-      tmapRef.value.onSetZoom(6)
-      if (cityId) {
-        address = address + city
-        tmapRef.value.onSetZoom(10)
-        if (areaId) {
-          address = address + area
-          tmapRef.value.onSetZoom(18)
-          if (detailAddress) {
-            // 详细地址
-            address = address + detailAddress
-            tmapRef.value.onSetZoom(18)
-          }
-        }
-      }
-    }
-    if (address) {
-      tmapRef.value.onGetLocation(address).then(res => {
-        onChangeLatLng(res)
-      })
-    }
-  } else {
-    if (!provinceId || !cityId || !areaId) {
-      shopBasicInfo.value.detailAddress = null
-      ElMessage({
-        message: $t('admin.selePCD'),
-        type: 'error',
-        duration: 1000
-      })
-      return
-    }
-    tmapRef.value.onGetAddress(latLng.value).then(res => {
-      shopBasicInfo.value.detailAddress = res.formatted_addresses?.recommend || res.address
-    })
-    tmapRef.value.onSetZoom(18)
-  }
-}
-
-// 修改经纬度
-const onChangeLatLng = (latLngInfo) => {
-  const { lng, lat } = latLngInfo
-  latLng.value = {
-    lat,
-    lng
-  }
-  shopBasicInfo.value.shopLng = lng
-  shopBasicInfo.value.shopLat = lat
-}
 const switchNav = (value) => {
   navStatus.value = value
   if (value === 1) {
@@ -1467,45 +1319,11 @@ const queryShopAuditStatus = () => {
 const queryShopBasicInfo = () => {
   api.getManageDetail({ shopId: shopId.value }).then(data => {
     shopBasicInfo.value = data
-    latLng.value = {
-      lat: data.shopLat,
-      lng: data.shopLng
-    }
     signingInfo.type = data.type
     signingInfo.contractStartTime = data.contractStartTime
     signingInfo.contractEndTime = data.contractEndTime
-    shopBasicInfo.value.currentAddr = [
-      data.provinceId,
-      data.cityId,
-      data.areaId
-    ]
     shopStatus.value = data
   })
-}
-/**
- * 省市区
- */
-const getAddrList = () => {
-  addrApi.listAreaOfEnable({}).then(data => {
-    addrList.value = treeDataTranslate(data, 'areaId', 'parentId')
-  })
-}
-
-const cascaderAddrRef = ref([])
-/**
- * 监听地址改变
- */
-const handleAddrChange = (value) => {
-  if (value.length > 0) {
-    const labels = cascaderAddrRef.value.getCheckedNodes()[0].pathLabels
-    shopBasicInfo.value.province = labels[0]
-    shopBasicInfo.value.provinceId = value[0]
-    shopBasicInfo.value.city = labels[1]
-    shopBasicInfo.value.cityId = value[1]
-    shopBasicInfo.value.area = labels[2]
-    shopBasicInfo.value.areaId = value[2]
-  }
-  onMapLocation(true)
 }
 
 /**
@@ -1671,7 +1489,8 @@ const updateShopApplyInfo = () => {
 
 // 更新基本信息
 const updateShopBasicInfo = () => {
-  api.updateBasicInfo(shopBasicInfo.value).then(() => {
+  const data = JSON.parse(JSON.stringify(shopBasicInfo.value))
+  api.updateBasicInfo(data).then(() => {
     ElMessage({
       message: '基本信息更新成功！',
       type: 'success',

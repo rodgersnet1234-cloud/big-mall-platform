@@ -135,7 +135,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="formData.leftConfig.imgMessage.img"
+                    :src="addDomain(formData.leftConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -256,7 +256,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="formData.topConfig.imgMessage.img"
+                    :src="addDomain(formData.topConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -377,7 +377,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="formData.bottomConfig.imgMessage.img"
+                    :src="addDomain(formData.bottomConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -617,8 +617,6 @@ const myCheckResult = ($isPass) => {
     }
   })
 }
-
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const currentActive = ref(1) // 当前激活的是哪个
 // 选中哪个
@@ -959,11 +957,11 @@ const handleAddImg = () => {
 // 选择图片后回调
 const refreshPic = (imagePath) => {
   if (currentActive.value === 1) { // 左边配置
-    formData.leftConfig.imgMessage.img = resourcesUrl + imagePath
+    formData.leftConfig.imgMessage.img = addDomain(imagePath)
   } else if (currentActive.value === 2) { // 上边的配置
-    formData.topConfig.imgMessage.img = resourcesUrl + imagePath
+    formData.topConfig.imgMessage.img = addDomain(imagePath)
   } else if (currentActive.value === 3) {
-    formData.bottomConfig.imgMessage.img = resourcesUrl + imagePath
+    formData.bottomConfig.imgMessage.img = addDomain(imagePath)
   }
 }
 // 删除图片

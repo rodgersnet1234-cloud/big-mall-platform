@@ -225,7 +225,7 @@ const route = useRouter()
 const prodHandle = (id) => {
   // visible.value = false
   route.push({
-    path: '/product/tag-prod',
+    path: '/platform-default/tag-prod',
     query: { id }
   })
 }

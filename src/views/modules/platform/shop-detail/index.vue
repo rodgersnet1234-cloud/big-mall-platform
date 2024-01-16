@@ -142,39 +142,6 @@
             </div>
             <div class="basic-info-item">
               <p class="tit">
-                <span class="asterisk">*</span>联系邮箱：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.email }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>所在地区：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.province }}{{ shopBasicInfo.city }}{{ shopBasicInfo.area }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
-                <span class="asterisk">*</span>详细地址：
-              </p>
-              <p
-                v-if="shopBasicInfo"
-                class="txt"
-              >
-                {{ shopBasicInfo.detailAddress }}
-              </p>
-            </div>
-            <div class="basic-info-item">
-              <p class="tit">
                 店铺简介：
               </p>
               <p
@@ -207,8 +174,8 @@
                   fit="contain"
                   class="img-static"
                   style="width: 100px; height: 100px"
-                  :src="shopBasicInfo.shopLogo.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.shopLogo : shopBasicInfo.shopLogo"
-                  :preview-src-list="shopBasicInfo.shopLogo.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.shopLogo] : [shopBasicInfo.shopLogo]"
+                  :src="addDomain(shopBasicInfo.shopLogo)"
+                  :preview-src-list="[addDomain(shopBasicInfo.shopLogo)]"
                 >
                   <template #error>
                     <img
@@ -242,8 +209,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="shopBasicInfo.mobileBackgroundPic.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.mobileBackgroundPic : shopBasicInfo.mobileBackgroundPic"
-                    :preview-src-list="shopBasicInfo.mobileBackgroundPic.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.mobileBackgroundPic] : [shopBasicInfo.mobileBackgroundPic]"
+                    :src="addDomain(shopBasicInfo.mobileBackgroundPic)"
+                    :preview-src-list="[addDomain(shopBasicInfo.mobileBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -265,8 +232,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="shopBasicInfo.pcBackgroundPic.indexOf('http')===-1 ? resourcesUrl + shopBasicInfo.pcBackgroundPic : shopBasicInfo.pcBackgroundPic"
-                    :preview-src-list="shopBasicInfo.pcBackgroundPic.indexOf('http')===-1 ? [resourcesUrl + shopBasicInfo.pcBackgroundPic] : [shopBasicInfo.pcBackgroundPic]"
+                    :src="addDomain(shopBasicInfo.pcBackgroundPic)"
+                    :preview-src-list="[addDomain(shopBasicInfo.pcBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -447,8 +414,8 @@
                 fit="contain"
                 class="img-static"
                 style="width: 100px; height: 100px"
-                :src="businessInfo.businessLicense.indexOf('http')===-1 ? resourcesUrl + businessInfo.businessLicense : businessInfo.businessLicense"
-                :preview-src-list="businessInfo.businessLicense.indexOf('http')===-1 ? [resourcesUrl + businessInfo.businessLicense] : [shopBasicInfo.businessLicense]"
+                :src="addDomain(businessInfo.businessLicense)"
+                :preview-src-list="[addDomain(businessInfo.businessLicense)]"
               >
                 <template #error>
                   <img
@@ -478,8 +445,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="businessInfo.identityCardFront.indexOf('http')===-1 ? resourcesUrl + businessInfo.identityCardFront : businessInfo.identityCardFront"
-              :preview-src-list="businessInfo.identityCardFront.indexOf('http')===-1 ? [resourcesUrl + businessInfo.identityCardFront] : [businessInfo.identityCardFront]"
+              :src="addDomain(businessInfo.identityCardFront)"
+              :preview-src-list="[addDomain(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -493,8 +460,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="businessInfo.identityCardLater.indexOf('http')===-1 ? resourcesUrl + businessInfo.identityCardLater : businessInfo.identityCardLater"
-              :preview-src-list="businessInfo.identityCardLater.indexOf('http')===-1 ? [resourcesUrl + businessInfo.identityCardLater] : [businessInfo.identityCardLater]"
+              :src="addDomain(businessInfo.identityCardLater)"
+              :preview-src-list="[addDomain(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -595,8 +562,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
-                      :preview-src-list="scope.row.imgs"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                       preview-teleported
                     >
                       <template #error>
@@ -677,8 +644,8 @@
                     preview-teleported
                     class="tab-img"
                     style="width: 60px; height: 60px;"
-                    :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
-                    :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                    :src="addDomain(scope.row.imgUrl)"
+                    :preview-src-list="[addDomain(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -701,8 +668,8 @@
                       preview-teleported
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="img"
-                      :preview-src-list="scope.row.imgs"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -772,8 +739,8 @@
                       class="tab-img"
                       preview-teleported
                       style="width: 60px; height: 60px"
-                      :src="scope.row.imgUrl.indexOf('http')===-1 ? resourcesUrl + scope.row.imgUrl : scope.row.imgUrl"
-                      :preview-src-list="scope.row.imgUrl.indexOf('http')===-1 ? [resourcesUrl + scope.row.imgUrl] : [scope.row.imgUrl]"
+                      :src="addDomain(scope.row.imgUrl)"
+                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -796,8 +763,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="(img).indexOf('http')===-1 ? resourcesUrl + img : img"
-                      :preview-src-list="(img).indexOf('http')===-1 ? [resourcesUrl + img] : [img]"
+                      :src="addDomain(img)"
+                      :preview-src-list="addDomain(imgs)"
                       preview-teleported
                     >
                       <template #error>
@@ -1148,7 +1115,6 @@ import * as api from '@/api/platform/audit-shop'
 import { ElMessage } from 'element-plus'
 
 // 图片前缀
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const route = useRoute()
 const shopId = route.query.shopId || 0
 // 页面类型 查看详情/审核申请
@@ -1318,12 +1284,7 @@ const queryCategoryContractInfo = () => {
   api.queryCategoryContract({ shopId, sysType: 1 }).then(data => {
     categoryContract.value = data
     categoryContract.value.forEach(el => {
-      const imgUrls = el.qualifications ? el.qualifications.split(',') : []
-      if (imgUrls.length) {
-        el.imgs = handleImgUrl(imgUrls)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
 }
@@ -1342,36 +1303,13 @@ const queryBrandSigningInfo = () => {
     })
     platformBrandList.value = data.platformBrandList
     platformBrandList.value.forEach(el => {
-      const plaImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (plaImgs.length) {
-        el.imgs = handleImgUrl(plaImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
     customizeBrandList.value = data.customizeBrandList
     customizeBrandList.value.forEach(el => {
-      const cusImgs = el.qualifications ? el.qualifications.split(',') : []
-      if (cusImgs.length) {
-        el.imgs = handleImgUrl(cusImgs)
-      } else {
-        el.imgs = []
-      }
+      el.imgs = el.qualifications ? el.qualifications.split(',') : []
     })
   })
-}
-
-const handleImgUrl = (imgUrls) => {
-  const imgs = []
-  imgUrls.forEach((img) => {
-    if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-      const image = resourcesUrl + img
-      imgs.push(image)
-    } else {
-      imgs.push(img)
-    }
-  })
-  return imgs
 }
 
 /**
@@ -1511,7 +1449,6 @@ const dataUpdate = Debounce(function () {
     width: 100%;
     .nav {
       position: relative;
-      display: inline-block;
       display: flex;
       white-space: nowrap;
       .nav-item {
@@ -1669,9 +1606,7 @@ const dataUpdate = Debounce(function () {
     width: 100%;
     position: fixed;
     bottom: 0;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 10px 20px;
     box-shadow: 4px 2px 5px 5px #eee;
     background: #fff;
     margin-left: -24px;
@@ -1701,7 +1636,6 @@ const dataUpdate = Debounce(function () {
 .audit-dialog {
   :deep(.el-dialog__header) {
     padding: 0;
-    padding-bottom: 0;
   }
   :deep(.el-dialog__body) {
     padding-top: 0;

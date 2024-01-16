@@ -2,7 +2,7 @@
   <el-image
     v-for="(imgUrl,imgInx) in imgList"
     :key="imgInx"
-    :src="imgUrl"
+    :src="addDomain(imgUrl)"
     class="img-box"
     :preview-src-list="imgList"
     :initial-index="initialIndex"

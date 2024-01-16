@@ -171,7 +171,9 @@ export default {
     qiniuKODO: '七牛云KODO',
     hwObs: '华为云OBS',
     OtherCloudServers: '其他云服务器',
-    IncludingCloud: '（包括：阿里云OSS,腾讯云COS,华为云OBS,七牛云KODO）'
+    IncludingCloud: '（包括：阿里云OSS,腾讯云COS,华为云OBS,七牛云KODO）',
+    endPoint: '外网域名(endPoint)',
+    bucketName: '桶名(bucketName)'
   },
   rbac: {
     role,

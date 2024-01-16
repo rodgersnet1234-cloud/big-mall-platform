@@ -13,7 +13,7 @@
           >
             <div class="goods-img-content">
               <el-image
-                :src="item.imgs"
+                :src="addDomain(item.imgs)"
                 fit="fill"
               >
                 <template #error>

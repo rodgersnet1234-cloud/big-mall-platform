@@ -16,9 +16,12 @@ import '@/permission.js'
 import { setupDirective } from '@/directive'
 import { setupDirectiveDrag } from '@/views/modules/platform/feature/create/edit/directive/index'
 import moment from 'moment'
+// 图片域名替换
+import { addDomain } from '@/utils/index.js'
 
 // element-plus 图标
 const app = createApp(App)
+app.config.globalProperties.addDomain = addDomain
 for (const [key, component] of Object.entries(
   ElementPlusIconsVue)) {
   app.component(key, component)

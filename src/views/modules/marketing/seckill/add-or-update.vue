@@ -97,6 +97,7 @@
             style="height: 160px; width: 120px"
           >
             <img-show
+              aaa="12343"
               :src="spu.mainImgUrl"
               :img-style="{height: '104px', width: '100%'}"
             />
