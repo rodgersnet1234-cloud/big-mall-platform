@@ -193,19 +193,49 @@ const changeMallName = () => {
 }
 const platformIdentifying = () => {
   getPlatformIdentifying().then(res => {
-    navigator.clipboard.writeText(res).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(res).then(() => {
+        ElMessage({
+          message: '复制成功',
+          type: 'success',
+          duration: 1000
+        })
+      }).catch(() => {
+        ElMessage({
+          message: '复制失败',
+          type: 'error',
+          duration: 1000
+        })
       })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
+    } else {
+      // 创建text area
+      const textArea = document.createElement('textarea')
+      textArea.value = res
+      // 使text area不在viewport，同时设置不可见
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      new Promise((resolve, reject) => {
+        // 执行复制命令并移除文本框
+        document.execCommand('copy') ? resolve() : reject(new Error('出错了'))
+        textArea.remove()
+      }).then(
+        () => {
+          ElMessage({
+            message: '复制成功',
+            type: 'success',
+            duration: 1000
+          })
+        },
+        () => {
+          ElMessage({
+            message: '复制失败',
+            type: 'error',
+            duration: 1000
+          })
+        }
+      )
+    }
   })
 }
 const updatePasswordRef = ref(null)
