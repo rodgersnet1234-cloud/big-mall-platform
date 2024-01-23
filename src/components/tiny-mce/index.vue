@@ -184,14 +184,15 @@ const initTinymce = () => {
 }
 
 const destroyTinymce = () => {
-  const tinymce = window.tinymce.get(tinymceId.value)
-  if (fullscreen) {
-    tinymce.execCommand('mceFullScreen')
-  }
-
-  if (tinymce) {
-    tinymce.destroy()
-  }
+  try {
+    const tinymce = window.tinymce.get(tinymceId.value)
+    if (fullscreen.value) {
+      tinymce.execCommand('mceFullScreen')
+    }
+    if (tinymce) {
+      tinymce.destroy()
+    }
+  } catch (e) { }
 }
 const setContent = (value) => {
   if (window.tinymce) {

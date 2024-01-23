@@ -80,7 +80,8 @@ export default {
     OtherCloudServers: 'Other Cloud Servers',
     IncludingCloud: '(Including: Alibaba Cloud OSS, Tencent Cloud COS, Huawei Cloud OBS, Qiniu Cloud KODO)',
     endPoint: 'endPoint',
-    bucketName: 'bucketName'
+    bucketName: 'bucketName',
+    domain: 'domain'
   },
   login: {
     title: 'Login Form',

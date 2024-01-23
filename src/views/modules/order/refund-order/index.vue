@@ -427,18 +427,10 @@
                       v-if="orderItem.comboList"
                       class="order-prod-item-give-con"
                     >
-                      <div
-                        v-for="(comboItem, comboIndex) in orderItem.comboList"
-                        :key="comboIndex"
-                        class="giveaway-item"
-                      >
-                        <div class="giveaway-item-name">
-                          【组合】{{ comboItem.spuName }}
-                        </div>
-                        <div class="giveaway-item-sku-count">
-                          {{ comboItem.skuName || '' }} x{{ comboItem.count }}
-                        </div>
-                      </div>
+                      <combo-list
+                        :combo-list="orderItem.comboList"
+                        tag-name="【组合】"
+                      />
                     </div>
 
                     <!-- 赠品信息 -->
@@ -446,18 +438,10 @@
                       v-if="orderItem.giveawayList"
                       class="order-prod-item-give-con"
                     >
-                      <div
-                        v-for="(giveawayItem, giveIndex) in orderItem.giveawayList"
-                        :key="giveIndex"
-                        class="giveaway-item"
-                      >
-                        <div class="giveaway-item-name">
-                          【赠品】{{ giveawayItem.spuName }}
-                        </div>
-                        <div class="giveaway-item-sku-count">
-                          {{ giveawayItem.skuName || '' }} x{{ giveawayItem.count }}
-                        </div>
-                      </div>
+                      <combo-list
+                        :combo-list="orderItem.giveawayList"
+                        tag-name="【赠品】"
+                      />
                     </div>
                   </div>
                 </div>

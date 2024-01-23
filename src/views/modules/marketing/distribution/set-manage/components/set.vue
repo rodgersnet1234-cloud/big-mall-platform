@@ -12,7 +12,7 @@
       @submit.prevent
     >
       <!-- 分销开关 -->
-      <el-form-item label="分销开关">
+      <el-form-item label="分销开关 :">
         <el-radio-group v-model="dataForm.distributionSwitch">
           <el-radio :label="0">
             {{ '关闭' }}
@@ -23,7 +23,7 @@
         </el-radio-group>
       </el-form-item>
       <!-- 业绩归属 -->
-      <el-form-item label="业绩归属">
+      <el-form-item label="业绩归属 :">
         <el-radio-group v-model="dataForm.attribution">
           <el-radio :label="0">
             {{ '允许绑定,关系优先' }}
@@ -34,7 +34,7 @@
         </el-radio-group>
       </el-form-item>
       <!-- 申请条件-条件审核判定 -->
-      <el-form-item label="条件审核判定">
+      <el-form-item label="条件审核判定 :">
         <el-radio-group
           v-model="dataForm.autoCheck"
           @change="changeRadio(dataForm.autoCheck)"
@@ -53,7 +53,7 @@
       <!-- 申请条件 -->
       <el-form-item
         v-if="dataForm.autoCheck === 1"
-        label="申请条件"
+        label="申请条件 :"
       >
         <div class="condition-item">
           <el-checkbox
@@ -154,7 +154,7 @@
       <!-- 申请所需信息 -->
       <el-form-item
         v-if="paySettlementType!==1"
-        label="申请所需信息"
+        label="申请所需信息 :"
       >
         <el-checkbox v-model="dataForm.realName">
           {{ '真实姓名' }}
@@ -169,7 +169,7 @@
       <!-- 提现发放方式 -->
       <el-form-item
         v-if="paySettlementType!==1"
-        label="提现发放方式"
+        label="提现发放方式 :"
       >
         <el-radio-group v-model="dataForm.withdrawal">
           <!-- 提现发放方式：0.无需审核直接发放，1.审核后系统发放，2.审核后人工发放 -->
@@ -196,7 +196,7 @@
         <!-- 提现设置start -->
         <el-divider content-position="left" />
         <!-- 单笔提现 -->
-        <el-form-item label="单笔提现">
+        <el-form-item label="单笔提现 :">
           <el-input
             v-model.number="dataForm.amountMin"
             style="width: 180px"
@@ -221,7 +221,7 @@
           <span class="tips">{{ '微信企业付款单笔最低1元,单笔单日最高2W元' }}</span>
         </el-form-item>
         <!-- 提现频次 -->
-        <el-form-item label="提现频次">
+        <el-form-item label="提现频次 :">
           <el-row>
             <el-col :span="10">
               <el-select
@@ -262,7 +262,7 @@
           </el-row>
         </el-form-item>
         <!-- 提现说明 -->
-        <el-form-item label="提现说明">
+        <el-form-item label="提现说明 :">
           <el-input
             v-model="dataForm.paymentExplain"
             type="textarea"

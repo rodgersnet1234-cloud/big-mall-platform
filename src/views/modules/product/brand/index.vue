@@ -41,6 +41,34 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item
+            prop="isTop"
+          >
+            <template #label>
+              是否置顶：
+              <el-tooltip
+                class="box-item"
+                placement="bottom"
+                content="置顶品牌将显示在用户pc端默认首页"
+              >
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </template>
+            <el-select
+              v-model="searchForm.isTop"
+              placeholder="请选择"
+              :clearable="true"
+            >
+              <el-option
+                label="不置顶"
+                value="0"
+              />
+              <el-option
+                label="置顶"
+                value="1"
+              />
+            </el-select>
+          </el-form-item>
           <el-button
             type="primary"
             @click="getPage(true)"
@@ -328,6 +356,7 @@ const onResetSearch = () => {
   searchForm.value.name = ''
   searchForm.value.firstLetter = ''
   searchForm.value.status = null
+  searchForm.value.isTop = ''
 }
 
 </script>
@@ -335,5 +364,8 @@ const onResetSearch = () => {
 <style lang="scss" scoped>
 .search-bar :deep(.el-button) {
   margin-bottom: 18px;
+}
+:deep(.el-form-item__label) {
+  align-items: center;
 }
 </style>

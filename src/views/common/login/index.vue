@@ -110,7 +110,7 @@ const onSubmit = async formEl => {
   })
 }
 const router = useRouter()
-const redirect = ref('')
+const redirect = ref('/')
 let otherQuery = reactive({})
 
 const getOtherQuery = (query) => {

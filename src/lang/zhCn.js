@@ -173,7 +173,8 @@ export default {
     OtherCloudServers: '其他云服务器',
     IncludingCloud: '（包括：阿里云OSS,腾讯云COS,华为云OBS,七牛云KODO）',
     endPoint: '外网域名(endPoint)',
-    bucketName: '桶名(bucketName)'
+    bucketName: '桶名(bucketName)',
+    domain: '绑定域名'
   },
   rbac: {
     role,

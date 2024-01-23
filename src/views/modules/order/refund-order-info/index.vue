@@ -233,14 +233,15 @@
               >
                 <el-table-column
                   :label="$t('order.order.refundGoods')"
-                  width="400"
+                  width="500"
                 >
                   <template #default="scope">
                     <div class="prod-info">
-                      <ImgShow
-                        :src="scope.row.pic"
-                        :style="{width:'100px',height:'100px'}"
-                      />
+                      <div class="prod-image">
+                        <img-show
+                          :src="scope.row.pic"
+                        />
+                      </div>
                       <div class="con">
                         <span
                           v-if="scope.row.giveawayOrderItemId"
@@ -266,16 +267,10 @@
                       v-if="scope.row.comboList"
                       class="gift-prod"
                     >
-                      <div
-                        v-for="(item,index) in scope.row.comboList"
-                        :key="index"
-                        class="item"
-                      >
-                        <div class="giveaway-item-name">
-                          【组合】{{ item.spuName }}
-                        </div>
-                        <span class="giveaway-item-sku-count">{{ item.skuName }} ×{{ item.count }}</span>
-                      </div>
+                      <combo-list
+                        :combo-list="scope.row.comboList"
+                        tag-name="【组合】"
+                      />
                     </div>
                     <!-- / 组合 -->
 
@@ -284,16 +279,10 @@
                       v-if="scope.row.giveawayList && !prodLength"
                       class="gift-prod"
                     >
-                      <div
-                        v-for="(item,index) in scope.row.giveawayList"
-                        :key="index"
-                        class="item"
-                      >
-                        <div class="giveaway-item-name">
-                          【赠品】{{ item.spuName }}
-                        </div>
-                        <span class="giveaway-item-sku-count">{{ item.skuName }} ×{{ item.count }}</span>
-                      </div>
+                      <combo-list
+                        :combo-list="scope.row.giveawayList"
+                        tag-name="【赠品】"
+                      />
                     </div>
                   <!-- / 赠品 -->
                   </template>

@@ -59,30 +59,30 @@ const handleClose = () => {
 </script>
 <style lang="scss" scoped>
 .dialog-container {
-
-        .dialog-footers {
-                width: 100%;
-                height: 56px;
-                text-align: center;
-                :deep(.el-button) {
-                    padding: 9px 20px;
-                }
-            }
+  .dialog-footers {
+    width: 100%;
+    height: 56px;
+    text-align: right;
+    padding-right: 24px;
+    :deep(.el-button) {
+      padding: 9px 20px;
     }
+  }
+}
 
 </style>
 <!-- eslint-disable-next-line vue-scoped-css/enforce-style-type -->
 <style lang="scss">
-        .dialog-container.el-dialog {
-            top: 50%!important;
-            margin-top: 0!important;
-            transform: translate(0, -50%)!important;
-            .el-dialog__body {
-                padding: 0;
-            }
-            .el-dialog__header{
-              padding: 0;
-              margin: 0;
-            }
-        }
+.dialog-container.el-dialog {
+  top: 50%!important;
+  margin-top: 0!important;
+  transform: translate(0, -50%)!important;
+  .el-dialog__body {
+    padding: 0;
+  }
+  .el-dialog__header{
+    padding: 0;
+    margin: 0;
+  }
+}
 </style>

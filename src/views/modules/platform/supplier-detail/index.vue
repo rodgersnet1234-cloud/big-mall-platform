@@ -561,7 +561,7 @@
                       style="width: 60px; height: 60px"
                       :src="addDomain(img)"
                       preview-teleported
-                      :preview-src-list="scope.row.imgs"
+                      :preview-src-list="addDomain(scope.row.imgs)"
                     >
                       <template #error>
                         <img

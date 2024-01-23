@@ -319,26 +319,5 @@
 
 // 赠品盒子
 .order-prod-item-give-con {
-  width: 100%;
   padding: 10px 50px 0 93px;
-  box-sizing: border-box;
-  .giveaway-item {
-    display: flex;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .giveaway-item-name {
-    box-sizing: border-box;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
-  .giveaway-item-sku-count {
-    white-space: nowrap;
-    margin-left: 10px;
-    color: #999;
-    width: auto;
-  }
 }

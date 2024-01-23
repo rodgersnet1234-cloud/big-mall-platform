@@ -42,7 +42,7 @@
     <div v-else>
       <el-menu-item
         v-if="!expandMenu.hidden"
-        :key="expandMenu.id"
+        :index="expandMenu.id + ''"
         style="font-size: 14px !important; padding-left: 15px !important"
         class="item-text menu-right-el-item is-active"
         :class="{ 'menu-active': selectRightId === expandMenu.id }"

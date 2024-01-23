@@ -75,14 +75,22 @@
           label="开始时间"
           align="left"
           show-overflow-tooltip
-        />
+        >
+          <template #default="{row}">
+            {{ row.startTime || '-' }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="endTime"
           min-width="170px"
           label="结束时间"
           align="left"
           show-overflow-tooltip
-        />
+        >
+          <template #default="{row}">
+            {{ row.endTime || '-' }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="couponType"
           label="优惠券类型"
@@ -330,7 +338,7 @@ const setDataShow = (val) => {
 }
 // 判断当前是否是多选回显还是单选回显
 const isShowData = () => {
-  return props.customLinkArr && props.customLinkArr.type !== '' && props.customLinkArr.type === '1'
+  return props.customLinkArr && props.customLinkArr.type !== '' && props.customLinkArr.type === '7'
 }
 
 watch(() => props.activeName, async (val) => {
@@ -338,23 +346,21 @@ watch(() => props.activeName, async (val) => {
     searchForm.keyword = ''
     // 回显数据
     if (isShowData()) { // 判断如果在操作热区
-      const obj = {
-        name: props.customLinkArr.title,
-        id: props.customLinkArr.link,
-        imgs: '',
-        brief: ''
-      }
-      const arr = []
-      arr.push(obj)
-      showEchData = JSON.parse(JSON.stringify(arr))
-
+      showEchData = JSON.parse(JSON.stringify([{
+        couponName: props.customLinkArr.title,
+        couponId: props.customLinkArr.link
+      }]))
       multipleSelection = showEchData
     } else {
       showEchData = JSON.parse(JSON.stringify(props.echoDataList))
+      showEchData.forEach(item => {
+        item.couponName = item.name || item.couponName // 商品名称
+        item.couponId = item.id || item.couponId // 商品id
+      })
       multipleSelection = showEchData
     }
     // 获取优惠券列表
-    getCouponListMessage('search')
+    getCouponListMessage()
   }
 })
 </script>

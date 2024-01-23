@@ -9,7 +9,7 @@
       :rules="rules"
       :model="dataForm"
       label-position="left"
-      label-width="70px"
+      label-width="80px"
       style="width: 400px; margin-left:50px;"
       @submit.prevent
     >
@@ -118,7 +118,7 @@ const validPassword = (rule, value, callback) => {
 
 // eslint-disable-next-line no-unused-vars
 const validateMobile = (rule, value, callback) => {
-  if (isMobile(value) || (dataForm.hasAccount && isStarMobile(value))) {
+  if (isMobile(value) || !value || (dataForm.hasAccount && isStarMobile(value))) {
     callback()
   } else {
     callback(new Error('请输入正确的联系方式'))
