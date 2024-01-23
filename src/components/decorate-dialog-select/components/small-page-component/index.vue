@@ -208,6 +208,9 @@ watch(() => props.activeName, (val) => { // 激活tabbar
       arr.push(obj)
       showEchData = arr
       multipleSelection = showEchData
+    } else {
+      showEchData = []
+      multipleSelection = []
     }
     // 获取微页面
     getSmallPage()

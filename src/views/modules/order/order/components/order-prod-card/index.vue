@@ -30,6 +30,14 @@
               }}
             </div>
 
+            <!-- 预售订单 -->
+            <div
+              v-if="orderInfo.preSaleType===0||orderInfo.preSaleType===1"
+              class="order-status"
+            >
+              预售订单
+            </div>
+
             <div
               v-if="!orderItem.refundStatus || (orderItem.refundStatus !== 2 && orderItem.refundStatus !== 3)"
               class="order-status"
@@ -98,21 +106,10 @@
         v-if="orderItem.comboList"
         class="order-prod-item-give-con"
       >
-        <div
-          v-for="(comboItem, comboIndex) in orderItem.comboList"
-          :key="comboIndex"
-          class="giveaway-item"
-        >
-          <div class="giveaway-item-name">
-            【组合】{{ comboItem.spuName }}
-          </div>
-          <div class="giveaway-item-name sku">
-            {{ comboItem.skuName || comboItem.supplierSkuName }}
-          </div>
-          <div class="giveaway-item-sku-count">
-            x{{ comboItem.count }}
-          </div>
-        </div>
+        <combo-list
+          :combo-list="orderItem.comboList"
+          tag-name="【组合】"
+        />
       </div>
 
       <!-- 赠品信息 -->
@@ -120,18 +117,10 @@
         v-if="orderItem.giveawayList"
         class="order-prod-item-give-con"
       >
-        <div
-          v-for="(giveawayItem, giveIndex) in orderItem.giveawayList"
-          :key="giveIndex"
-          class="giveaway-item"
-        >
-          <div class="giveaway-item-name">
-            【赠品】{{ giveawayItem.spuName }}
-          </div>
-          <div class="giveaway-item-sku-count">
-            {{ giveawayItem.skuName || '' }} x{{ giveawayItem.count }}
-          </div>
-        </div>
+        <combo-list
+          :combo-list="orderItem.giveawayList"
+          tag-name="【赠品】"
+        />
       </div>
     </div>
   </div>
@@ -168,36 +157,7 @@ const orderInfo = computed(() => {
 
   // 赠品盒子
   .order-prod-item-give-con {
-    width: 100%;
     padding: 0 50px 10px 103px;
-    box-sizing: border-box;
-    .giveaway-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0 !important;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    .giveaway-item-name {
-      margin-right: 5px;
-      box-sizing: border-box;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
-
-    .giveaway-item-name.sku {
-      color: #999;
-    }
-
-    .giveaway-item-sku-count {
-      white-space: nowrap;
-      margin-left: 10px;
-      color: #999;
-      width: auto;
-    }
   }
 }
 

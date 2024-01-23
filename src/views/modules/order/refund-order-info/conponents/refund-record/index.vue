@@ -302,7 +302,7 @@ const rejectImgs = computed(() => {
 // 图片处理
 const onHandleImgs = (imgStr) => {
   if (imgStr) {
-    return imgStr.split(',').map
+    return imgStr.split(',')
   }
   return []
 }

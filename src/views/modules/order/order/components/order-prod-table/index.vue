@@ -67,17 +67,10 @@
               v-if="item.comboItemList"
               class="order-prod-item-give-con"
             >
-              <div
-                v-for="(combo, comboIndex) in item.comboItemList"
-                :key="comboIndex"
-                class="giveaway-item"
-              >
-                <span class="giveaway-item-name">【组合】{{ combo.spuName }}</span>
-                <span
-                  class="giveaway-item-name sku"
-                >{{ combo.skuName || combo.supplierSkuName }}</span>
-                <span class="giveaway-item-sku-count">×{{ combo.count }}</span>
-              </div>
+              <combo-list
+                :combo-list="item.comboItemList"
+                tag-name="【组合】"
+              />
             </div>
 
             <!-- 赠品 -->
@@ -85,18 +78,10 @@
               v-if="item.giveawayList"
               class="order-prod-item-give-con"
             >
-              <div
-                v-for="(giveaway, giveawayIndex) in item.giveawayList"
-                :key="giveawayIndex"
-                class="giveaway-item"
-              >
-                <span class="giveaway-item-name">【赠品】{{ giveaway.spuName }}</span>
-                <span
-                  v-if="giveaway.skuName"
-                  class="giveaway-item-name"
-                >{{ giveaway.skuName }}</span>
-                <span class="giveaway-item-sku-count">×{{ giveaway.count }}</span>
-              </div>
+              <combo-list
+                :combo-list="item.giveawayList"
+                tag-name="【赠品】"
+              />
             </div>
           </td>
           <td>
@@ -173,6 +158,11 @@ const orderInfo = computed(() => {
         &:hover {
           background-color: rgb(245, 247, 250);
         }
+
+        .name-box {
+          text-align: left;
+          padding-left: 10px;
+        }
       }
     }
   }
@@ -190,39 +180,7 @@ const orderInfo = computed(() => {
 
   // 赠品盒子
   .order-prod-item-give-con {
-    text-align: left;
-    width: 100%;
     padding: 10px 50px 0 63px;
-    box-sizing: border-box;
-
-    .giveaway-item {
-      display: flex;
-      align-items: center;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    .giveaway-item-name {
-      margin-right: 5px;
-      box-sizing: border-box;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
-
-    .giveaway-item-name.sku {
-      color: #999;
-    }
-
-    .giveaway-item-sku-count {
-      white-space: nowrap;
-      margin-left: 10px;
-      color: #999;
-      width: auto;
-    }
   }
 }
 

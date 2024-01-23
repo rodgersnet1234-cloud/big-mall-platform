@@ -431,7 +431,7 @@ watch(() => props.activeName, async (val) => {
       }
     }
     // 获取商品列表
-    await getGoodsListMessage('search')
+    getGoodsListMessage()
   }
 })
 </script>

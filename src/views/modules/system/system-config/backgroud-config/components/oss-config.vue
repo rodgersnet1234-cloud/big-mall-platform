@@ -37,6 +37,16 @@
       </el-form-item>
       <div>
         <el-form-item
+          :label="$t('sysManagement.domain') + ':'"
+          style="width:640px"
+        >
+          <el-input
+            v-model="dataForm.domain"
+            :placeholder="`${$t('sysManagement.fileUpload') + ' ' + $t('sysManagement.domain')}`"
+            controls-position="right"
+          />
+        </el-form-item>
+        <el-form-item
           :label="$t('sysManagement.endPoint') + ':'"
           style="width:640px"
           prop="endPoint"
@@ -113,7 +123,8 @@ const dataForm = ref({
   accessKey: '',
   secretKey: '',
   endPoint: '',
-  bucketName: ''
+  bucketName: '',
+  domain: ''
 })
 onMounted(() => {
   init()

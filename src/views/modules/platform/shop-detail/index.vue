@@ -767,7 +767,7 @@
                       class="tab-img"
                       style="width: 60px; height: 60px"
                       :src="addDomain(img)"
-                      :preview-src-list="addDomain(imgs)"
+                      :preview-src-list="[addDomain(img)]"
                       preview-teleported
                     >
                       <template #error>

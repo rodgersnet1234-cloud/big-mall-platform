@@ -32,11 +32,6 @@
           label="联系电话"
         />
         <el-table-column
-          v-if="type !== 2"
-          prop="email"
-          label="联系邮箱"
-        />
-        <el-table-column
           class="table-item"
           label="操作"
           align="center"

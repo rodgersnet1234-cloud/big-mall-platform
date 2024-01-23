@@ -28,6 +28,7 @@
           maxlength="20"
           style="width: 355px"
           :placeholder="'弹窗名称'"
+          @blur="dataForm.popupName=dataForm.popupName.trim()"
         />
       </el-form-item>
       <el-form-item
@@ -56,7 +57,7 @@
         required
       >
         <template #label>
-          <div class="jumpurl-label">
+          <div class="custom-label">
             <span class="label">跳转页面</span>
             <el-tooltip placement="top">
               <template #content>
@@ -81,6 +82,7 @@
         </div>
       </el-form-item>
       <el-form-item
+        v-if="dataForm.jumpUrl?.type!=='7'"
         label="弹窗图片"
         prop="popupPic"
         required
@@ -193,10 +195,20 @@
       </el-form-item>
       <!-- 推送频次 -->
       <el-form-item
-        label="推送频次"
         prop="pushFrequency"
         :required="true"
       >
+        <template #label>
+          <div class="custom-label">
+            <span class="label">推送频次</span>
+            <el-tooltip placement="top">
+              <template #content>
+                跳转路径为优惠券时，如用户已领取过该优惠券则不再推送，如用户未领取，则按照设定的推送频次进行推送
+              </template>
+              <el-icon><QuestionFilled /></el-icon>
+            </el-tooltip>
+          </div>
+        </template>
         <!-- 推送频次 0.永久一次 1.每次进入 2.自定义频次 -->
         <el-radio-group
           v-model="dataForm.pushFrequency"
@@ -289,6 +301,7 @@
     <decorate-dialog-select
       :dialog-visible="jumpUrlDialogVisible"
       :device-type="'mobile'"
+      :custom-link-arr="dataForm.jumpUrl"
       :current-select-type="[1, 2, 3, 4, 5, 6, 7]"
       @handle-close="jumpUrlDialogVisible=false"
       @handle-dialog-submit="handleDialogSubmit"
@@ -298,8 +311,9 @@
 
 <script setup>
 import * as api from '@/api/popup-ad/index.js'
-import moment from 'moment'
 import * as userLevelApi from '@/api/user/level.js'
+import { getProdInfoPage } from '@/api/product/prod-info.js'
+import moment from 'moment'
 import { ElMessage } from 'element-plus'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue' // 选择商品
 
@@ -361,7 +375,16 @@ const getDataInfo = () => {
       data.weekFrequency = []
     }
     Object.assign(dataForm, data)
+    onHandleProdName()
     onHandleWeekFrequency()
+  })
+}
+
+// 处理商品名称回显
+const onHandleProdName = () => {
+  if (dataForm.jumpUrl.type !== '1') return
+  getProdInfoPage(dataForm.jumpUrl.link).then(data => {
+    dataForm.jumpUrl.name = data.name
   })
 }
 
@@ -590,8 +613,8 @@ const onSubmit = () => {
         submitData.weekFrequency = submitData.weekFrequency?.toString()
         submitData.dayFrequency = null
       }
+      submitData.popupPic = submitData.jumpUrl.type === '7' ? '' : submitData.popupPic
       submitData.jumpUrl = JSON.stringify(submitData.jumpUrl)
-      submitData.spuIds = submitData.userLevelIds?.map(item => item.userLevelId)
       let methods = 'save'
       if (dataForm.popupId) {
         methods = 'update'

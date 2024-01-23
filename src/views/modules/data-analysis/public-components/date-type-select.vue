@@ -306,6 +306,7 @@ const setDateRange = () => {
  * 改变日期选择
  */
 const changeDate = (val) => {
+  if (!val) return
   let startTime
   let endTime
   if (timeType.value === 2) {

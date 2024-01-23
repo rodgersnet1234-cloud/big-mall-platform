@@ -338,7 +338,7 @@ watch(() => props.activeName, (val) => {
       showEchData = JSON.parse(JSON.stringify(props.echoDataList))
     }
     // 获取店铺列表
-    getStoreList('search')
+    getStoreList()
   }
 })
 </script>

@@ -3,6 +3,7 @@
     v-model="visible"
     class="component-shop-category-dialog"
     width="80%"
+    style="min-width: 1150px"
     top="8vh"
     :show-close="false"
     @close="closePopup"
