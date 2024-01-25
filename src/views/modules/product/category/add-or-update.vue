@@ -36,7 +36,7 @@
         :required="isRequiredImg"
         :label="$t('product.category.imgUrl')"
       >
-        <div>
+        <div style="width: 120px;height: 120px;">
           <img-show
             :src="dataForm.imgUrl"
             :class-list="['pic']"
