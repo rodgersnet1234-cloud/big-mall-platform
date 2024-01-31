@@ -76,7 +76,8 @@
 </template>
 <script setup>
 import * as api from '@/api/rbac/web-config'
-const webConfig = computed(() => useWebConfigStore().webConfig)
+const userConfig = useWebConfigStore()
+const webConfig = computed(() => userConfig.webConfig)
 // 当前语言
 const language = computed(() => useAppStore().language)
 // 登录表单

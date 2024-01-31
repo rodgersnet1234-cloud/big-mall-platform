@@ -13,7 +13,7 @@
       <div class="login-img">
         <img
           v-if="webConfig.loginBgImg"
-          :src="webConfig.loginBgImg"
+          :src="addDomain(webConfig.loginBgImg)"
           @error="webConfig.loginBgImg=''"
         >
         <img
