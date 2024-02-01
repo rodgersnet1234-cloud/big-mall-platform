@@ -31,7 +31,10 @@
         label="验证码"
         prop="validCode"
       >
-        <el-input v-model="dataForm.validCode">
+        <el-input
+          v-model="dataForm.validCode"
+          maxlength="6"
+        >
           <template
             #append
           >
