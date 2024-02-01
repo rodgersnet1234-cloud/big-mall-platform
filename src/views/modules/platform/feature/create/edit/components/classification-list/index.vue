@@ -668,7 +668,7 @@ const elxImgboxHandle = (type) => {
 const refreshPic = (imagePath) => {
   const imgsList = imagePath.split(',')
   if (imgsList.length) {
-    const chooseImages = { key: 'image_url', val: addDomain(imgsList[0]) }
+    const chooseImages = { key: 'image_url', val: checkFileUrl(imgsList[0]) }
     if (currentChangeType === 2) { // 头图模式
       setBanner(chooseImages)
     } else {
@@ -678,7 +678,7 @@ const refreshPic = (imagePath) => {
             title: '',
             type: '',
             link: '',
-            image_url: addDomain(res)
+            image_url: checkFileUrl(res)
           })
         })
         return

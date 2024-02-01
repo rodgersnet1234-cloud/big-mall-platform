@@ -21,16 +21,6 @@
           />
         </el-form-item>
 
-        <el-form-item :label="'主单单号' + '：'">
-          <el-input
-            v-model="searchForm.mainOrderId"
-            class="input-text-algin"
-            placeholder="主单单号"
-            oninput="value=value.replace(/[^0-9]/g,'')"
-            clearable
-          />
-        </el-form-item>
-
         <el-form-item :label="$t('order.order.shopName') + '：'">
           <el-input
             v-model.trim="searchForm.shopName"
@@ -375,7 +365,6 @@
             <span>{{ $t("order.order.createTime") }}:{{ order.createTime }}</span>
             <span>{{ $t("order.order.shopName") }}:{{ order.shopName }}</span>
             <span v-if="order.supplierName">{{ $t("order.order.supplierName") }}:{{ order.supplierName }}</span>
-            <span v-if="order.mainOrderId">主单号:{{ order.mainOrderId }}</span>
           </div>
           <div class="prod-cont">
             <el-row style="width: 100%">
@@ -726,7 +715,6 @@ const searchForm = reactive({
   isPreSale: null,
   mobile: null,
   orderId: null,
-  mainOrderId: null,
   orderMold: null,
   orderType: null,
   payType: null,
@@ -769,7 +757,6 @@ let tempSearchForm = null // 保存上次点击查询的请求条件
 const onGetDataList = (type = 0, newData = false) => {
   let par = {
     orderId: orderId === 1 ? searchForm.orderId : useRoute().query.orderNumber,
-    mainOrderId: searchForm.mainOrderId,
     shopName: searchForm.shopName,
     supplierName: searchForm.supplierName,
     orderType: searchForm.orderType,
@@ -900,7 +887,6 @@ const onGetSoldExcel = () => {
   }).then(() => {
     api.soldExcel({
       orderId: searchForm.orderId,
-      mainOrderId: searchForm.mainOrderId,
       shopName: searchForm.shopName,
       supplierName: searchForm.supplierName,
       orderType: searchForm.orderType,
@@ -944,7 +930,6 @@ const onHandleSearchForm = (data) => {
   searchForm.isPreSale = data.isPreSale
   searchForm.mobile = data.mobile
   searchForm.orderId = data.orderId
-  searchForm.mainOrderId = data.mainOrderId
   searchForm.orderMold = data.orderMold
   searchForm.orderType = data.orderType
   searchForm.payType = data.payType

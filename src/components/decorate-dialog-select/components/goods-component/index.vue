@@ -73,7 +73,7 @@
               style="display: flex;align-items: center"
             >
               <el-image
-                :src="addDomain(scope.row.mainImgUrl)"
+                :src="checkFileUrl(scope.row.mainImgUrl)"
                 style="width: 48px;height: 48px;margin-right: 15px"
               >
                 <template #error>

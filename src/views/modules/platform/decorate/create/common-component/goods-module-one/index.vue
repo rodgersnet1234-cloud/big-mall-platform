@@ -21,7 +21,7 @@
         >
           <div class="left-img">
             <el-image
-              :src="addDomain(item.imgs)"
+              :src="checkFileUrl(item.imgs)"
               fit="fill"
             >
               <template #error>

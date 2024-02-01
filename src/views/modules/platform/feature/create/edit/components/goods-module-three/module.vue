@@ -57,7 +57,7 @@
           <div class="goods-three-items">
             <div class="goods-three-items-imgs">
               <el-image
-                :src="addDomain(item.imgs)"
+                :src="checkFileUrl(item.imgs)"
                 fit="fill"
               >
                 <template #error>

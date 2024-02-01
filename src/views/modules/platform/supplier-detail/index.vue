@@ -312,8 +312,8 @@
               v-if="businessInfo && businessInfo.businessLicense"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="addDomain(businessInfo.businessLicense)"
-              :preview-src-list="[addDomain(businessInfo.businessLicense)]"
+              :src="checkFileUrl(businessInfo.businessLicense)"
+              :preview-src-list="[checkFileUrl(businessInfo.businessLicense)]"
             >
               <template #error>
                 <div class="image-slot">
@@ -339,8 +339,8 @@
               v-if="businessInfo && businessInfo.identityCardFront"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="addDomain(businessInfo.identityCardFront)"
-              :preview-src-list="[addDomain(businessInfo.identityCardFront)]"
+              :src="checkFileUrl(businessInfo.identityCardFront)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -353,8 +353,8 @@
               v-if="businessInfo && businessInfo.identityCardLater"
               class="info-img"
               style="width: 100px; height: 100px"
-              :src="addDomain(businessInfo.identityCardLater)"
-              :preview-src-list="[addDomain(businessInfo.identityCardLater)]"
+              :src="checkFileUrl(businessInfo.identityCardLater)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -455,9 +455,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="addDomain(scope.row.imgs)"
+                      :preview-src-list="checkFileUrl(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -536,9 +536,9 @@
                     v-if="scope.row.imgUrl"
                     class="tab-img"
                     style="width: 60px; height: 60px"
-                    :src="addDomain(scope.row.imgUrl)"
+                    :src="checkFileUrl(scope.row.imgUrl)"
                     preview-teleported
-                    :preview-src-list="[addDomain(scope.row.imgUrl)]"
+                    :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -560,9 +560,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="addDomain(scope.row.imgs)"
+                      :preview-src-list="checkFileUrl(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -627,9 +627,9 @@
                       v-if="scope.row.imgUrl"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(scope.row.imgUrl)"
+                      :src="checkFileUrl(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -652,9 +652,9 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="[addDomain(img)]"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img

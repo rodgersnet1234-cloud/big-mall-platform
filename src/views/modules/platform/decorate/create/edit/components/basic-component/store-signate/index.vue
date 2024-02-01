@@ -11,7 +11,7 @@
         <div class="top-logo">
           <img
             v-show="config.showLogo === 0"
-            :src="addDomain(webHeaderConfig.pcLogoImgText)"
+            :src="checkFileUrl(webHeaderConfig.pcLogoImgText)"
             alt=""
           >
         </div>
@@ -154,7 +154,7 @@ const getHeader = () => {
     }
   }).then(data => {
     if (data.pcLogoImgText) {
-      data.pcLogoImgText = addDomain(data.pcLogoImgText)
+      data.pcLogoImgText = checkFileUrl(data.pcLogoImgText)
     } else {
       data.pcLogoImgText = require('@/assets/website-config/logo-text.png')
     }

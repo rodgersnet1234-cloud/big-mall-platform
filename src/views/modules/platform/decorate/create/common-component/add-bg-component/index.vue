@@ -3,7 +3,7 @@
     <template v-if="imgUrl !== ''">
       <div class="bg-img">
         <el-image
-          :src="addDomain(imgUrl)"
+          :src="checkFileUrl(imgUrl)"
           fit="cover"
         >
           <template #error>

@@ -175,8 +175,8 @@
                   fit="contain"
                   class="img-static"
                   style="width: 100px; height: 100px"
-                  :src="addDomain(shopBasicInfo.shopLogo)"
-                  :preview-src-list="[addDomain(shopBasicInfo.shopLogo)]"
+                  :src="checkFileUrl(shopBasicInfo.shopLogo)"
+                  :preview-src-list="[checkFileUrl(shopBasicInfo.shopLogo)]"
                 >
                   <template #error>
                     <img
@@ -210,8 +210,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="addDomain(shopBasicInfo.mobileBackgroundPic)"
-                    :preview-src-list="[addDomain(shopBasicInfo.mobileBackgroundPic)]"
+                    :src="checkFileUrl(shopBasicInfo.mobileBackgroundPic)"
+                    :preview-src-list="[checkFileUrl(shopBasicInfo.mobileBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -233,8 +233,8 @@
                     fit="contain"
                     class="img-static"
                     style="width: 100px; height: 100px"
-                    :src="addDomain(shopBasicInfo.pcBackgroundPic)"
-                    :preview-src-list="[addDomain(shopBasicInfo.pcBackgroundPic)]"
+                    :src="checkFileUrl(shopBasicInfo.pcBackgroundPic)"
+                    :preview-src-list="[checkFileUrl(shopBasicInfo.pcBackgroundPic)]"
                   >
                     <template #error>
                       <img
@@ -417,8 +417,8 @@
                 fit="contain"
                 class="img-static"
                 style="width: 100px; height: 100px"
-                :src="addDomain(businessInfo.businessLicense)"
-                :preview-src-list="[addDomain(businessInfo.businessLicense)]"
+                :src="checkFileUrl(businessInfo.businessLicense)"
+                :preview-src-list="[checkFileUrl(businessInfo.businessLicense)]"
               >
                 <template #error>
                   <img
@@ -448,8 +448,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="addDomain(businessInfo.identityCardFront)"
-              :preview-src-list="[addDomain(businessInfo.identityCardFront)]"
+              :src="checkFileUrl(businessInfo.identityCardFront)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardFront)]"
             >
               <template #error>
                 <img
@@ -463,8 +463,8 @@
               fit="contain"
               class="img-static"
               style="width: 100px; height: 100px"
-              :src="addDomain(businessInfo.identityCardLater)"
-              :preview-src-list="[addDomain(businessInfo.identityCardLater)]"
+              :src="checkFileUrl(businessInfo.identityCardLater)"
+              :preview-src-list="[checkFileUrl(businessInfo.identityCardLater)]"
             >
               <template #error>
                 <img
@@ -565,8 +565,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
-                      :preview-src-list="addDomain(scope.row.imgs)"
+                      :src="checkFileUrl(img)"
+                      :preview-src-list="checkFileUrl(scope.row.imgs)"
                       preview-teleported
                     >
                       <template #error>
@@ -647,8 +647,8 @@
                     preview-teleported
                     class="tab-img"
                     style="width: 60px; height: 60px;"
-                    :src="addDomain(scope.row.imgUrl)"
-                    :preview-src-list="[addDomain(scope.row.imgUrl)]"
+                    :src="checkFileUrl(scope.row.imgUrl)"
+                    :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                   >
                     <template #error>
                       <img
@@ -671,8 +671,8 @@
                       preview-teleported
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
-                      :preview-src-list="addDomain(scope.row.imgs)"
+                      :src="checkFileUrl(img)"
+                      :preview-src-list="checkFileUrl(scope.row.imgs)"
                     >
                       <template #error>
                         <img
@@ -742,8 +742,8 @@
                       class="tab-img"
                       preview-teleported
                       style="width: 60px; height: 60px"
-                      :src="addDomain(scope.row.imgUrl)"
-                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
+                      :src="checkFileUrl(scope.row.imgUrl)"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -766,8 +766,8 @@
                       :key="index"
                       class="tab-img"
                       style="width: 60px; height: 60px"
-                      :src="addDomain(img)"
-                      :preview-src-list="[addDomain(img)]"
+                      :src="checkFileUrl(img)"
+                      :preview-src-list="[checkFileUrl(img)]"
                       preview-teleported
                     >
                       <template #error>

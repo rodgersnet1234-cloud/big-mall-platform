@@ -30,7 +30,7 @@
               </div>
               <el-image
                 v-else
-                :src="addDomain(formData.leftMessage.img)"
+                :src="checkFileUrl(formData.leftMessage.img)"
                 fit="fill"
               >
                 <template #error>
@@ -76,7 +76,7 @@
               </div>
               <el-image
                 v-else
-                :src="addDomain(formData.rightMessage.img)"
+                :src="checkFileUrl(formData.rightMessage.img)"
                 fit="fill"
               >
                 <template #error>
@@ -354,9 +354,9 @@ const handleRightRemoveSelected = () => {
 // 图片选择回调
 const refreshPic = (imagePath) => {
   if (currentOperation.value === 'addImg1') {
-    formData.leftMessage.img = addDomain(imagePath)
+    formData.leftMessage.img = checkFileUrl(imagePath)
   } else if (currentOperation.value === 'addImg2') {
-    formData.rightMessage.img = addDomain(imagePath)
+    formData.rightMessage.img = checkFileUrl(imagePath)
   }
 }
 

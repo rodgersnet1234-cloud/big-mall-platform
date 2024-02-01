@@ -30,7 +30,7 @@ const showImgs = computed(() => {
   let arr = []
   if (type !== 'function' && props.imgList.length > 0) {
     arr = props.imgList.map(item => {
-      return addDomain(item)
+      return checkFileUrl(item)
     })
   }
   return arr

@@ -231,7 +231,14 @@
               data-sts="6"
               @click="onSelectNav($event)"
             >
-              平台介入中
+              申请介入
+            </li>
+            <li
+              :class="['nav-item-li', sts === 7 ? 'selected' : '']"
+              data-sts="7"
+              @click="onSelectNav($event)"
+            >
+              介入处理
             </li>
           </ul>
           <ul class="nav-right" />
@@ -539,15 +546,17 @@
                   v-if="orderRefund.platformInterventionStatus && orderRefund.platformInterventionStatus!==-1"
                   class="item"
                 >
-                  <!-- 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功 -->
+                  <!-- 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功 7.平台介入处理中 -->
                   <span>{{
                     [
                       "",
-                      '平台介入中',
-                      '平台介入中',
+                      '申请介入',
+                      '',
                       '退款关闭',
                       '',
-                      '退款成功'
+                      '退款成功',
+                      '',
+                      '介入处理'
                     ][orderRefund.platformInterventionStatus]
                   }}</span>
                 </div>
@@ -670,7 +679,10 @@ const options = [{
   label: $t('order.order.refundClosed')
 }, {
   value: 6,
-  label: '平台介入中'
+  label: '申请介入'
+}, {
+  value: 7,
+  label: '介入处理'
 }]
 const orderType = [{
   value: 0,

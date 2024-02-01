@@ -15,7 +15,7 @@
           <img
             v-if="configuration.bsTopBarIcon"
             style="height: 18px;width:59px;margin-right: 10px"
-            :src="addDomain(configuration.bsTopBarIcon)"
+            :src="checkFileUrl(configuration.bsTopBarIcon)"
             alt=""
           >
           <a

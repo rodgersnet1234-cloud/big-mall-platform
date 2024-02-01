@@ -42,8 +42,8 @@
         <el-image
           v-if="dataForm.identityCardPicFront"
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.identityCardPicFront)"
-          :preview-src-list="addDomain(srcList)"
+          :src="checkFileUrl(dataForm.identityCardPicFront)"
+          :preview-src-list="checkFileUrl(srcList)"
         >
           <template #error>
             <img
@@ -59,8 +59,8 @@
         <el-image
           v-if="dataForm.identityCardPicBack"
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.identityCardPicBack)"
-          :preview-src-list="addDomain(srcList)"
+          :src="checkFileUrl(dataForm.identityCardPicBack)"
+          :preview-src-list="checkFileUrl(srcList)"
         >
           <template #error>
             <img
@@ -76,8 +76,8 @@
         <el-image
           v-if="dataForm.identityCardPicHold"
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.identityCardPicHold)"
-          :preview-src-list="addDomain(srcList)"
+          :src="checkFileUrl(dataForm.identityCardPicHold)"
+          :preview-src-list="checkFileUrl(srcList)"
         >
           <template #error>
             <img
@@ -111,7 +111,7 @@ const init = (data) => {
   })
   for (const key in data) {
     if (Object.hasOwnProperty.call(data, key)) {
-      data[key] = addDomain(data[key])
+      data[key] = checkFileUrl(data[key])
     }
   }
   dataForm.realName = data.realName

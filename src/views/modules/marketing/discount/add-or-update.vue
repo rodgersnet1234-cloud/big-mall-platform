@@ -27,8 +27,8 @@
       >
         <el-image
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.mobilePic)"
-          :preview-src-list="addDomain(dataForm.mobilePicL)"
+          :src="checkFileUrl(dataForm.mobilePic)"
+          :preview-src-list="checkFileUrl(dataForm.mobilePicL)"
         >
           <template #error>
             <img
@@ -44,8 +44,8 @@
       >
         <el-image
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.pcPic)"
-          :preview-src-list="addDomain(dataForm.pcPicL)"
+          :src="checkFileUrl(dataForm.pcPic)"
+          :preview-src-list="checkFileUrl(dataForm.pcPicL)"
         >
           <template #error>
             <img
@@ -61,8 +61,8 @@
       >
         <el-image
           style="width: 100px; height: 100px"
-          :src="addDomain(dataForm.pcBackgroundPic)"
-          :preview-src-list="[addDomain(dataForm.pcBackgroundPicL)]"
+          :src="checkFileUrl(dataForm.pcBackgroundPic)"
+          :preview-src-list="[checkFileUrl(dataForm.pcBackgroundPicL)]"
         >
           <template #error>
             <img
@@ -335,7 +335,7 @@
 <script setup>
 import * as api from '@/api/discount/discount'
 import Big from 'big.js'
-import { addDomain } from '@/utils/index.js'
+import { checkFileUrl } from '@/utils/index.js'
 
 const dataForm = reactive({
   discountId: 0,
