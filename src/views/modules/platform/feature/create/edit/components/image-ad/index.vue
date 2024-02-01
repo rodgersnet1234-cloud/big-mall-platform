@@ -17,7 +17,7 @@
               :key="index"
               style="display: flex; align-items: center;justify-content: center; width: 100%; height: 100%"
               fit="fill"
-              :src="addDomain(item.url)"
+              :src="checkFileUrl(item.url)"
             >
               <template #error>
                 <div class="image-slot">
@@ -39,7 +39,7 @@
           fit="fill"
           style="display: flex;justify-content: center;align-items: center;"
           class="image-ad-view"
-          :src="addDomain(item.url)"
+          :src="checkFileUrl(item.url)"
         >
           <template #error>
             <div class="image-slot">
@@ -534,7 +534,7 @@ let currentEditIndex = 0 // 当前编辑的图片
 const refreshPic = (imagePath) => {
   const imgsList = imagePath.split(',')
   for (let i = 0; i < imgsList.length; i++) {
-    imgsList[i] = addDomain(imgsList[i])
+    imgsList[i] = checkFileUrl(imgsList[i])
   }
   if (imgsList.length) {
     if (isChangeImg.value) { // 更换图片模式

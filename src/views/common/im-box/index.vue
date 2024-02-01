@@ -30,7 +30,7 @@
               >
               <img
                 v-else
-                :src="addDomain(item.pic)"
+                :src="checkFileUrl(item.pic)"
                 class="shop-icon"
                 alt
                 @error="item.pic=''"
@@ -114,7 +114,7 @@
                         >
                         <img
                           v-else
-                          :src="addDomain(row.userHeadUrl)"
+                          :src="checkFileUrl(row.userHeadUrl)"
                           class="avatar"
                           alt
                           @error="row.userHeadUrl = ''"
@@ -132,9 +132,9 @@
                           class="bubble"
                         >
                           <el-image
-                            :src="addDomain(row.content)"
+                            :src="checkFileUrl(row.content)"
                             class="longimage"
-                            :preview-src-list="[row.content]"
+                            :preview-src-list="[checkFileUrl(row.content)]"
                           >
                             <template #error>
                               <img
@@ -222,9 +222,9 @@
                             class="bubble"
                           >
                             <el-image
-                              :src="addDomain(row.content)"
+                              :src="checkFileUrl(row.content)"
                               class="longimage"
-                              :preview-src-list="[row.content]"
+                              :preview-src-list="[checkFileUrl(row.content)]"
                             >
                               <template #error>
                                 <img
@@ -625,10 +625,10 @@ const openWs = () => {
       }
 
       if (result.data.shopLogo) {
-        result.data.shopLogo = addDomain(result.data.shopLogo)
+        result.data.shopLogo = checkFileUrl(result.data.shopLogo)
       }
       if (result.data.userHeadUrl) {
-        result.data.userHeadUrl = addDomain(result.data.userHeadUrl)
+        result.data.userHeadUrl = checkFileUrl(result.data.userHeadUrl)
       }
 
       if (result.code === 4) {
@@ -685,7 +685,7 @@ const openWs = () => {
         result.data.list.forEach(item => {
           const a = isJSON(item.content)
           if (item.userHeadUrl) {
-            item.userHeadUrl = addDomain(item.userHeadUrl)
+            item.userHeadUrl = checkFileUrl(item.userHeadUrl)
           }
           if (a && JSON.parse(item.content) instanceof Object) {
             item.prodInfo = JSON.parse(item.content)
@@ -939,7 +939,7 @@ const getMsgItems = () => {
  */
 const pushMsgItem = (msgListPar, msgItemPar) => {
   if (msgItemPar.type === 1) {
-    msgItemPar.content = addDomain(msgItemPar.content)
+    msgItemPar.content = checkFileUrl(msgItemPar.content)
   }
 
   const a = isJSON(msgItemPar.content)
@@ -1016,7 +1016,7 @@ const addMessage = (messageInfoPar, type) => {
   const shopInfo = {}
   const msgItem = {
     shopName: shopInfo.shopName,
-    shopLogo: addDomain(shopInfo.shopLogo),
+    shopLogo: checkFileUrl(shopInfo.shopLogo),
     type: messageInfoPar.msgType,
     userUnread: 0,
     employeeId: employeeIdShop,

@@ -222,7 +222,7 @@
               </el-button>
               <el-button
                 v-if="row.state !== -1"
-                v-permission="['distribution:user-manage:update']"
+                v-permission="['distribution:user:update']"
                 link
                 type="primary"
                 @click="onAddOrUpdate(row)"

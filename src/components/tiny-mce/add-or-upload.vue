@@ -66,7 +66,7 @@ const refreshPic = imagePath => {
   const imageArray = imagePath.split(',')
   const data = []
   imageArray.forEach(img => {
-    data.push(addDomain(img))
+    data.push(checkFileUrl(img))
   })
   imgUrls.value = ''
   dialogVisible.value = false

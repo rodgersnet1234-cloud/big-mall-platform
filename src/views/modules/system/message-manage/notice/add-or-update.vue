@@ -4,6 +4,7 @@
     :title="dataForm.id? $t('table.edit'): $t('table.create')"
     :close-on-click-modal="false"
     top="5vh"
+    :z-index="1300"
     class="natice-dialog"
   >
     <el-form

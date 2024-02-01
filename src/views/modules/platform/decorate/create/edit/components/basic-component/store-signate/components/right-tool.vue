@@ -356,7 +356,7 @@ const handleAddImage = () => {
 }
 // 选择图片之后的回调
 const refreshPic = (imagePath) => {
-  configForm.value.bgUrl = addDomain(imagePath)
+  configForm.value.bgUrl = checkFileUrl(imagePath)
 }
 // 删除招牌背景图
 const handleRemmoveImage = () => {

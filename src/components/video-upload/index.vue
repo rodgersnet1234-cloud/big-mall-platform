@@ -10,7 +10,7 @@
           v-if="value"
           ref="myVideoRef"
           class="video"
-          :src="addDomain(value)"
+          :src="checkFileUrl(value)"
           controls="controls"
         />
         <div

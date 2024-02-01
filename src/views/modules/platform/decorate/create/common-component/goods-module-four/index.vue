@@ -2,7 +2,7 @@
   <div class="goods-module4">
     <div class="goods-module-top">
       <el-image
-        :src="addDomain(config.bgImg)"
+        :src="checkFileUrl(config.bgImg)"
         fit="fill"
       >
         <template #error>
@@ -25,7 +25,7 @@
           <div class="bottom-items">
             <div class="bottom-items-imgs">
               <el-image
-                :src="addDomain(item.imgs)"
+                :src="checkFileUrl(item.imgs)"
                 fit="fill"
               >
                 <template #error>

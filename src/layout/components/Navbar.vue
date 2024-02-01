@@ -15,14 +15,14 @@
         <img
           v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon"
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="addDomain(webConfig.bsTopBarIcon)"
+          :src="checkFileUrl(webConfig.bsTopBarIcon)"
           alt=""
           @error="webConfig.bsTopBarIcon=''"
         >
         <img
           v-else
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="addDomain(webConfig.bsTopBarIcon)"
+          :src="checkFileUrl(webConfig.bsTopBarIcon)"
           alt=""
         >
         <a

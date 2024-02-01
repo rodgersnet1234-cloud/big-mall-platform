@@ -80,7 +80,7 @@
                   <el-image
                     v-if="modifyInformation.businessLicense"
                     class="logo-image"
-                    :src="addDomain(modifyInformation.businessLicense)"
+                    :src="checkFileUrl(modifyInformation.businessLicense)"
                   >
                     <template #error>
                       <img
@@ -101,7 +101,7 @@
                   <el-image
                     v-if="modifyInformation.identityCardFront"
                     class="logo-image"
-                    :src="addDomain(modifyInformation.identityCardFront)"
+                    :src="checkFileUrl(modifyInformation.identityCardFront)"
                   >
                     <template #error>
                       <img
@@ -113,7 +113,7 @@
                   <el-image
                     v-if="modifyInformation.identityCardLater"
                     class="logo-image"
-                    :src="addDomain(modifyInformation.identityCardLater)"
+                    :src="checkFileUrl(modifyInformation.identityCardLater)"
                   >
                     <template #error>
                       <img

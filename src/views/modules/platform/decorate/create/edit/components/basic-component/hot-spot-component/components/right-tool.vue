@@ -297,7 +297,7 @@ const handleAddImage = () => {
 const currentEditIndex = ref(0) // 当前编辑的图片
 const refreshPic = (imagePath) => {
   if (isChangeImg) { // 更换图片模式
-    hotForm.value.imgList[currentEditIndex.value].url = addDomain(imagePath)
+    hotForm.value.imgList[currentEditIndex.value].url = checkFileUrl(imagePath)
     return
   }
   let arr = []
@@ -307,7 +307,7 @@ const refreshPic = (imagePath) => {
   if (arr.length > 0) { // 说明是多选
     arr.forEach(item => {
       hotForm.value.imgList.push({
-        url: addDomain(item),
+        url: checkFileUrl(item),
         title: '',
         link: '',
         type: '',
@@ -317,7 +317,7 @@ const refreshPic = (imagePath) => {
     })
   } else { // 就是单选
     hotForm.value.imgList.push({
-      url: addDomain(imagePath),
+      url: checkFileUrl(imagePath),
       title: '',
       link: '',
       type: '',

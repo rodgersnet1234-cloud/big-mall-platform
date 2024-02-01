@@ -450,9 +450,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="addDomain(img)"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="addDomain(imgs)"
+                      :preview-src-list="checkFileUrl(imgs)"
                     >
                       <template #error>
                         <img
@@ -540,9 +540,9 @@
                     <el-image
                       v-if="scope.row.imgUrl"
                       class="tab-img"
-                      :src="addDomain(scope.row.imgUrl)"
+                      :src="checkFileUrl(scope.row.imgUrl)"
                       preview-teleported
-                      :preview-src-list="[addDomain(scope.row.imgUrl)]"
+                      :preview-src-list="[checkFileUrl(scope.row.imgUrl)]"
                     >
                       <template #error>
                         <img
@@ -569,9 +569,9 @@
                       v-for="(img,index) in scope.row.imgs"
                       :key="index"
                       class="tab-img"
-                      :src="addDomain(img)"
+                      :src="checkFileUrl(img)"
                       preview-teleported
-                      :preview-src-list="[addDomain(img)]"
+                      :preview-src-list="[checkFileUrl(img)]"
                     >
                       <template #error>
                         <img

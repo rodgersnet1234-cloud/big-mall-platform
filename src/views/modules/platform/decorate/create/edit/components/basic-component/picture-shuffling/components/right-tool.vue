@@ -54,7 +54,7 @@
         class="picture-items"
       >
         <el-image
-          :src="addDomain(item.img)"
+          :src="checkFileUrl(item.img)"
           fit="fill"
           style="position: relative"
         >
@@ -197,7 +197,7 @@ const refreshPic = (imagePath) => {
   // 更改图片的回调
   pciConfigForm.value.picList.forEach((item, index) => {
     if (updateIndex === index) {
-      item.img = addDomain(imagePath)
+      item.img = checkFileUrl(imagePath)
       updateStatus = true
     } else {
       updateStatus = false
@@ -211,7 +211,7 @@ const refreshPic = (imagePath) => {
     arr.forEach(item => {
       if (!updateStatus) { // 如果不是更改图片就让他增加
         pciConfigForm.value.picList.push({
-          img: addDomain(item),
+          img: checkFileUrl(item),
           path: {
             name: '',
             link: '',
@@ -223,7 +223,7 @@ const refreshPic = (imagePath) => {
   } else { // 就是单选
     if (!updateStatus) { // 如果不是更改图片就让他增加
       pciConfigForm.value.picList.push({
-        img: addDomain(imagePath),
+        img: checkFileUrl(imagePath),
         path: {
           name: '',
           link: '',

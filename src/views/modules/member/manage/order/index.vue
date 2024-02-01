@@ -80,7 +80,7 @@
               >
               <img
                 v-else
-                :src="addDomain(row.pic)"
+                :src="checkFileUrl(row.pic)"
                 class="img"
                 style="width:60px;height:60px"
                 alt=""

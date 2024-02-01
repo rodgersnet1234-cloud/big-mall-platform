@@ -844,8 +844,6 @@ let skuTableData = [] // sku表格返回数据
 // SkuTable返回数据
 const handleChangeData = (data) => {
   skuTableData = data
-  const salePrices = []
-  const scorePrices = []
   const marketPrices = []
   let totalStock = 0
   skuTableData?.forEach((sku) => {
@@ -864,13 +862,26 @@ const handleChangeData = (data) => {
         type: 0
       }]
     }
-    salePrices.push(sku.priceFee) // 售价
     marketPrices.push(sku.marketPriceFee) // 市场价
-    scorePrices.push(sku.scoreFee)
   })
-  dataForm.value.priceFee = Math.min.apply(null, salePrices) // 最低价-售价
+
+  const minPriceFeeList = JSON.parse(JSON.stringify(skuTableData)).sort((a, b) => {
+    return a.priceFee - b.priceFee
+  })
+  dataForm.value.priceFee = minPriceFeeList[0].priceFee // 最低价-售价
+
+  const minScoreFeeList = minPriceFeeList.filter(el => el.priceFee === dataForm.value.priceFee)
+
+  if (minScoreFeeList.length === 1) {
+    dataForm.value.scoreFee = minScoreFeeList[0].scoreFee // 最低积分
+  } else {
+    minScoreFeeList.sort((a, b) => {
+      return a.scoreFee - b.scoreFee
+    })
+    dataForm.value.scoreFee = minScoreFeeList[0].scoreFee // 最低积分
+  }
+
   dataForm.value.marketPriceFee = Math.min.apply(null, marketPrices) // 最低价-市场价
-  dataForm.value.scoreFee = Math.min.apply(null, scorePrices) // 最低价-市场价
   dataForm.value.totalStock = totalStock // 总库存
 }
 // 规格组件相关 end

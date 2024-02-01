@@ -2,7 +2,7 @@
   <div class="Mall4j page-login login-container">
     <div class="login-frame">
       <div class="login-img">
-        <img :src="addDomain(webConfig.loginBgImg)">
+        <img :src="checkFileUrl(webConfig.loginBgImg)">
       </div>
       <div class="login-info">
         <div class="title">

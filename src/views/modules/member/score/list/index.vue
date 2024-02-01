@@ -369,6 +369,15 @@
             </template>
           </el-table-column>
           <el-table-column
+            label="积分"
+            prop="scoreFee"
+            width="auto"
+          >
+            <template #default="{ row }">
+              <span class="table-cell-text">{{ row.scoreFee }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="累计销量"
             prop="actualSoldNum"
             width="auto"

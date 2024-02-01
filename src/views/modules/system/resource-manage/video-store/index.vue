@@ -135,7 +135,7 @@
                 @click.prevent.stop="onClickListImage(img)"
               >
                 <video
-                  :src="addDomain(img.filePath)"
+                  :src="checkFileUrl(img.filePath)"
                   controls="controls"
                   class="showVideo"
                   style="width:175px;height:88px;"
@@ -248,7 +248,7 @@
                 <video
                   v-if="item.url"
                   class="upShowVideo"
-                  :src="addDomain(item.url)"
+                  :src="checkFileUrl(item.url)"
                   controls="controls"
                   style="width:175px;height:88px;"
                 />
@@ -388,7 +388,7 @@
       >
         <el-form-item :label="`视频`">
           <video
-            :src="addDomain(imageObject.filePath)"
+            :src="checkFileUrl(imageObject.filePath)"
             class="changebox-img"
             controls="controls"
           />
