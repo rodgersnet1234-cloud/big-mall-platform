@@ -140,10 +140,6 @@ const onAddOrUpdate = (supplierRefundAddrId) => {
 }
 
 const onDelete = (supplierRefundAddrId, row) => {
-  if (row.isDefault) {
-    ElMessage.error('默认地址无法删除')
-    return
-  }
   ElMessageBox.confirm($t('table.sureToDelete'), $t('table.tips'), {
     confirmButtonText: $t('table.confirm'),
     cancelButtonText: $t('table.cancel'),
