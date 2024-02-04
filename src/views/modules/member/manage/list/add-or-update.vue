@@ -40,7 +40,7 @@
                   >
                   <img
                     v-else
-                    :src="addDomain(dataForm.pic)"
+                    :src="checkFileUrl(dataForm.pic)"
                     class="image"
                     width="130"
                     height="130"

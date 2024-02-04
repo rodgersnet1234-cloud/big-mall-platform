@@ -147,7 +147,7 @@ const getImgArr = () => {
 
 // 获取图片路径
 const getImgSrc = (img) => {
-  return addDomain(img)
+  return checkFileUrl(img)
 }
 
 // 删除图片

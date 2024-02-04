@@ -616,13 +616,13 @@ export function bigNumberTransform (value) {
  * 添加图片域名
  * @param path 获取到的文件路径
  */
-export function addDomain (path) {
+export function checkFileUrl (path) {
   if (path === '') return ''
   const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
   // 适配el-image 图片组件预览功能
   if (path && typeof path === 'object') {
     // eslint-disable-next-line no-return-assign
-    return path.map(el => el = addDomain(el))
+    return path.map(el => el = checkFileUrl(el))
   } else {
     if (path && path.indexOf('http') === -1) {
       return resourcesUrl + path

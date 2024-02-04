@@ -86,7 +86,7 @@
                 </el-icon>
               </div>
               <div
-                v-for="(img) in imgRes"
+                v-for="img in imgRes"
                 :key="img.fileId"
                 class="img-item"
               >
@@ -450,7 +450,7 @@ const loadListImage = () => {
       page.pages = response.pages
       page.total = response.total
       isLoading.value = false
-    }, 100)
+    }, 500)
   })
 }
 

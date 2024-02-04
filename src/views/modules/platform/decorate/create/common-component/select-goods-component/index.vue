@@ -6,7 +6,7 @@
     >
       <div class="goods-items">
         <el-image
-          :src="addDomain(item.imgs)"
+          :src="checkFileUrl(item.imgs)"
           fit="cover"
         >
           <template #error>

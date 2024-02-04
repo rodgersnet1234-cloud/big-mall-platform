@@ -36,7 +36,7 @@
                   class="goods-img-one"
                   :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
                   :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !goodsList[0].prodId}"
-                  :src="addDomain(item.pic||'')"
+                  :src="checkFileUrl(item.pic||'')"
                   fit="fill"
                 >
                   <template #error>
@@ -515,7 +515,7 @@ const getGoodsInfo = () => {
         prodName: item.spuName, // 商品名称
         status: item.spuStatus, // 商品状态
         price: item.priceFee, // 商品价格
-        pic: addDomain(item.mainImgUrl), // 商品图片
+        pic: checkFileUrl(item.mainImgUrl), // 商品图片
         brief: item.sellingPoint // 商品描述
       })
     })

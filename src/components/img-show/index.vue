@@ -1,7 +1,7 @@
 <template>
   <img
     v-if="imgPath"
-    :src="addDomain(imgPath)"
+    :src="checkFileUrl(imgPath)"
     :class="classList"
     :alt="imgAlt"
     :style="wrapStyle"

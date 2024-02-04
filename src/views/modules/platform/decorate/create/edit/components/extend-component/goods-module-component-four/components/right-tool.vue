@@ -19,7 +19,7 @@
         class="bg-pic has-bg"
       >
         <el-image
-          :src="addDomain(goodsForm.bgImg)"
+          :src="checkFileUrl(goodsForm.bgImg)"
           fit="fill"
         >
           <template #error>
@@ -239,7 +239,7 @@ const hanldeBgRemove = () => {
 }
 // 选择图片之后的回调
 const refreshPic = (imagePath) => {
-  goodsForm.value.bgImg = addDomain(imagePath)
+  goodsForm.value.bgImg = checkFileUrl(imagePath)
 }
 // 验证信息
 const handleValidate = () => {

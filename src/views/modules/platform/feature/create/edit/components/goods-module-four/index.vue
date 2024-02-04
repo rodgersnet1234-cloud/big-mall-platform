@@ -30,7 +30,7 @@
               </div>
               <el-image
                 v-else
-                :src="addDomain(formData.topImg)"
+                :src="checkFileUrl(formData.topImg)"
                 fit="fill"
               >
                 <template #error>
@@ -265,7 +265,7 @@ const handleAddImg = () => {
 
 // 选择图片的回调
 const refreshPic = (imagePath) => {
-  formData.topImg = addDomain(imagePath)
+  formData.topImg = checkFileUrl(imagePath)
 }
 
 // 删除图片

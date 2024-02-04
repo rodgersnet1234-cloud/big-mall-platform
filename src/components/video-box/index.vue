@@ -92,7 +92,7 @@
                   @click.prevent.stop="onClickListImage(img)"
                 >
                   <video
-                    :src="addDomain(img.filePath)"
+                    :src="checkFileUrl(img.filePath)"
                     class="showVideo"
                     controls="controls"
                   />
@@ -224,7 +224,7 @@
                   <video
                     v-if="item.url"
                     class="upShowVideo"
-                    :src="addDomain(item.url)"
+                    :src="checkFileUrl(item.url)"
                     controls="controls"
                     style="width:175px;height:88px;"
                   />

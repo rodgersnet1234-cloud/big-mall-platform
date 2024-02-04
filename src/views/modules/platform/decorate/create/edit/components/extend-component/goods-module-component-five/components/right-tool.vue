@@ -21,7 +21,7 @@
             class="item-operation has-bg"
           >
             <el-image
-              :src="addDomain(goodsForm.bgImg)"
+              :src="checkFileUrl(goodsForm.bgImg)"
               fit="fill"
             >
               <template #error>
@@ -151,7 +151,7 @@ const handleAddImg = () => {
 }
 // 选择图片之后的回调
 const refreshPic = (imagePath) => {
-  goodsForm.value.bgImg = addDomain(imagePath)
+  goodsForm.value.bgImg = checkFileUrl(imagePath)
 }
 // 删除图片
 const dialogVisible = ref(false) // 弹窗是否显示

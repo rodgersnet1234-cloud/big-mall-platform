@@ -55,7 +55,7 @@
             <el-date-picker
               v-model="dateRange"
               type="datetimerange"
-              range-separator="—"
+              range-separator="至"
               value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('date.start')"
               :end-placeholder="$t('date.end')"

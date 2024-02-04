@@ -474,7 +474,7 @@ const elxImgboxHandle = (type) => {
  */
 const refreshPic = (imagePath) => {
   // 导航这里只有单选的
-  formData.nav[currentNav].img = addDomain(imagePath)
+  formData.nav[currentNav].img = checkFileUrl(imagePath)
 }
 /** 添加导航 */
 const addNav = () => {

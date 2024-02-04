@@ -18,7 +18,7 @@
       <div
         v-else-if="formData.bgType===1"
         class="preview-header"
-        :style="[formData.bgImg ? {'background-image': `url(${addDomain(formData.bgImg)}) !important`} : { 'background': formData.bgColor }]"
+        :style="[formData.bgImg ? {'background-image': `url(${checkFileUrl(formData.bgImg)}) !important`} : { 'background': formData.bgColor }]"
       >
         <div
           class="preview-header-title"

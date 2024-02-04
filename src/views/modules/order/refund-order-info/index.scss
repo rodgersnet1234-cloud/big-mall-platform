@@ -274,15 +274,22 @@
           align-items: flex-start;
 
           .remark-title {
+            min-width: 102px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
             line-height: 32px;
             padding-left: 8px;
             position: relative;
+            .refundAmount-title{
+              margin-right: 2px;
+            }
 
             &.star::before {
               content: "*";
               color: #f56c6c;
               position: absolute;
-              left: 0;
+              left: 24px;
             }
           }
 
@@ -307,6 +314,16 @@
               margin-top: 4px;
               font-size: 12px;
             }
+          }
+
+          .refund-amount-score{
+            min-width: 250px;
+            line-height: 32px;
+            border: 1px solid #dcdfe6;
+            padding: 0 12px;
+            border-radius: 4px;
+            background-color: #f5f7fa;
+            color: #777;
           }
         }
 

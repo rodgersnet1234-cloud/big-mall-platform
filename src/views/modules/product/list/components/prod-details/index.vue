@@ -145,8 +145,8 @@
                   :key="index"
                   class="rotating-img"
                   style="width: 100px; height: 100px"
-                  :src="addDomain(img)"
-                  :preview-src-list="addDomain(dataForm.imgUrls)"
+                  :src="checkFileUrl(img)"
+                  :preview-src-list="checkFileUrl(dataForm.imgUrls)"
                 >
                   <template #error>
                     <img
@@ -168,7 +168,7 @@
               </div>
               <div class="part-form-item">
                 <video
-                  :src="addDomain(dataForm.video)"
+                  :src="checkFileUrl(dataForm.video)"
                   controls="controls"
                   class="video-box"
                 />
@@ -419,7 +419,7 @@ const init = (spuId) => {
       // 商品分类选择按钮
       showCategorySelectBtn.value = false
       if (data.brand?.imgUrl) {
-        brandImgUrl.value = addDomain(data.brand.imgUrl) // 品牌图片
+        brandImgUrl.value = checkFileUrl(data.brand.imgUrl) // 品牌图片
       }
       brandName.value = data.brand?.name // 品牌名字
       // 根据分类获取基本规格列表

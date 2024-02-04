@@ -135,7 +135,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="addDomain(formData.leftConfig.imgMessage.img)"
+                    :src="checkFileUrl(formData.leftConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -256,7 +256,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="addDomain(formData.topConfig.imgMessage.img)"
+                    :src="checkFileUrl(formData.topConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -377,7 +377,7 @@
                   </div>
                   <el-image
                     v-else
-                    :src="addDomain(formData.bottomConfig.imgMessage.img)"
+                    :src="checkFileUrl(formData.bottomConfig.imgMessage.img)"
                     fit="fill"
                   />
                   <el-icon
@@ -957,11 +957,11 @@ const handleAddImg = () => {
 // 选择图片后回调
 const refreshPic = (imagePath) => {
   if (currentActive.value === 1) { // 左边配置
-    formData.leftConfig.imgMessage.img = addDomain(imagePath)
+    formData.leftConfig.imgMessage.img = checkFileUrl(imagePath)
   } else if (currentActive.value === 2) { // 上边的配置
-    formData.topConfig.imgMessage.img = addDomain(imagePath)
+    formData.topConfig.imgMessage.img = checkFileUrl(imagePath)
   } else if (currentActive.value === 3) {
-    formData.bottomConfig.imgMessage.img = addDomain(imagePath)
+    formData.bottomConfig.imgMessage.img = checkFileUrl(imagePath)
   }
 }
 // 删除图片

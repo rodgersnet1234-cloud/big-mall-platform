@@ -496,7 +496,7 @@
                 <span class="txt-bold">{{ bankCartInfoForm.data.length }}</span>
                 个结算账户，最多可添加
                 <span class="txt-bold">5</span>
-                个结算账户，如需修改结算账户请在商家端供应商信息模块操作
+                个结算账户，如需修改结算账户请在供应商端供应商信息模块操作
               </div>
               <div
                 class="edit-btn"

@@ -68,7 +68,7 @@
     <template v-else>
       <div class="goods-top">
         <el-image
-          :src="addDomain(moduleForm.leftMessage.img)"
+          :src="checkFileUrl(moduleForm.leftMessage.img)"
           fit="fill"
         >
           <template #error>
@@ -82,7 +82,7 @@
           </template>
         </el-image>
         <el-image
-          :src="addDomain(moduleForm.rightMessage.img)"
+          :src="checkFileUrl(moduleForm.rightMessage.img)"
           fit="fill"
         >
           <template #error>
@@ -106,7 +106,7 @@
             <div class="bottom-items">
               <div class="bottom-items-imgs">
                 <el-image
-                  :src="addDomain(item.imgs)"
+                  :src="checkFileUrl(item.imgs)"
                   fit="fill"
                 >
                   <template #error>

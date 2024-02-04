@@ -18,7 +18,7 @@
             :style="{'width': config.width, 'height': config.height}"
           >
             <el-image
-              :src="addDomain(item.img)"
+              :src="checkFileUrl(item.img)"
               fit="fill"
             >
               <template #error>
