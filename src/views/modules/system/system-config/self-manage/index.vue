@@ -220,25 +220,29 @@ onMounted(() => {
 const activeName = ref('first')
 const miniAppImgUrl = ref('')
 const miniAppShowState = (state) => {
-  api.getAppletInformation().then(res => {
+  const infoPromise = api.getAppletInformation().then(res => {
     appletInformation.value = res
     miniAppShow.value = state
     Cookies.set('miniAppConfigSave', false)
   }).catch(() => {
     Cookies.set('miniAppConfigSave', true)
   })
-  api.getAppletQRcode().then(res => {
-    getBase64(res).then(base64 => {
+  const qrCodePromise = api.getAppletQRcode().then(res => {
+    return getBase64(res).then(base64 => {
       miniAppImgUrl.value = base64
     }).catch(err => {
       // eslint-disable-next-line no-console
       console.log(err, 'err')
     })
   })
-  Promise.all([api.getAppletInformation(), api.getAppletQRcode()]).then(res => {
-    // miniAppImgUrl.value = res[1]
+
+  return Promise.all([infoPromise, qrCodePromise]).then(() => {
+    console.log('Both requests have completed.')
+  }).catch((err) => {
+    console.error('At least one request failed:', err)
   })
 }
+
 const onDownload = () => {
   if (appletInformation.value) {
     api.onDownloadZip().then(res => {
