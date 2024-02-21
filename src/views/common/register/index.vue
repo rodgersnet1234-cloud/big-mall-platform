@@ -13,7 +13,7 @@
       <div class="login-img">
         <img
           v-if="webConfig.loginBgImg"
-          :src="addDomain(webConfig.loginBgImg)"
+          :src="checkFileUrl(webConfig.loginBgImg)"
           @error="webConfig.loginBgImg=''"
         >
         <img
@@ -262,6 +262,7 @@ import { getRegisterCode, register, getMerchantRegisterProtocol } from '@/api/au
 import { encrypt } from '@/utils/crypto'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
+
 const router = useRouter()
 const passwordType = ref('password')
 const mallNameEmptyTips = ref(false)
