@@ -1582,7 +1582,7 @@ const createStore = () => {
     }
     api.create(data).then(() => {
       ElMessage({
-        message: '店铺商城成功！',
+        message: '店铺创建成功！',
         type: 'success',
         duration: 1500,
         onClose: () => {
