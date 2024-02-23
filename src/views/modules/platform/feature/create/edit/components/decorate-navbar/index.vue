@@ -162,8 +162,6 @@
 
 <script setup>
 import ImgUpload from '@/components/img-upload/index.vue'
-import request from '@/utils/request'
-import { formatConfigInfo } from '@/utils/website-config.js'
 
 const props = defineProps({
   isTemplate: {
@@ -281,29 +279,23 @@ const configuration = ref({
   bsMenuTitleCloseCn: null,
   bsMenuTitleCloseEn: null
 })
-// 更新网站配置信息
-const updateWebConfigData = () => {
-  request({
-    url: '/mall4cloud_admin/ua/web_config/get_activity',
-    params: {
-      webConfigType: 'PLATFROM_WEBSITE_CONFIG'
-    },
-    method: 'get'
-  }).then((data) => {
-    data = formatConfigInfo(data)
-    configuration.value = data
-    if (data.bsMenuTitleOpenEn.length >= 17) {
-      fontOpenSize.fontSize = '16px'
-    } else if (data.bsMenuTitleOpenCn.length >= 10) {
-      fontOpenSize.fontSize = '16px'
-    }
 
-    if (data.bsMenuTitleCloseEn.length >= 6) {
-      fontCloseSize.fontSize = '18px'
-    } else if (data.bsMenuTitleCloseCn.length >= 4) {
-      fontCloseSize.fontSize = '18px'
-    }
-  })
+const webConfigStore = useWebConfigStore()
+// 更新网站配置信息
+const updateWebConfigData = async () => {
+  const data = webConfigStore.webConfig
+  configuration.value = data
+  if (data.bsMenuTitleOpenEn.length >= 17) {
+    fontOpenSize.fontSize = '16px'
+  } else if (data.bsMenuTitleOpenCn.length >= 10) {
+    fontOpenSize.fontSize = '16px'
+  }
+
+  if (data.bsMenuTitleCloseEn.length >= 6) {
+    fontCloseSize.fontSize = '18px'
+  } else if (data.bsMenuTitleCloseCn.length >= 4) {
+    fontCloseSize.fontSize = '18px'
+  }
 }
 </script>
 

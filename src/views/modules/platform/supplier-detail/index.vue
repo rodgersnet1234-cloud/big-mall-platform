@@ -707,7 +707,7 @@
                 <span class="asterisk">*</span>签约有效期
               </div>
               <div class="txt weak">
-                供应商供应商有效期
+                供应商有效期
               </div>
             </div>
             <div class="si-content">

@@ -228,6 +228,7 @@
             </div>
             <el-upload
               ref="uploadRef"
+              v-model:file-list="fileList"
               class="upload-img-preview"
               list-type="picture-card"
               accept=".jpg,.png,.gif"
@@ -460,7 +461,7 @@ import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteImgs, batchMoveImgs } from '@/api/resource/picture-store'
 import ImageCompressor from 'compressorjs'
 import { Debounce } from '@/utils/debounce'
-
+const fileList = ref([])
 let images = [] // 已选图片
 let fileIds = [] // 已选图片的fileId
 let sizeFlag = 0 // 避免错误提示重复弹出
@@ -1002,8 +1003,15 @@ const onUploadConfirm = Debounce(() => {
       type: 'warning'
     })
   }
+  const fileNames = fileList.value?.map((item) => {
+    return item.name
+  }).join(',')
+  const fileNamesArr = fileNames.split(',')
   getBatchPreSignUrl(fileNames).then(response => {
     ossList = response
+    for (let i = 0; i < ossList.length; i++) {
+      ossList[i].name = fileNamesArr[i]
+    }
     notImg.value = true
     nextTick(() => {
       uploadRef.value?.submit()
@@ -1019,7 +1027,7 @@ const httpRequest = (event) => {
     return
   }
   // 获取本次上传文件的位置
-  const currentIndex = fileIndex.value++
+  const index = ossList.findIndex(item => item.name === event.file.name)
 
   const file = event.file
   const typeArray = file.type.split('/')
@@ -1054,8 +1062,8 @@ const httpRequest = (event) => {
   }
   // aliOss 上传
 
-  attachFile.filePath = '/' + ossList[currentIndex].dir + ossList[currentIndex].fileName
-  awsImgUpdate(ossList[currentIndex].preSignUrl, file, event).then(() => {
+  attachFile.filePath = '/' + ossList[index].dir + ossList[index].fileName
+  awsImgUpdate(ossList[index].preSignUrl, file, event).then(() => {
     attachFiles.push(attachFile)
     completeCount.value++
     if (completeCount.value === ossList.length) {
@@ -1063,7 +1071,7 @@ const httpRequest = (event) => {
     }
     uploadSuccess()
   }).catch(() => {
-    message($t('biz.imgbox.uploadBefore') + (currentIndex + 1) + $t('biz.imgbox.uploadAfter'), true)
+    message($t('biz.imgbox.uploadBefore') + (index + 1) + $t('biz.imgbox.uploadAfter'), true)
     completeCount.value++
     if (completeCount.value === ossList.length) {
       event.onSuccess()

@@ -136,6 +136,8 @@ const getData = () => {
     if (data) {
       setDate(data)
     }
+  }).finally(() => {
+    tinymceFlag.value = Date.now() + 1
   })
 }
 

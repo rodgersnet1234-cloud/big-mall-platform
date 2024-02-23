@@ -562,10 +562,10 @@ const refundAuditChange = (sts) => {
 
 // 退款金额限制
 const onRefundPriceBlur = () => {
-  const limitPrice = new Big(dataForm.value.refundActualTotal || dataForm.value.refundAmount).div(100)
-  if (auditForm.refundPrice < 0) {
+  const limitPrice = new Big(dataForm.value.refundAmount).div(100)
+  if (+auditForm.refundPrice < 0) {
     auditForm.refundPrice = 0
-  } else if (auditForm.refundPrice > limitPrice) {
+  } else if (+auditForm.refundPrice > limitPrice) {
     auditForm.refundPrice = limitPrice
   }
 }

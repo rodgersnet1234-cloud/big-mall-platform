@@ -260,7 +260,7 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 const emit = defineEmits(['onOrOffTheShelf', 'directOnline', 'offlineDataSubmit', 'auditOnlineSubmit'])
-const props = defineProps({
+defineProps({
   alignCenter: {
     type: Boolean,
     default: false
