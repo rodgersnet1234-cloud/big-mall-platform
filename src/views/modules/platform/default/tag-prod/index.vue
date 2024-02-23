@@ -12,6 +12,7 @@
         <el-form-item :label="$t('product.spu.name') + '：'">
           <el-input
             v-model="searchParam.spuName"
+            style="width: 190px"
             :placeholder="$t('product.spu.name')"
             clearable
           />

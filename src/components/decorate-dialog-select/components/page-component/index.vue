@@ -54,7 +54,7 @@ const pageList = [
   {
     img: pcModalIndex,
     title: $t('pcdecorate.commonModal.pageComponent.index'),
-    link: '/'
+    link: '/index'
   },
   {
     img: pcModalCart,

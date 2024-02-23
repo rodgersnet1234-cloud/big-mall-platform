@@ -148,7 +148,7 @@
       </div>
     </div>
     <div
-      v-if="refundDetail.refundTime"
+      v-if="refundDetail.returnMoneySts !== -1 && refundDetail.refundTime"
       class="item"
     >
       <div class="title">
@@ -160,7 +160,7 @@
       </div>
     </div>
     <div
-      v-if="refundDetail.decisionTime"
+      v-if="refundDetail.returnMoneySts !== -1 && refundDetail.decisionTime"
       class="item"
     >
       <div class="title">

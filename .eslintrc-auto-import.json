@@ -132,6 +132,26 @@
     "stores": true,
     "allinpay": true,
     "useAllinpayStore": true,
-    "useTestStore": true
+    "useTestStore": true,
+    "ExtractDefaultPropTypes": true,
+    "ExtractPropTypes": true,
+    "ExtractPublicPropTypes": true,
+    "STAR_MOBILE_REGEXP": true,
+    "WritableComputedRef": true,
+    "areaNameList": true,
+    "bigNumberTransform": true,
+    "checkFileUrl": true,
+    "checkIDCard": true,
+    "countComboPrice": true,
+    "excelRequest": true,
+    "generateTitle": true,
+    "getDateTimeRange": true,
+    "getParseTime": true,
+    "handleOrderItems": true,
+    "isStarMobile": true,
+    "setupStore": true,
+    "store": true,
+    "useCancelFocusIntervalStore": true,
+    "validPassword2": true
   }
 }

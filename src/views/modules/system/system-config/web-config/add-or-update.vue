@@ -280,11 +280,8 @@
 
 <script setup>
 import ImgUpload from '@/components/img-upload/index.vue'
-import * as api from '@/api/rbac/web-config'
 import * as apis from '@/api/platform/sys-config'
-import { formatConfigInfo } from '@/utils/website-config'
 import { ElMessage } from 'element-plus'
-import useStore from 'element-plus/es/components/table/src/store/index'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -525,10 +522,7 @@ const updateWebConfigData = () => {
   if (dataForm.value.configType !== 1) {
     return
   }
-  api.getActivity('PLATFROM_WEBSITE_CONFIG').then(data => {
-    data = formatConfigInfo(data)
-    useStore.commit('webConfig/addData', data)
-  })()
+  useWebConfigStore().getWebConfig()
 }
 
 </script>
