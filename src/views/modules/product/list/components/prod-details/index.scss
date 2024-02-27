@@ -84,9 +84,9 @@
           display: inline-block;
           margin-right: 6px;
           width: auto;
-          max-width: 60px;
+          max-width: 60px !important;
           height: auto;
-          max-height: 40px;
+          max-height: 40px !important;
         }
         .br {
           margin-right: 20px;
@@ -140,7 +140,7 @@
           line-height: 36px;
         }
         .part-form-item {
-          width: 100%;
+          width: calc(100% - 110px);
           // 轮播图&主图
           .el-image.rotating-img {
             padding-right: 5px;

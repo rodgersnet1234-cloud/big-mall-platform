@@ -57,7 +57,7 @@
           <div class="goods-three-items">
             <div class="goods-three-items-imgs">
               <el-image
-                :src="item.imgs"
+                :src="checkFileUrl(item.imgs)"
                 fit="fill"
               >
                 <template #error>
@@ -158,6 +158,7 @@
 </template>
 <script setup>
 import { formatPrice } from '@/utils/index.js'
+
 const props = defineProps({
   config: { // 配置信息
     type: Object,

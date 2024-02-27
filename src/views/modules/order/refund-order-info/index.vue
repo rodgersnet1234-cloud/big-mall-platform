@@ -7,13 +7,14 @@
       </div>
     </div>
     <div
-      v-if="platInterveneSts===1 && stillAveTime"
+      v-if="platInterveneSts===1"
       class="plat-intervene"
     >
       <el-icon :size="14">
         <WarningFilled />
       </el-icon>
-      <span>用户申请平台介入售后，请在{{ dataForm.platformProcessingEndTime }}前处理</span>
+      <span v-if="stillAveTime">用户申请平台介入售后，请在{{ dataForm.platformProcessingEndTime }}前处理</span>
+      <span v-else>当前商家、用户正在举证，请在{{ dataForm.interventionEndTime }}后进行结果介入判定</span>
     </div>
     <div class="order-refund-info">
       <div class="refundId">
@@ -124,9 +125,10 @@
                           <el-image
                             v-for="(picItem,picInx) in dataForm.imgUrls"
                             :key="picInx"
-                            :src="picItem"
+                            :src="checkFileUrl(picItem)"
                             class="img-box"
-                            :preview-src-list="dataForm.imgUrls"
+                            :initial-index="picInx"
+                            :preview-src-list="checkFileUrl(dataForm.imgUrls)"
                           >
                             <template #error>
                               <img
@@ -205,8 +207,9 @@
                     <el-image
                       v-for="(picItem,picInx) in orderRefundAddrPhotos"
                       :key="picInx"
-                      :src="picItem"
+                      :src="checkFileUrl(picItem)"
                       class="img-box"
+                      :initial-index="picInx"
                       :preview-src-list="orderRefundAddrPhotos"
                     >
                       <template #error>
@@ -233,14 +236,15 @@
               >
                 <el-table-column
                   :label="$t('order.order.refundGoods')"
-                  width="400"
+                  width="500"
                 >
                   <template #default="scope">
                     <div class="prod-info">
-                      <ImgShow
-                        :src="scope.row.pic"
-                        :style="{width:'100px',height:'100px'}"
-                      />
+                      <div class="prod-image">
+                        <img-show
+                          :src="scope.row.pic"
+                        />
+                      </div>
                       <div class="con">
                         <span
                           v-if="scope.row.giveawayOrderItemId"
@@ -260,21 +264,28 @@
                         </div>
                       </div>
                     </div>
+
+                    <!-- 组合 -->
+                    <div
+                      v-if="scope.row.comboList"
+                      class="gift-prod"
+                    >
+                      <combo-list
+                        :combo-list="scope.row.comboList"
+                        tag-name="【组合】"
+                      />
+                    </div>
+                    <!-- / 组合 -->
+
                     <!-- 赠品 -->
                     <div
                       v-if="scope.row.giveawayList && !prodLength"
-                      class="gift-prod table-cell-text"
+                      class="gift-prod"
                     >
-                      <div
-                        v-for="(item,index) in scope.row.giveawayList"
-                        :key="index"
-                        class="item"
-                      >
-                        <div class="name prod-info-text">
-                          【赠品】{{ item.spuName }}
-                        </div>
-                        <span class="num">{{ item.skuName }} ×{{ item.count }}</span>
-                      </div>
+                      <combo-list
+                        :combo-list="scope.row.giveawayList"
+                        tag-name="【赠品】"
+                      />
                     </div>
                   <!-- / 赠品 -->
                   </template>
@@ -375,7 +386,7 @@
                 </el-table-column>
               </el-table>
             </div>
-            <template v-if="platInterveneSts===1 && stillAveTime">
+            <template v-if="platInterveneSts===1">
               <div class="sellerRemark">
                 <div class="remark-title star">
                   申请审批：
@@ -391,7 +402,7 @@
                       商家承担退款
                     </el-radio>
                     <el-radio
-                      v-if="dataForm.supplierId && dataForm.waitPurchase!==1 && dataForm.supplierHandleStatus!=-1"
+                      v-if="dataForm.supplierId && dataForm.waitPurchase!==1 && dataForm.supplierHandleStatus!==-1"
                       :label="2"
                     >
                       商家、供应商共同承担退款
@@ -406,9 +417,20 @@
               </div>
               <div class="sellerRemark">
                 <div class="remark-title">
-                  退款金额：
+                  <span class="refundAmount-title">退款金额</span>
+                  <el-tooltip
+                    effect="dark"
+                    content="享受平台优惠的订单不能修改退款金额"
+                    placement="top"
+                  >
+                    <el-icon><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                  ：
                 </div>
-                <div class="remark-content">
+                <div
+                  v-if="!dataForm.platformRefundAmount"
+                  class="remark-content"
+                >
                   <div class="refund-price">
                     <el-input
                       v-model="auditForm.refundPrice"
@@ -417,10 +439,32 @@
                       :disabled="auditForm.isAgreeRefund===3"
                       style="width: 250px;outline-style: none;"
                       @blur="onRefundPriceBlur"
+                      @keydown="channelInputLimit"
                     />
                     <span class="unit">元</span>
                   </div>
                   <span class="pri-tips">平台售后可按需修改退款金额</span>
+                </div>
+                <!-- 使用了平台优惠（会员折扣、平台优惠券、积分抵扣）的订单，平台介入时，不能修改退款金额 -->
+                <div
+                  v-else
+                  class="refund-amount-score"
+                >
+                  <span
+                    v-if="dataForm.refundAmount"
+                    class="text"
+                  >{{ formatPrice(dataForm.refundAmount, 1).toFixed(2)
+                  }}{{ $t("constant.dollar") }}</span>
+                  <span
+                    v-if="dataForm.refundAmount && dataForm.refundScore"
+                    class="text"
+                  >+
+                  </span>
+                  <span
+                    v-if="dataForm.refundScore"
+                    class="text"
+                  >{{ dataForm.refundScore
+                  }}{{ $t("order.order.integral") }}</span>
                 </div>
               </div>
               <div class="sellerRemark">
@@ -455,14 +499,13 @@
 </template>
 
 <script setup>
+import { formatPrice } from '@/utils/index.js'
+
 import Big from 'big.js'
 import * as api from '@/api/order/order-refund'
-import { formatPrice } from '@/utils/index.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import refundRecord from './conponents/refund-record/index.vue'
 import refundSteps from './conponents/refund-steps/index.vue'
-
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const route = useRoute()
 onMounted(() => {
@@ -519,11 +562,21 @@ const refundAuditChange = (sts) => {
 
 // 退款金额限制
 const onRefundPriceBlur = () => {
-  if (auditForm.refundPrice < 0) {
+  const limitPrice = new Big(dataForm.value.refundAmount).div(100)
+  if (+auditForm.refundPrice < 0) {
     auditForm.refundPrice = 0
-  } else if (auditForm.refundPrice > dataForm.value.refundActualTotal) {
-    auditForm.refundPrice = new Big(dataForm.value.refundActualTotal || dataForm.value.refundAmount).div(100)
+  } else if (+auditForm.refundPrice > limitPrice) {
+    auditForm.refundPrice = limitPrice
   }
+}
+const channelInputLimit = (e) => {
+  const key = e.key
+  // 不允许输入'-'
+  if (key === 'e' || key === '+' || key === '-') {
+    e.returnValue = false
+    return false
+  }
+  return true
 }
 
 // 提交平台介入结果
@@ -542,6 +595,22 @@ const onHandleAudit = () => {
     })
     return
   }
+  if (!stillAveTime.value) {
+    ElMessageBox.confirm('当前举证时间还未结束，点击确定则举证结束直接进行结果判定，是否继续操作', $t('table.tips'), {
+      confirmButtonText: $t('table.confirm'),
+      cancelButtonText: $t('table.cancel'),
+      type: 'warning'
+    }).then(() => {
+      if (isSubmit) return
+      if (auditForm.isAgreeRefund === 3) {
+        onSubmit()
+        return
+      }
+      checkIsLastOrderItem(onSubmit)
+    }).catch(() => { })
+    return
+  }
+
   if (isSubmit) return
   if (auditForm.isAgreeRefund === 3) {
     onSubmit()
@@ -659,12 +728,7 @@ const getRefundOrderInfo = () => {
 const onHandleImgUrl = (imgUrls) => {
   const imgs = []
   imgUrls.forEach((img) => {
-    if (img.indexOf('http') === -1 && img.indexOf('https') === -1) {
-      const image = resourcesUrl + img
-      imgs.push(image)
-    } else {
-      imgs.push(img)
-    }
+    imgs.push(checkFileUrl(img))
   })
   return imgs
 }

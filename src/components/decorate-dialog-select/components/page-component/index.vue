@@ -31,6 +31,9 @@ import pcModalIntegral from '@/assets/pc-micro-page/pc_modal_integral.png'
 import pcModalMembers from '@/assets/pc-micro-page/pc_modal_members.png'
 import pcModalDistribution from '@/assets/pc-micro-page/pc_modal_distribution.png'
 import pcModalLive from '@/assets/pc-micro-page/pc_modal_live.png'
+import * as api from '@/api/distribution/set/distribution-config.js'
+import { ElMessage } from 'element-plus'
+
 const props = defineProps({
   activeName: { // 动态切换tab
     type: String,
@@ -51,7 +54,7 @@ const pageList = [
   {
     img: pcModalIndex,
     title: $t('pcdecorate.commonModal.pageComponent.index'),
-    link: '/'
+    link: '/index'
   },
   {
     img: pcModalCart,
@@ -106,7 +109,7 @@ const pageList = [
   {
     img: pcModalMembers,
     title: $t('pcdecorate.commonModal.pageComponent.memberCenter'),
-    link: '/member-center/member-center'
+    link: '/member-center'
   }
 
 ]
@@ -187,6 +190,14 @@ const currentPageList = ref([]) // 当前的页面
 
 // 选中哪个页面
 const handleSelectPage = (item, index) => {
+  if (item.link === '/package-activities/pages/distribution-center/distribution-center' && distributionSwitch.value !== 1) {
+    ElMessage({
+      message: '分销未开启',
+      type: 'error',
+      duration: 1500
+    })
+    return
+  }
   currentIndex.value = index
   emit('handleGoodsSelect', { type: 'pageItem', value: item })
 }
@@ -216,51 +227,60 @@ watch(() => props.activeName, (newVal) => { // 激活tabbar
   if (newVal === '4') {
     resetComponent()
     setPageContent()
+    onGetDistributionSet()
   }
 })
+
+// 分销设置
+const distributionSwitch = ref(0)
+const onGetDistributionSet = () => {
+  api.get().then(res => {
+    distributionSwitch.value = res.distributionSwitch
+  })
+}
 </script>
 <style lang="scss" scoped>
 .page-modal-content {
-    min-height: 450px;
-    max-height: 450px;
-    height: 450px;
+  min-height: 450px;
+  max-height: 450px;
+  height: 450px;
+  overflow-y: auto;
+  .page-contents {
+    width: calc(100% - 40px);
+    max-height: 400px;
     overflow-y: auto;
-    .page-contents {
-        width: calc(100% - 40px);
-        max-height: 400px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        display: flex;
-        flex-wrap: wrap;
-        margin: 20px;
-        .page-items {
-            width: 20%;
-            height: 88px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            &:hover {
-                border: 1px solid #155BD4;
-                border-radius: 6px;
-            }
-            &.active {
-                border: 1px solid #155BD4;
-                border-radius: 6px;
-            }
-            img {
-                width: 40px;
-                height: 40px;
-            }
-            span {
-                margin-top: 6px;
-                font-size: 14px;
-                font-family: Microsoft YaHei, sans-serif;
-                color: #333;
-            }
-        }
+    overflow-x: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+    .page-items {
+      width: 20%;
+      height: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      &:hover {
+        border: 1px solid #155BD4;
+        border-radius: 6px;
+      }
+      &.active {
+        border: 1px solid #155BD4;
+        border-radius: 6px;
+      }
+      img {
+        width: 40px;
+        height: 40px;
+      }
+      span {
+        margin-top: 6px;
+        font-size: 14px;
+        font-family: Microsoft YaHei, sans-serif;
+        color: #333;
+      }
     }
+  }
 }
 </style>

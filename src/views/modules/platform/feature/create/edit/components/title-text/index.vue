@@ -5,20 +5,31 @@
         class="title-text-content"
         :style="{textAlign:formData.align}"
       >
-        <div
-          class="title-text-title"
-          :style="{fontSize:formData.titleSize+'px',fontWeight:formData.titleWeight, 'width':!formData.isLink?'100%':formData.linkStyle===1?'80%':formData.linkStyle===2?'75%':'90%'}"
-        >
-          {{ formData.title }}
-        </div>
-        <div
-          v-if="formData.isLink"
-          class="show-more"
-        >
-          <span v-if="formData.linkStyle!==3">{{ formData.linkText }} </span>
-          <el-icon v-if="formData.linkStyle!==1">
-            <ArrowRight />
-          </el-icon>
+        <div class="title-bar">
+          <!-- 占位 -->
+          <div
+            :style="{'width':!formData.isLink?'0':formData.linkStyle===1?'60px':formData.linkStyle===2?'70px':'15px'}"
+          />
+          <div
+            class="title-text-title"
+            :style="{
+              fontSize:formData.titleSize+'px',
+              fontWeight:formData.titleWeight,
+              'width':!formData.isLink?'100%':formData.linkStyle===1?'80%':formData.linkStyle===2?'75%':'90%'
+            }"
+          >
+            {{ formData.title }}
+          </div>
+          <div
+            v-if="formData.isLink"
+            class="show-more"
+            :style="{'width':!formData.isLink?'0':formData.linkStyle===1?'60px':formData.linkStyle===2?'70px':'15px'}"
+          >
+            <span v-if="formData.linkStyle!==3">{{ formData.linkText }} </span>
+            <el-icon v-if="formData.linkStyle!==1">
+              <ArrowRight />
+            </el-icon>
+          </div>
         </div>
         <div
           v-if="formData.desc"

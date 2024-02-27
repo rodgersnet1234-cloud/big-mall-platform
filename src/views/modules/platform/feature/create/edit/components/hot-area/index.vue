@@ -12,7 +12,7 @@
             v-for="(item, index) in formData.imageList"
             :key="index"
             style="display: block"
-            :src="item.url"
+            :src="checkFileUrl(item.url)"
             alt=""
           >
         </div>
@@ -94,7 +94,7 @@
                   </div>
                 </div>
                 <img-show
-                  :src="item.url"
+                  :src="checkFileUrl(item.url)"
                   :class-list="['ad-handle']"
                 />
                 <el-icon
@@ -316,7 +316,6 @@ const boxItem = { // 盒子模板
   width: 102,
   height: 102
 }
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const elxImgboxRef = ref(null)
 /**
@@ -341,7 +340,7 @@ const isChangeImg = ref(false) // 是否为更换图片模式
 const refreshPic = (imagePath) => {
   const imgsList = imagePath.split(',')
   for (let i = 0; i < imgsList.length; i++) {
-    imgsList[i] = resourcesUrl + imgsList[i]
+    imgsList[i] = checkFileUrl(imgsList[i])
   }
   if (imgsList.length) {
     if (isChangeImg.value) { // 更换图片模式

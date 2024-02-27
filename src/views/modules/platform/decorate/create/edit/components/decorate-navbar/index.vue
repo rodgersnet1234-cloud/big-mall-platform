@@ -15,7 +15,7 @@
           <img
             v-if="configuration.bsTopBarIcon"
             style="height: 18px;width:59px;margin-right: 10px"
-            :src="configuration.bsTopBarIcon"
+            :src="checkFileUrl(configuration.bsTopBarIcon)"
             alt=""
           >
           <a
@@ -230,11 +230,8 @@
 </template>
 
 <script setup>
-
 import allCanUseComponents from '../all-can-use-components/index.vue' // 左边组件列表
 import ImgUpload from '@/components/img-upload/index.vue'
-import request from '@/utils/request'
-import { formatConfigInfo } from '@/utils/website-config'
 const language = computed(() => useAppStore().language)
 
 const props = defineProps({
@@ -364,29 +361,23 @@ const closeRight = () => {
 const closeComponentManage = () => {
   emit('closeComponentManage')
 }
-// 更新网站配置信息
-const updateWebConfigData = () => {
-  request({
-    url: '/mall4cloud_admin/ua/web_config/get_activity',
-    params: {
-      webConfigType: 'PLATFROM_WEBSITE_CONFIG'
-    },
-    method: 'get'
-  }).then((data) => {
-    data = formatConfigInfo(data)
-    configuration.value = data
-    if (data.bsMenuTitleOpenEn.length >= 17) {
-      fontOpenSize.value.fontSize = '16px'
-    } else if (data.bsMenuTitleOpenCn.length >= 10) {
-      fontOpenSize.value.fontSize = '16px'
-    }
 
-    if (data.bsMenuTitleCloseEn.length >= 6) {
-      fontCloseSize.value.fontSize = '18px'
-    } else if (data.bsMenuTitleCloseCn.length >= 4) {
-      fontCloseSize.value.fontSize = '18px'
-    }
-  })
+const webConfigStore = useWebConfigStore()
+// 更新网站配置信息
+const updateWebConfigData = async () => {
+  const data = webConfigStore.webConfig
+  configuration.value = data
+  if (data.bsMenuTitleOpenEn.length >= 17) {
+    fontOpenSize.value.fontSize = '16px'
+  } else if (data.bsMenuTitleOpenCn.length >= 10) {
+    fontOpenSize.value.fontSize = '16px'
+  }
+
+  if (data.bsMenuTitleCloseEn.length >= 6) {
+    fontCloseSize.value.fontSize = '18px'
+  } else if (data.bsMenuTitleCloseCn.length >= 4) {
+    fontCloseSize.value.fontSize = '18px'
+  }
 }
 defineExpose({ menuActive, visible })
 </script>

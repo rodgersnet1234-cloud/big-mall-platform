@@ -47,7 +47,6 @@ const props = defineProps({
 const elxImgboxVisible = ref(false)
 const maxNum = ref(15) // 可选择的最大图片数量
 const imgUrls = ref([])
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const elxImgboxRef = ref()
 const dialogVisible = ref()
 /**
@@ -67,7 +66,7 @@ const refreshPic = imagePath => {
   const imageArray = imagePath.split(',')
   const data = []
   imageArray.forEach(img => {
-    data.push(resourcesUrl + img)
+    data.push(checkFileUrl(img))
   })
   imgUrls.value = ''
   dialogVisible.value = false

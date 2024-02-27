@@ -51,3 +51,14 @@ export function getAttrsByCategoryId (param) {
     params: param
   })
 }
+
+/**
+ * 获取默认仓库id
+ * @returns {*}
+ */
+export function getDefaultWarehouseId () {
+  return request({
+    url: '/mall4cloud_product/p/warehouse',
+    method: 'get'
+  })
+}

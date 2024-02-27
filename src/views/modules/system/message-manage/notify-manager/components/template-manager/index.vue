@@ -193,7 +193,7 @@
           >
             <template #default="{row}">
               <el-button
-                v-permission="['notify:notif y:update']"
+                v-permission="['notify:notify:update']"
                 link
                 type="primary"
                 @click="onAddOrUpdate(row.templateId)"

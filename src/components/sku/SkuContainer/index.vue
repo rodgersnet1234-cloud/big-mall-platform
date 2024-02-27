@@ -9,52 +9,55 @@
       >
         规格值：
       </div>
-      <div
-        v-for="(item, index) in sku.leaf"
-        :key="index"
-        :class="['spec-name-int',hasSkuImage?'ft-spec-val-item':''] "
-      >
-        <div class="spec-name-box">
-          <div class="text-hid">
-            {{ item[optionText] }}
-          </div>
-          <div
-            class="del-btn"
-            @click="handleRemoveSkuLeaf(index)"
-          >
-            <el-icon class="el-icon-close">
-              <Close />
-            </el-icon>
-          </div>
-        </div>
+      <div class="spec-name-conter">
         <div
-          v-if="hasSkuImage"
-
-          class="img-box"
+          v-for="(item, index) in sku.leaf"
+          :key="index"
+          :class="['spec-name-int',hasSkuImage?'ft-spec-val-item':''] "
         >
-          <div
-            class="spec-imgbox"
-          >
-            <img-upload
-              v-model:model-value="item.imgUrl"
-              :show="view"
-              class="spec-img"
-              @input="handleUploadSuccess(item, $event)"
-            />
+          <div class="spec-name-box">
+            <div class="text-hid">
+              {{ item[optionText] }}
+            </div>
             <div
-              v-if="item.imgUrl"
-              class="preview-btn"
-              @click="picturePreview(item.imgUrl)"
+              v-if="view"
+              class="del-btn"
+              @click="handleRemoveSkuLeaf(index)"
             >
-              预览
+              <el-icon class="el-icon-close">
+                <Close />
+              </el-icon>
             </div>
           </div>
           <div
-            v-if="hasSkuImage && item.imgUrl && view"
-            class="del-pic"
-            @click="delSpecPic(item, index)"
+            v-if="hasSkuImage"
+
+            class="img-box"
           >
-            删除
+            <div
+              class="spec-imgbox"
+            >
+              <img-upload
+                v-model:model-value="item.imgUrl"
+                :show="view"
+                class="spec-img"
+                @input="handleUploadSuccess(item, $event)"
+              />
+              <div
+                v-if="item.imgUrl"
+                class="preview-btn"
+                @click="picturePreview(item.imgUrl)"
+              >
+                预览
+              </div>
+            </div>
+            <div
+              v-if="hasSkuImage && item.imgUrl && view"
+              class="del-pic"
+              @click="delSpecPic(item, index)"
+            >
+              删除
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +122,7 @@ const setSalesAttrs = inject('setSalesAttrs')
 
 const route = useRoute()
 
-const view = ref(!(route.path === '/product/list' || route.path === '/product-insights'))
+const view = ref(!(route.path === '/product/list' || route.path === '/data-analysis/product-insights'))
 const leafValue = ref([])
 const props = defineProps({
   sku: {

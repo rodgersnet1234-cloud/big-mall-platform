@@ -68,7 +68,6 @@ import request from '@/utils/request'
 const emit = defineEmits(['selectTemplate'])
 
 const templateList = ref([])
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const visible = ref(false)
 const perProps = ref({
   pageNum: 1, // 当前页
@@ -103,13 +102,6 @@ const getMiniPageList = () => {
     }
   }).then((data) => {
     visible.value = true
-    data.list.forEach(item => {
-      if (!item.image) {
-        item.image = ''
-      } else if (item.image.indexOf('http') < 0) {
-        item.image = resourcesUrl + item.image
-      }
-    })
     templateList.value = data.list
     perProps.value.total = data.total
   })

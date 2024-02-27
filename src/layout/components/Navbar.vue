@@ -13,16 +13,16 @@
       <!-- 1.左边部分 -->
       <div class="left-menu">
         <img
-          v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon && webConfig.bsTopBarIcon !== resourcesUrl"
+          v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon"
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="webConfig.bsTopBarIcon"
+          :src="checkFileUrl(webConfig.bsTopBarIcon)"
           alt=""
           @error="webConfig.bsTopBarIcon=''"
         >
         <img
           v-else
           style="height: 18px;width:59px;margin-right: 10px"
-          :src="webConfig.bsTopBarIcon"
+          :src="checkFileUrl(webConfig.bsTopBarIcon)"
           alt=""
         >
         <a
@@ -139,7 +139,6 @@ import { Base64 } from 'js-base64'
 import { mallUserStore } from '@/stores/modules/mall-user.js'
 
 const updatePasswordVisible = ref(false)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const webConfigStore = useWebConfigStore()
 const webConfig = computed(() => webConfigStore.webConfig)
 
@@ -194,19 +193,49 @@ const changeMallName = () => {
 }
 const platformIdentifying = () => {
   getPlatformIdentifying().then(res => {
-    navigator.clipboard.writeText(res).then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-        duration: 1000
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(res).then(() => {
+        ElMessage({
+          message: '复制成功',
+          type: 'success',
+          duration: 1000
+        })
+      }).catch(() => {
+        ElMessage({
+          message: '复制失败',
+          type: 'error',
+          duration: 1000
+        })
       })
-    }).catch(() => {
-      ElMessage({
-        message: '复制失败',
-        type: 'error',
-        duration: 1000
-      })
-    })
+    } else {
+      // 创建text area
+      const textArea = document.createElement('textarea')
+      textArea.value = res
+      // 使text area不在viewport，同时设置不可见
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      new Promise((resolve, reject) => {
+        // 执行复制命令并移除文本框
+        document.execCommand('copy') ? resolve() : reject(new Error('出错了'))
+        textArea.remove()
+      }).then(
+        () => {
+          ElMessage({
+            message: '复制成功',
+            type: 'success',
+            duration: 1000
+          })
+        },
+        () => {
+          ElMessage({
+            message: '复制失败',
+            type: 'error',
+            duration: 1000
+          })
+        }
+      )
+    }
   })
 }
 const updatePasswordRef = ref(null)
@@ -330,7 +359,8 @@ const onReconnect = () => {
 }
 
 const openUrl = () => {
-  const win = window.open(location.origin + '/im-box', 'view_window', 'noopener,noreferrer')
+  const path = router.resolve({ path: '/im-box' })
+  const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
   localStorage.removeItem('cloudVsNotificationMessage')
   if (win) win.opener = null
   message.value = null
@@ -350,7 +380,8 @@ const popNotice = (user, content) => {
           notificationDebounce.value = 1
           localStorage.removeItem('cloudVsNotificationMessage')
           message.value = null
-          const win = window.open(location.href.split('#')[0] + '#/im-box', 'view_window', 'noopener,noreferrer')
+          const path = router.resolve({ path: '/im-box' })
+          const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
           if (win) win.opener = null
           // 具体操作
         }, 500)

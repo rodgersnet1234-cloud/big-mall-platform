@@ -13,7 +13,7 @@
       <div class="login-img">
         <img
           v-if="webConfig.loginBgImg"
-          :src="webConfig.loginBgImg"
+          :src="checkFileUrl(webConfig.loginBgImg)"
           @error="webConfig.loginBgImg=''"
         >
         <img

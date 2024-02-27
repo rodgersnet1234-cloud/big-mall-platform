@@ -13,7 +13,7 @@
       <div class="login-img">
         <img
           v-if="webConfig.loginBgImg"
-          :src="webConfig.loginBgImg"
+          :src="checkFileUrl(webConfig.loginBgImg)"
           @error="webConfig.loginBgImg=''"
         >
         <img
@@ -132,9 +132,9 @@
               ref="passwordRef"
               v-model="password"
               :type="passwordType"
-              maxlength="16"
+              maxlength="20"
               autocomplete="new-password"
-              placeholder="请设置6-16位登录密码"
+              placeholder="请设置8-20位登录密码"
               @blur="validateTrim()"
             >
             <div class="conceal-icon">
@@ -170,7 +170,7 @@
               v-if="passwordErrorTips"
               class="err-tips"
             >
-              登录密码长度为6-16位
+              密码由字母、数字和特殊符号三种字符组成8-20位半角字符，区分大小写
             </div>
             <div
               v-if="passwordErrorTips2"
@@ -257,11 +257,12 @@
 </template>
 
 <script setup>
-import { isMobile, isUserName, validPassword, noSpacesBothSides, validNoEmptySpace } from '@/utils/validate'
+import { isMobile, isUserName, validPassword, noSpacesBothSides, validNoEmptySpace, validPassword2 } from '@/utils/validate'
 import { getRegisterCode, register, getMerchantRegisterProtocol } from '@/api/auth/auth'
 import { encrypt } from '@/utils/crypto'
 import { Debounce } from '@/utils/debounce'
 import { ElMessage } from 'element-plus'
+
 const router = useRouter()
 const passwordType = ref('password')
 const mallNameEmptyTips = ref(false)
@@ -387,12 +388,11 @@ const validateTrim = () => {
     passwordErrorTips2.value = true
     return
   }
-  // 密码长度
-  if (!validPassword(password.value)) {
+  // 密码验证
+  if (!validPassword2(password.value)) {
     passwordErrorTips.value = true
   }
 }
-
 // 多选框变化
 const changeCheckbox = (val) => {
   checked.value = val

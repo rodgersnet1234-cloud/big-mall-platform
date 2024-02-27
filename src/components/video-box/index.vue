@@ -92,7 +92,7 @@
                   @click.prevent.stop="onClickListImage(img)"
                 >
                   <video
-                    :src="resourcesUrl + img.filePath"
+                    :src="checkFileUrl(img.filePath)"
                     class="showVideo"
                     controls="controls"
                   />
@@ -224,9 +224,9 @@
                   <video
                     v-if="item.url"
                     class="upShowVideo"
-                    :src="item.url"
+                    :src="checkFileUrl(item.url)"
                     controls="controls"
-                    style="width:175px;height:87.5px;"
+                    style="width:175px;height:88px;"
                   />
                   <!-- 显示查看和删除的按钮弹窗 -->
                   <div
@@ -244,7 +244,7 @@
                   :file-list="uploadFiles"
                   class="upload-img-preview"
                   list-type="picture-card"
-                  accept="video/*"
+                  accept=".mp4,.mov,.wmv "
                   action=""
                   :multiple="true"
                   :http-request="httpRequest"
@@ -358,7 +358,6 @@ const dataForm = reactive({
   host: '',
   attachFileGroupId: 0
 })
-const resourcesUrl = ref(import.meta.env.VITE_APP_RESOURCES_URL)
 const groupForm = reactive({
   attachFileGroupId: '', // 选择分组的值
   name: '' // 分组名称
@@ -575,6 +574,17 @@ const onConfirm = () => {
 let isSubmit = false
 // 视频预上传
 const handleAvatarChange = (file, files) => {
+  if (['video/mp4', 'video/mov', 'video/wmv'].indexOf(file.raw.type) === -1) {
+    uploadRef.value.handleRemove(file)
+    ElMessage.error('请上传正确的视频格式')
+    return false
+  }
+  const isSize = file.size / (1024 * 1024) < 20
+  if (!isSize) {
+    ElMessage.error('视频大小不能超过20m')
+    uploadRef.value.handleRemove(file)
+    return false
+  }
   uploadFiles.value = files
   if (!isSubmit) {
     const videoSrc = URL.createObjectURL(file.raw)
@@ -850,6 +860,7 @@ const message = (msg, isInfo) => {
 
 // 删除预览视频
 const preDeleteVideo = (index) => {
+  uploadRef.value.handleRemove(videoList.value[index])
   videoList.value.splice(index, 1)
 }
 

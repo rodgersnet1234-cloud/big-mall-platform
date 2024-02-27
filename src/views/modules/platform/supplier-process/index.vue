@@ -138,42 +138,6 @@
                       />
                     </el-form-item>
                     <el-form-item
-                      label="联系邮箱"
-                      prop="email"
-                    >
-                      <el-input
-                        v-model.trim="supplierDetail.email"
-                        placeholder="请输入常用联系邮箱"
-                        maxlength="30"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="所在地区"
-                      prop="currentAddr"
-                    >
-                      <el-cascader
-                        ref="cascaderAddrRef"
-                        v-model="supplierDetail.currentAddr"
-                        :options="addrList"
-                        :props="addrListTreeProps"
-                        style="width:100%"
-                        placeholder="请选择所在地区"
-                        @change="handleAddrChange"
-                      />
-                    </el-form-item>
-                    <el-form-item
-                      label="详细地址"
-                      prop="detailAddress"
-                    >
-                      <el-input
-                        v-model="supplierDetail.detailAddress"
-                        placeholder="请输入50字以内的详细地址"
-                        maxlength="50"
-                      />
-                    </el-form-item>
-                  </div>
-                  <div class="right-info">
-                    <el-form-item
                       label="供应商简介"
                       prop="intro"
                     >
@@ -204,7 +168,7 @@
               label-width="auto"
               @submit.prevent
             >
-              <div class="ci-wrapper">
+              <div class="ci-wrapper company">
                 <div class="left-info">
                   <el-form-item
                     label="统一社会信用代码"
@@ -532,7 +496,7 @@
                 <span class="txt-bold">{{ bankCartInfoForm.data.length }}</span>
                 个结算账户，最多可添加
                 <span class="txt-bold">5</span>
-                个结算账户，如需修改结算账户请在商家端供应商信息模块操作
+                个结算账户，如需修改结算账户请在供应商端供应商信息模块操作
               </div>
               <div
                 class="edit-btn"
@@ -871,9 +835,7 @@
 <script setup>
 import categoryAddOrUpdate from './components/category-add-or-update/index.vue'
 import brandAddOrUpdate from './components/brand-add-or-update/index.vue'
-import * as addrApi from '@/api/delivery/transport'
 import * as api from '@/api/platform/audit-supplier'
-import { treeDataTranslate } from '@/utils'
 import { isMobile, isEmail, isCreditCode, isUserName, validNoEmptySpace, noSpacesBothSides, checkIDCard, validPassword2 } from '@/utils/validate'
 import moment from 'moment'
 import { encrypt } from '@/utils/crypto'
@@ -886,25 +848,10 @@ const applyStep = ref(1)
 // 是否不可以编辑信息, 当申请状态为待审核时不能编辑
 const isNotEdit = ref(false)
 
-// 第一步---基本信息
-const addrList = ref([])
-const addrListTreeProps = reactive({
-  value: 'areaId',
-  label: 'areaName'
-})
 const supplierDetail = reactive({
   supplierName: '',
   contactName: '',
   contactPhone: '',
-  email: '',
-  province: '',
-  provinceId: '',
-  city: '',
-  cityId: '',
-  area: '',
-  areaId: '',
-  currentAddr: '',
-  detailAddress: '',
   supplierLogo: '',
   intro: '',
   type: ''
@@ -1052,17 +999,6 @@ const shopDetailRule = reactive({
   contactPhone: [
     { required: true, message: '请填写联系方式', trigger: 'blur' },
     { validator: validateMobile, trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: '联系邮箱不能为空', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'blur' }
-  ],
-  currentAddr: [
-    { required: true, message: '请选择所在地区', trigger: ['blur', 'change'] }
-  ],
-  detailAddress: [
-    { required: true, message: '详细地址不能为空', trigger: 'blur' },
-    { validator: validEmptyTab, trigger: 'blur' }
   ],
   supplierLogo: [
     { required: true, message: '请上传供应商Logo', trigger: ['blur', 'change'] }
@@ -1262,37 +1198,6 @@ const shopUserRegisterRule = reactive({
 
 const allinPayStore = useAllinpayStore()
 const paySettlementType = allinPayStore.paySettlementType // 是否开启通联支付 1：开启 0：关闭
-
-onMounted(() => {
-  // 请求地址列表
-  queryAddressList()
-})
-
-/**
- * 请求地址列表
- */
-const queryAddressList = () => {
-  addrApi.listAreaOfEnable({}).then(data => {
-    addrList.value = treeDataTranslate(data, 'areaId', 'parentId')
-  })
-}
-
-const cascaderAddrRef = ref(null)
-
-/**
- * 监听地址改变
- */
-const handleAddrChange = (value) => {
-  if (value.length > 0) {
-    const labels = cascaderAddrRef.value.getCheckedNodes()[0].pathLabels
-    supplierDetail.province = labels[0]
-    supplierDetail.provinceId = value[0]
-    supplierDetail.city = labels[1]
-    supplierDetail.cityId = value[1]
-    supplierDetail.area = labels[2]
-    supplierDetail.areaId = value[2]
-  }
-}
 
 const endTimeRef = ref(null)
 const focusEndTime = () => {

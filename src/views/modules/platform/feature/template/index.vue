@@ -91,7 +91,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 const vPermission = checkPermission
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const perProps = reactive({
   pageNum: 1, // 当前页
   pageSize: 10, // 每页显示多少条
@@ -115,13 +114,6 @@ const getMiniPageList = () => {
       type: 2 // 1表示pc端，2表示移动端
     }
   }).then((data) => {
-    data.list.forEach(item => {
-      if (!item.image) {
-        item.image = ''
-      } else if (item.image.indexOf('http') < 0) {
-        item.image = resourcesUrl + item.image
-      }
-    })
     templateList.value = data.list
     perProps.total = data.total
   })

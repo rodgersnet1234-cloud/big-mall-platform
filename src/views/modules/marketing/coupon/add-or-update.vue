@@ -298,7 +298,7 @@
               :key="index"
               :body-style="{ padding: '0px' }"
               class="prod-item"
-              style="height: 160px;width: 120px"
+              style="height: 140px;width: 120px"
             >
               <ImgShow
                 :src="item.mainImgUrl"
@@ -433,8 +433,8 @@ defineExpose({ init })
   .card-prod-bottom {
     position: relative;
     text-align: left;
-    top: -15px;
     .card-prod-name {
+      line-height: 32px;
       margin: auto;
       padding: 0 4px;
       overflow: hidden;

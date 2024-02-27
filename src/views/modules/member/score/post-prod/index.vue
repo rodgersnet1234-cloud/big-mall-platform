@@ -196,12 +196,14 @@
               <div class="sku-table">
                 <!-- sku表格 -->
                 <sku-table
+                  v-if="isHaveDefaultWarehouse"
                   :data="salesAttrs"
                   :flatten="flatten"
                   :is-no-sku-value="isNoSkuValue"
                   :spu-id="parseInt(dataForm.spuId)"
                   :is-category-id="!!dataForm.shopCategoryId"
                   :is-score="isScore"
+                  :default-warehouse="defaultWarehouse"
                   @on-change-data="handleChangeData"
                 />
               </div>
@@ -411,6 +413,19 @@ const vPermission = checkPermission
 
 const route = useRoute()
 const router = useRouter()
+
+const defaultWarehouse = ref('')
+const isHaveDefaultWarehouse = ref(false)
+// 未获取默认仓库id，则需要获取默认仓库id
+const getDefaultWarehouse = () => {
+  if (!defaultWarehouse.value) {
+    api.getDefaultWarehouseId().then((res) => {
+      isHaveDefaultWarehouse.value = true
+      defaultWarehouse.value = res.warehouseId
+    })
+  }
+}
+getDefaultWarehouse()
 
 const rules = reactive({
   nameZh: [
@@ -829,8 +844,6 @@ let skuTableData = [] // sku表格返回数据
 // SkuTable返回数据
 const handleChangeData = (data) => {
   skuTableData = data
-  const salePrices = []
-  const scorePrices = []
   const marketPrices = []
   let totalStock = 0
   skuTableData?.forEach((sku) => {
@@ -840,13 +853,35 @@ const handleChangeData = (data) => {
     if (sku.stock) {
       totalStock += Number(sku.stock) // 库存累加
     }
-    salePrices.push(sku.priceFee) // 售价
+
+    if ((!sku.stockPointList || !sku.stockPointList.length)) {
+      sku.stockPointList = [{
+        stock: 0,
+        stockPointId: defaultWarehouse.value,
+        stockPointType: 1,
+        type: 0
+      }]
+    }
     marketPrices.push(sku.marketPriceFee) // 市场价
-    scorePrices.push(sku.scoreFee)
   })
-  dataForm.value.priceFee = Math.min.apply(null, salePrices) // 最低价-售价
+
+  const minPriceFeeList = JSON.parse(JSON.stringify(skuTableData)).sort((a, b) => {
+    return a.priceFee - b.priceFee
+  })
+  dataForm.value.priceFee = minPriceFeeList[0].priceFee // 最低价-售价
+
+  const minScoreFeeList = minPriceFeeList.filter(el => el.priceFee === dataForm.value.priceFee)
+
+  if (minScoreFeeList.length === 1) {
+    dataForm.value.scoreFee = minScoreFeeList[0].scoreFee // 最低积分
+  } else {
+    minScoreFeeList.sort((a, b) => {
+      return a.scoreFee - b.scoreFee
+    })
+    dataForm.value.scoreFee = minScoreFeeList[0].scoreFee // 最低积分
+  }
+
   dataForm.value.marketPriceFee = Math.min.apply(null, marketPrices) // 最低价-市场价
-  dataForm.value.scoreFee = Math.min.apply(null, scorePrices) // 最低价-市场价
   dataForm.value.totalStock = totalStock // 总库存
 }
 // 规格组件相关 end

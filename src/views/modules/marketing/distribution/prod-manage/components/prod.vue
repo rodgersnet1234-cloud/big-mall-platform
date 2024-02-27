@@ -101,21 +101,10 @@
             align="center"
           >
             <template #default="{ row }">
-              <span
-                v-if="row.distributionInfo.state === 0"
-              >商家下架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 1"
-                type="success"
-              >商家上架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 2"
-                type="danger"
-              >违规下架</span>
-              <span
-                v-else-if="row.distributionInfo.state === 3"
-                type="warning"
-              >待审核</span>
+              <span v-if="row.distributionInfo.state === 0">商家下架</span>
+              <span v-else-if="row.distributionInfo.state === 1">商家上架</span>
+              <span v-else-if="row.distributionInfo.state === 2">违规下架</span>
+              <span v-else-if="row.distributionInfo.state === 3">待审核</span>
             </template>
           </el-table-column>
 
@@ -168,6 +157,7 @@
             <template #default="{ row }">
               <div class="table-btn-con">
                 <el-button
+                  v-permission="['distribution:spu:get:offline']"
                   link
                   type="primary"
                   @click="onProdInfo(row)"
@@ -176,7 +166,7 @@
                 </el-button>
                 <el-button
                   v-if="row.distributionInfo.state <= 1"
-                  v-permission="['marketing:distributionSpu:offShelf']"
+                  v-permission="['distribution:spu:offline']"
                   link
                   type="primary"
                   @click="onOfflineManage(row, 'offline')"
@@ -185,7 +175,7 @@
                 </el-button>
                 <el-button
                   v-if="row.distributionInfo.state >= 2"
-                  v-permission="['marketing:distributionSpu:moderated']"
+                  v-permission="['distribution:spu:audit']"
                   link
                   type="primary"
                   @click="onOfflineManage(row, 'offlineManage')"
@@ -193,7 +183,7 @@
                   下线管理
                 </el-button>
                 <el-button
-                  v-permission="['marketing:distributionSpu:delete']"
+                  v-permission="['distribution:spu:delete']"
                   link
                   type="primary"
                   @click="onDelete(row)"

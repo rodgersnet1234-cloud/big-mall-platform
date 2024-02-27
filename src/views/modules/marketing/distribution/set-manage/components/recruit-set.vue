@@ -5,7 +5,7 @@
     </div>
     <el-form
       ref="dataFormRef"
-      :label-width="language === 'en' ? '160px' : '80px'"
+      :label-width="language === 'en' ? '160px' : '100px'"
       class="set-form"
       label-position="right"
       :rules="dataRule"
@@ -13,7 +13,7 @@
       @submit.prevent
     >
       <el-form-item
-        label="推广开关"
+        label="推广开关 :"
         prop="state"
       >
         <el-radio-group v-model="dataForm.state">
@@ -26,7 +26,7 @@
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="封面图片">
+      <el-form-item label="封面图片 :">
         <div class="cover-photo">
           <img-upload v-model="dataForm.pic" />
           <div
@@ -40,7 +40,7 @@
       </el-form-item>
 
       <el-form-item
-        label="推广标题"
+        label="推广标题 :"
         prop="title"
       >
         <el-input
@@ -52,7 +52,7 @@
       </el-form-item>
 
       <el-form-item
-        label="推广内容"
+        label="推广内容 :"
         prop="content"
       >
         <tiny-mce
@@ -136,6 +136,8 @@ const getData = () => {
     if (data) {
       setDate(data)
     }
+  }).finally(() => {
+    tinymceFlag.value = Date.now() + 1
   })
 }
 

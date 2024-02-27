@@ -2,15 +2,7 @@
   <div class="Mall4j page-login login-container">
     <div class="login-frame">
       <div class="login-img">
-        <img
-          v-if="isLoginBgImg"
-          :src="webConfig.loginBgImg"
-          @error="isLoginBgImg=false"
-        >
-        <img
-          v-else
-          src="@/assets/website-config/login-bg.jpg"
-        >
+        <img :src="checkFileUrl(webConfig.loginBgImg)">
       </div>
       <div class="login-info">
         <div class="title">
@@ -27,6 +19,7 @@
               <el-input
                 v-model="loginInfo.userName"
                 v-input-rule
+                :maxlength="16"
                 :placeholder="$t('login.username')"
               />
             </el-form-item>
@@ -83,7 +76,8 @@
 </template>
 <script setup>
 import * as api from '@/api/rbac/web-config'
-const webConfig = computed(() => useWebConfigStore().webConfig)
+const userConfig = useWebConfigStore()
+const webConfig = computed(() => userConfig.webConfig)
 // 当前语言
 const language = computed(() => useAppStore().language)
 // 登录表单
@@ -93,7 +87,6 @@ const loginInfo = reactive({
   captchaVerification: '', // 验证码
   sysType: 2
 })
-const isLoginBgImg = ref(true)
 const passwordType = ref('password')
 const passwordRef = ref(null)
 // eslint-disable-next-line no-unused-vars
@@ -132,7 +125,7 @@ const onSubmit = async formEl => {
   })
 }
 const router = useRouter()
-const redirect = ref('')
+const redirect = ref('/')
 let otherQuery = reactive({})
 
 const getOtherQuery = (query) => {

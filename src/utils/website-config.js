@@ -1,8 +1,4 @@
 // 网站配置默认信息
-
-// bsLoginLogoImg: require('@/assets/img/website-config/login-logo.png'),
-// bsLoginLogoImg: new URL('@/assets/img/website-config/login-logo.png', import.meta.url).href,
-// 网站配置默认信息
 const configDefInfo = {
   // 登录logo
   loginBgImg: new URL('@/assets/website-config/login-bg.jpg', import.meta.url).href,
@@ -28,25 +24,10 @@ const configDefInfo = {
   bsMenuTitleCloseEn: 'saas平台端'
 }
 
-// 添加图片域名
-function addDomain (path) {
-  const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-  if (!path || /^https?:\/\//.test(path)) {
-    return path
-  } else {
-    return resourcesUrl + path
-  }
-}
-
 // 格式化配置信息
 const formatConfigInfo = function (config) {
   const data = {}
   config = JSON.parse(JSON.stringify(config))
-  // 检测图片是否携带域名
-  config.loginBgImg = addDomain(config.loginBgImg)
-  config.titleImg = addDomain(config.titleImg)
-  config.bsTopBarIcon = addDomain(config.bsTopBarIcon)
-
   // 为空使用默认配置
   data.loginBgImg = config.loginBgImg || configDefInfo.loginBgImg
   data.copyrightCn = config.copyrightCn || configDefInfo.copyrightCn

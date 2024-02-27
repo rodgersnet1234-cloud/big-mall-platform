@@ -109,7 +109,7 @@ const props = defineProps({
 
 const route = useRoute()
 
-const view = ref(!(route.path === '/product/list' || route.path === '/product-insights'))
+const view = ref(!(route.path === '/product/list' || route.path === '/data-analysis/product-insights'))
 
 const hasSkuImage = ref(props.sku.leaf ? props.sku.leaf.some(item => item.imgUrl) : false)
 

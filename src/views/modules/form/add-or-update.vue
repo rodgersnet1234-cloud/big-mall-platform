@@ -89,7 +89,7 @@
           range-separator="-"
           :start-placeholder="$t('date.start')"
           :end-placeholder="$t('date.end')"
-          :shortcuts="pickerOptions.shortcuts"
+          :shortcuts="pickerOptions.calendarMonth"
           :clearable="false"
           @input="dateRangeChange"
         />
@@ -98,7 +98,7 @@
           v-else-if="dataForm.timeType === 2"
           v-model="dateWeek"
           type="week"
-          format="YYYY [年第] ww [周]"
+          :format="weekRangeFormat"
           :clearable="false"
           placeholder="选择周"
           @change="Week"
@@ -123,7 +123,7 @@
             <el-tooltip
               class="item"
               effect="light"
-              :content="'如选择近1天，则该报表会自动更新为当前天的数据，近2天，则该报表会自动更新为当前天 + 昨天的数据'"
+              :content="timeRangeTips"
               placement="top"
             >
               <span>
@@ -230,6 +230,24 @@ const dataForm = ref({
   seq: 1
 })
 const dateWeek = ref('')
+// 自然周默认格式
+const weekRangeFormat = ref('')
+watch(() => dateWeek.value, (newVal) => {
+  const startD = moment(newVal).format('YYYY-MM-DD')
+  const endD = moment(startD).add(6, 'days').endOf('day').format('YYYY-MM-DD')
+  weekRangeFormat.value = startD + ' - ' + endD
+})
+
+const timeRangeTips = computed(() => {
+  if (dataForm.value.timeType === 1) {
+    return '如选择近1天，则该报表会自动更新为当前天的数据，近2天，则该报表会自动更新为当前天 + 昨天的数据'
+  } else if (dataForm.value.timeType === 2) {
+    return '如选择近1周，则该报表会自动更新为当前周的数据，近2周，则该报表会自动更新为当前周 + 上周的数据'
+  } else {
+    return '如选择近1月，则该报表会自动更新为当前月的数据，近2月，则该报表会自动更新为当前月 + 上月的数据'
+  }
+})
+
 const pickerOptions = reactive({
   shortcuts: [{
     text: '最近一周',
@@ -240,6 +258,23 @@ const pickerOptions = reactive({
       return [start, end]
     }
   }, {
+    text: '最近一个月',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+      return [start, end]
+    }
+  }, {
+    text: '最近三个月',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+      return [start, end]
+    }
+  }],
+  calendarMonth: [{
     text: '最近一个月',
     value: () => {
       const end = new Date()

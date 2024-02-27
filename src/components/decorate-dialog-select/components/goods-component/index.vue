@@ -73,7 +73,7 @@
               style="display: flex;align-items: center"
             >
               <el-image
-                :src="scope.row.mainImgUrl"
+                :src="checkFileUrl(scope.row.mainImgUrl)"
                 style="width: 48px;height: 48px;margin-right: 15px"
               >
                 <template #error>
@@ -125,8 +125,7 @@
 </template>
 <script setup>
 import request from '@/utils/request'
-import { treeDataTranslate } from '@/utils'
-import { formatPrice } from '@/utils/index'
+import { treeDataTranslate, formatPrice } from '@/utils'
 
 const emit = defineEmits([
   'handleGoodsSelect'
@@ -432,7 +431,7 @@ watch(() => props.activeName, async (val) => {
       }
     }
     // 获取商品列表
-    await getGoodsListMessage('search')
+    getGoodsListMessage()
   }
 })
 </script>

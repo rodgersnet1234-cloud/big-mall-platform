@@ -54,7 +54,7 @@
           <template #default="scope">
             <div class="shopName-content">
               <el-image
-                :src="scope.row.shopLogo"
+                :src="checkFileUrl(scope.row.shopLogo)"
                 fit="fill"
               >
                 <template #error>
@@ -338,7 +338,7 @@ watch(() => props.activeName, (val) => {
       showEchData = JSON.parse(JSON.stringify(props.echoDataList))
     }
     // 获取店铺列表
-    getStoreList('search')
+    getStoreList()
   }
 })
 </script>

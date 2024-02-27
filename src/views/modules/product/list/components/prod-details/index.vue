@@ -145,8 +145,8 @@
                   :key="index"
                   class="rotating-img"
                   style="width: 100px; height: 100px"
-                  :src="img"
-                  :preview-src-list="[img]"
+                  :src="checkFileUrl(img)"
+                  :preview-src-list="checkFileUrl(dataForm.imgUrls)"
                 >
                   <template #error>
                     <img
@@ -168,7 +168,7 @@
               </div>
               <div class="part-form-item">
                 <video
-                  :src="resourcesUrl + dataForm.video"
+                  :src="checkFileUrl(dataForm.video)"
                   controls="controls"
                   class="video-box"
                 />
@@ -332,7 +332,7 @@
 
 <script setup>
 import * as api from '@/api/product/prod-info.js'
-import { getUUID, formatHtml, checkFileUrl } from '@/utils/index.js'
+import { getUUID, formatHtml } from '@/utils/index.js'
 import { transportGet } from '@/api/distribution-manage/transport.js'
 import skuBlock from '@/components/sku/SkuBlock/index.vue'
 import skuTable from '@/components/sku/SkuTable/index.vue'
@@ -342,7 +342,6 @@ import categoryGroup from '@/components/category-group/index.vue'
 import picturePreview from '@/components/picture-preview/index.vue'
 import Big from 'big.js'
 import { ElMessage } from 'element-plus'
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 
 const route = useRoute()
 const dataForm = ref({
@@ -407,13 +406,7 @@ const init = (spuId) => {
       }, 0)
       // 商品轮播图
       if (data.imgUrls) {
-        const imgUrls = data.imgUrls.split(',')
-        const imgs = []
-        imgUrls.forEach((img) => {
-          const image = checkFileUrl(img)
-          imgs.push(image)
-        })
-        dataForm.value.imgUrls = imgs
+        dataForm.value.imgUrls = data.imgUrls.split(',')
       } else {
         dataForm.value.imgUrls = []
       }

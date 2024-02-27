@@ -19,7 +19,7 @@
         class="bg-pic has-bg"
       >
         <el-image
-          :src="goodsForm.bgImg"
+          :src="checkFileUrl(goodsForm.bgImg)"
           fit="fill"
         >
           <template #error>
@@ -230,7 +230,6 @@ const handleRemove = (index) => {
 }
 // 添加背景图
 const elxImgboxRef = ref(null)
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL // 服务地址
 const handAddBg = () => {
   elxImgboxRef.value?.init(1, 1)
 }
@@ -240,7 +239,7 @@ const hanldeBgRemove = () => {
 }
 // 选择图片之后的回调
 const refreshPic = (imagePath) => {
-  goodsForm.value.bgImg = resourcesUrl + imagePath
+  goodsForm.value.bgImg = checkFileUrl(imagePath)
 }
 // 验证信息
 const handleValidate = () => {

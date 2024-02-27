@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="component-live-add-or-update">
     <el-dialog
       v-model="visible"
       :title="$t('liveRoom.viewLRoomInfo')"
       :close-on-click-modal="false"
-      width="60%"
+      style="min-width:950px"
     >
       <el-form
         ref="dataFormRef"
@@ -157,14 +157,14 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item>
-          <el-button
-            @click="back()"
-          >
-            取消
-          </el-button>
-        </el-form-item>
       </el-form>
+      <div class="btn-box">
+        <el-button
+          @click="back()"
+        >
+          取消
+        </el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -296,6 +296,12 @@ const back = () => {
       text-overflow:ellipsis;
       white-space: nowrap;
     }
+  }
+}
+.component-live-add-or-update{
+  .btn-box{
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>

@@ -148,7 +148,7 @@
       </div>
     </div>
     <div
-      v-if="refundDetail.refundTime"
+      v-if="refundDetail.returnMoneySts !== -1 && refundDetail.refundTime"
       class="item"
     >
       <div class="title">
@@ -160,7 +160,7 @@
       </div>
     </div>
     <div
-      v-if="refundDetail.decisionTime"
+      v-if="refundDetail.returnMoneySts !== -1 && refundDetail.decisionTime"
       class="item"
     >
       <div class="title">
@@ -296,17 +296,13 @@ const applyInterventionImgs = computed(() => {
 
 // 拒绝凭证
 const rejectImgs = computed(() => {
-  return props.refundDetail.shopImgUrls?.split(',').map(item => {
-    return import.meta.env.VITE_APP_RESOURCES_URL + item
-  })
+  return props.refundDetail.shopImgUrls?.split(',')
 })
 
 // 图片处理
 const onHandleImgs = (imgStr) => {
   if (imgStr) {
-    return imgStr.split(',').map(url => {
-      return import.meta.env.VITE_APP_RESOURCES_URL + url
-    })
+    return imgStr.split(',')
   }
   return []
 }

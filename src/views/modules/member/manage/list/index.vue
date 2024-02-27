@@ -239,7 +239,7 @@
               >
               <img
                 v-else
-                :src="(row.pic).indexOf('http')===-1 ? resourcesUrl + row.pic : row.pic"
+                :src="checkFileUrl(row.pic)"
                 class="img"
                 style="width:60px;height:60px"
                 alt=""
@@ -566,7 +566,6 @@ const formatPhoneNumber = (value) => {
 const useAllinpay = useAllinpayStore()
 const paySettlementType = useAllinpay.paySettlementType // 结算方式 1:通联 0：非通联
 let tempSearchForm = null // 保存上次点击查询的请求条件
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 // 查询的参数
 const pageQuery = ref({
   pageSize: 10,

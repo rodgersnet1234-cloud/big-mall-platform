@@ -100,7 +100,6 @@
         <div
           v-if="options.activeTab==='pick'"
           class="pick-block"
-          name="pick"
         >
           <div class="elx-main elx-img-list">
             <div
@@ -136,10 +135,10 @@
                 @click.prevent.stop="onClickListImage(img)"
               >
                 <video
-                  :src="resourcesUrl + img.filePath"
+                  :src="checkFileUrl(img.filePath)"
                   controls="controls"
                   class="showVideo"
-                  style="width:175px;height:87.5px;"
+                  style="width:175px;height:88px;"
                 />
               </div>
               <div
@@ -199,7 +198,6 @@
         <div
           v-if="options.activeTab==='upload'"
           class="upload-block"
-          name="upload"
         >
           <div class="elx-main">
             <div class="upload-title">
@@ -250,9 +248,9 @@
                 <video
                   v-if="item.url"
                   class="upShowVideo"
-                  :src="item.url"
+                  :src="checkFileUrl(item.url)"
                   controls="controls"
-                  style="width:175px;height:87.5px;"
+                  style="width:175px;height:88px;"
                 />
                 <!-- 显示查看和删除的按钮弹窗 -->
                 <div
@@ -271,7 +269,7 @@
                 ref="uploadRef"
                 class="upload-img-preview"
                 list-type="picture-card"
-                accept="video/*"
+                accept=".mp4,.mov,.wmv "
                 action=""
                 :multiple="true"
                 :http-request="httpRequest"
@@ -390,7 +388,7 @@
       >
         <el-form-item :label="`视频`">
           <video
-            :src="(imageObject.filePath).indexOf('http')===-1 ? resourcesUrl + imageObject.filePath : imageObject.filePath"
+            :src="checkFileUrl(imageObject.filePath)"
             class="changebox-img"
             controls="controls"
           />
@@ -496,7 +494,7 @@
 <script setup>
 import { getCurrentInstance } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, aliImgUpdate, awsImgUpdate } from '@/api/biz/oss'
+import { getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup, deleteFileGroup, awsImgUpdate } from '@/api/biz/oss'
 import { save, page, updateFileName, deleteFile } from '@/api/biz/attach-file'
 import { batchDeleteVedio, batchMoveVedio } from '@/api/resource/video-store'
 
@@ -520,7 +518,6 @@ const hideUploadEdit = ref(false) // 上传按钮显示
 const attachFiles = ref([])
 const fileIndex = ref(0) // 视频位置索引，用于获取文件数组中当前上传文件的位置
 const completeCount = ref(0) // 传输完成数量，用于控制文件全部上传成功才进入onSuccess方法
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const showGroupVisible = ref(false) // 选择/创建分组弹窗
 const showGroupType = ref(0) // 0选择分组 1创建分组 2修改分组
 const groupForm = ref({
@@ -572,19 +569,11 @@ const rules = computed(() => {
   }
 })
 watch(() => fileIds.value, (newValue) => {
-  if (newValue.length === imgRes.value.length && imgRes.value.length !== 0) {
-    checkedAll.value = true
-  } else {
-    checkedAll.value = false
-  }
+  checkedAll.value = newValue.length === imgRes.value.length && imgRes.value.length !== 0
 }, { deep: true })
 
 watch(() => imgRes.value, (newValue) => {
-  if (newValue.length !== 0 && newValue.filter(element => fileIds.value.includes(element.fileId)).length === newValue.length) {
-    checkedAll.value = true
-  } else {
-    checkedAll.value = false
-  }
+  checkedAll.value = newValue.length !== 0 && newValue.filter(element => fileIds.value.includes(element.fileId)).length === newValue.length
 }, { deep: true })
 
 onMounted(() => {
@@ -786,7 +775,7 @@ const AllImgs = () => {
       fileIds.value.push(img.fileId)
       img.selected = true
     })
-    const showVideoList = document.querySelectorAll('showVideo')
+    const showVideoList = document.querySelectorAll('.showVideo')
     showVideoList.forEach((item) => {
       if (!item.paused) {
         item.pause()
@@ -879,7 +868,7 @@ const onDeleteFileGroup = (groupId) => {
 let tempSearchForm = null
 /**
  * 加载视频列表数据
- * @param page
+ * @param newData
  */
 const loadListImage = (newData = false) => {
   if (newData || !tempSearchForm) {
@@ -1023,7 +1012,7 @@ const onClickListImage = (img) => {
   }
   files.value.push(JSON.parse(JSON.stringify(img)))
   fileIds.value.push(img.fileId)
-  const showVideoList = document.querySelectorAll('showVideo')
+  const showVideoList = document.querySelectorAll('.showVideo')
   showVideoList.forEach((item) => {
     if (!item.paused) {
       item.pause()
@@ -1071,6 +1060,17 @@ const onPageNumChange = (page) => {
 // 视频预上传
 let fileNames = []
 const onUploadChange = (file, fileList) => {
+  if (['video/mp4', 'video/mov', 'video/wmv'].indexOf(file.raw.type) === -1) {
+    uploadRef.value.handleRemove(file)
+    ElMessage.error('请上传正确的视频格式')
+    return false
+  }
+  const isSize = file.size / (1024 * 1024) < 20
+  if (!isSize) {
+    ElMessage.error('视频大小不能超过20m')
+    uploadRef.value.handleRemove(file)
+    return false
+  }
   fileNames = fileList?.map((item) => {
     return item.name
   }).join(',')
@@ -1078,7 +1078,7 @@ const onUploadChange = (file, fileList) => {
   if (isSubmit.value) {
     return
   }
-  const showVideoList = document.querySelectorAll('upShowVideo')
+  const showVideoList = document.querySelectorAll('.upShowVideo')
   if (fileList.length >= 20) {
     hideUploadEdit.value = true
   }
@@ -1226,11 +1226,7 @@ const uploadTips = () => {
   if (uploadFileNum > 0) {
     tips.push($t('biz.videobox.soonUpload') + uploadFileNum + $t('biz.videobox.unit'))
   }
-  if (uploadFileNum >= options.limit) {
-    uploadFileFlag.value = true
-  } else {
-    uploadFileFlag.value = false
-  }
+  uploadFileFlag.value = uploadFileNum >= options.limit
   tips.push($t('biz.videobox.remainder') + (options.limit - files.value.length - uploadFileNum) + $t('biz.videobox.unit') + $t('biz.videobox.upload'))
 
   return tips.join('，')
@@ -1238,9 +1234,6 @@ const uploadTips = () => {
 
 /**
  * 上传错误处理
- * @param err
- * @param file
- * @param fileList
  */
 const onUploadError = () => {
   message($t('biz.videobox.maxSelect') + uploadNumberLimit() + $t('biz.videobox.unit') + $t('biz.videobox.upload'))
@@ -1301,6 +1294,7 @@ const message = (msg, isInfo) => {
 
 // 删除预览视频
 const preDeleteVideo = (index) => {
+  uploadRef.value.handleRemove(videoList.value[index])
   videoList.value.splice(index, 1)
   // upload.uploadFilesRef.value?.splice(index, 1)
   setTimeout(() => {

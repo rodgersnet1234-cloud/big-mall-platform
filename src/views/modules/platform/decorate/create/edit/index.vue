@@ -616,6 +616,7 @@ const addComponent = (item) => {
       showLogo: 0,
       showCategory: 0,
       showSearch: 0,
+      showHotWord: 0,
       showNavs: 0,
       navList: [],
       bgUrl: ''

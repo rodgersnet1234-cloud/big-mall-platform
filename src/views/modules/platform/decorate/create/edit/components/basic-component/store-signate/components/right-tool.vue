@@ -31,6 +31,24 @@
         </el-radio-group>
       </div>
     </div>
+    <div
+      v-show="configForm.showSearch === 0"
+      class="config-items"
+    >
+      <div class="title">
+        热搜词
+      </div>
+      <div class="right-select">
+        <el-radio-group v-model="configForm.showHotWord">
+          <el-radio :label="0">
+            {{ $t(`pcdecorate.storeSignate.show`) }}
+          </el-radio>
+          <el-radio :label="1">
+            {{ $t(`pcdecorate.storeSignate.hide`) }}
+          </el-radio>
+        </el-radio-group>
+      </div>
+    </div>
     <div class="config-items">
       <div class="title">
         {{ $t(`pcdecorate.storeSignate.navsBar`) }}
@@ -199,6 +217,7 @@ const configForm = ref({
   showLogo: 0, // 平台logo是否显示
   showCategory: 0, // 全部分类是否显示
   showSearch: 0, // 搜索栏是否限时
+  showHotWord: 0, // 热搜栏是否显示
   showNavs: 0, // 导航栏是否显示
   navList: [], // 导航栏个数
   bgUrl: '' // 图片背景
@@ -222,6 +241,7 @@ watch(() => props.currentItem, (newVal) => {
         showLogo: 0,
         showCategory: 0,
         showSearch: 0,
+        showHotWord: 0,
         showNavs: 0,
         navList: [],
         bgUrl: ''
@@ -335,9 +355,8 @@ const handleAddImage = () => {
   elxImgboxRef.value?.init(1, 1)
 }
 // 选择图片之后的回调
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL // 服务地址
 const refreshPic = (imagePath) => {
-  configForm.value.bgUrl = resourcesUrl + imagePath
+  configForm.value.bgUrl = checkFileUrl(imagePath)
 }
 // 删除招牌背景图
 const handleRemmoveImage = () => {

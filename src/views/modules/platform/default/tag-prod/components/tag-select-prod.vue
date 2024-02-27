@@ -16,6 +16,7 @@
       <el-form-item :label="$t('product.spu.name')">
         <el-input
           v-model="name"
+          style="width: 190px"
           :placeholder="$t('product.spu.name')"
           clearable
         />
@@ -50,9 +51,6 @@
         </el-button>
       </el-form-item>
     </el-form>
-    <div class="tip">
-      注意：当商品少于三件时，该分组不显示
-    </div>
     <div class="prods-select-body">
       <el-table
         ref="prodTableRef"
@@ -305,13 +303,8 @@ const dialogClose = () => {
 }
 defineExpose({ init })
 </script>
-<style scoped>
-.tip {
-  color: #e43130;
-  height: 30px;
-  line-height: 30px;
-}
 
+<style scoped>
 .prods-select-body {
   height: 600px;
   overflow: auto;

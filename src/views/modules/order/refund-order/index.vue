@@ -12,7 +12,7 @@
           <el-input
             v-model="searchForm.refundId"
             :placeholder="$t('order.order.refundId')"
-            maxlength="20"
+            maxlength="19"
             clearable
           />
         </el-form-item>
@@ -70,7 +70,7 @@
           <el-input
             v-model="searchForm.orderId"
             :placeholder="$t('order.order.number')"
-            maxlength="20"
+            maxlength="19"
             clearable
           />
         </el-form-item>
@@ -231,7 +231,14 @@
               data-sts="6"
               @click="onSelectNav($event)"
             >
-              平台介入中
+              申请介入
+            </li>
+            <li
+              :class="['nav-item-li', sts === 7 ? 'selected' : '']"
+              data-sts="7"
+              @click="onSelectNav($event)"
+            >
+              介入处理
             </li>
           </ul>
           <ul class="nav-right" />
@@ -422,23 +429,26 @@
                         <span>{{ orderItem.count }}{{ $t("constant.piece") }}</span>
                       </div>
                     </div>
+                    <!-- 组合信息 -->
+                    <div
+                      v-if="orderItem.comboList"
+                      class="order-prod-item-give-con"
+                    >
+                      <combo-list
+                        :combo-list="orderItem.comboList"
+                        tag-name="【组合】"
+                      />
+                    </div>
+
                     <!-- 赠品信息 -->
                     <div
                       v-if="orderItem.giveawayList"
                       class="order-prod-item-give-con"
                     >
-                      <div
-                        v-for="(giveawayItem, giveIndex) in orderItem.giveawayList"
-                        :key="giveIndex"
-                        class="giveaway-item"
-                      >
-                        <div class="giveaway-item-name">
-                          【赠品】{{ giveawayItem.spuName }}
-                        </div>
-                        <div class="giveaway-item-sku-count">
-                          {{ giveawayItem.skuName || '' }} x{{ giveawayItem.count }}
-                        </div>
-                      </div>
+                      <combo-list
+                        :combo-list="orderItem.giveawayList"
+                        tag-name="【赠品】"
+                      />
                     </div>
                   </div>
                 </div>
@@ -536,15 +546,17 @@
                   v-if="orderRefund.platformInterventionStatus && orderRefund.platformInterventionStatus!==-1"
                   class="item"
                 >
-                  <!-- 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功 -->
+                  <!-- 平台介入状态 -1.没有介入 1.用户申请介入 2.平台同意介入 3.平台拒绝介入 5.平台同意退款成功 7.平台介入处理中 -->
                   <span>{{
                     [
                       "",
-                      '平台介入中',
-                      '平台介入中',
+                      '申请介入',
+                      '',
                       '退款关闭',
                       '',
-                      '退款成功'
+                      '退款成功',
+                      '',
+                      '介入处理'
                     ][orderRefund.platformInterventionStatus]
                   }}</span>
                 </div>
@@ -639,7 +651,8 @@
 import moment from 'moment'
 import * as api from '@/api/order/order-refund'
 import { formatPrice } from '@/utils/index.js'
-import OrderInfo from '../order/components/order-info.vue'
+import OrderInfo from '../order/components/order-info/index.vue'
+import Pagination from '@/components/pagination/index.vue'
 import { useRouter } from 'vue-router'
 
 const defaultTime = [
@@ -666,7 +679,10 @@ const options = [{
   label: $t('order.order.refundClosed')
 }, {
   value: 6,
-  label: '平台介入中'
+  label: '申请介入'
+}, {
+  value: 7,
+  label: '介入处理'
 }]
 const orderType = [{
   value: 0,

@@ -33,10 +33,10 @@
       <!-- 分类图片 -->
       <el-form-item
         v-if="selectedCategories.length !== 1"
-        :required="isRequiredImg"
+        :required="isRequiredImg || dataForm.level === 2"
         :label="$t('product.category.imgUrl')"
       >
-        <div>
+        <div style="width: 120px;height: 120px;">
           <img-show
             :src="dataForm.imgUrl"
             :class-list="['pic']"

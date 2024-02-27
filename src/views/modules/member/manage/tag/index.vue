@@ -8,13 +8,22 @@
         <el-tabs>
           <el-tab-pane :label="$t('user.tag.conditionLabel')">
             <div class="bg-white add-label">
-              <div class="label-wapper">
-                <button
+              <div class="label-wapper btn-bar">
+                <el-button
                   v-permission="['user:tag:save']"
+                  type="primary"
                   @click="onAddOrUpdate('',1)"
                 >
                   {{ $t('user.tag.addLabel') }}
-                </button>
+                </el-button>
+                <el-button
+                  @click="onRefreshLabel()"
+                >
+                  更新标签数据
+                </el-button>
+                <div class="font-line">
+                  {{ $t('user.tag.updateTime') }}：{{ (customLabelList[customLabelList.length-1]?.statisticUpdateTime) ? customLabelList[customLabelList.length-1].statisticUpdateTime : '暂无更新' }}
+                </div>
               </div>
             </div>
             <!-- 不同标签内容 -->
@@ -40,14 +49,7 @@
                     <div class="font-line">
                       {{ $t('user.tag.creationTime') }}：{{ item.createTime }}
                     </div>
-                    <div class="font-line">
-                      {{ $t('user.tag.updateTime') }}：{{ item.statisticUpdateTime }}
-                    </div>
                     <div class="op-btn-wrapper">
-                      <span
-                        v-permission="['user:tag:refresh']"
-                        @click="refreshTag(item.userTagId)"
-                      >{{ $t('user.tag.updateBtn') }}</span>
                       <span
                         v-permission="['user:tag:update']"
                         @click="onAddOrUpdate(item.userTagId,1)"
@@ -71,12 +73,13 @@
           <el-tab-pane :label="$t('user.tag.manualLabel')">
             <div class="bg-white add-label">
               <div class="label-wapper">
-                <button
+                <el-button
                   v-permission="['user:tag:save']"
+                  type="primary"
                   @click="onAddOrUpdate('',0)"
                 >
                   {{ $t('user.tag.addLabel') }}
-                </button>
+                </el-button>
               </div>
             </div>
             <!-- 标签内容 -->
@@ -169,12 +172,18 @@ const onAddOrUpdate = (userTagId, tagType) => {
     addOrUpdateRef.value?.onInit(userTagId, tagType)
   })
 }
-const refreshTag = (userTagId) => {
-  api.refreshTag(userTagId).then(() => {
+
+const onRefreshLabel = () => {
+  if (!customLabelList.value.length) {
+    ElMessage.warning('暂无数据，请添加标签')
+    return
+  }
+  api.batchRefreshTag([]).then(() => {
     onTagList()
     ElMessage.success($t('user.tag.updateSucceeded'))
   })
 }
+
 const onDeleteById = (userTagId) => {
   ElMessageBox.confirm('确定进行删除操作', '提示', {
     confirmButtonText: '确定',
@@ -219,21 +228,6 @@ const onDeleteById = (userTagId) => {
       padding: 10px;
       border-radius: 6px;
       margin-bottom: 10px;
-      .label-wapper {
-        button {
-          height: 32px;
-          font-size: 12px;
-          padding: 0 12px;
-          background: #fff;
-          border: 1px solid #ededed;
-          border-radius: 5px;
-          margin-left: 10px;
-          &:hover {
-            color: #2589FF;
-            border: 1px solid #2589FF;
-          }
-        }
-      }
     }
 
     .label-content-wrapper {
@@ -259,7 +253,7 @@ const onDeleteById = (userTagId) => {
             position: relative;
             box-sizing: content-box;
             width: 198px;
-            height: 118px;
+            height: 100px;
             font-size: 12px;
             padding: 10px;
             border: 1px solid #E3E2E5;
@@ -298,6 +292,17 @@ const onDeleteById = (userTagId) => {
   }
   &:deep(.el-tabs__header) {
     margin: 0;
+  }
+
+  .btn-bar {
+    display: flex;
+    align-items: end;
+
+    .font-line {
+      margin-left: 10px;
+      padding-bottom: 5px;
+      font-size: 14px;
+    }
   }
 }
 </style>

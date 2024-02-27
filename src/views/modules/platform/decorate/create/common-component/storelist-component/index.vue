@@ -8,7 +8,7 @@
       >
         <div class="images">
           <el-image
-            :src="item.shopLogo"
+            :src="checkFileUrl(item.shopLogo)"
             fit="cover"
           >
             <template #error>

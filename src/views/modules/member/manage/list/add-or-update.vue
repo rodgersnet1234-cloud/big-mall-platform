@@ -40,7 +40,7 @@
                   >
                   <img
                     v-else
-                    :src="(dataForm.pic).indexOf('http')===-1 ? resourcesUrl + dataForm.pic : dataForm.pic"
+                    :src="checkFileUrl(dataForm.pic)"
                     class="image"
                     width="130"
                     height="130"
@@ -276,7 +276,6 @@ import { deleteUserTag } from '@/api/user/user-tag-user.js'
 
 const emit = defineEmits(['refreshDataList'])
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const visible = ref(false)
 let isSubmit = false
 const nameVisible = ref(true)

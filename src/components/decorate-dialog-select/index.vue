@@ -57,6 +57,7 @@ import storeComponent from './components/store-component/index.vue' // 店铺组
 import pageComponent from './components/page-component/index.vue' // 页面组件
 import smallPageComponent from './components/small-page-component/index.vue' // 微页面组件
 import customComponent from './components/custom-component/index.vue' // 自定义链接
+import couponSelect from './components/coupon-select/index.vue' // 优惠券
 import { ElMessage } from 'element-plus'
 const com = shallowReactive({
   goodsComponent,
@@ -64,7 +65,8 @@ const com = shallowReactive({
   storeComponent,
   pageComponent,
   smallPageComponent,
-  customComponent
+  customComponent,
+  couponSelect
 })
 const emit = defineEmits(['handleClose', 'handleDialogSubmit'])
 const props = defineProps({
@@ -119,7 +121,8 @@ const titleArr = [ // 对应的标题组件
   { title: $t('pcdecorate.commonModal.store'), id: '3', components: 'storeComponent' },
   { title: $t('pcdecorate.commonModal.page'), id: '4', components: 'pageComponent' },
   { title: $t('pcdecorate.commonModal.smallPage'), id: '5', components: 'smallPageComponent' },
-  { title: $t('pcdecorate.commonModal.customLink'), id: '6', components: 'customComponent' }
+  { title: $t('pcdecorate.commonModal.customLink'), id: '6', components: 'customComponent' },
+  { title: '优惠券', id: '7', components: 'couponSelect' }
 ]
 let currentSelectedObj = { // 选择信息
   goodsItem: {}, // 选中的商品
@@ -175,6 +178,8 @@ const handleIsValidate = (active) => {
       return isDataValidate(currentSelectedObj.smallPageItem)
     case '6': // 自定义链接
       return isDataValidate(currentSelectedObj.customLink)
+    case '7': // 优惠券
+      return isDataValidate(currentSelectedObj.couponsItem)
     default:
       break
   }
@@ -182,7 +187,7 @@ const handleIsValidate = (active) => {
 // 判断是否符合
 const isDataValidate = (val) => {
   let status = true
-  status = (JSON.stringify(val) === '{}' || val === null || val === '')
+  status = (!val || JSON.stringify(val) === '{}')
   return status
 }
 const tabbarRef = ref(null)

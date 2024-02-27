@@ -3,7 +3,7 @@
     <template v-if="imgUrl !== ''">
       <div class="bg-img">
         <el-image
-          :src="imgUrl"
+          :src="checkFileUrl(imgUrl)"
           fit="cover"
         >
           <template #error>
@@ -32,7 +32,6 @@
   </div>
 </template>
 <script setup>
-
 defineProps({
   imgUrl: {
     type: String,

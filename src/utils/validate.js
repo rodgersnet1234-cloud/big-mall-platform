@@ -17,6 +17,11 @@
 export const MOBILE_REGEXP = /1[0-9]{10}/
 
 /**
+ * 带星号的手机号
+ */
+export const STAR_MOBILE_REGEXP = /^(?:(?:\+|00)86)?1\d{2}([\d*]{4})\d{4}$/
+
+/**
  * 1. 用户名不能为纯数字
  * 2. 由字母、数字或下划线 4-16位组成
  */
@@ -61,6 +66,15 @@ export function validUsername (str) {
  */
 export function isMobile (value) {
   return isMatching(MOBILE_REGEXP, value)
+}
+
+/**
+ *是否是手机号,可带*号
+ * @param value 输入值
+ * @return 匹配结果
+ */
+export function isStarMobile (value) {
+  return isMatching(STAR_MOBILE_REGEXP, value)
 }
 
 /**
@@ -259,6 +273,6 @@ export function checkIDCard (idcode) {
  * @returns {Boolean} 检查密码格式是否正确(检查密码格式是否正确 密码由字母、数字和特殊符号三种字符组成8-20位半角字符，区分大小写)
  */
 export function validPassword2 (s) {
-  const reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,20}/
+  const reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*(\W|_))[A-Za-z\d(\W|_)]{8,20}$/
   return reg.test(s)
 }

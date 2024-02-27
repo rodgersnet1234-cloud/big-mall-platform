@@ -8,6 +8,7 @@
       :lock-scroll="true"
       :append-to-body="true"
       :destroy-on-close="true"
+      :align-center="alignCenter"
       width="750px"
       top="4vh"
       class="operate-dlg"
@@ -259,6 +260,12 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 const emit = defineEmits(['onOrOffTheShelf', 'directOnline', 'offlineDataSubmit', 'auditOnlineSubmit'])
+defineProps({
+  alignCenter: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const operateDialogVisible = ref(false) // 操作对话框
 const showOfflineOperate = ref(false) // 下架

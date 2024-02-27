@@ -18,7 +18,7 @@
       <div
         v-else-if="formData.bgType===1"
         class="preview-header"
-        :style="[formData.bgImg ? {'background-image': `url(${resources + formData.bgImg}) !important`} : { 'background': formData.bgColor }]"
+        :style="[formData.bgImg ? {'background-image': `url(${checkFileUrl(formData.bgImg)}) !important`} : { 'background': formData.bgColor }]"
       >
         <div
           class="preview-header-title"
@@ -95,12 +95,13 @@
               </el-radio>
               <div v-if="formData.bgType === 1">
                 <img-upload v-model="formData.bgImg" />
-                <div
-                  class="default-btn"
+                <el-button
+                  style="margin-top: 15px;"
+                  plain
                   @click="formData.bgImg=''"
                 >
                   {{ $t('shopFeature.header.reset') }}
-                </div>
+                </el-button>
               </div>
               <el-form-item
                 v-if="formData.bgType === 0"
@@ -252,7 +253,6 @@ const validatePageTitle = (rule, value, callback) => {
   }
 }
 
-const resources = ref(import.meta.env.VITE_APP_RESOURCES_URL)
 const rules = {
   bgColor: [
     { validator: validateBgColor, trigger: 'blur' }

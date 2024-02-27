@@ -17,7 +17,7 @@
               :key="index"
               style="display: flex; align-items: center;justify-content: center; width: 100%; height: 100%"
               fit="fill"
-              :src="item.url"
+              :src="checkFileUrl(item.url)"
             >
               <template #error>
                 <div class="image-slot">
@@ -39,7 +39,7 @@
           fit="fill"
           style="display: flex;justify-content: center;align-items: center;"
           class="image-ad-view"
-          :src="item.url"
+          :src="checkFileUrl(item.url)"
         >
           <template #error>
             <div class="image-slot">
@@ -334,6 +334,7 @@
   </div>
 </template>
 <script setup>
+
 /**
  * 创建新组件之后，在all-can-use-components中添加
  * 必须应用 microCreateMinis
@@ -509,7 +510,6 @@ const typeList = [
   }
 ]
 const commandInfo = reactive({}) // 选择跳转的信息
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const isGetChooseFeature = ref(false) // 是否可以返回微页面
 const editLinkType = ref(0) // 当前改项目的跳转类型
 
@@ -534,7 +534,7 @@ let currentEditIndex = 0 // 当前编辑的图片
 const refreshPic = (imagePath) => {
   const imgsList = imagePath.split(',')
   for (let i = 0; i < imgsList.length; i++) {
-    imgsList[i] = resourcesUrl + imgsList[i]
+    imgsList[i] = checkFileUrl(imgsList[i])
   }
   if (imgsList.length) {
     if (isChangeImg.value) { // 更换图片模式

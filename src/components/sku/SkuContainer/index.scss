@@ -14,10 +14,15 @@
     margin: 15px 5px;
     margin-bottom: 0;
 
+    .spec-name-conter{
+      display: flex;
+      flex-wrap: wrap;
+    }
+
     .tag-item-tit {
       height: 32px;
       line-height: 32px;
-      min-width: 45px;
+      min-width: 56px;
       margin-right: 10px;
     }
 
@@ -29,6 +34,7 @@
       margin-right: 10px;
       vertical-align: top;
       width: 150px;
+      margin-bottom: 10px;
       &.ft-spec-val-item{
         padding-bottom: 10px;
       }

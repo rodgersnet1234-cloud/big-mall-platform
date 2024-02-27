@@ -42,6 +42,9 @@
         :label="$t('platform.shopUserAccount.password')"
         prop="password"
         :class="{'is-required': !dataForm.hasAccount }"
+        :rules="[{ validator: validPassword, trigger: 'blur' }].concat(!dataForm.hasAccount ? [
+          { required: true, message: '密码不能为空', trigger: 'blur' }
+        ] : [])"
       >
         <el-input
           v-model="dataForm.password"
@@ -88,7 +91,7 @@
 
 <script setup>
 import * as api from '@/api/platform/sys-user-account'
-import { MOBILE_REGEXP, USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides, validPassword2 } from '@/utils/validate'
+import { USER_NAME_REGEXP, validNoEmptySpace, noSpacesBothSides, validPassword2 } from '@/utils/validate'
 import { encrypt } from '@/utils/crypto'
 import { ElMessage } from 'element-plus'
 
@@ -115,6 +118,15 @@ const validPassword = (rule, value, callback) => {
     callback()
   }
 }
+
+// eslint-disable-next-line no-unused-vars
+const validateMobile = (rule, value, callback) => {
+  if (isMobile(value) || isStarMobile(value)) {
+    callback()
+  } else {
+    callback(new Error('请输入正确的联系方式'))
+  }
+}
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -125,7 +137,7 @@ const rules = {
   ],
   phone: [
     { required: true, message: '请输入手机号码', trigger: 'blur' },
-    { pattern: MOBILE_REGEXP, message: '手机号格式有误', trigger: 'blur' }
+    { validator: validateMobile, trigger: 'blur' }
   ],
   password: [
     { validator: validPassword, trigger: 'blur' }

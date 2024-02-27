@@ -54,7 +54,7 @@
         class="picture-items"
       >
         <el-image
-          :src="item.img"
+          :src="checkFileUrl(item.img)"
           fit="fill"
           style="position: relative"
         >
@@ -192,13 +192,12 @@ const handleAddImage = () => {
   elxImgboxRef.value?.init(2, 10 - pciConfigForm.value.picList?.length)
 }
 // 选择图片之后进行回调
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL // 服务地址
 const refreshPic = (imagePath) => {
   let updateStatus = false
   // 更改图片的回调
   pciConfigForm.value.picList.forEach((item, index) => {
     if (updateIndex === index) {
-      item.img = resourcesUrl + imagePath
+      item.img = checkFileUrl(imagePath)
       updateStatus = true
     } else {
       updateStatus = false
@@ -212,7 +211,7 @@ const refreshPic = (imagePath) => {
     arr.forEach(item => {
       if (!updateStatus) { // 如果不是更改图片就让他增加
         pciConfigForm.value.picList.push({
-          img: resourcesUrl + item,
+          img: checkFileUrl(item),
           path: {
             name: '',
             link: '',
@@ -224,7 +223,7 @@ const refreshPic = (imagePath) => {
   } else { // 就是单选
     if (!updateStatus) { // 如果不是更改图片就让他增加
       pciConfigForm.value.picList.push({
-        img: resourcesUrl + imagePath,
+        img: checkFileUrl(imagePath),
         path: {
           name: '',
           link: '',

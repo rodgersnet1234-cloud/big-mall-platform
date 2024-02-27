@@ -16,7 +16,7 @@
           <div class="left-content">
             <div class="left-content-img">
               <el-image
-                :src="item.imgs"
+                :src="checkFileUrl(item.imgs)"
                 fit="fill"
               >
                 <template #error>
@@ -89,7 +89,7 @@
               <div class="right-items">
                 <div class="right-content-img">
                   <el-image
-                    :src="item.imgs"
+                    :src="checkFileUrl(item.imgs)"
                     fit="fill"
                   >
                     <template #error>
@@ -147,7 +147,7 @@
               <div class="right-items">
                 <div class="right-content-img">
                   <el-image
-                    :src="item.imgs"
+                    :src="checkFileUrl(item.imgs)"
                     fit="fill"
                   >
                     <template #error>
@@ -282,6 +282,7 @@
 </template>
 <script setup>
 import { formatPrice } from '@/utils/index.js'
+
 defineProps({
   config: { // 配置信息
     type: Object,

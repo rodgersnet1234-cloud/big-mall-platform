@@ -30,7 +30,7 @@
               </div>
               <el-image
                 v-else
-                :src="formData.topImg"
+                :src="checkFileUrl(formData.topImg)"
                 fit="fill"
               >
                 <template #error>
@@ -233,8 +233,6 @@ const myCheckResult = ($isPass) => {
 
 const addLength = ref(12)
 
-const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
-
 const dialogVisible = ref(false) // 弹窗
 const currentSelectType = ref([])
 const currentOperation = ref('') // 当前操作的类型
@@ -267,7 +265,7 @@ const handleAddImg = () => {
 
 // 选择图片的回调
 const refreshPic = (imagePath) => {
-  formData.topImg = resourcesUrl + imagePath
+  formData.topImg = checkFileUrl(imagePath)
 }
 
 // 删除图片

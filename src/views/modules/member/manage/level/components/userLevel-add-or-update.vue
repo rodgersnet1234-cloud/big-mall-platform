@@ -207,6 +207,7 @@
 import * as api from '@/api/user/level.js'
 import * as rightApi from '@/api/user/user-rights.js'
 import { ElMessage } from 'element-plus'
+import { Debounce } from '@/utils/debounce'
 const emit = defineEmits(['refreshDataList', 'getData'])
 
 const visible = ref(false)
@@ -520,7 +521,7 @@ const onChangeNeedPrice = () => {
 /**
  * 确定事件
  */
-const onSubmitProds = () => {
+const onSubmitProds = Debounce(() => {
   // 校验数据
   isCheckSccuss = true
   onCheckData()
@@ -590,7 +591,7 @@ const onSubmitProds = () => {
   }).catch(() => {
     isConfirm = false
   })
-}
+})
 const onSetRightsStatus = (data) => {
   data.isFreeFee === 0 ? isFreeFee = false : isFreeFee = true
   data.discount === 10 ? isDiscount = false : isDiscount = true

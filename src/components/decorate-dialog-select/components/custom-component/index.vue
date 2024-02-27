@@ -8,6 +8,7 @@
         v-model="link.url"
         placeholder="输入自定义链接"
         style="width: 50%"
+        @blur="link.url=link.url.trim()"
       />
       <img
         src="@/assets/pc-micro-page/selected_link.png"
@@ -62,8 +63,8 @@ const setDatas = () => {
 }
 
 watch(() => link.value, (val) => {
-  emit('handleGoodsSelect', { type: 'customLink', value: val })
-})
+  emit('handleGoodsSelect', { type: 'customLink', value: val.url.trim() ? val : null })
+}, { deep: true })
 watch(() => props.activeName, (val) => {
   if (val === '6') {
     link.value = {

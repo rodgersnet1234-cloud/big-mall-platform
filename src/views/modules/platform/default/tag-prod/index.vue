@@ -12,6 +12,7 @@
         <el-form-item :label="$t('product.spu.name') + '：'">
           <el-input
             v-model="searchParam.spuName"
+            style="width: 190px"
             :placeholder="$t('product.spu.name')"
             clearable
           />
@@ -237,7 +238,7 @@ const getPage = () => {
     pageLoading.value = false
   }).catch(err => {
     if (err.code === 'A00007' && !err.success) {
-      router.push('/product/spu-tag')
+      router.push('/platform-default/spu-tag')
     }
   })
 }
@@ -324,7 +325,7 @@ const selectProdHandle = () => {
 }
 // 返回路由跳转
 const goBackHandle = () => {
-  router.push({ path: '/product/spu-tag' })
+  router.push({ path: '/platform-default/spu-tag' })
 }
 
 </script>

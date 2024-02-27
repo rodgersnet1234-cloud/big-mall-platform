@@ -22,7 +22,7 @@
                   class="goods-img-one"
                   :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
                   :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !formData.goods[0].prodId}"
-                  :src="item.pic"
+                  :src="checkFileUrl(item.pic)"
                   fit="fill"
                 >
                   <template #error>
@@ -172,7 +172,7 @@
                   <el-image
                     class="goods-select-item-img"
                     :class="{'goods-empty': !formData.goods[0].prodId}"
-                    :src="item.pic"
+                    :src="checkFileUrl(item.pic)"
                     fit="fill"
                   >
                     <template #error>
@@ -254,6 +254,7 @@
 <script setup>
 import defPng from '@/assets/micro-page/def.png'
 import { formatPrice } from '@/utils/index'
+
 /**
  * 创建新组件之后，在all-can-use-components中添加
  * 必须应用 microCreateMinis

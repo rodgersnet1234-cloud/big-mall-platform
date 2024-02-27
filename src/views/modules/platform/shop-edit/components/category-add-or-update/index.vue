@@ -3,6 +3,7 @@
     v-model="visible"
     class="component-shop-category-dialog"
     width="80%"
+    style="min-width: 1150px"
     top="8vh"
     :show-close="false"
     @close="closePopup"
@@ -97,14 +98,14 @@
                 <template #default="scope">
                   <div class="custom-rate">
                     <el-input
-                      v-model.number="scope.row.customizeRate"
+                      v-model="scope.row.customizeRate"
                       :min="0"
-                      :max="99.9999"
-                      :precision="4"
-                      placeholder="0~99.9999"
+                      :max="99.99"
+                      :precision="2"
+                      placeholder="0~99.99"
                       size="small"
                       style="width: 80%;"
-                      onkeyup="value=value.replace(/[^\d]/g,'')"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
                       @blur="checkCustomizeRateInt(scope)"
                       @keydown="channelInputLimit"
                     />%
@@ -462,13 +463,13 @@ const checkCustomizeRateInt = (scope) => {
     return
   }
   const reg1 = /^(\d{1,2})$/
-  const reg2 = /^((\d{1,2})|(0{1}))(\.\d{0,4})$/
+  const reg2 = /^((\d{1,2})|(0{1}))(\.\d{0,2})$/
   if (!reg1.test(customizeRate)) {
     if (!reg2.test(customizeRate)) {
       signCategories.value[$index].customizeRate = ''
       messageClosed.value = false
       ElMessage({
-        message: '自定义类目扣率数值在0~99.9999之间，最多保留4位小数',
+        message: '自定义类目扣率数值在0~99.99之间，最多保留2位小数',
         type: 'error',
         duration: 2000,
         onClose: () => {
@@ -481,7 +482,7 @@ const checkCustomizeRateInt = (scope) => {
 const channelInputLimit = (e) => {
   const key = e.key
   // 不允许输入'-'
-  if (key === '-' || key === '+') {
+  if (key === '-' || key === '+' || (key === '.' && e.target.value?.includes('.'))) {
     e.returnValue = false
     return false
   }

@@ -373,8 +373,6 @@ import ElxImgbox from '@/components/img-box/index.vue'
 
 const vHandle = HandleDirective
 
-const resourcesUrl = import.meta.env.VUE_APP_RESOURCES_URL
-
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
     type: Boolean,
@@ -670,7 +668,7 @@ const elxImgboxHandle = (type) => {
 const refreshPic = (imagePath) => {
   const imgsList = imagePath.split(',')
   if (imgsList.length) {
-    const chooseImages = { key: 'image_url', val: resourcesUrl + imgsList[0] }
+    const chooseImages = { key: 'image_url', val: checkFileUrl(imgsList[0]) }
     if (currentChangeType === 2) { // 头图模式
       setBanner(chooseImages)
     } else {
@@ -680,7 +678,7 @@ const refreshPic = (imagePath) => {
             title: '',
             type: '',
             link: '',
-            image_url: resourcesUrl + res
+            image_url: checkFileUrl(res)
           })
         })
         return

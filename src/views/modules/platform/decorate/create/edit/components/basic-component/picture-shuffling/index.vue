@@ -18,7 +18,7 @@
             :style="{'width': config.width, 'height': config.height}"
           >
             <el-image
-              :src="item.img"
+              :src="checkFileUrl(item.img)"
               fit="fill"
             >
               <template #error>
@@ -145,7 +145,6 @@ watch(() => props.itemComponent, (newVal) => {
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
             margin: 0 auto;
             position: absolute;
             left: 50%;
