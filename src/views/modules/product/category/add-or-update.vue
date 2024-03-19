@@ -37,13 +37,10 @@
         :label="$t('product.category.imgUrl')"
       >
         <div style="width: 120px;height: 120px;">
-          <img-upload
-            v-model="dataForm.imgUrl"
-            :show-delete="true"
+          <img-show
+            :src="dataForm.imgUrl"
             :class-list="['pic']"
-            @input="onPropChage('imgUrl')"
           />
-          <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>
         </div>
       </el-form-item>
       <!-- 分类扣率-->

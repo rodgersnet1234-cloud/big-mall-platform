@@ -11,17 +11,17 @@ const configDefInfo = {
   // 版权声明-英文
   copyrightEn: 'Copyright © 2018-2022 广州市蓝海创新科技有限公司 版权所有 | 粤ICP备18115813号-1',
   // 标题文本-中文
-  titleContentCn: '白洞版-平台端',
+  titleContentCn: '多元版-平台端',
   // 标题文本-英文
-  titleContentEn: '白洞版-平台端',
+  titleContentEn: '多元版-平台端',
   // 网站标题图标
   titleImg: new URL('@/assets/website-config/title-icon.png', import.meta.url).href,
   // 菜单栏顶部图标
   bsTopBarIcon: new URL('@/assets/website-config/menu-top-icon.png', import.meta.url).href,
   // 菜单展开文本-中文
-  bsMenuTitleOpenCn: '白洞版-平台端',
+  bsMenuTitleOpenCn: '多元版-平台端',
   // 菜单展开文本-英文
-  bsMenuTitleOpenEn: '白洞版-平台端',
+  bsMenuTitleOpenEn: '多元版-平台端',
   // 菜单收缩文本-中文
   bsMenuTitleCloseCn: '平台端',
   // 菜单收缩文本-英文
