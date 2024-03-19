@@ -1,5 +1,4 @@
 .component-order-info {
-
   .el-dialog {
     min-width: 950px;
     margin-top: 10vh !important;
@@ -21,7 +20,7 @@
     height: 100%;
     width: 100%;
     font: 14px Arial, "PingFang SC", "Hiragino Sans GB", STHeiti,
-    "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+      "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
     color: #333;
 
     .order-number {
@@ -97,7 +96,7 @@
     .order-state .state-steps .el-form-item {
       margin-bottom: 0;
     }
-    .order-state .state-steps .description{
+    .order-state .state-steps .description {
       min-width: 62px;
     }
 
@@ -343,10 +342,10 @@
     }
 
     // 新增 物流线条超出bug修复
-    .packages .p-con .logistics .logistics-box .item:nth-last-child(2){
+    .packages .p-con .logistics .logistics-box .item:nth-last-child(2) {
       padding: 0 0 40px 25px;
     }
-    .packages .p-con .logistics .logistics-box .item:last-child{
+    .packages .p-con .logistics .logistics-box .item:last-child {
       padding: 10px 0 30px 25px;
       border-left: none;
       margin-top: -14px;
@@ -399,6 +398,10 @@
       margin-top: 10px;
       display: flex;
       line-height: 20px;
+      .station-name {
+        width: calc(100% - 75px);
+        word-wrap: break-word;
+      }
     }
 
     .item .remarks {
@@ -422,7 +425,7 @@
 
     .goods-list .df .name {
       line-height: 20px;
-      word-break:break-word;
+      word-break: break-word;
     }
 
     .goods-list .goods-total {

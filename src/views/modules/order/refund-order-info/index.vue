@@ -295,7 +295,8 @@
                   :label="$t('order.order.unitPrice')"
                 >
                   <template #default="scope">
-                    <span>{{ formatPrice(scope.row.price, 1).toFixed(2) }}</span>
+                    <span v-if="!scope.row.giveawayOrderItemId">{{ getUnitPrice(scope.row.spuTotalAmount, scope.row.count) }}</span>
+                    <span v-if="scope.row.giveawayOrderItemId">{{ getUnitPrice(scope.row.giveawayAmount, scope.row.count) }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -744,6 +745,13 @@ const bigActualTotal = (a, b) => {
     return ''
   }
   return new Big(a).div(b).times(dataForm.value.refundCount).div(100).toFixed(2)
+}
+
+const getUnitPrice = (value, count) => {
+  if (!value) {
+    return 0.00
+  }
+  return new Big(formatPrice(value, 1)).div(count).toFixed(2)
 }
 </script>
 

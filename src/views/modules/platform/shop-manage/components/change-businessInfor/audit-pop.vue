@@ -58,9 +58,19 @@
             </el-form-item>
             <el-form-item
               label="营业期限："
-              required
             >
-              {{ modifyInformation.startTime.slice(0,10) + ' - ' + (!modifyInformation.endTime ? '无固定期限' : modifyInformation.endTime.slice(0, 10)) }}
+              <span v-if="modifyInformation.startTime && modifyInformation.endTime">
+                {{ modifyInformation.startTime.slice(0, 10) + ' - ' + modifyInformation.endTime.slice(0, 10) }}
+              </span>
+              <span v-else-if="modifyInformation.startTime">
+                {{ modifyInformation.startTime.slice(0, 10) + ' - ' + '无固定期限' }}
+              </span>
+              <span
+                v-else
+                class="txt-null"
+              >
+                暂无
+              </span>
             </el-form-item>
             <el-form-item
               label="经营范围："

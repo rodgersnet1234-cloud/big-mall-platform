@@ -6,11 +6,25 @@
         class="el-upload el-upload--text"
         @click="elxImgboxHandle"
       >
-        <img-show
+        <div
           v-if="modelValue"
-          :src="modelValue"
-          :class-list="['pic']"
-        />
+          class="show-pic"
+        >
+          <img-show
+            :src="modelValue"
+            :class-list="['pic']"
+          />
+          <div
+            v-if="showDelete"
+            tabindex="0"
+            class="el-upload el-upload--picture-card blackba"
+            @click.stop="detailImg"
+          >
+            <el-icon class="delete">
+              <Delete />
+            </el-icon>
+          </div>
+        </div>
         <el-icon
           v-else
           class="el-icon-plus pic-uploader-icon"
@@ -50,6 +64,10 @@ const props = defineProps({
   show: {
     default: true,
     type: Boolean
+  },
+  showDelete: {
+    default: false,
+    type: Boolean
   }
 })
 const emit = defineEmits(['update:modelValue', 'input'])
@@ -77,10 +95,33 @@ const refreshPic = (imagePath) => {
   emit('input', imagePath)
 }
 
+const detailImg = () => {
+  refreshPic('')
+}
 </script>
 <style lang="scss" scoped>
 .component-img-upload-box {
   max-height: 120px;
+
+  .show-pic{
+    height: 100%;
+    .blackba {
+      display: none;
+      position: absolute;
+      background: rgba(0, 0, 0, 0.7) !important;
+      left: 0;
+      border: none !important;
+    }
+    &:hover .blackba {
+      display: inline-block !important;
+    }
+    .delete {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 .plugin-images {
   display: inline-block;
