@@ -274,7 +274,8 @@
                         type="date"
                         value-format="YYYY-MM-DD HH:mm:ss"
                         placeholder="开始日期"
-                        :clearable="false"
+                        clearable
+                        @change="onValidateTime('startTime')"
                       />
                       <span style="margin: 0 10px">-</span>
                       <el-date-picker
@@ -285,6 +286,8 @@
                         value-format="YYYY-MM-DD HH:mm:ss"
                         placeholder="结束日期"
                         clearable
+                        :disabled="!supplierCompany.startTime"
+                        @change="onValidateTime('endTime')"
                       />
                     </div>
                   </el-form-item>
@@ -586,7 +589,7 @@
                         >
                           <el-input
                             v-model="scope.row.cardNo"
-                            maxlength="19"
+                            maxlength="30"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             placeholder="输入账号"
                             clearable
@@ -768,6 +771,7 @@
                     maxlength="20"
                     placeholder="输入6-20位登录密码"
                     autocomplete="new-password"
+                    show-password
                   />
                 </el-form-item>
                 <el-form-item
@@ -797,6 +801,7 @@
                     v-model="supplierUserRegisterInfo.validCode"
                     class="mobile-int"
                     placeholder="输入验证码"
+                    maxlength="6"
                   />
                 </el-form-item>
               </el-form>
@@ -1040,13 +1045,7 @@ const pickerOptions = reactive({
     )
   }
 })
-const valiStartTime = (rule, value, callback) => {
-  if (supplierCompany.endTime && new Date(supplierCompany.startTime).getTime() >= new Date(supplierCompany.endTime).getTime()) {
-    callback(new Error('营业起始日期不能大于营业终止时间'))
-  } else {
-    callback()
-  }
-}
+
 // 工商信息校验
 const shopCompanyRule = reactive({
   creditCode: [
@@ -1063,10 +1062,6 @@ const shopCompanyRule = reactive({
   businessScope: [
     { required: true, message: '经营范围不能为空', trigger: 'blur' },
     { validator: validEmptyTab, trigger: 'blur' }
-  ],
-  startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' },
-    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '上传营业执照', trigger: 'change' }
@@ -1120,6 +1115,7 @@ const bankCartInfoForm = reactive({
     ],
     cardNo: [
       { required: true, message: '账号不能为空', trigger: 'blur' },
+      { min: 8, max: 30, message: '账户长度在8到30个字符', trigger: 'blur' },
       { validator: validateCardNo, trigger: 'blur' },
       { validator: validEmptyTab, trigger: 'blur' }
     ],
@@ -1292,7 +1288,7 @@ const supplierUserRegisterInfoRef = ref(null)
 /**
  * 下一步
  */
-const toNextStep = () => {
+const toNextStep = Debounce(() => {
   if (applyStep.value === 1) {
     // 第一步 基本信息
     supplierDetailRef.value?.validate((valid) => {
@@ -1309,14 +1305,6 @@ const toNextStep = () => {
         if (!supplierCompany.businessScope.trim()) {
           ElMessage({
             message: '经营范围不能为空或空格！',
-            type: 'error',
-            duration: 1000
-          })
-          return
-        }
-        if (supplierCompany.endTime && Date.parse(supplierCompany.startTime) >= Date.parse(supplierCompany.endTime)) {
-          ElMessage({
-            message: '营业起始日期不能大于营业终止时间',
             type: 'error',
             duration: 1000
           })
@@ -1380,7 +1368,7 @@ const toNextStep = () => {
       }
     })
   }
-}
+}, 1000)
 
 /**
  * 签约数据处理
@@ -1517,6 +1505,23 @@ const changeBank = (value) => {
 const imgChange = (prop) => {
   supplierCompanyRef.value?.validateField(prop)
 }
+
+const onValidateTime = (value) => {
+  if (value === 'endTime') {
+    if (!supplierCompany.endTime) supplierCompany.endTime = undefined
+  } else {
+    if (!supplierCompany.startTime) supplierCompany.endTime = undefined
+  }
+  if (supplierCompany.endTime && Date.parse(supplierCompany.startTime) >= Date.parse(supplierCompany.endTime)) {
+    ElMessage({
+      message: '营业起始日期不能大于营业终止时间',
+      type: 'error',
+      duration: 1500
+    })
+    supplierCompany.endTime = undefined
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>

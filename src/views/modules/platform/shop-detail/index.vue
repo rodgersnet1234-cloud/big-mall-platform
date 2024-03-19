@@ -380,10 +380,21 @@
           </div>
           <div class="basic-info-item">
             <p class="tit">
-              <span class="asterisk">*</span>营业期限：
+              营业期限：
             </p>
             <p class="txt">
-              {{ businessInfo.startTime && businessInfo.startTime.slice(0,10) + ' - ' + (!businessInfo.endTime ? '无固定期限' : businessInfo.endTime.slice(0, 10)) }}
+              <span v-if="businessInfo.startTime && businessInfo.endTime">
+                {{ businessInfo.startTime.slice(0, 10) + ' - ' + businessInfo.endTime.slice(0, 10) }}
+              </span>
+              <span v-else-if="businessInfo.startTime">
+                {{ businessInfo.startTime.slice(0, 10) + ' - ' + '无固定期限' }}
+              </span>
+              <span
+                v-else
+                class="txt weak"
+              >
+                暂无
+              </span>
             </p>
           </div>
           <div class="basic-info-item">
@@ -1053,7 +1064,7 @@
             </div>
           </el-form-item>
           <el-form-item
-            label="商家类型"
+            label="店铺类型"
             prop="shopType"
           >
             <el-radio-group v-model="auditform.shopType">

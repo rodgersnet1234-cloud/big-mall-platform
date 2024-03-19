@@ -290,7 +290,10 @@
                     class="items name"
                   >
                     <div class="prod-image">
-                      <img-show :src="orderItem.pic" />
+                      <img-show
+                        :src="orderItem.pic"
+                        :img-style="{width: '100%',height: '100%'}"
+                      />
                     </div>
                     <div class="prod-name">
                       <div class="prod-con">

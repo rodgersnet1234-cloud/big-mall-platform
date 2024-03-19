@@ -1033,8 +1033,6 @@ const httpRequest = (event) => {
   const typeArray = file.type.split('/')
   if (typeArray[1] === 'jpeg') {
     typeArray[1] = 'jpg'
-  } else {
-    typeArray[1] = ''
   }
   const attachFile = Object.assign({
     attachFileGroupId: file.attachFileGroupId,

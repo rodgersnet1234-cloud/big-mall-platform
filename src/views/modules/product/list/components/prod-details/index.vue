@@ -59,9 +59,9 @@
               </div>
             </div>
 
-            <!-- 商品标题(中文) -->
+            <!-- 商品名称(中文) -->
             <el-form-item
-              label="商品标题"
+              label="商品名称"
               prop="nameZh"
             >
               <el-input
@@ -408,7 +408,7 @@ const init = (spuId) => {
       if (data.imgUrls) {
         dataForm.value.imgUrls = data.imgUrls.split(',')
       } else {
-        dataForm.value.imgUrls = []
+        dataForm.value.imgUrls = ['@/assets/images/def.png']
       }
       // 配送方式
       dataForm.value.deliveryMode = JSON.parse(data.deliveryMode)

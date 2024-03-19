@@ -156,6 +156,7 @@ const init = (rowIndexPar, cityList, typePar, banArr) => {
   if (menuList.value.length === 0) {
     api.listArea({}).then(data => {
       menuList.value = treeDataTranslate(data, 'areaId', 'parentId')
+      removeChildren(menuList.value)
     }).then(() => {
       visible.value = true
       disabledNodes(cityList, banArr)
@@ -164,6 +165,26 @@ const init = (rowIndexPar, cityList, typePar, banArr) => {
     visible.value = true
     disabledNodes(cityList, banArr)
   }
+}
+
+// 去除没有4级的地址
+const removeChildren = (tree, level = 4) => {
+  level--
+  for (let i = 0; i < tree.length; i++) {
+    if (!tree[i].children?.length) {
+      tree.splice(i, 1)
+      i--
+      continue
+    }
+    if (level > 1) {
+      tree[i].children = removeChildren(tree[i].children, level)
+      if (!tree[i]?.children?.length) {
+        tree.splice(i, 1)
+        i--
+      }
+    }
+  }
+  return tree
 }
 
 const markClick = (e) => {

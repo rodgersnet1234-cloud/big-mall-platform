@@ -75,8 +75,6 @@ import Item from './item.vue'
 import '@/styles/variables.scss'
 import { useCommonStore } from '@/stores/modules/common.js'
 
-const showName = '客服'
-
 const permissionStore = usePermissionStore()
 const permissionStoreRoutes = computed(() => permissionStore.routes)
 
@@ -85,7 +83,7 @@ const sidebar = computed(() => appStore.sidebar)
 
 const dashboard = computed(() => permissionStore.dashboard)
 
-const permissionRoutes = computed(() => permissionStore.routes.filter(menu => !menu.hidden && menu.name !== showName && menu.meta))
+const permissionRoutes = computed(() => permissionStore.routes.filter(menu => !menu.hidden && menu.meta))
 const router = useRouter()
 
 const isCollapse = computed(() => !sidebar.value.opened)
@@ -297,6 +295,15 @@ onBeforeMount(() => {
 })
 
 const gotoRouteHandle = (menu) => {
+  if (menu.name === '客服' || menu.name === 'Message') {
+    window.open('/im-box', 'view_window')
+    const url = router.resolve({
+      name: 'im-box'
+    })
+    // 打开新窗口
+    window.open(url.href)
+    return
+  }
   if (!isCollapse.value) {
     appStore.toggleSideBar()
   }

@@ -28,7 +28,8 @@ export const useUserStore = defineStore('user', {
       tenantId: '',
       roles: [],
       menuIds: [],
-      isPassShop: 0
+      isPassShop: 0,
+      channelId: ''
     }
   },
   actions: {
@@ -120,6 +121,12 @@ export const useUserStore = defineStore('user', {
       this.roles = []
       this.menuIds = []
       this.isPassShop = 0
+    },
+    saveChannelId (ids) {
+      this.channelId = ids
+    },
+    removeChannelId () {
+      this.channelId = []
     }
   }
 })

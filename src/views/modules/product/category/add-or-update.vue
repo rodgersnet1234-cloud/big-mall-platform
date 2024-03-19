@@ -63,6 +63,7 @@
         <div>
           <img-upload
             v-model="dataForm.imgUrl"
+            :show-delete="true"
             @input="onPropChage('imgUrl')"
           />
           <span>{{ $t('product.category.recommImgSize') }}{{ dataForm.parentId ? '75*75' : '255*100' }}</span>

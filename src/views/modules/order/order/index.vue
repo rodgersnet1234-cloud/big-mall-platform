@@ -422,7 +422,7 @@
                 <div class="item">
                   <div>
                     <span v-if="!order.payType && order.payType !== 0">{{
-                      $t("pay.notPaid")
+                      $t("order.order.unpaid")
                     }}</span>
                     <span v-else>
                       {{
@@ -655,6 +655,9 @@ const orderMold = [{
 }, {
   value: 1,
   label: '虚拟商品'
+}, {
+  value: 2,
+  label: '组合商品'
 }]
 const orderType = [{
   value: 0,

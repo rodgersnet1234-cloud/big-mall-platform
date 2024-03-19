@@ -103,7 +103,10 @@
 <script setup>
 import UpdatePassword from '@/components/update-password/index.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { Base64 } from 'js-base64'
+import * as api from '@/api/im-box/index.js'
+import { WKSDK, ConnectStatus } from 'wukongimjssdk'
+import { Convert } from '@/views/common/im-box/components/Conversation/convert.js'
+import cookie from 'vue-cookies'
 
 const updatePasswordVisible = ref(false)
 const webConfigStore = useWebConfigStore()
@@ -140,9 +143,7 @@ const logout = async () => {
     type: 'warning'
   }).then(async () => {
     await userStore.logout()
-    lockReconnect = true // 退出登录不在重连
-    imSocketTask?.close() // 关闭ws
-    imSocketTask = null
+    WKSDK.shared().disconnect()
     localStorage.setItem('cloudPlatChatWs', Date.now()) // 通知新窗口关闭ws
     await router.push(`/login?redirect=${route.fullPath}`)
   })
@@ -159,116 +160,13 @@ const changePassword = () => {
 /**
  * 开启webstocket
  */
-let imSocketTask = null
-const noAccountable = ref(false)
 const newMessage = ref(false)
 const notificationDebounce = ref(1)
 const messageReminding = ref(null)
 const message = ref(0)
-const tenantId = computed(() => userStore.tenantId)
-const userId = computed(() => userStore.userId)
-const notification = ref(false)
+let notification = false
 // 图标提醒标题闪烁
 const showHidden = ref(true)
-const openWs = () => {
-  try {
-    imSocketTask = new WebSocket(
-      import.meta.env.VITE_APP_WEBSOCKET_URL + '/mall4cloud_im/p/ua/im/websocket/online/' + Base64.encode(getToken()) + '/' + tenantId.value + '/' + userId.value
-    )
-    const heartCheck = {
-      timeout: 19000, // 19s发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。 尽量一个小时发送三次
-      serverTimeoutObj: null,
-      reset () {
-        clearTimeout(this.serverTimeoutObj)
-        return this
-      },
-      start () {
-        this.serverTimeoutObj = setTimeout(() => {
-          if (!imSocketTask) {
-            return
-          }
-          if (imSocketTask.readyState === 1) {
-            imSocketTask.send(
-              JSON.stringify({
-                content: 'HEART_BEAT',
-                msgType: 0
-              })
-            )
-            heartCheck.reset().start() // 如果获取到消息，说明连接是正常的，重置心跳检测
-          } else {
-            imSocketTask.close()
-            imSocketTask = null
-            lockReconnect = false
-            onReconnect()
-          }
-        }, this.timeout)
-      }
-    }
-    imSocketTask.onopen = () => {
-      heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-      imSocketTask.send(
-        JSON.stringify({
-          content: 'HEART_BEAT',
-          msgType: 0
-        })
-      )
-    }
-
-    imSocketTask.onmessage = res => {
-      heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-      const result = JSON.parse(res.data)
-      if (result.code === 10) {
-        return
-      }
-      if (result.code === 11) {
-        return
-      }
-      if (result.code === 12) {
-        return
-      }
-      if (result.code === 15) {
-        ElMessage.error($t('chat.notYourResponsibility'))
-        noAccountable.value = false
-        return false
-      }
-      if (result.code === '00000' && result.data) {
-        message.value = 1
-        if (
-          result.data.newMessage &&
-          notificationDebounce.value &&
-          !localStorage.getItem('cloudShop')
-        ) {
-          notificationDebounce.value = null // 防止连续发送的消息导致右下方弹窗不断
-          popNotice($t('chat.notification'), $t('chat.haveANewUnreadMessage')) // 启用通知
-        }
-        newMessage.value = true
-        clearInterval(messageReminding.value)
-        if (notification.value) {
-          showMessage()
-        }
-        messageRemindingFn()
-      }
-    }
-    imSocketTask.onerror = () => {
-      onReconnect()
-    }
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('创建ws连接失败', err)
-  }
-}
-
-let lockReconnect = false
-const onReconnect = () => {
-  if (lockReconnect) return
-  lockReconnect = true
-  setTimeout(() => {
-    // 没连接上会一直重连，设置延迟避免请求过多
-    openWs()
-    lockReconnect = false
-  }, 2000)
-}
-
 const openUrl = () => {
   const path = router.resolve({ path: '/im-box' })
   const win = window.open(path.href, 'view_window', 'noopener,noreferrer')
@@ -335,11 +233,108 @@ const showMessage = Debounce(function () {
 }, 1800)
 
 onMounted(() => {
+  let notifFlag = true
   message.value = localStorage.getItem('cloudVsNotificationMessage') || null
   if (isImbox.value) {
-    openWs()
+    getWuKong()
+    WKSDK.shared().connectManager.addConnectStatusListener(connectStatusListener) // 监听连接状态
+  }
+  if (window.Notification) {
+    // 浏览器通知--window.Notification
+    if (Notification.permission === 'granted') {
+      notification = false
+      notifFlag = false
+    } else if (Notification.permission !== 'denied') {
+      notification = false
+      Notification.requestPermission()
+    }
+  } else {
+    notification = true
+  }
+  if (notifFlag) {
+    notification = true
   }
 })
+onUnmounted(() => {
+  WKSDK.shared().chatManager.removeMessageListener(messageListener)
+  WKSDK.shared().connectManager.removeConnectStatusListener(connectStatusListener)
+  WKSDK.shared().disconnect()
+})
+let messageListener
+const getWuKong = () => {
+  api.registerOrLogin(getToken()).then((data) => {
+    // 认证信息
+    const config = WKSDK.shared().config
+    config.addr = import.meta.env.VITE_APP_WEBSOCKET_URL
+    config.uid = data.uid // 用户uid（需要在悟空通讯端注册过）
+    config.token = data.token// 用户token （需要在悟空通讯端注册过）
+    WKSDK.shared().config = config
+    WKSDK.shared().connect()
+
+    // 监听消息
+    messageListener = (msg) => {
+      const ids = +cookie.get('cloudPChannelIds')
+      if (!msg.send && (ids === 0 || ids == null)) {
+        message.value = 1
+        popNotice($t('chat.notification'), $t('chat.haveANewUnreadMessage')) // 启用通知
+        newMessage.value = true
+        clearInterval(messageReminding)
+        if (notification) {
+          showMessage()
+        }
+        messageRemindingFn()
+      }
+    }
+    WKSDK.shared().chatManager.addMessageListener(messageListener)
+  })
+}
+let messageCount = 0
+const connectStatusListener = async (status) => {
+  if (status === ConnectStatus.Connected) {
+    const remoteConversations = await WKSDK.shared().conversationManager.sync() // 同步最近会话列表
+    if (remoteConversations && remoteConversations.length > 0) {
+      messageCount = WKSDK.shared().conversationManager.getAllUnreadCount()
+      if (messageCount > 0) {
+        message.value = 1
+        messageRemindingFn()
+        if (notification) {
+          showMessage()
+        }
+      }
+    }
+  }
+}
+// 同步自己业务端的最近会话列表
+WKSDK.shared().config.provider.syncConversationsCallback = async () => {
+  const data = await sendDelayedRequest()
+  return data
+}
+const sendDelayedRequest = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const data = await api.conversationSyncPage({
+          version: 0,
+          pageNum: 1,
+          pageSize: 20
+        })
+        const conversationList = data.list
+        const resultConversations = []
+
+        if (conversationList) {
+          conversationList.forEach((v) => {
+            const conversation = Convert.toConversation(v)
+            conversation.lastMessage.content.text = JSON.parse(conversation.lastMessage?.content.text)
+            resultConversations.push(conversation)
+          })
+        }
+        resolve(resultConversations)
+      } catch (error) {
+        reject(error)
+      }
+    }, 100)
+  })
+}
 const isDecorate = computed(() => {
   return !(/^\/(platform-decorate\/decorate-select-decorate)/.test(router.currentRoute.value.path))
 })

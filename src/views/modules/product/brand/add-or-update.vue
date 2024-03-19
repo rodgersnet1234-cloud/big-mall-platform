@@ -58,6 +58,7 @@
         prop="imgUrl"
       >
         <img-upload v-model="dataForm.imgUrl" />
+        <div>建议尺寸149*100像素</div>
       </el-form-item>
       <!-- 检索首字母 -->
       <el-form-item
@@ -351,5 +352,9 @@ defineExpose({ init })
   .brand-add-upd ::v-deep(.el-dialog){
     margin-top: 160px !important;
   }
+}
+
+:deep(.component-img-upload-box) {
+  margin-right: 100%;
 }
 </style>

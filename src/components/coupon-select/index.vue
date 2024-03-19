@@ -49,7 +49,7 @@
           :label="$t('coupon.coupon.couponName')"
         />
         <el-table-column
-          prop="getWay"
+          prop="couponTypeTxt"
           header-align="center"
           align="center"
           :label="$t('coupon.coupon.couponType')"
@@ -153,6 +153,7 @@ const onGetDataList = () => {
     dataList.value.forEach(item => {
       // 平台投放 / 用户领取
       item.getWay = item.getWay === 1 ? $t('coupon.coupon.platformDistribution') : $t('coupon.coupon.userClaim')
+      item.couponTypeTxt = item.couponType === 1 ? '代金券' : '折扣券'
     })
     dataListLoading.value = false
     if (selectCoupons) {

@@ -238,10 +238,10 @@ const init = (data) => {
         Data.liveRoomProdList = data.map(x => x.spuSearchVO)
         if (Data.dataForm.status !== null && Data.dataForm.status === -1) {
           // 用户注销
-          ElMessage($t('live.liveAnchorNotExist'))
+          ElMessage($t('platform.config.liveAnchorNotExist'))
         } else if (Data.dataForm.status !== null && Data.dataForm.status !== 1) {
           // 用户禁用
-          ElMessageBox.confirm($t('live.liveAnchorError'))
+          ElMessageBox.confirm($t('platform.config.liveAnchorError'))
         }
       })
     }

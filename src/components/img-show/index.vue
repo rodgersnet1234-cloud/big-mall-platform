@@ -26,11 +26,11 @@ const props = defineProps({
   },
   width: {
     type: [String, Number],
-    default: 'auto'
+    default: '100%'
   },
   height: {
     type: [String, Number],
-    default: 'auto'
+    default: '100%'
   },
   radius: {
     type: [String, Number],
@@ -90,7 +90,7 @@ const wrapStyle = computed(() => {
   // 如果是显示圆形，设置一个很多的半径值即可
   style.borderRadius = addUnit(props.radius)
   // 如果设置圆角，必须要有hidden，否则可能圆角无效
-  style.overflow = props.radius > 0 ? 'hidden' : 'visible'
+  style.overflow = props.radius > 0 ? 'hidden' : ''
   return { ...style, ...props.imgStyle }
 })
 

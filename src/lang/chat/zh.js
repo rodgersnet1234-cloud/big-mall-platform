@@ -47,5 +47,9 @@ export default {
   haveANewUnreadMessage: '你有新的未读消息',
   tips: '提示',
   confirm: '确认',
-  cancel: '取消'
+  cancel: '取消',
+  noContacts: '暂无联系人',
+  cannotSendBlankMessage: '不能发送空白消息哦',
+  PleaseSelectAContactPerson: '请选择联系人',
+  AccountCancelled: '账户已注销'
 }

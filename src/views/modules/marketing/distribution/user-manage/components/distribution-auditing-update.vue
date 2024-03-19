@@ -95,7 +95,6 @@
         class="user-application-data"
       >
         <el-button
-          v-permission="['distribution:distributionUser:update']"
           link
           type="primary"
           @click="info()"

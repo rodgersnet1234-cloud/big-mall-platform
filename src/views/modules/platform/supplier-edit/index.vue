@@ -265,7 +265,8 @@
                     type="date"
                     value-format="YYYY-MM-DD HH:mm:ss"
                     placeholder="开始日期"
-                    :clearable="false"
+                    clearable
+                    @change="onValidateTime('startTime')"
                   />
                   <span style="margin: 0 10px">-</span>
                   <span class="end-time">
@@ -275,13 +276,14 @@
                       style="width:170px;"
                       type="date"
                       value-format="YYYY-MM-DD HH:mm:ss"
-                      :placeholder="endTimeFlag && !companyInfoForm.endTime ? '' : '结束日期'"
+                      :placeholder="(endTimeFlag && !companyInfoForm.endTime && companyInfoForm.startTime) ? '' : '结束日期'"
                       clearable
-                      @change="endTimeFlag = false"
+                      :disabled="!companyInfoForm.startTime"
+                      @change="onValidateTime('endTime')"
                       @focus="endTimeFlag = false"
                     />
                     <span
-                      v-if="endTimeFlag && !companyInfoForm.endTime"
+                      v-if="endTimeFlag && !companyInfoForm.endTime && companyInfoForm.startTime"
                       class="text"
                       @click="focusEndTime"
                     >
@@ -1070,13 +1072,7 @@ const pickerOptions = reactive({
     )
   }
 })
-const valiStartTime = (rule, value, callback) => {
-  if (companyInfoForm.value.endTime && new Date(companyInfoForm.value.startTime).getTime() >= new Date(companyInfoForm.value.endTime).getTime()) {
-    callback(new Error('营业起始日期不能大于营业终止时间'))
-  } else {
-    callback()
-  }
-}
+
 const companyInfoRule = reactive({
   creditCode: [
     { required: true, message: '请填写统一社会信用代码', trigger: 'blur' },
@@ -1092,10 +1088,6 @@ const companyInfoRule = reactive({
   businessScope: [
     { required: true, message: '经营范围不能为空', trigger: 'blur' },
     { validator: validateNotEmpty, trigger: 'blur' }
-  ],
-  startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' },
-    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '营业执照需要上传', trigger: 'change' }
@@ -1466,6 +1458,25 @@ const toNextStep = () => {
       })
     }
   })
+}
+
+const onValidateTime = (value) => {
+  if (value === 'endTime') {
+    endTimeFlag.value = true
+    if (!companyInfoForm.value.endTime) companyInfoForm.value.endTime = undefined
+  } else {
+    endTimeFlag.value = false
+    if (!companyInfoForm.value.startTime) companyInfoForm.value.endTime = undefined
+  }
+  if (companyInfoForm.value.endTime && Date.parse(companyInfoForm.value.startTime) >= Date.parse(companyInfoForm.value.endTime)) {
+    ElMessage({
+      message: '营业起始日期不能大于营业终止时间',
+      type: 'error',
+      duration: 1500
+    })
+    endTimeFlag.value = true
+    companyInfoForm.value.endTime = undefined
+  }
 }
 
 </script>

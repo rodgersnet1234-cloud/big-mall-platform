@@ -1134,6 +1134,21 @@ const formValidation = () => {
     })
     return false
   }
+  for (let i = 0; i < dataFormPar.skuList.length; i++) {
+    const sku = dataFormPar.skuList[i]
+    if (
+      sku.partyCode &&
+      dataFormPar.skuList.find((el, index) => el.partyCode &&
+        index !== i &&
+        el.partyCode === sku.partyCode)
+    ) {
+      ElMessage({
+        message: '商品编码不能重复',
+        duration: 1000
+      })
+      return false
+    }
+  }
   return true
 }
 
