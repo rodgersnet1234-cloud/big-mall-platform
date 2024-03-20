@@ -469,7 +469,7 @@ const messageSendlisten = (event) => {
 }
 let sensitiveWords = '' // 敏感词
 const getSensitiveWords = () => {
-  get('SENSITIVE_WORDS').then((data) => {
+  get('sensitive_words').then((data) => {
     data = JSON.parse(data)
     if (data?.sensitiveWords) {
       sensitiveWords = data.sensitiveWords.replaceAll('，', '|')
