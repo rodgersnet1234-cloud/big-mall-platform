@@ -126,21 +126,34 @@ const dataForm = reactive({
   alipayRootCertContent: null,
   appPrivateKey: null
 })
+// eslint-disable-next-line no-unused-vars
+const validEmptyTab = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('内容不能全为空格'))
+  } else {
+    callback()
+  }
+}
 const dataRule = {
   appId: [
-    { required: true, message: $t('platform.config.appNullTips'), trigger: 'blur' }
+    { required: true, message: $t('platform.config.appNullTips'), trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   appCertContent: [
-    { required: true, message: $t('platform.config.appCertPublicKeyNullTips'), trigger: 'blur' }
+    { required: true, message: $t('platform.config.appCertPublicKeyNullTips'), trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   alipayCertContent: [
-    { required: true, message: $t('platform.config.alipayCertPublicKeyNullTips'), trigger: 'blur' }
+    { required: true, message: $t('platform.config.alipayCertPublicKeyNullTips'), trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   alipayRootCertContent: [
-    { required: true, message: $t('platform.config.alipayRootCertPathNullTips'), trigger: 'blur' }
+    { required: true, message: $t('platform.config.alipayRootCertPathNullTips'), trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   appPrivateKey: [
-    { required: true, message: $t('platform.config.appPrivateKeyNullTips'), trigger: 'blur' }
+    { required: true, message: $t('platform.config.appPrivateKeyNullTips'), trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ]
 }
 const useAllinpay = useAllinpayStore()
