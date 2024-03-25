@@ -332,7 +332,8 @@
                         type="date"
                         value-format="YYYY-MM-DD HH:mm:ss"
                         placeholder="开始日期"
-                        :clearable="false"
+                        clearable
+                        @change="onValidateTime('startTime')"
                       />
                       <span style="margin: 0 10px">-</span>
                       <el-date-picker
@@ -343,6 +344,8 @@
                         value-format="YYYY-MM-DD HH:mm:ss"
                         placeholder="结束日期"
                         clearable
+                        :disabled="!shopCompany.startTime"
+                        @change="onValidateTime('endTime')"
                       />
                     </div>
                   </el-form-item>
@@ -666,7 +669,7 @@
                             v-model="scope.row.cardNo"
                             oninput="value=value.replace(/[^\d]/g,'')"
                             placeholder="输入账号"
-                            maxlength="23"
+                            maxlength="30"
                             clearable
                           />
                         </el-form-item>
@@ -876,6 +879,7 @@
                     v-model="shopUserRegisterInfo.validCode"
                     class="mobile-int"
                     placeholder="输入验证码"
+                    maxlength="6"
                   />
                 </el-form-item>
               </el-form>
@@ -1137,13 +1141,7 @@ const pickerOptions = reactive({
     )
   }
 })
-const valiStartTime = (rule, value, callback) => {
-  if (shopCompany.value.endTime && new Date(shopCompany.value.startTime).getTime() >= new Date(shopCompany.value.endTime).getTime()) {
-    callback(new Error('营业起始日期不能大于营业终止时间'))
-  } else {
-    callback()
-  }
-}
+
 // 工商信息校验
 const shopCompanyRule = reactive({
   creditCode: [
@@ -1160,10 +1158,6 @@ const shopCompanyRule = reactive({
   businessScope: [
     { required: true, message: '经营范围不能为空', trigger: 'blur' },
     { validator: validEmptyTab, trigger: 'blur' }
-  ],
-  startTime: [
-    { required: true, message: '开始日期不能为空', trigger: 'change' },
-    { validator: valiStartTime, trigger: 'change' }
   ],
   businessLicense: [
     { required: true, message: '上传营业执照', trigger: 'change' }
@@ -1215,6 +1209,7 @@ const bankCartInfoForm = reactive({
     ],
     cardNo: [
       { required: true, message: '账号不能为空', trigger: 'blur' },
+      { min: 8, max: 30, message: '账户长度在8到30个字符', trigger: 'blur' },
       { validator: validateCardNo, trigger: 'blur' },
       { validator: validEmptyTab, trigger: 'blur' }
     ],
@@ -1376,7 +1371,7 @@ const bankCartInfoFormRef = ref(null)
 /**
  * 下一步
  */
-const toNextStep = () => {
+const toNextStep = Debounce(() => {
   if (applyStep.value === 1) {
     // 第一步 基本信息
     shopDetailRef.value?.validate((valid) => {
@@ -1393,14 +1388,6 @@ const toNextStep = () => {
         if (!shopCompany.value.businessScope.trim()) {
           ElMessage({
             message: '经营范围不能为空或空格！',
-            type: 'error',
-            duration: 1000
-          })
-          return
-        }
-        if (shopCompany.value.endTime && Date.parse(shopCompany.value.startTime) >= Date.parse(shopCompany.value.endTime)) {
-          ElMessage({
-            message: '营业起始日期不能大于营业终止时间',
             type: 'error',
             duration: 1000
           })
@@ -1471,7 +1458,7 @@ const toNextStep = () => {
       }
     })
   }
-}
+}, 1000)
 
 /**
  * 签约数据处理
@@ -1620,6 +1607,22 @@ const imgChange = (applyStepPar, prop) => {
  */
 const getSignBrandList = (brands) => {
   signBrandList.value = brands
+}
+
+const onValidateTime = (value) => {
+  if (value === 'endTime') {
+    if (!shopCompany.value.endTime) shopCompany.value.endTime = undefined
+  } else {
+    if (!shopCompany.value.startTime) shopCompany.value.endTime = undefined
+  }
+  if (shopCompany.value.endTime && Date.parse(shopCompany.value.startTime) >= Date.parse(shopCompany.value.endTime)) {
+    ElMessage({
+      message: '营业起始日期不能大于营业终止时间',
+      type: 'error',
+      duration: 1500
+    })
+    shopCompany.value.endTime = undefined
+  }
 }
 
 </script>

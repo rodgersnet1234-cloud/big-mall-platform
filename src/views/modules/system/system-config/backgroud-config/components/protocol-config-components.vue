@@ -7,6 +7,7 @@
     >
       <el-tab-pane :label="$t('platform.config.chineseConfig')">
         <tiny-mce
+          v-if="contentCN"
           v-model="contentCN"
           style="width: 1000px"
         />

@@ -214,5 +214,10 @@ defineExpose({ onInit })
   .no-data{
     text-align: center;
   }
+  .main {
+    & > div {
+      display: inline-flex;
+    }
+  }
 }
 </style>

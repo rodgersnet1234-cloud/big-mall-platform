@@ -123,7 +123,7 @@
                   v-permission="['platform:outletConfig:paperSize']"
                   type="primary"
                   link
-                  @click="onGetPaperSize(scope.row.outletConfigId, scope.row.deliveryCompanyType, scope.row.paperSize)"
+                  @click="onGetPaperSize(scope.row)"
                 >
                   {{ '纸张规格' }}
                 </el-button>
@@ -305,8 +305,8 @@ const onResetSearch = (formEl) => {
 
 // 获取纸张规格
 const paperSizeRef = ref(null)
-const onGetPaperSize = (id, type, paperSize) => {
-  paperSizeRef.value.init(id, type, paperSize)
+const onGetPaperSize = (item) => {
+  paperSizeRef.value.init(JSON.parse(JSON.stringify(item)))
 }
 
 // 设为默认

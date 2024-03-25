@@ -72,19 +72,10 @@
               class="names"
               style="display: flex;align-items: center"
             >
-              <el-image
-                :src="checkFileUrl(scope.row.mainImgUrl)"
-                style="width: 48px;height: 48px;margin-right: 15px"
-              >
-                <template #error>
-                  <div class="image-slot">
-                    <img
-                      src="@/assets/images/def.png"
-                      alt=""
-                    >
-                  </div>
-                </template>
-              </el-image>
+              <img-show
+                :img-style="{width: '48px',height: '48px',marginRight: '15px'}"
+                :src="scope.row.mainImgUrl"
+              />
               <span
                 style="width: calc(100% - 65px);overflow:hidden;text-overflow: ellipsis;white-space: nowrap"
               >{{ scope.row.spuName }}</span>
@@ -339,6 +330,8 @@ const handleSearch = () => {
 const handleChange = (val) => {
   if (val) {
     searchForm.value.categoryId = val[val?.length - 1]
+  } else {
+    searchForm.value.categoryId = null
   }
 }
 // 获取商品分类

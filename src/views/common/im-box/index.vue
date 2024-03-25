@@ -4,60 +4,17 @@
       <!-- 消息盒子头部 -->
       <div class="chat-box-top">
         {{ $t('chat.messageBox') }}
+        <span class="user-name">{{ userName }}</span>
       </div>
 
       <div class="chat-box-main">
-        <!-- 消息盒子左侧栏 -->
+        <!-- 左侧用户信息栏 -->
         <div class="chat-box-left">
-          <!-- 左侧用户信息栏 -->
-          <ul
-            v-if="friends.length"
-            v-infinite-scroll="scrollUserList"
-            infinite-scroll-immediate="false"
-            class="shop-list"
-          >
-            <li
-              v-for="(item, index) in friends"
-              :key="index"
-              :class="['shop-item',item.userId === Number(selectedF) ? 'changeUser' : '',item.message?'newMessage':'']"
-              @click="changeImContent(item.userId,index)"
-            >
-              <img
-                v-if="!item.pic"
-                src="@/assets/im_box/userImg.jpg"
-                class="shop-icon"
-                alt
-              >
-              <img
-                v-else
-                :src="checkFileUrl(item.pic)"
-                class="shop-icon"
-                alt
-                @error="item.pic=''"
-              >
-              <div class="shop-info">
-                <span class="shop-info-name">
-                  <span class="name">{{ item.friendName }}</span>
-                  <span
-                    v-if="item.unread > 0"
-                    class="tips"
-                  >{{ item.unread }}</span>
-                </span>
-                <span class="shop-info-icon">{{ item.latestMsg }}</span>
-              </div>
-            </li>
-          </ul>
-          <div
-            v-else
-            class="empty-contacts"
-          >
-            <img
-              src="@/assets/empty/empty_contacts.png"
-              alt="暂无联系人"
-              class="empty-img"
-            >
-            <span class="empty-txt">暂无联系人</span>
-          </div>
+          <Conversation
+            ref="conversationRef"
+            :on-select-channel="onSelectChannel"
+            @channel-info-update="channelInfoUpdate"
+          />
         </div>
 
         <!-- 消息盒子右侧信息回复栏 -->
@@ -67,164 +24,55 @@
               <div class="chat-main-form">
                 <div class="display-infor">
                   <div
-                    v-if="moreMess && pages>1"
-                    class="more"
-                    @click="moreInfo()"
+                    ref="chatRef"
+                    class="message-list"
+                    @scroll="handleScroll"
                   >
-                    {{ $t('chat.clickToLoadMore') }}
-                  </div>
-                  <div
-                    v-if="!moreMess && pages>1"
-                    class="more"
-                  >
-                    {{ $t('chat.noMore') }}
-                  </div>
-                  <div
-                    v-for="(row, index) in msgList"
-                    :key="index"
-                    class="row"
-                  >
-                    <!-- <div
-                      v-if="index>0&&msgList[index].employeeId!==msgList[index-1].employeeId"
-                      class="divider-box"
-                    >
-                      <el-divider>
-                        以上是{{ msgList[index-1].nickName || msgList[index-1].shopName }}客服聊天记录
-                      </el-divider>
-                    </div> -->
-                    <!-- 用户消息 -->
                     <div
-                      v-if="row.timeStr"
-                      class="topTime"
+                      v-for="(m, index) in messages"
+                      :key="index"
+                      class="row"
                     >
-                      {{ row.timeStr }}
-                    </div>
-                    <!-- 用户发出的消息 -->
-                    <div
-                      v-if="row.source === 2"
-                      class="my"
-                    >
-                      <!-- 右-消息 -->
-                      <div class="left">
-                        <img
-                          v-if="!row.userHeadUrl"
-                          src="@/assets/im_box/userImg.jpg"
-                          class="avatar"
-                          alt
-                        >
-                        <img
-                          v-else
-                          :src="checkFileUrl(row.userHeadUrl)"
-                          class="avatar"
-                          alt
-                          @error="row.userHeadUrl = ''"
-                        >
+                      <div
+                        v-if="m.timeStr"
+                        class="topTime"
+                      >
+                        {{ m.timeStr }}
                       </div>
-                      <!-- 左-头像 -->
-                      <div class="right">
-                        <div class="username">
-                          <div class="name">
-                            {{ row.userName }}
-                          </div>
-                        </div>
-                        <div
-                          v-if="row.type === 1 && !row.prodInfo"
-                          class="bubble"
-                        >
-                          <el-image
-                            :src="checkFileUrl(row.content)"
-                            class="longimage"
-                            :preview-src-list="[checkFileUrl(row.content)]"
+                      <!-- 用户发出的消息 -->
+                      <div
+                        v-if="!m.send&&!m.content.text.sender&&m.content.text?.msgType!==-1"
+                        class="my"
+                      >
+                        <!-- 右-消息 -->
+                        <div class="left">
+                          <img
+                            v-if="getChannelInfo(m,'pic')"
+                            :src="checkFileUrl(getChannelInfo(m,'pic'))"
+                            alt=""
                           >
-                            <template #error>
-                              <img
-                                class="img-slot"
-                                src="@/assets/images/def.png"
-                                alt
-                              >
-                            </template>
-                          </el-image>
-                        </div>
-                        <!-- 文字消息 -->
-                        <div
-                          v-if="row.type === 0 && !row.prodInfo"
-                          class="bubble"
-                        >
-                          <span>{{ row.content }}</span>
-                        </div>
-                        <!-- 商品链接 -->
-                        <div
-                          v-if="row.prodInfo"
-                          class="prod-link"
-                        >
-                          <div class="link-prod">
-                            <div
-                              v-if="row.prodInfo.orderFlag"
-                              class="prod-number"
-                              @click="toProdDetail(row.prodInfo,1,row.prodInfo.orderType)"
-                            >
-                              {{ $t('chat.orderNumber') }}:{{ row.prodInfo.orderId }}
-                            </div>
-                            <div
-                              class="prod-box"
-                              @click="toProdDetail(row.prodInfo,0,row.prodInfo.orderType)"
-                            >
-                              <img-show :src="row.prodInfo.imgs" />
-                              <div class="link-detail">
-                                <div class="prod-name">
-                                  {{ row.prodInfo.spuName }}
-                                </div>
-                                <div class="prod-price">
-                                  <span>{{ row.prodInfo.actualTotal?'￥':'' }}{{ row.prodInfo.actualTotal?parsePrice(row.prodInfo.actualTotal)[0]+'.'+parsePrice(row.prodInfo.actualTotal)[1]:'' }}{{ (row.prodInfo.actualTotal && (row.prodInfo.platformShareReduce || row.prodInfo.scoreFee))?'+':'' }}<span v-if="row.prodInfo.platformShareReduce">{{ parsePrice(row.prodInfo.platformShareReduce)[0] }} {{ $t('order.order.integral') }}</span><span v-if="row.prodInfo.scoreFee">{{ row.prodInfo.scoreFee }} {{ $t('order.order.integral') }}</span></span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- 平台或者商家发出的消息 -->
-                    <div
-                      v-if="(row.source === 0 || row.source === 1)"
-                      class="other"
-                    >
-                      <!-- 右-商家名称-时间-消息 -->
-                      <div class="left">
-                        <div class="username">
-                          <div class="name">
-                            {{ row.nickName||row.shopName }}
-                          </div>
-                        </div>
-                        <div class="message-box">
-                          <div
-                            v-if="row.userUnread"
-                            class="unread"
-                          >
-                            {{ $t('chat.read') }}
-                          </div>
-                          <div
+                          <img
                             v-else
-                            class="unread"
+                            src="@/assets/im_box/userImg.jpg"
+                            class="avatar"
+                            alt=""
                           >
-                            {{ $t('chat.unRead') }}
+                        </div>
+                        <!-- 左-头像 -->
+                        <div class="right">
+                          <div class="username">
+                            <div class="name">
+                              {{ getChannelInfo(m,'nickName') }}
+                            </div>
                           </div>
-                          <!-- 文字消息 -->
                           <div
-                            v-if="row.type === 0"
-                            class="bubble"
-                          >
-                            <span>{{ row.content }}</span>
-                          </div>
-                          <!-- 图片消息 -->
-                          <div
-                            v-if="row.type === 1"
+                            v-if="m.content.text.msgType===2"
                             class="bubble"
                           >
                             <el-image
-                              :src="checkFileUrl(row.content)"
+                              :src="checkFileUrl(m.content.text.msg)"
                               class="longimage"
-                              :preview-src-list="[checkFileUrl(row.content)]"
+                              :preview-src-list="[checkFileUrl(m.content.text.msg)]"
                             >
                               <template #error>
                                 <img
@@ -235,15 +83,140 @@
                               </template>
                             </el-image>
                           </div>
+                          <div
+                            v-if="m.content.text.msgType===1"
+                            class="bubble"
+                          >
+                            <span> {{ getMessageText(m) }} </span>
+                          </div>
+                          <div
+                            v-if="m.content.text?.msgType===4"
+                            class="prod-link"
+                          >
+                            <div class="link-prod">
+                              <div
+                                v-if="m.content.text.msg.orderFlag"
+                                class="prod-number"
+                                @click="toProdDetail(m.content.text.msg,1,m.content.text.msg.orderType)"
+                              >
+                                {{ $t('chat.orderNumber') }}:{{ m.content.text.msg.orderId }}
+                              </div>
+                              <div
+                                class="prod-box"
+                                @click="toProdDetail(m.content.text.msg,0,m.content.text.msg.orderType)"
+                              >
+                                <img-show :src="m.content.text.msg.imgs" />
+                                <div class="link-detail">
+                                  <div class="prod-name">
+                                    {{ m.content.text.msg.spuName }}
+                                  </div>
+                                  <div class="prod-price">
+                                    <span>{{ m.content.text.msg.actualTotal?'￥':'' }}{{ m.content.text.msg.actualTotal?parsePrice(m.content.text.msg.actualTotal)[0]+'.'+parsePrice(m.content.text.msg.actualTotal)[1]:'' }}{{ (m.content.text.msg.actualTotal && (m.content.text.msg.platformShareReduce || m.content.text.msg.scoreFee))?'+':'' }}<span v-if="m.content.text.msg.platformShareReduce">{{ parsePrice(m.content.text.msg.platformShareReduce)[0] }} {{ $t('order.order.integral') }}</span><span v-if="m.content.text.msg.scoreFee">{{ m.content.text.msg.scoreFee }} {{ $t('order.order.integral') }}</span></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <!-- 头像 -->
-                      <div class="right">
-                        <img
-                          src="@/assets/im_box/customer-service.png"
-                          class="avatar"
-                          alt
-                        >
+
+                      <!-- 平台或者商家发出的消息 -->
+                      <div
+                        v-if="m.send||m.content.text.sender||m.content.text?.msgType===-1||m.content.text?.type===-1"
+                        :id="m.clientMsgNo"
+                        class="other"
+                      >
+                        <!-- 右-商家名称-时间-消息 -->
+                        <div class="left">
+                          <div
+                            v-if="m.content.text.sender===1"
+                            class="divider-box"
+                          >
+                            <div class="divider" />
+                            <div class="divider-txt">
+                              {{ $t('chat.transferToCustomerService') }}{{ getChannelInfo(m,'nickName') }}
+                            </div>
+                            <div class="divider" />
+                          </div>
+                          <div class="username">
+                            <div class="name">
+                              <!-- {{ row.nickName||row.shopName }} -->
+                              {{ getChannelInfo(m,'nickName') }}
+                            </div>
+                          </div>
+                          <div class="message-box">
+                            <div
+                              v-if="maxReadSeq>=m.messageSeq"
+                              class="unread"
+                            >
+                              {{ $t('chat.read') }}
+                            </div>
+                            <div
+                              v-else
+                              class="unread"
+                            >
+                              {{ $t('chat.unRead') }}
+                            </div>
+                            <!-- 文字消息 -->
+                            <div
+                              v-if="(m.content.text.msgType===-1||m.content.text.msgType===1||m.content.text.type===-5)&&m.content.text.type!==-1"
+                              class="bubble"
+                            >
+                              <span>  {{ m.content.text.msg }}</span>
+                            </div>
+                            <!-- 图片消息 -->
+                            <div
+                              v-if="m.content.text.msgType===2"
+                              class="bubble"
+                            >
+                              <el-image
+                                :src="checkFileUrl(m.content.text.msg)"
+                                class="longimage"
+                                :preview-src-list="[checkFileUrl(m.content.text.msg)]"
+                              >
+                                <template #error>
+                                  <img
+                                    class="img-slot"
+                                    src="@/assets/images/def.png"
+                                    alt
+                                  >
+                                </template>
+                              </el-image>
+                            </div>
+                            <div>
+                              <div
+                                v-if="m.content.text.type===-1"
+                                class="issues-bubble"
+                              >
+                                <div
+                                  v-if="m.content.text.sendTextState"
+                                >
+                                  {{ m.content.text.content }}
+                                </div>
+                                <div
+                                  v-if="m.content.text.sendIssusState"
+                                  style="display: flex; flex-direction: column;align-items: flex-start;"
+                                >
+                                  <div
+                                    v-for="item in m.content.text.issues"
+                                    :key="item.id"
+                                    class="issues-btn"
+                                  >
+                                    • {{ item.issues }}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- 头像 -->
+                        <div class="right">
+                          <img
+                            src="@/assets/im_box/customer-service.png"
+                            class="avatar"
+                            alt
+                          >
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -289,6 +262,7 @@
                       name=""
                       cols="20"
                       rows="4"
+                      maxlength="500"
                       @keydown="messageSendlisten($event)"
                     />
                   </div>
@@ -310,51 +284,35 @@
       v-model="visible"
       :title="$t('chat.selectOnlineCustomerService')"
       :modal="false"
-      top="61px"
-      width="980px"
+      top="60px"
+      width="800px"
       :close-on-click-modal="false"
       append-to-body
     >
       <div class="prods-select-body">
-        <el-table
-          ref="prodTableRef"
-          :data="serviceList"
-          border
-          style="width: 100%"
+        <div class="username">
+          {{ $t('login.username') }}
+        </div>
+        <div
+          v-for="item in serviceList"
+          :key="item.uid"
+          class="service-list"
         >
-          <el-table-column
-            v-if="isSingle"
-            width="50"
-            header-align="center"
-            align="center"
+          <el-radio
+            v-model="platformUserId"
+            :label="item.uid"
+            @change="getSelectProdRow(item)"
           >
-            <template #default="scope">
-              <div>
-                <!-- native modifier has been removed, please confirm whether the function has been affected  -->
-                <el-radio
-                  v-model="platformUserId"
-                  :label="scope.row.sysUserId"
-                  @change="getSelectProdRow(scope.row)"
-                >
-&nbsp;
-                </el-radio>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            v-if="!isSingle"
-            type="selection"
-            header-align="center"
-            align="center"
-            width="50"
-          />
-          <el-table-column
-            prop="nickName"
-            header-align="center"
-            align="center"
-            :label="$t('chat.userName')"
-          />
-        </el-table>
+            &nbsp;
+          </el-radio>
+          <span class="nick-name">{{ item.nickName }}</span>
+        </div>
+        <div
+          v-if="serviceList.length===0"
+          class="no-data"
+        >
+          {{ $t('order.order.noData') }}
+        </div>
       </div>
       <template #footer>
         <span>
@@ -377,48 +335,48 @@
 import * as api from '@/api/im-box/index.js'
 import { awsImgUpdate, getBatchPreSignUrl } from '@/api/biz/oss.js'
 import { getToken } from '@/utils/auth.js'
-import { Base64 } from 'js-base64'
 import ImageCompressor from 'compressorjs'
-
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import Conversation from './components/Conversation/index.vue'
+import { ConnectStatus, WKSDK, Message, MessageText, MessageStatus, PullMode } from 'wukongimjssdk'
+import { Convert } from './components/Conversation/convert'
+import { get } from '@/api/platform/sys-config.js'
+import cookie from 'vue-cookies'
 
 const router = useRouter()
-const route = useRoute()
-
-const employeeIdShop = null // 当前商家id
-const WebSocketUrl = import.meta.env.VITE_APP_WEBSOCKET_URL
-
 const defaultTitle = document.title // 存储默认标题
-
-const isSingle = ref(true)
-
 onMounted(() => {
-  getShopInfo()
-  getConversations()
+  getSensitiveWords()
   // 监听storage的变化，用于退出登录时关闭ws
   window.addEventListener('storage', (e) => {
     if (e.key === 'cloudPlatChatWs') {
-      imSocketTask?.close()
+      WKSDK.shared().disconnect()
     }
   })
+  window.addEventListener('visibilitychange', () => {
+    clearInterval(messageReminding)
+    document.title = defaultTitle
+  })
+  getWuKong()
+  WKSDK.shared().chatManager.addCMDListener(cmdListener) // 监听cmd消
 })
-
-let imSocketTask = null
-onBeforeMount(() => {
-  if (imSocketTask != null) {
-    imSocketTask.close()
+onUnmounted(() => {
+  clearInterval(messageReminding)
+  WKSDK.shared().connectManager.removeConnectStatusListener(connectStatusListener)
+  WKSDK.shared().chatManager.removeMessageListener(messageListener)
+  WKSDK.shared().chatManager.removeCMDListener(cmdListener)
+  WKSDK.shared().chatManager.removeMessageStatusListener(messageStatusListener)
+  WKSDK.shared().disconnect()
+})
+const userStore = useUserStore()
+const channelId = computed(() => userStore.channelId)
+window.addEventListener('beforeunload', () => {
+  const temp = cookie.get('cloudPChannelIds')
+  if (Number(temp) > 0) {
+    const updateNum = Number(temp) - channelId.value
+    cookie.set('cloudPChannelIds', updateNum)
   }
 })
-
-let userId = ''
-let nickName = ''
-const getShopInfo = () => {
-  api.shopUserInfo().then(data => {
-    userId = data.platformUserId
-    nickName = data.nickName
-  })
-}
-
 /**
  * 价格过滤
  */
@@ -457,439 +415,35 @@ const messageRemindingFn = () => {
   }, 500)
 }
 
-let userCurrent = 1 // 左侧用户栏当前页
-const friends = ref([])
-let currentUserId = ''
-let userPages = null
-/**
- * 获取左侧历史联系人信息
- */
-const getConversations = async () => {
-  const data = await api.getConversations(userCurrent, 20)
-  if (data.list && data.pages) {
-    data.list.forEach(item => {
-      const a = isJSON(item.latestMsg)
-      if (item.type === 1) {
-        item.latestMsg = '[' + $t('chat.image') + ']'
-      } else if (a && JSON.parse(item.latestMsg) instanceof Object) {
-        item.latestMsg = '[' + $t('chat.productLinks') + ']'
-      }
-    })
-    // sort按时间正序排序 最新的消息在前面
-    data.list.sort(function (a, b) {
-      return b.timestamp - a.timestamp
-    })
-    if (userCurrent > 1) {
-      friends.value.forEach(item => {
-        data.list = data.list.filter(itemInde => {
-          return item.userId !== itemInde.userId
-        })
-      }) // 过滤左侧已存在的用户
-      friends.value = friends.value.concat(data.list)
-    } else {
-      if (route.query.userId) {
-        // 用户要是已存在就记录下标
-        const newUserFlag = data.list.some((item) => {
-          if (item.userId === Number(route.query.userId)) {
-            return item.userId === Number(route.query.userId)
-          } else {
-            return false
-          }
-        }) // 过滤已存在的用户
-        if (newUserFlag) {
-          friends.value = data.list
-          currentUserId = route.query.userId
-        } else {
-          const res = await api.getUserinfo(route.query.userId)
-          friends.value.push(res[0])
-          currentUserId = res[0].userId
-          friends.value = friends.value.concat(data.list)
-        }
-      } else {
-        friends.value = data.list
-        currentUserId = data.list[0].userId
-      }
-      openWs() // 开启webstocket
-    }
-    userPages = data.pages
-  } else {
-    // 平台联系买家
-    if (route.query.orderNumber && route.query.userId && !friends.value.length) {
-      getNewUser()
-    } else {
-      openWs() // 开启webstocket
-    }
-  }
-}
-
-// 添加新的用户栏到左侧
-const getNewUser = async () => {
-  const res = await api.getUserinfo(route.query.userId)
-  friends.value.push(res[0])
-  currentUserId = res[0].userId
-  selectedF.value = res[0].userId
-  openWs() // 开启webstocket
-}
-
-let ortherUser = false // 别的账号登录判断
 let noAccountable = true // 转接判断
-let current = 1 // 聊天内容当前页
-const msgList = ref([])
-const pages = ref(null)
-const moreMess = ref(null) // true 有更多 false 没有更多
-const selectedF = ref(null) // 选中的用户
 const serviceList = ref([])
-let userRead = true // 用户的已读未读判断
-let userSend = false // 是否是用户发送的消息判断
-let lockReconnect = false // 判断有无客服连接上
-let plooTime = 0
-let messageInfo = {} // 商家发送的文本消息
-/**
- * 开启webstocket
- */
-// eslint-disable-next-line max-lines-per-function
-const openWs = () => {
-  imSocketTask = new WebSocket(
-    WebSocketUrl + '/mall4cloud_im/p/ua/im/websocket/' + Base64.encode(getToken()) + '/' + userId
-  )
-  imSocketTask.onopen = () => {
-    heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-    ortherUser = false
-    if (friends.value.length) {
-      getMsgItems()
-    }
-  }
-  // eslint-disable-next-line max-statements,max-lines-per-function
-  imSocketTask.onmessage = (res) => {
-    heartCheck.reset().start() // 成功建立连接后，重置心跳检测
-    const result = JSON.parse(res.data)
-    if (result.code !== '00000') {
-      result.code = Number(result.code)
-    }
-    if (result.code === 10) {
-      router.push({ path: '/login' })
-      return
-    }
-    if (result.code === 11) {
-      ortherUser = true
-      ElMessageBox.confirm($t('chat.idIsLoginInElse'), {
-        showClose: false,
-        showCancelButton: false,
-        confirmButtonText: $t('chat.confirm')
-      }).then(() => {
-        window.close()
-      })
-      return
-    }
-    if (result.code === 12) {
-      return
-    }
-    if (result.code === 15) {
-      ElMessage.error($t('chat.notYourResponsibility'))
-      noAccountable = false
-      return false
-    }
-    if (result.code === 18) {
-      clearTimeout(pushMsgTimer)
-      ElMessage.error(result.data || '该用户已注销')
-      return
-    }
-    if (!result.data) {
-      return
-    }
-    let switchingHistory = null
-    /**
-     * 新的聊天信息
-     */
-    if (result.code === '00000' || result.code === 4) {
-      if (result.data === 'ok') {
-        return
-      }
-      let index = null
-
-      // 消息提醒标题闪烁
-      if (result.data && !messageReminding) {
-        messageRemindingFn()
-      }
-
-      // 进行未读消息的加减
-      if (friends.value.length && result.code !== 4) {
-        friends.value.forEach((item, indexx) => {
-          if (item.userId === result.data.userId) {
-            index = indexx
-          }
-        })
-        if (index != null && selectedF.value !== result.data.userId && result.data.userUnread) {
-          friends.value[index].unread = Number(friends.value[index].unread) + 1
-        }
-      }
-
-      if (result.data.shopLogo) {
-        result.data.shopLogo = checkFileUrl(result.data.shopLogo)
-      }
-      if (result.data.userHeadUrl) {
-        result.data.userHeadUrl = checkFileUrl(result.data.userHeadUrl)
-      }
-
-      if (result.code === 4) {
-        currentUserId = result.data.userId
-        switchingHistory = 1
-        clearMeagess()
-        if (!friends.value.length) {
-          friends.value.unshift({
-            pic: result.data.userHeadUrl,
-            friendName: result.data.userName,
-            latestMsg: result.data.content,
-            shopId: result.data.shopId,
-            userId: result.data.userId,
-            unread: 0,
-            message: result.data.userId === currentUserId ? 0 : 1
-          })
-        }
-        getMsgItems(1)
-      }
-
-      if (result.data.userId === currentUserId) {
-        const readed = {
-          read: 1,
-          msgIds: [result.data.itemId],
-          toId: currentUserId,
-          sendType: 0
-        }
-        imSocketTask.send(JSON.stringify(readed))
-      }
-
-      changeFriendsWhenMsg(result.data)
-      if (result.data.userId === currentUserId) {
-        pushMsgItem(1, result.data)
-      }
-    }
-
-    /**
-     * 聊天记录
-     */
-    if (result.code === 2) {
-      const msgIds = []
-      let index = null
-      if (result && result.data.pages) {
-        result.data.list = result.data.list.reverse()
-        if (friends.value.length) {
-          friends.value.forEach((item, indexx) => {
-            if (item.userId === result.data.list[0].userId) {
-              index = indexx
-            }
-          })
-        }
-
-        // 进行是否是商品链接的判断
-        result.data.list.forEach(item => {
-          const a = isJSON(item.content)
-          if (item.userHeadUrl) {
-            item.userHeadUrl = checkFileUrl(item.userHeadUrl)
-          }
-          if (a && JSON.parse(item.content) instanceof Object) {
-            item.prodInfo = JSON.parse(item.content)
-          }
-
-          item.timeStr = tsToDate(item.timestamp, 'M月D日 h:m')
-
-          msgIds.push(item.itemId)
-          // 进行未读消息的加减
-          if (!item.employeeUnread) {
-            friends.value[index].unread = 0
-          }
-          item.employeeUnread = 1
-        })
-
-        const readed = {
-          read: 1,
-          msgIds,
-          toId: currentUserId,
-          sendType: 0
-        }
-        imSocketTask.send(JSON.stringify(readed))
-
-        result.data.list.reduce((prev, cur) => {
-          // 将时间更换为某某月某某日 要是是当天即去掉月日
-          const now = tsToDate(prev.timestamp, 'M月D日 h:m')
-          const next = tsToDate(cur.timestamp, 'M月D日 h:m')
-          if (now.slice(0, now.indexOf(' ')) === next.slice(0, next.indexOf(' '))) {
-            cur.timeStr = tsToDate(cur.timestamp, 'h:m')
-          }
-
-          // 历史记录进行时间段显示判断
-          if (result.data.list.length > 2) {
-            const timeFlag = timeBeApart(prev.timestamp, cur.timestamp)
-            if (timeFlag) {
-              delete cur.timeStr
-            }
-          }
-          return cur
-        })
-      }
-
-      if (current === 1) {
-        msgList.value = result.data.list || []
-        pages.value = result.data.pages
-        scrollToBottom()
-      }
-
-      if (current !== 1) {
-        result.data.list = result.data.list.reverse()
-        // 数组反转拼接
-        if (!switchingHistory) {
-          // 转接客服的历史消息合并
-          result.data.list.forEach(item => {
-            msgList.value.unshift(item)
-          })
-        } else {
-          result.data.list = result.data.list.reverse()
-          msgList.value = result.data.list || []
-          pages.value = result.data.pages
-          switchingHistory = null // 重置转接客服聊天消息
-          current = 1
-        }
-      }
-      moreMess.value = result.data.pages > 1
-      if (result.data.pages !== 0) {
-        selectedF.value = result.data.list[0].userId
-      } else {
-        selectedF.value = route.query.userId ? route.query.userId : ''
-      }
-    }
-
-    /**
-     * 转接客服
-     */
-    if (result.code === 3) {
-      serviceList.value = result.data
-    }
-
-    /**
-     * 未读信息转成已读
-     */
-    if (result.code === 5) {
-      if (userSend) {
-        userRead = false
-        userSend = false
-        pushMsgItem(msgList.value, messageInfo)
-      }
-      msgList.value.forEach(item => {
-        item.userUnread = 1
-      })
-    }
-  }
-  const heartCheck = {
-    timeout: 19000, // 19s发一次心跳，比server端设置的连接时间稍微小一点，在接近断开的情况下以通信的方式去重置连接时间。 尽量一个小时发送三次
-    serverTimeoutObj: null,
-    reset: function () {
-      clearTimeout(heartCheck.serverTimeoutObj)
-      return this
-    },
-    start: function () {
-      heartCheck.serverTimeoutObj = setTimeout(() => {
-        if (!imSocketTask) {
-          return
-        }
-        if (imSocketTask.readyState === 1) {
-          imSocketTask.send(
-            JSON.stringify({
-              sendType: null,
-              content: 'HEART_BEAT',
-              msgType: 0,
-              toId: currentUserId
-            })
-          )
-          heartCheck.reset().start() // 如果获取到消息，说明连接是正常的，重置心跳检测
-        } else {
-          imSocketTask.close()
-          imSocketTask = null
-          lockReconnect = false
-        }
-      }, heartCheck.timeout)
-    }
-  }
-  imSocketTask.onclose = () => {
-    if (!ortherUser) {
-      ortherUser = false
-      if (plooTime < 3) {
-        plooTime++
-        if (lockReconnect) return
-        lockReconnect = true
-        setTimeout(() => { // 没连接上会一直重连，设置延迟避免请求过多
-          openWs()
-          lockReconnect = false
-        }, 2000)
-      } else {
-        ElMessageBox.confirm($t('chat.connetBroken'), $t('chat.tips'), {
-          confirmButtonText: $t('chat.confirm'),
-          cancelButtonText: $t('chat.cancel'),
-          type: 'warning'
-        }).then(() => {
-          location.reload()
-        }).catch(() => {})
-      }
-    }
-  }
-}
 
 const visible = ref(false) // 客服转接弹窗显隐
 /**
  * 转接客服
  */
 const customerService = () => {
-  const messageInfoPar = {
-    toId: currentUserId,
-    platformUserList: 1,
-    msgType: 0
+  if (isDestroy || isDestroyArr.includes(to.value.channelID)) {
+    ElMessage.error($t('chat.AccountCancelled'))
+    textMsg.value = ''
+    return
   }
-
-  imSocketTask.send(JSON.stringify(messageInfoPar))
+  if (!to.value.channelID) {
+    ElMessage.error($t('chat.PleaseSelectAContactPerson'))
+    return
+  }
+  if (!noAccountable) {
+    ElMessage.error($t('chat.notYourResponsibility'))
+    return
+  }
+  api.getListTransfer().then((data) => { // 客服列表
+    serviceList.value = data
+  })
   const time = setTimeout(() => {
-    if (noAccountable) {
-      visible.value = true
-    }
+    if (noAccountable) visible.value = true
+    visible.value = true
     clearTimeout(time)
   }, 100)
-}
-
-/**
- * 有消息过来的时候，改变左边历史联系人列表（先删除消息对应联系人的信息，再将联系人放到第一个）
- */
-const changeFriendsWhenMsg = (msgItem) => {
-  // 消息内容
-  let msgContent
-  const isJson = isJSON(msgItem.content)
-  // 图片消息
-  if (msgItem.type === 1) {
-    msgContent = '[' + $t('chat.image') + ']'
-  } else if (isJson && JSON.parse(msgItem.content) instanceof Object) {
-    msgContent = '[' + $t('chat.productLinks') + ']'
-  } else {
-    msgContent = msgItem.content
-  }
-  for (let i = 0; i < friends.value.length; i++) {
-    const item = friends.value[i]
-    // 更新最新消息
-    if (msgItem.userId === item.userId) {
-      item.latestMsg = msgContent
-      item.timeStr = msgItem.timeStr
-      msgItem.unread = item.unread
-      friends.value.splice(i, 1)
-      break
-    }
-  }
-
-  // 新消息
-  friends.value.unshift({
-    pic: msgItem.userHeadUrl,
-    friendName: msgItem.userName,
-    latestMsg: msgContent,
-    shopId: msgItem.shopId,
-    userId: msgItem.userId,
-    unread: msgItem.unread || (currentUserId === msgItem.userId ? msgItem.unread : 1),
-    message: msgItem.userId === currentUserId ? 0 : 1
-  })
 }
 
 const isJSON = (str) => {
@@ -904,72 +458,6 @@ const isJSON = (str) => {
 }
 
 /**
- * 换个联系人聊条
- */
-const changeImContent = (itemUserId, index) => {
-  if (currentUserId === itemUserId) {
-    return
-  }
-  currentUserId = itemUserId
-  current = 1
-  noAccountable = 1
-  friends.value[index].message = 0
-  const time = setTimeout(() => {
-    getMsgItems()
-    clearTimeout(time)
-  }, 100)
-}
-
-/**
- * 获取聊天记录
- */
-const getMsgItems = () => {
-  const messageInfoPar = {
-    history: true,
-    current,
-    size: 10,
-    sendType: 0,
-    toId: currentUserId
-  }
-  imSocketTask.send(JSON.stringify(messageInfoPar))
-}
-
-/**
- * 添加联系人发送过来的消息内容
- */
-const pushMsgItem = (msgListPar, msgItemPar) => {
-  if (msgItemPar.type === 1) {
-    msgItemPar.content = checkFileUrl(msgItemPar.content)
-  }
-
-  const a = isJSON(msgItemPar.content)
-  if (a && JSON.parse(msgItemPar.content) instanceof Object) {
-    msgItemPar.prodInfo = JSON.parse(msgItemPar.content)
-  }
-
-  // 首次进入
-  if (msgListPar.length) {
-    const prevTime = tsToDate(msgListPar[msgListPar.length - 1].timestamp, 'M月D日 h:m')
-    const nowTime = tsToDate(msgItemPar.timestamp, 'M月D日 h:m')
-    if (prevTime.slice(0, prevTime.indexOf(' ')) === nowTime.slice(0, nowTime.indexOf(' '))) {
-      msgItemPar.timeStr = tsToDate(new Date().getTime(), 'h:m')
-    } else {
-      msgItemPar.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
-    }
-    const timeFlag = timeBeApart(msgListPar[msgListPar.length - 1].timestamp, new Date().getTime())
-    if (timeFlag) {
-      delete msgItemPar.timeStr
-    }
-  } else {
-    msgItemPar.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
-  }
-  msgItemPar.timestamp = new Date().getTime()
-  msgList.value.push(msgItemPar)
-  noAccountable = true
-  scrollToBottom()
-}
-
-/**
  * textarea回车事件
  */
 const messageSendlisten = (event) => {
@@ -979,67 +467,52 @@ const messageSendlisten = (event) => {
     return false
   }
 }
-
-const textMsg = ref('')
+let sensitiveWords = '' // 敏感词
+const getSensitiveWords = () => {
+  get('sensitive_words').then((data) => {
+    data = JSON.parse(data)
+    if (data?.sensitiveWords) {
+      sensitiveWords = data.sensitiveWords.replaceAll('，', '|')
+    }
+  })
+}
 /**
  * 发送文本消息
  */
+const textMsg = ref('')
 const sendText = () => {
-  if (imSocketTask?.readyState !== 1) {
-    ElMessageBox.confirm($t('chat.connetBroken'), $t('chat.tips'), {
-      confirmButtonText: $t('chat.confirm'),
-      cancelButtonText: $t('chat.cancel'),
+  if (!to.value.channelID) {
+    ElMessage.error($t('chat.PleaseSelectAContactPerson'))
+    return
+  }
+  if (isDestroy || isDestroyArr.includes(to.value.channelID)) {
+    ElMessage.error($t('chat.AccountCancelled'))
+    textMsg.value = ''
+    return
+  }
+  if (!noAccountable) {
+    ElMessage.error($t('chat.notYourResponsibility'))
+    textMsg.value = ''
+    return
+  }
+  if (textMsg.value === '' || textMsg.value.match(/^\s+$/)) {
+    ElMessage({
+      message: $t('chat.cannotSendBlankMessage'),
       type: 'warning'
-    }).then(() => {
-      location.reload()
-    }).catch(() => {})
+    })
     return
   }
-
-  if (textMsg.value === '' || !currentUserId) {
-    return
+  if (sensitiveWords) {
+    try {
+      const rep = new RegExp(sensitiveWords, 'g')
+      textMsg.value = textMsg.value.replaceAll(rep, '**')
+    } catch (e) {}
   }
-  const messageInfoPar = {
-    toId: currentUserId,
-    content: textMsg.value,
-    msgType: 0
-  }
-  addMessage(messageInfoPar)
+  let content = ''
+  const msgObj = JSON.stringify({ msg: textMsg.value, msgType: 1, sender: -1 })
+  content = new MessageText(msgObj)
+  WKSDK.shared().chatManager.send(content, to.value)
   textMsg.value = ''
-}
-
-let pushMsgTimer = null
-const addMessage = (messageInfoPar, type) => {
-  userRead = true // 重置,防止用户不在线时可以继续发消息
-  userSend = true
-  imSocketTask.send(JSON.stringify(messageInfoPar))
-  const shopInfo = {}
-  const msgItem = {
-    shopName: shopInfo.shopName,
-    shopLogo: checkFileUrl(shopInfo.shopLogo),
-    type: messageInfoPar.msgType,
-    userUnread: 0,
-    employeeId: employeeIdShop,
-    timestamp: new Date(),
-    source: 1,
-    content: messageInfoPar.content,
-    nickName
-  }
-  messageInfo = msgItem
-
-  // 转接客服异步返回结果所以设下定时器
-  pushMsgTimer = setTimeout(() => {
-    if (noAccountable && userRead) {
-      friends.value.forEach(item => {
-        if (item.userId === currentUserId) {
-          item.latestMsg = type ? '[' + $t('chat.image') + ']' : msgItem.content
-        }
-      })
-      pushMsgItem(msgList.value, msgItem)
-      userSend = false
-    }
-    clearTimeout(pushMsgTimer)
-  }, 100)
 }
 
 /**
@@ -1068,6 +541,19 @@ const fileRef = ref(null)
  * 获取上传图片数据
  */
 const onUploadConfirm = () => {
+  if (!to.value.channelID) {
+    ElMessage.error($t('chat.PleaseSelectAContactPerson'))
+    return
+  }
+  if (isDestroy || isDestroyArr.includes(to.value.channelID)) {
+    ElMessage.error($t('chat.AccountCancelled'))
+    textMsg.value = ''
+    return
+  }
+  if (!noAccountable) {
+    ElMessage.error($t('chat.notYourResponsibility'))
+    return
+  }
   getBatchPreSignUrl([fileRef.value.files[0].name]).then(data => {
     ossList = data
     nextTick(() => {
@@ -1160,13 +646,11 @@ const ImageCompressorFn = (file, quality) => {
  * 上传成功
  */
 const uploadSuccess = () => {
-  const messageInfoPar = {
-    toId: currentUserId,
-    content: '/' + ossList[0].dir + ossList[0].fileName,
-    msgType: 1
-  }
   fileRef.value.value = null // 解决上传同一图片不显示bug
-  addMessage(messageInfoPar, 1)
+  const msgObj = JSON.stringify({ msg: '/' + ossList[0].dir + ossList[0].fileName, msgType: 2 })
+  const content = new MessageText(msgObj)
+  WKSDK.shared().chatManager.send(content, to.value)
+  scrollBottom()
   ossList = []
 }
 
@@ -1201,55 +685,32 @@ const tsToDate = (number, format) => {
   return format
 }
 
-/**
- * 主体消息点击加载更多
- */
-const moreInfo = () => {
-  current += 1
-  if (current > pages.value) {
-    moreMess.value = false
-  } else {
-    getMsgItems(currentUserId)
-  }
-}
-
-/**
- * 滚动加载用户列表
- */
-const scrollUserList = () => {
-  userCurrent += 1
-  if (userCurrent <= userPages) {
-    getConversations()
-  }
-}
-
-// 滚动条自动到底部
-const scrollToBottom = () => {
-  nextTick(() => {
-    const msg = document.getElementsByClassName('display-infor')[0] // 获取对象
-    msg.scrollTop = msg.scrollHeight // 滚动高度
-  })
-}
-
 const platformUserId = ref(0)
 // 选中客服
 const getSelectProdRow = (row) => {
-  platformUserId.value = row.sysUserId
+  platformUserId.value = row.uid
 }
 
 /**
  * 转接客服确定
  */
+const conversationRef = ref(null)
 const transferDetermination = () => {
+  if (!noAccountable) {
+    ElMessage.error($t('chat.notYourResponsibility'))
+    return
+  }
   if (platformUserId.value) {
-    const messageInfoPar = {
-      toId: currentUserId,
-      changeTo: 1,
-      platformUserId: platformUserId.value,
-      msgType: 0
-    }
-    imSocketTask.send(JSON.stringify(messageInfoPar))
-    visible.value = false
+    api.transfer(to.value.channelID, platformUserId.value).then(async () => {
+      await WKSDK.shared().channelManager.fetchChannelInfo(to.value)
+      ElMessage.success($t('chat.transferToCustomerService') + $t('order.order.success'))
+      visible.value = false
+      // eslint-disable-next-line require-atomic-updates
+      to.value.channelID = ''
+      messages.value = []
+      userName.value = ''
+      conversationRef.value.resetConversation()
+    })
   } else {
     ElMessage.error($t('chat.pleaseSelectAcustomerService'))
   }
@@ -1284,6 +745,283 @@ const toProdDetail = (prodInfo, type, orderType) => {
   if (win) win.opener = null
 }
 
+let messageStatusListener
+let connectStatusListener
+let messageListener
+const title = ref('')
+const messages = ref([])
+const getWuKong = () => {
+  api.registerOrLogin(getToken()).then((data) => {
+    // 认证信息
+    const config = WKSDK.shared().config
+    config.addr = import.meta.env.VITE_APP_WEBSOCKET_URL
+    config.uid = data.uid // 用户uid（需要在悟空通讯端注册过）
+    config.token = data.token// 用户token （需要在悟空通讯端注册过）
+    WKSDK.shared().config = config
+    WKSDK.shared().connect()
+
+    // 监听连接状态
+    connectStatusListener = (status) => {
+      if (status === ConnectStatus.Connected) {
+        title.value = '(连接成功)'
+      } else {
+        title.value = '(断开)'
+      }
+    }
+    WKSDK.shared().connectManager.addConnectStatusListener(connectStatusListener)
+    // 监听消息
+    messageListener = (msg) => {
+      if (isJSON(msg.content.text)) {
+        msg.content.text = JSON.parse(msg.content.text)
+      }
+      const type = msg.content.text.type
+      if (type === -1 && msg.channel.channelID === to.value.channelID) {
+        api.getShopChannelInfo(selectedID)
+      }
+      const lastMessage = messages.value[messages.value.length - 1]
+      if (msg.send && type !== -1 && msg.content.text.msgType !== -1 && updateAuto && (lastMessage || (lastMessage && lastMessage?.send === false))) {
+        api.updateAuto(msg.channel.channelID)
+        updateAuto = false
+      }
+      if (!msg.send && msg.content.text.sender !== 1 && msg.content.text.sender !== -1) {
+        messageRemindingFn()
+      }
+      msg.messageSeq = ++lastMessageSeq // 新发送的消息没有序列号,此处添加序列号
+      if (msg.channel.channelID === to.value.channelID) {
+        api.setUnread({ channel_id: to.value.channelID, maxSeq: lastMessageSeq || 0 })
+      }
+      if (to.value.channelID === msg.channel.channelID) {
+        if (msg.content.text.sender === 1) {
+          api.getShopChannelInfo(selectedID).then(({ data }) => {
+            noAccountable = data.isWhiteUser === 1
+          })
+        }
+        if (messages.value.length) {
+          const prevTime = tsToDate(
+            messages.value[messages.value.length - 1].timestamp * 1000,
+            'M月D日 h:m'
+          )
+          const nowTime = tsToDate(new Date().getTime(), 'M月D日 h:m')
+          if (prevTime.slice(0, prevTime.indexOf(' ')) === nowTime.slice(0, nowTime.indexOf(' '))) {
+            msg.timeStr = tsToDate(new Date().getTime(), 'h:m')
+          } else {
+            msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
+          }
+          const timeFlag = timeBeApart(messages.value[messages.value.length - 1].timestamp * 1000, new Date().getTime())
+          if (timeFlag) {
+            delete msg.timeStr
+          }
+        } else {
+          msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
+        }
+        if (!to.value.isEqual(msg.channel)) {
+          return
+        }
+        messages.value.push(msg)
+        scrollBottom()
+      }
+    }
+    WKSDK.shared().chatManager.addMessageListener(messageListener)
+    messageStatusListener = (ack) => {
+      messages.value.forEach((m) => {
+        if (m.clientSeq === ack.clientSeq) {
+          m.status = ack.reasonCode === 1 ? MessageStatus.Normal : MessageStatus.Fail
+        }
+      })
+    }
+    WKSDK.shared().chatManager.addMessageStatusListener(messageStatusListener)
+  })
+}
+const channelInfo = ref([])
+const getChannelInfo = (m, temp) => {
+  channelInfo.value = WKSDK.shared().channelManager.getChannelInfo(m.channel)// 获取频道详情(不会触发数据源的远程获取)
+  let info = channelInfo.value?.data.find((item) => m.fromUID === item.uid)
+  if (!info) {
+    info = channelInfo.value.data[0] // 客服被删除使用超管的信息
+  }
+  if (info) {
+    return info[temp]
+  }
+}
+const getMessageText = (m) => {
+  if (m instanceof Message) {
+    const streams = m.streams
+    let text = ''
+    if (m.content instanceof MessageText) {
+      const messageText = m.content
+      text = messageText.text.msg || ''
+    }
+    if (streams && streams.length > 0) {
+      for (const stream of streams) {
+        if (stream.content instanceof MessageText) {
+          const messageText = stream.content
+          text = text + (messageText.text.msg || '')
+        }
+      }
+    }
+    return text
+  }
+  return '未知消息'
+}
+const to = ref({})
+const maxReadSeq = ref(0)
+let lastMessageSeq = 0
+const userName = ref('')
+let updateAuto = false
+let selectedID = 0
+let isDestroy = 0
+// eslint-disable-next-line max-params
+const onSelectChannel = async (channel, maxSeq, noAccount, nickName, update, userId, destroy) => {
+  isDestroy = destroy
+  selectedID = userId
+  userName.value = nickName
+  updateAuto = update
+  noAccountable = noAccount === 1
+  maxReadSeq.value = maxSeq
+  clearMeagess()
+  to.value = channel
+  messages.value = []
+  pullLast(channel) // 拉取最新消息
+}
+const pulldowning = ref(false) // 下拉中
+const pulldownFinished = ref(false) // 下拉完成
+const pullLast = async () => {
+  pulldowning.value = true
+  pulldownFinished.value = false
+  const msgs = await WKSDK.shared().chatManager.syncMessages(to.value, {
+    limit: 15,
+    startMessageSeq: 0,
+    endMessageSeq: 0,
+    pullMode: PullMode.Up
+  })
+  lastMessageSeq = msgs[msgs.length - 1]?.messageSeq || msgs[msgs.length - 2]?.messageSeq || 0
+  pulldowning.value = false
+
+  if (msgs && msgs.length > 0) {
+    msgs.forEach((m) => {
+      messages.value.push(m)
+    })
+  }
+  scrollBottom()
+}
+const chatRef = ref(null)
+const scrollBottom = () => {
+  const chat = chatRef.value
+  if (chat) {
+    nextTick(function () {
+      chat.scrollTop = chat.scrollHeight
+    })
+  }
+}
+// 同步自己业务端的频道消息列表
+WKSDK.shared().config.provider.syncMessagesCallback = async (channel, opts) => {
+  const resultMessages = []
+  const limit = 20
+  const data = await api.messageSync({
+    channel_id: channel.channelID,
+    channel_type: channel.channelType,
+    start_message_seq: opts.startMessageSeq,
+    end_message_seq: opts.endMessageSeq,
+    pull_mode: opts.pullMode,
+    limit
+  })
+  const messageList = data && data.messages
+  if (messageList) {
+    messageList.forEach((msg) => {
+      const message = Convert.toMessage(msg)
+      message.content.text = JSON.parse(message.content.text)
+      message.timeStr = tsToDate(
+        message.timestamp * 1000,
+        'M月D日 h:m'
+      )
+      resultMessages.push(message)
+    })
+
+    resultMessages.length > 0 && resultMessages.reduce((prev, cur) => {
+      // 将时间更换为某某月某某日 要是是当天即去掉月日
+      const now = tsToDate(prev.timestamp * 1000, 'M月D日 h:m')
+      const next = tsToDate(cur.timestamp * 1000, 'M月D日 h:m')
+      if (
+        now.slice(0, now.indexOf(' ')) ===
+            next.slice(0, next.indexOf(' '))
+      ) {
+        cur.timeStr = tsToDate(cur.timestamp * 1000, 'h:m')
+      }
+      // 历史记录进行时间段显示判断
+      if (resultMessages.length > 2) {
+        const timeFlag = timeBeApart(prev.timestamp * 1000, cur.timestamp * 1000)
+        if (timeFlag) {
+          delete cur.timeStr
+        }
+      }
+      return cur
+    })
+  }
+
+  return resultMessages
+}
+const { proxy } = getCurrentInstance()
+const channelInfoUpdate = () => {
+  proxy.$forceUpdate()
+}
+const handleScroll = (e) => {
+  const targetScrollTop = e.target.scrollTop
+  if (targetScrollTop <= 250) { // 下拉
+    if (pulldowning.value || pulldownFinished.value) {
+      return
+    }
+    pulldowning.value = true
+    pullDown().then(() => {
+      pulldowning.value = false
+    }).catch(() => {
+      pulldowning.value = false
+    })
+  }
+}
+const pullDown = async () => {
+  if (messages.value.length === 0) {
+    return
+  }
+  const firstMsg = messages.value[0]
+  if (firstMsg.messageSeq === 1) {
+    pulldownFinished.value = true
+    return
+  }
+  const limit = 15
+  const msgs = await WKSDK.shared().chatManager.syncMessages(to.value, {
+    limit,
+    startMessageSeq: firstMsg.messageSeq - 1,
+    endMessageSeq: 0,
+    pullMode: PullMode.Down
+  })
+  if (msgs.length < limit) {
+    pulldownFinished.value = true
+  }
+  if (msgs && msgs.length > 0) {
+    msgs.reverse().forEach((m) => {
+      messages.value.unshift(m)
+    })
+  }
+  nextTick(function () {
+    const chat = chatRef.value
+    const firstMsgEl = document.getElementById(firstMsg.clientMsgNo)
+    if (firstMsgEl) {
+      chat.scrollTop = firstMsgEl.offsetTop
+    }
+  })
+}
+const isDestroyArr = ([])
+const cmdListener = async (msg) => {
+  if (isJSON(msg.content.contentObj.content)) {
+    msg.content.contentObj.content = JSON.parse(msg.content.contentObj.content)
+    if (msg.content.contentObj.content.type === -2) {
+      maxReadSeq.value = msg.content.contentObj.content.content// 已读的最大序列号
+    }
+  }
+  if (msg.content.contentObj.cmd === 'userDestroy') {
+    isDestroyArr.push(msg.content.contentObj.param)
+  }
+}
 </script>
 <style lang="scss" scoped>
 @use "index";

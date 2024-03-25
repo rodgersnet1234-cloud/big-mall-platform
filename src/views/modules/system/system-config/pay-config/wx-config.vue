@@ -182,27 +182,42 @@ const dataForm = reactive({
 const dataFormAppId = ref({
   appId: null
 })
-const dataRule = {
+// eslint-disable-next-line no-unused-vars
+const validEmptyTab = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('内容不能全为空格'))
+  } else {
+    callback()
+  }
+}
+const dataRule = { // 表单验证规则
   mchId: [
-    { required: true, message: `${$t('platform.config.wechatPay')} mchId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+    { required: true, message: `${$t('platform.config.wechatPay')} mchId ${$t('platform.config.nullTips')}`, trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   mchKey: [
-    { required: true, message: `${$t('platform.config.wechatPay')} mchKey ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+    { required: true, message: `${$t('platform.config.wechatPay')} mchKey ${$t('platform.config.nullTips')}`, trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   keyPath: [
-    { required: true, message: `${$t('platform.config.paymentCertificatePath')} ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+    { required: true, message: `${$t('platform.config.paymentCertificatePath')} ${$t('platform.config.nullTips')}`, trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   apiv3Key: [
-    { required: true, message: '微信支付apiv3Key不能为空', trigger: 'blur' }
+    { required: true, message: '微信支付apiv3Key不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   certSerialNo: [
-    { required: true, message: '证书序列号不能为空', trigger: 'blur' }
+    { required: true, message: '证书序列号不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   privateKeyContent: [
-    { required: true, message: '商户apiclient_key.pem不能为空', trigger: 'blur' }
+    { required: true, message: '商户apiclient_key.pem不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ],
   privateCertContent: [
-    { required: true, message: '商户apiclient_cert.pem不能为空', trigger: 'blur' }
+    { required: true, message: '商户apiclient_cert.pem不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
   ]
 }
 

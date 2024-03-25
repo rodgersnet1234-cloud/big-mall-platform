@@ -472,7 +472,7 @@
                   <div class="text">
                     门店名称：
                   </div>
-                  <div class="res">
+                  <div class="res station-name">
                     {{ orderSelfStationVO.stationName }}
                   </div>
                 </div>
@@ -662,7 +662,7 @@
                 {{ dataForm.deliveryTime }}
                 {{
                   dataForm.deliveryType === 2
-                    ? dataForm.nickName + $t("order.order.orderPickup")
+                    ? (dataForm.nickName || '') + $t("order.order.orderPickup")
                     : $t("order.order.deliverys")
                 }}
               </div>

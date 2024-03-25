@@ -155,7 +155,6 @@
                 <template #error>
                   <div class="image-slot">
                     <img
-                      style="width: 16px"
                       src="@/assets/micro-page/def.png"
                       alt=""
                     >
@@ -286,6 +285,11 @@ watch(() => props.config, (newVal) => {
 
       .bottom-items-imgs {
         position: relative;
+        text-align: center;
+        &:deep(img) {
+          width: 100%;
+          height: 61px;
+        }
 
         .imgs_shelves {
           position: absolute;

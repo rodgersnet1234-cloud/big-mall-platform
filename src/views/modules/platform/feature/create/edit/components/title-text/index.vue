@@ -8,6 +8,7 @@
         <div class="title-bar">
           <!-- 占位 -->
           <div
+            v-if="formData.align==='center'"
             :style="{'width':!formData.isLink?'0':formData.linkStyle===1?'60px':formData.linkStyle===2?'70px':'15px'}"
           />
           <div

@@ -337,6 +337,7 @@
           :max="999999"
           style="width:300px"
           :disabled="dataForm.couponId !== 0 && dataForm.status === 0"
+          @blur="onFormatHandle('limitNum')"
         >
           <template #append>
             张
@@ -354,6 +355,7 @@
           :disabled="dataForm.couponId !== 0"
           :max="999999999"
           style="width:300px"
+          @blur="onFormatHandle('stocks')"
         >
           <template #append>
             张
@@ -744,6 +746,10 @@ const cashConditionHand = () => {
   }
 }
 
+const onFormatHandle = (propertyName) => {
+  dataForm[propertyName] = dataForm[propertyName] ? Number(dataForm[propertyName]) : 1
+}
+
 // 选择商品组件返回
 const getSelectedProd = (prods) => {
   dataForm.spus = []
@@ -845,13 +851,10 @@ defineExpose({ init })
   .el-input-group > :deep(.el-input__inner) {
     padding-right: 0;
   }
-  .card-prod-bottom {
-    display: flex;
-    justify-content: space-around;
-  }
   .card-prod-bottom .card-prod-name {
     margin: auto;
     padding: 0 6px;
+    line-height: 1em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -859,6 +862,9 @@ defineExpose({ init })
     display: inline-block;
   }
   .card-prod-d .card-prod-name-buttons {
+    display: block;
+    width: 100%;
+    text-align: right;
     padding-right: 5px;
   }
   .prod-box {

@@ -44,5 +44,9 @@ export default {
   haveANewUnreadMessage: 'Have a new unreadMessage',
   tips: 'Tips',
   confirm: 'Confirm',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  noContacts: 'No contact',
+  cannotSendBlankMessage: 'Cannot send blank messages',
+  PleaseSelectAContactPerson: 'Please select a contact person',
+  AccountCancelled: 'Account cancelled'
 }

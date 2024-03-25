@@ -124,7 +124,7 @@ const emit = defineEmits([
 
 const componentList = ref([]) // 组件列表
 const smallPageName = ref('') // 页面名称
-let pageBackground = ref('rgba(244, 244, 244, 1)') // 页面背景
+const pageBackground = ref('rgba(244, 244, 244, 1)') // 页面背景
 
 watch(() => props.currentUseComponents, (newVal) => {
   componentList.value = []
@@ -163,10 +163,10 @@ const handelRemove = () => {
 }
 // 页面背景
 const handleBackColor = (color) => {
-  pageBackground = color
-  emit('handlePageColor', pageBackground)
+  pageBackground.value = color
+  emit('handlePageColor', pageBackground.value)
 }
-defineExpose({ smallPageName, pageBackground })
+defineExpose({ smallPageName, pageBackground: pageBackground.value })
 </script>
 <style lang="scss" scoped>
 @use './index.scss';

@@ -693,16 +693,18 @@ const sortEnd = (val) => {
 }
 // 点击当前某个组件
 const clickComponent = (item, index) => {
-  isRightShow.value = true // 显示右边配置信息
-  isshowComponentManage.value = false // 右边组件管理隐藏
-  currentIndex.value = index // 当前选中的组件
-  configMessage.value = {
-    currentConfigTitle: item.rightConfigTitle,
-    type: 'basic_component',
-    currentConfigType: item.type,
-    Ref: item.Ref + index,
-    config: item.rightConfigMessage
-  }
+  setTimeout(() => {
+    isRightShow.value = true // 显示右边配置信息
+    isshowComponentManage.value = false // 右边组件管理隐藏
+    currentIndex.value = index // 当前选中的组件
+    configMessage.value = {
+      currentConfigTitle: item.rightConfigTitle,
+      type: 'basic_component',
+      currentConfigType: item.type,
+      Ref: item.Ref + index,
+      config: item.rightConfigMessage
+    }
+  }, 300)
 }
 // 获取当前页面的宽度
 const getCurrentPageWidth = () => {

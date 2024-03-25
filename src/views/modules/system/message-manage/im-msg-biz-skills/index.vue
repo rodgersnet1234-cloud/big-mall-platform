@@ -1,142 +1,232 @@
 <template>
-  <div class="mod-shop-notice">
-    <div class="search-bar">
-      <el-form
-        ref="searchFormRef"
-        :inline="true"
-        class="search-form"
-        :model="searchForm"
-        label-width="auto"
-        @submit.prevent
-      >
-        <div class="input-row">
-          <el-form-item
-            prop="keywords"
-            label="关键字:"
-          >
-            <el-input
-              v-model="searchForm.keywords"
-              type="text"
-              placeholder="关键字"
-            />
-          </el-form-item>
-          <el-form-item
-            prop="content"
-            label="回复内容:"
-          >
-            <el-input
-              v-model="searchForm.content"
-              type="text"
-              placeholder="回复内容"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              @click="onSearch(true)"
-            >
-              搜索
-            </el-button>
-            <el-button
-              @click="onResetSearch(searchFormRef)"
-            >
-              重置
-            </el-button>
-          </el-form-item>
-        </div>
-      </el-form>
-    </div>
-    <div class="main-content">
-      <div class="operation-bar">
-        <el-button
-          v-permission="['platform:imMsgBizSkills:save']"
-          type="primary"
-          class="filter-item"
-          @click="onAddOrUpdate()"
-        >
-          新增
-        </el-button>
+  <div class="im-msg-biz-skills">
+    <div class="new-page-title">
+      <div class="line" />
+      <div class="text">
+        自动回复
       </div>
-      <div class="table-con">
-        <el-table
-          :data="dataList"
-          header-cell-class-name="table-header"
-          row-class-name="table-row-low"
-          style="width: 100%"
+    </div>
+    <div class="im-msg-content">
+      <div class="im-msg-letf">
+        <div
+          class="content-box"
         >
-          <el-table-column
-            label="序号"
-            type="index"
-            align="left"
-            width="80"
-          />
-          <el-table-column
-            prop="keywords"
-            width="210"
-            label="关键字"
+          <el-form
+            label-position="left"
           >
-            <template #defult="row">
-              {{ row.keywords }}
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            prop="content"
-            min-width="380"
-            label="回复内容"
-          >
-            <template #default="{row}">
-              {{ row.content }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="备注"
-            width="300"
-          >
-            <template #default="{row}">
-              {{ row.remark || '-' }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="center"
-            label="操作"
-            width="230"
-          >
-            <template #default="{row}">
-              <div class="text-btn-con">
+            <el-form-item
+              class="el-form-item"
+              label="启用状态"
+            >
+              <el-switch
+                v-model="imAutoReplyData.status"
+                @change="onChangeState"
+              />
+              <span class="status-tips">启用后，当天买家用户发送第一条消息或者无客服在线时，系统会自动进行回复</span>
+            </el-form-item>
+          </el-form>
+          <div class="checkbox-msg">
+            <el-checkbox
+              v-model="imAutoReplyData.content.sendTextState"
+              label="发送文字信息"
+              name="type"
+              @change="changeSendTextState"
+            />
+            <div class="text-msg">
+              <p style="margin: 0">
+                回复内容:
+              </p>
+              <div>
+                <div class="content">
+                  <div v-if="editText">
+                    <el-input
+                      v-model="content"
+                      class="tarea"
+                      type="textarea"
+                      maxlength="500"
+                    />
+                    <div class="count">
+                      <div class="count-text">
+                        还可以输入
+                        <i>
+                          {{ remainingCount }}
+                        </i>
+                        字
+                      </div>
+                    </div>
+                    <div class="save-btn">
+                      <el-button
+                        style="margin-right: 10px;"
+                        type="primary"
+                        @click="onSave"
+                      >
+                        保存
+                      </el-button>
+                      <el-button @click="editText = !editText">
+                        取消
+                      </el-button>
+                    </div>
+                  </div>
+                  <span v-else>{{ imAutoReplyData.content.content }}</span>
+                </div>
                 <el-button
-                  v-permission="['platform:imMsgBizSkills:update']"
-                  link
+                  v-if="!editText"
                   type="primary"
-                  @click="onAddOrUpdate(row.id)"
+                  link
+                  class="edit-btn"
+                  @click="onEditText"
                 >
                   编辑
                 </el-button>
-                <el-button
-                  v-permission="['platform:imMsgBizSkills:delete']"
-                  link
-                  type="primary"
-                  @click="onDelete(row.id)"
-                >
-                  删除
-                </el-button>
               </div>
-            </template>
-          </el-table-column>
-        </el-table>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <div class="checkbox">
+              <el-checkbox
+                v-model="imAutoReplyData.content.sendIssusState"
+                label="发送常见问题"
+                name="type"
+                @change="changeCommonQuestion"
+              />
+              <p class="max-msg">
+                最多添加10条
+              </p>
+            </div>
+            <div class="issues-box">
+              <el-button
+                v-if="imAutoReplyData.content.issues?.length<10||!imAutoReplyData.content.issues"
+                @click="onAddOrUpdate()"
+              >
+                添加问题
+              </el-button>
+
+              <div
+                v-for="(item,index) in imAutoReplyData.content.issues"
+                :key="item.id"
+                style="margin-top: 15px;"
+              >
+                <div
+                  class="issues-list"
+                >
+                  <div>
+                    <span class="issues">
+                      问题
+                      {{ `${index+1}` }}</span>
+                    <span>{{ item.issues }}</span>
+                  </div>
+                  <div
+                    class="button-list"
+                  >
+                    <el-button
+                      v-if="index!==0"
+                      type="primary"
+                      link
+                      @click="updateList(index,'up')"
+                    >
+                      上移
+                    </el-button>
+                    <el-button
+                      v-if="index<imAutoReplyData.content.issues.length-1"
+                      type="primary"
+                      link
+                      @click="updateList(index,'down')"
+                    >
+                      下移
+                    </el-button>
+                    <el-button
+                      type="primary"
+                      link
+                      @click="onAddOrUpdate(item.id)"
+                    >
+                      编辑
+                    </el-button>
+                    <el-button
+                      type="primary"
+                      link
+                      @click="removeItem(item.id)"
+                    >
+                      删除
+                    </el-button>
+                  </div>
+                </div>
+                <div class="answer">
+                  <span>
+                    答案:
+                    {{ item.content }}</span>
+                </div>
+              </div>
+            </div>
+            <el-button
+              type="primary"
+              @click="onSubmit()"
+            >
+              保存
+            </el-button>
+          </div>
+        </div>
       </div>
-      <pagination
-        v-if="dataList.length"
-        class="pagination-container"
-        :current-page="page.currentPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="page.pageSize"
-        :total="page.total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="onPageSizeChange"
-        @current-change="onPageChange"
-      />
+      <div class="im-msg-right">
+        <div class="navigation-bar">
+          <el-icon><ArrowLeft /></el-icon>
+          <div class="user-name">
+            {{ '平台客服' }}
+          </div>
+        </div>
+        <div class="msg-box-wrapper">
+          <div class="msg-box">
+            <div class="user-send">
+              <div class="bubble">
+                {{ '你好' }}
+              </div>
+              <div class="image">
+                <img
+                  src="@/assets/im_box/userImg.jpg"
+                  alt=""
+                >
+              </div>
+            </div>
+
+            <div
+              v-if="imAutoReplyData.content.sendTextState||imAutoReplyData.content.sendIssusState"
+              class="service-send"
+            >
+              <div class="image">
+                <img
+                  src="@/assets/im_box/customer-service.png"
+                  alt=""
+                >
+              </div>
+              <div class="bubble">
+                <div
+                  v-if="imAutoReplyData.content.sendTextState"
+                  class="text"
+                >
+                  {{ imAutoReplyData.content.content || content }}
+                </div>
+
+                <ul v-if="imAutoReplyData.content.sendIssusState">
+                  <li
+                    v-for="item in imAutoReplyData.content.issues"
+                    :key="item.id"
+                  >
+                    • {{ item.issues }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reply">
+          <div class="input-box" />
+          <img
+            src="@/assets/images/add.png"
+          >
+          <el-button class="send-btn">
+            {{ $t('chat.send') }}
+          </el-button>
+        </div>
+      </div>
     </div>
     <add-or-update
       v-if="addOrUpdateVisible"
@@ -149,117 +239,188 @@
 <script setup>
 import addOrUpdate from './add-or-update.vue'
 import * as http from '@/api/im-msg-biz-skills'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
-let tempSearchForm = null // 保存上次点击查询的请求条件
-let theParams = null // 保存上次点击查询的请求条件
-const dataList = ref([])
-const page = reactive({
-  total: 0, // 总页数
-  currentPage: 1, // 当前页数
-  pageSize: 10 // 每页显示多少条
-})
-const searchForm = reactive({
-  keywords: '',
-  content: ''
-})
-const searchFormRef = ref(null)
-const dateRange = ref([])
-const dataListLoading = ref(false)
-
-onMounted(() => {
-  getDataList(page)
-})
-
-const getDataList = (pageParam, newData = false) => {
-  if (newData || !tempSearchForm) {
-    theParams = JSON.parse(JSON.stringify(searchForm))
-    tempSearchForm = {
-      pageNum: pageParam == null ? page.currentPage : pageParam.currentPage,
-      pageSize: pageParam == null ? page.pageSize : pageParam.pageSize
-    }
-  } else {
-    tempSearchForm.pageNum = pageParam == null ? page.currentPage : pageParam.currentPage
-    tempSearchForm.pageSize = pageParam == null ? page.pageSize : pageParam.pageSize
-  }
-  http.getList(Object.assign(tempSearchForm, theParams)).then((data) => {
-    dataList.value = data.list
-    page.total = data.total
-    dataListLoading.value = false
-  })
+const editText = ref(false)
+const onEditText = () => {
+  content.value = imAutoReplyData.value.content.content
+  editText.value = !editText.value
 }
 
+const imAutoReplyData = ref({
+  content: { sendIssusState: false, sendTextState: false },
+  status: false
+})
+const infoStatus = {
+  sendIssusState: false, sendTextState: false
+}
+const issuesArr = ref([])
+const dataInfo = ref(false)
+onMounted(() => {
+  imAutoReplyInfo()
+})
+const imAutoReplyInfo = () => {
+  http.get().then((data) => {
+    dataInfo.value = !data
+    if (data?.content) {
+      data.content = JSON.parse(data.content)
+      imAutoReplyData.value = data
+      infoStatus.sendIssusState = imAutoReplyData.value.content.sendIssusState
+      infoStatus.sendTextState = imAutoReplyData.value.content.sendTextState
+      imAutoReplyData.value.status = !!imAutoReplyData.value.status
+    }
+  })
+}
+const updateData = ref({ type: -1 })
+const onSave = () => {
+  if (!content || typeof content.value !== 'string' || content.value.trim() === '') {
+    return ElMessage({
+      message: '不能为空',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
+  imAutoReplyData.value.content.content = content.value
+  editText.value = false
+}
+const onChangeState = (state) => {
+  if (state && !imAutoReplyData.value.content.sendTextState && !imAutoReplyData.value.content.sendIssusState) {
+    imAutoReplyData.value.status = false
+    return ElMessage({
+      message: '请勾选其中一个自动回复选项',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
+}
 const addOrUpdateVisible = ref(false)
-const addOrUpdateRef = ref()
-// 新增 / 修改
+const addOrUpdateRef = ref(null)
 const onAddOrUpdate = (id) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdateRef.value.init(id)
+    addOrUpdateRef.value?.init(id, imAutoReplyData.value.content.issues)
   })
 }
-const dataListSelections = ref([])
+let result
+const refreshChange = (obj) => {
+  issuesArr.value.push(obj)
+  if (imAutoReplyData.value.content.issues) {
+    imAutoReplyData.value.content.issues = replaceItem(imAutoReplyData.value.content.issues, obj)
+    result = mergeArraysAndRemoveDuplicates(issuesArr.value, imAutoReplyData.value.content.issues)
+  }
+  imAutoReplyData.value.content.issues = result || issuesArr.value
+  issuesArr.value = []
+}
+const mergeArraysAndRemoveDuplicates = (arrayA, arrayB) => {
+  const mergedArray = arrayB.concat(arrayA)
+  const uniqueObjects = Array.from(new Set(mergedArray.map(obj => obj.id))).map(id => {
+    return mergedArray.find(obj => obj.id === id)
+  })
+  return uniqueObjects
+}
+// 移动数组
+const updateList = (index, direction) => {
+  const newList = [...imAutoReplyData.value.content.issues]
+  if (direction === 'up' && index > 0) {
+    // 上移操作
+    [newList[index], newList[index - 1]] = [newList[index - 1], newList[index]]
+  } else if (direction === 'down' && index < newList.length - 1) {
+    // 下移操作
+    [newList[index], newList[index + 1]] = [newList[index + 1], newList[index]]
+  }
+  imAutoReplyData.value.content.issues = newList
+}
 // 删除
-const onDelete = (id) => {
-  const ids = id ? [id] : dataListSelections.value.map(item => {
-    return item.id
-  })
-  ElMessageBox.confirm('确定进行删除操作?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    http.delSkills(id)
-      .then(() => {
-        if (dataList.length === 1 && page.currentPage > 1) {
-          page.currentPage--
-        }
-        page.total = page.total - ids.length
-        ElMessage({
-          message: '操作成功',
-          type: 'success',
-          duration: 1500,
-          onClose: () => {
-            refreshChange()
-          }
-        })
-      })
+const removeItem = (id) => {
+  if (imAutoReplyData.value.content.issues.length === 1) {
+    ElMessage({
+      message: '问题至少保留一个',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  } else {
+    imAutoReplyData.value.content.issues = imAutoReplyData.value.content.issues.filter(item => item.id !== id)
+  }
+}
+// 编辑
+const replaceItem = (array, newItem) => {
+  return array.map(item => {
+    if (item.id === newItem.id) {
+      return { ...newItem }
+    }
+    return item
   })
 }
-
-// 刷新回调用
-const refreshChange = () => {
-  getDataList(page)
+const changeCommonQuestion = (e) => {
+  if (e && (!imAutoReplyData.value.content.issues || imAutoReplyData.value.content.issues.length === 0)) {
+    imAutoReplyData.value.content.sendIssusState = !e
+    return ElMessage({
+      message: '自动回复问题为空',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
 }
-const onSearch = (newData = false) => {
-  page.currentPage = 1
-  page.pageSize = 10
-  getDataList(page, newData)
+const changeSendTextState = (e) => {
+  if (e && !imAutoReplyData.value.content.content) {
+    imAutoReplyData.value.content.sendTextState = !e
+    return ElMessage({
+      message: '自动回复文字信息为空',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
 }
-const onPageSizeChange = (val) => {
-  page.pageSize = val
-  getDataList()
+const onSubmit = () => {
+  updateData.value.content = imAutoReplyData.value.content.content
+  updateData.value.sendIssusState = imAutoReplyData.value.content.sendIssusState
+  updateData.value.sendTextState = imAutoReplyData.value.content.sendTextState
+  updateData.value.issues = imAutoReplyData.value.content.issues
+  if (imAutoReplyData.value.status && !imAutoReplyData.value.content.sendTextState && !imAutoReplyData.value.content.sendIssusState) {
+    return ElMessage({
+      message: '请勾选其中一个自动回复选项',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
+  if (!updateData.value.content && (!updateData.value.issues || updateData.value.issues.length === 0)) {
+    return ElMessage({
+      message: '自动回复内容不能为空',
+      type: 'warning',
+      duration: 1500,
+      onClose: () => {}
+    })
+  }
+  const param = {
+    autoReplyId: imAutoReplyData.value.autoReplyId,
+    content: JSON.stringify(updateData.value),
+    shopId: imAutoReplyData.value.shopId,
+    status: imAutoReplyData.value.status ? 1 : 0
+  }
+  const request = dataInfo.value ? http.save(param) : http.update(param)
+  request.then(() => {
+    imAutoReplyInfo()
+    ElMessage({
+      message: '操作成功',
+      type: 'success',
+      duration: 1500
+    })
+  })
 }
-const onPageChange = (val) => {
-  page.currentPage = val
-  getDataList()
-}
-const onResetSearch = (formName) => {
-  formName.resetFields()
-  dateRange.value = []
-}
-
+const content = ref('')
+const maxCharCount = 500
+const remainingCount = ref(500)
+watch(() => content.value, () => {
+  remainingCount.value = content.value ? maxCharCount - content.value.length : maxCharCount
+}, { deep: true })
 </script>
 
 <style lang="scss" scoped>
-.mod-shop-notice {
-  background-color: #fff;
-  padding: 20px;
-
-  .pagination-container {
-    background: #fff;
-    padding: 32px 16px;
-    text-align: right;
-  }
-}
+@use './index.scss';
 </style>
