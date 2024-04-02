@@ -19,7 +19,7 @@
               'width':!formData.isLink?'100%':formData.linkStyle===1?'80%':formData.linkStyle===2?'75%':'90%'
             }"
           >
-            {{ formData.title }}
+            {{ formData.titleText }}
           </div>
           <div
             v-if="formData.isLink"
@@ -57,12 +57,12 @@
             @submit.prevent
           >
             <el-form-item
-              prop="title"
-              :rules="rules.title"
+              prop="titleText"
+              :rules="rules.titleText"
             >
               <div><span class="required">*</span>{{ $t('shopFeature.titText.titContent') }}</div>
               <el-input
-                v-model="formData.title"
+                v-model="formData.titleText"
                 :placeholder="$t('shopFeature.titText.titContent')"
                 maxlength="100"
               />
@@ -280,7 +280,7 @@ watch(() => props.dataField, (val) => {
 }, { deep: true })
 
 const formData = reactive({
-  title: '', // 标题
+  titleText: '', // 标题
   desc: '', // 描述
   align: 'left', // 显示位置
   titleSize: '12', // 标题大小
@@ -328,7 +328,7 @@ onMounted(() => {
 const startCheckFieldRulesCommonFun = () => {
   let isPass = true
   let errorMessage = ''
-  if (formData.title.trim() === '') {
+  if (formData.titleText.trim() === '') {
     isPass = false
     errorMessage = $t('shopFeature.titText.pleaseFillTit')
   }
@@ -375,7 +375,7 @@ const validateTitle = (rule, value, callback) => {
   }
 }
 const rules = reactive({
-  title: [
+  titleText: [
     { required: true, message: $t('shopFeature.titText.pleaseFillTit'), trigger: 'blur' },
     { validator: validateTitle, trigger: 'blur' }
   ]

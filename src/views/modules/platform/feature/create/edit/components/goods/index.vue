@@ -18,32 +18,34 @@
                 :class="{goodsItem1:formData.size === 1}"
               >
                 <!--图片-->
-                <el-image
-                  class="goods-img-one"
-                  :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
-                  :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !formData.goods[0].prodId}"
-                  :src="checkFileUrl(item.pic)"
-                  fit="fill"
-                >
-                  <template #error>
-                    <div class="image-slot">
-                      <img
-                        src="@/assets/pc-micro-page/show-default.png"
-                        alt
-                      >
-                    </div>
-                  </template>
-                </el-image>
-                <!-- 下架商品蒙版 start -->
-                <div
-                  v-if="item.status !== 1"
-                  class="imgs_shelves"
-                >
-                  <img
-                    class="been_imgs"
-                    src="@/assets/pc-micro-page/been_shelves.png"
-                    alt
+                <div class="goods-img-box">
+                  <el-image
+                    class="goods-img-one"
+                    :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
+                    :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !formData.goods[0].prodId}"
+                    :src="checkFileUrl(item.pic)"
+                    fit="fill"
                   >
+                    <template #error>
+                      <div class="image-slot">
+                        <img
+                          src="@/assets/pc-micro-page/show-default.png"
+                          alt
+                        >
+                      </div>
+                    </template>
+                  </el-image>
+                  <!-- 下架商品蒙版 start -->
+                  <div
+                    v-if="item.status !== 1"
+                    class="imgs_shelves"
+                  >
+                    <img
+                      class="been_imgs"
+                      src="@/assets/pc-micro-page/been_shelves.png"
+                      alt
+                    >
+                  </div>
                 </div>
                 <div
                   class="goods-box-info"

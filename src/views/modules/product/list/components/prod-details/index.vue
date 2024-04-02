@@ -25,7 +25,10 @@
               <span class="part-tit-num">1</span><span class="part-tit-name">商品基本信息</span>
             </div>
             <!-- 商品SaaS分类（不可修改） -->
-            <div class="part-form-div">
+            <div
+              v-if="spuType !== 3"
+              class="part-form-div"
+            >
               <div class="part-form-item-tit">
                 SaaS分类
               </div>
@@ -42,7 +45,7 @@
 
             <!-- 商品店铺分类 -->
             <div
-              v-if="dataForm.shopCategoryId&&dataForm.shopCategoryId!==-1"
+              v-if="dataForm.shopCategoryId&&dataForm.shopCategoryId!==-1 && spuType !== 3"
               class="part-form-div"
             >
               <div class="part-form-item-tit">
@@ -380,6 +383,9 @@ const language = computed(() => {
   return appStore.language === 'zh' ? 1 : 2
 })
 
+// 0.普通商品 1.团购商品 2.秒杀商品 3.积分商品 4.预售商品 5活动商品
+const spuType = computed(() => dataForm.value.spuType)
+
 const visible = ref(false)
 const dataFormRef = ref(null)
 let originalSpuAttrValueList = [] // 基本规格回显原数据
@@ -414,8 +420,6 @@ const init = (spuId) => {
       dataForm.value.deliveryMode = JSON.parse(data.deliveryMode)
       // 固定运费
       dataForm.value.deliveryAmount = new Big(data.deliveryAmount || 0).div(100).valueOf()
-      // 回显分类
-      getCategoryBack()
       // 商品分类选择按钮
       showCategorySelectBtn.value = false
       if (data.brand?.imgUrl) {
@@ -433,7 +437,11 @@ const init = (spuId) => {
           })
         }
       })
-      getAttrsByCategoryId(data.categoryId, dataForm.value.spuAttrValues)
+      if (spuType.value !== 3) {
+        // 回显分类
+        getCategoryBack()
+        getAttrsByCategoryId(data.categoryId, dataForm.value.spuAttrValues)
+      }
       // sku回显
       await skuBackShow(data.skus) // 销售规格
       // 商品详情回显

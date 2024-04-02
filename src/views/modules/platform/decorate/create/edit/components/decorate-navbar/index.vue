@@ -12,12 +12,11 @@
           class="site-navbar__brand"
           style="width: auto;"
         >
-          <img
-            v-if="configuration.bsTopBarIcon"
-            style="height: 18px;width:59px;margin-right: 10px"
-            :src="checkFileUrl(configuration.bsTopBarIcon)"
-            alt=""
-          >
+          <WebConfigImg
+            :src="configuration.bsTopBarIcon"
+            :img-style="{width:'59px',height: '18px',marginRight: '10px'}"
+            def-img-type="bsTopBarIcon"
+          />
           <a
             class="site-navbar__brand-lg"
             style="text-transform:none;"
@@ -25,16 +24,6 @@
           >{{
             language === 'en' ?
               configuration.bsMenuTitleOpenEn : configuration.bsMenuTitleOpenCn
-          }}</a>
-          <a
-            v-if="!configuration.bsTopBarIcon"
-            class="site-navbar__brand-mini"
-            style="text-transform:none;"
-            href="javascript:;"
-            :style="fontCloseSize"
-          >{{
-            language === 'en' ?
-              configuration.bsMenuTitleCloseEn : configuration.bsMenuTitleCloseCn
           }}</a>
         </div>
       </div>

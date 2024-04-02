@@ -94,8 +94,9 @@
             :key="threeIdx"
             class="addr-item"
           >
-            <div class="dot">
-              {{ threeItem.name }}
+            <div class="dot three-box">
+              <span class="name">{{ threeItem.name }}</span>
+              <span class="rate">{{ threeItem.deductionRate?`(${threeItem.deductionRate}%)` : '' }}</span>
             </div>
             <div class="btn">
               <div class="tag">
@@ -249,6 +250,17 @@ const onAddOrUpdate = (categoryPlatformId, level) => {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            &.three-box{
+              display: flex;
+              .name{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-break: anywhere;
+              }
+            }
+            .rate{
+              margin-left: 4px;
+            }
           }
           .dot::before {
             content: "";

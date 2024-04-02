@@ -12,19 +12,11 @@
     <div class="navbar-content">
       <!-- 1.左边部分 -->
       <div class="left-menu">
-        <img
-          v-if="route.path!=='/supplier/shop-process' && webConfig.bsTopBarIcon"
-          style="height: 18px;width:59px;margin-right: 10px"
-          :src="checkFileUrl(webConfig.bsTopBarIcon)"
-          alt=""
-          @error="webConfig.bsTopBarIcon=''"
-        >
-        <img
-          v-else
-          style="height: 18px;width:59px;margin-right: 10px"
-          :src="checkFileUrl(webConfig.bsTopBarIcon)"
-          alt=""
-        >
+        <WebConfigImg
+          :src="webConfig.bsTopBarIcon"
+          :img-style="{width:'59px',height: '18px',marginRight: '10px'}"
+          def-img-type="bsTopBarIcon"
+        />
         <a
           v-if="(webConfig.bsMenuTitleOpenCn || webConfig.bsMenuTitleCloseCn) || (webConfig.bsMenuTitleOpenEn || webConfig.bsMenuTitleCloseEn)"
           class="site-navbar__brand-lg"
@@ -356,7 +348,7 @@ onUnmounted(() => {
 })
 let messageListener
 const getWuKong = () => {
-  api.registerOrLogin(getToken()).then((data) => {
+  api.registerOrLogin().then((data) => {
     // 认证信息
     const config = WKSDK.shared().config
     config.addr = import.meta.env.VITE_APP_WEBSOCKET_URL
@@ -364,11 +356,23 @@ const getWuKong = () => {
     config.token = data.token// 用户token （需要在悟空通讯端注册过）
     WKSDK.shared().config = config
     WKSDK.shared().connect()
-
+    const isJSON = (str) => {
+      if (typeof str === 'string') {
+        try {
+          JSON.parse(str)
+          return true
+        } catch (e) {
+          return false
+        }
+      }
+    }
     // 监听消息
     messageListener = (msg) => {
+      if (isJSON(msg.content.text)) {
+        msg.content.text = JSON.parse(msg.content.text)
+      }
       const ids = +cookie.get('cloudPChannelIds')
-      if (!msg.send && (ids === 0 || ids == null)) {
+      if ((!msg.send || msg.content.text.sender === 1) && (ids === 0 || ids == null)) {
         message.value = 1
         popNotice($t('chat.notification'), $t('chat.haveANewUnreadMessage')) // 启用通知
         newMessage.value = true

@@ -23,7 +23,7 @@
       >
         <el-input
           v-model="dataForm.issues"
-          maxlength="20"
+          maxlength="15"
           placeholder="问题不超过15个字"
         />
       </el-form-item>

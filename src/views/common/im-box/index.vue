@@ -265,12 +265,12 @@
                       maxlength="500"
                       @keydown="messageSendlisten($event)"
                     />
-                  </div>
-                  <div
-                    class="send"
-                    @click="sendText()"
-                  >
-                    {{ $t('chat.send') }}
+                    <div
+                      class="send"
+                      @click="sendText()"
+                    >
+                      {{ $t('chat.send') }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -467,6 +467,7 @@ const messageSendlisten = (event) => {
     return false
   }
 }
+
 let sensitiveWords = '' // 敏感词
 const getSensitiveWords = () => {
   get('sensitive_words').then((data) => {
@@ -647,7 +648,7 @@ const ImageCompressorFn = (file, quality) => {
  */
 const uploadSuccess = () => {
   fileRef.value.value = null // 解决上传同一图片不显示bug
-  const msgObj = JSON.stringify({ msg: '/' + ossList[0].dir + ossList[0].fileName, msgType: 2 })
+  const msgObj = JSON.stringify({ msg: '/' + ossList[0].dir + ossList[0].fileName, msgType: 2, sender: -1 })
   const content = new MessageText(msgObj)
   WKSDK.shared().chatManager.send(content, to.value)
   scrollBottom()
@@ -751,7 +752,7 @@ let messageListener
 const title = ref('')
 const messages = ref([])
 const getWuKong = () => {
-  api.registerOrLogin(getToken()).then((data) => {
+  api.registerOrLogin().then((data) => {
     // 认证信息
     const config = WKSDK.shared().config
     config.addr = import.meta.env.VITE_APP_WEBSOCKET_URL
@@ -769,59 +770,7 @@ const getWuKong = () => {
       }
     }
     WKSDK.shared().connectManager.addConnectStatusListener(connectStatusListener)
-    // 监听消息
-    messageListener = (msg) => {
-      if (isJSON(msg.content.text)) {
-        msg.content.text = JSON.parse(msg.content.text)
-      }
-      const type = msg.content.text.type
-      if (type === -1 && msg.channel.channelID === to.value.channelID) {
-        api.getShopChannelInfo(selectedID)
-      }
-      const lastMessage = messages.value[messages.value.length - 1]
-      if (msg.send && type !== -1 && msg.content.text.msgType !== -1 && updateAuto && (lastMessage || (lastMessage && lastMessage?.send === false))) {
-        api.updateAuto(msg.channel.channelID)
-        updateAuto = false
-      }
-      if (!msg.send && msg.content.text.sender !== 1 && msg.content.text.sender !== -1) {
-        messageRemindingFn()
-      }
-      msg.messageSeq = ++lastMessageSeq // 新发送的消息没有序列号,此处添加序列号
-      if (msg.channel.channelID === to.value.channelID) {
-        api.setUnread({ channel_id: to.value.channelID, maxSeq: lastMessageSeq || 0 })
-      }
-      if (to.value.channelID === msg.channel.channelID) {
-        if (msg.content.text.sender === 1) {
-          api.getShopChannelInfo(selectedID).then(({ data }) => {
-            noAccountable = data.isWhiteUser === 1
-          })
-        }
-        if (messages.value.length) {
-          const prevTime = tsToDate(
-            messages.value[messages.value.length - 1].timestamp * 1000,
-            'M月D日 h:m'
-          )
-          const nowTime = tsToDate(new Date().getTime(), 'M月D日 h:m')
-          if (prevTime.slice(0, prevTime.indexOf(' ')) === nowTime.slice(0, nowTime.indexOf(' '))) {
-            msg.timeStr = tsToDate(new Date().getTime(), 'h:m')
-          } else {
-            msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
-          }
-          const timeFlag = timeBeApart(messages.value[messages.value.length - 1].timestamp * 1000, new Date().getTime())
-          if (timeFlag) {
-            delete msg.timeStr
-          }
-        } else {
-          msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
-        }
-        if (!to.value.isEqual(msg.channel)) {
-          return
-        }
-        messages.value.push(msg)
-        scrollBottom()
-      }
-    }
-    WKSDK.shared().chatManager.addMessageListener(messageListener)
+
     messageStatusListener = (ack) => {
       messages.value.forEach((m) => {
         if (m.clientSeq === ack.clientSeq) {
@@ -895,6 +844,60 @@ const pullLast = async () => {
     pullMode: PullMode.Up
   })
   lastMessageSeq = msgs[msgs.length - 1]?.messageSeq || msgs[msgs.length - 2]?.messageSeq || 0
+  WKSDK.shared().chatManager.removeMessageListener(messageListener)
+  // 监听消息
+  messageListener = (msg) => {
+    if (isJSON(msg.content.text)) {
+      msg.content.text = JSON.parse(msg.content.text)
+    }
+    const type = msg.content.text.type
+    if (type === -1 && msg.channel.channelID === to.value.channelID) {
+      api.getShopChannelInfo(selectedID)
+    }
+    const lastMessage = messages.value[messages.value.length - 1]
+    if (msg.send && type !== -1 && msg.content.text.msgType !== -1 && updateAuto && (lastMessage || (lastMessage && lastMessage?.send === false))) {
+      api.updateAuto(msg.channel.channelID)
+      updateAuto = false
+    }
+    if (!msg.send && msg.content.text.sender !== 1 && msg.content.text.sender !== -1) {
+      messageRemindingFn()
+    }
+    msg.messageSeq = ++lastMessageSeq // 新发送的消息没有序列号,此处添加序列号
+    if (msg.channel.channelID === to.value.channelID) {
+      api.setUnread({ channel_id: to.value.channelID, maxSeq: lastMessageSeq || 0 })
+    }
+    if (to.value.channelID === msg.channel.channelID) {
+      if (msg.content.text.sender === 1) {
+        api.getShopChannelInfo(selectedID).then(({ data }) => {
+          noAccountable = data.isWhiteUser === 1
+        })
+      }
+      if (messages.value.length) {
+        const prevTime = tsToDate(
+          messages.value[messages.value.length - 1].timestamp * 1000,
+          'M月D日 h:m'
+        )
+        const nowTime = tsToDate(new Date().getTime(), 'M月D日 h:m')
+        if (prevTime.slice(0, prevTime.indexOf(' ')) === nowTime.slice(0, nowTime.indexOf(' '))) {
+          msg.timeStr = tsToDate(new Date().getTime(), 'h:m')
+        } else {
+          msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
+        }
+        const timeFlag = timeBeApart(messages.value[messages.value.length - 1].timestamp * 1000, new Date().getTime())
+        if (timeFlag) {
+          delete msg.timeStr
+        }
+      } else {
+        msg.timeStr = tsToDate(new Date().getTime(), 'M月D日 h:m')
+      }
+      if (!to.value.isEqual(msg.channel)) {
+        return
+      }
+      messages.value.push(msg)
+      scrollBottom()
+    }
+  }
+  WKSDK.shared().chatManager.addMessageListener(messageListener)
   pulldowning.value = false
 
   if (msgs && msgs.length > 0) {

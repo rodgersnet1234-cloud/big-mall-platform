@@ -366,6 +366,7 @@ const onInit = (rightsId) => {
     api.get(rightsId).then(data => {
       dataForm.value = data
       dataForm.value.details = data.details || ''
+      detailsRef.value?.setContent(data.details)
       dataForm.value.discount = dataForm.value.discount / 10
       dataForm.value.rateScore = dataForm.value.rateScore / 10
       couponList.value = data.couponList.filter(item => {

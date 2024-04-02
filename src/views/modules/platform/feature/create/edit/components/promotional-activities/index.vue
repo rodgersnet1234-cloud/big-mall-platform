@@ -135,18 +135,7 @@
             <el-icon><Close /></el-icon>
           </div>
           <div class="img-box">
-            <el-image
-              class="goods-pic"
-              :src="checkFileUrl(item.pic)"
-              fit="fill"
-            >
-              <template #error>
-                <img
-                  :src="defPng"
-                  alt
-                >
-              </template>
-            </el-image>
+            <img-show :src="item.pic" />
             <div
               v-if="setImgs(item, 'show')"
               class="imgs_shelves"
