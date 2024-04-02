@@ -7,24 +7,16 @@
       active-text-color="{ 'border': 'none' }"
     >
       <el-menu-item index="0">
-        <img
-          v-if="configuration.bsTopBarIcon"
-          style="height: 18px;width:59px;margin-right: 10px;"
-          :src="checkFileUrl(configuration.bsTopBarIcon)"
-          alt
-        >
+        <WebConfigImg
+          :src="configuration.bsTopBarIcon"
+          :img-style="{width:'59px',height: '18px',marginRight: '10px'}"
+          def-img-type="bsTopBarIcon"
+        />
         <a
           class="site-navbar__brand-lg"
           style="text-transform:none;"
           href="javascript:"
         >{{ configuration.bsMenuTitleOpenCn }}</a>
-        <a
-          v-if="!configuration.bsTopBarIcon"
-          class="site-navbar__brand-mini"
-          style="text-transform:none;"
-          href="javascript:"
-          :style="fontCloseSize"
-        >{{ configuration.bsMenuTitleCloseCn }}</a>
       </el-menu-item>
       <div class="flex-grow" />
       <el-menu-item>

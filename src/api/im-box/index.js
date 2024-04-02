@@ -105,9 +105,9 @@ export function conversationSyncPage (pageParam) {
   })
 }
 // 注册或登录
-export function registerOrLogin (token) {
+export function registerOrLogin () {
   return request({
-    url: '/mall4cloud_biz/p/wukongim/register_or_login?token=' + token,
+    url: '/mall4cloud_biz/p/wukongim/register_or_login',
     method: 'POST'
   })
 }

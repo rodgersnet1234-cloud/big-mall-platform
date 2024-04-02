@@ -22,7 +22,6 @@
         <div class="left">
           <div
             class="avatar"
-            style="width: 48px;height: 48px;"
           >
             <img
               :src="conversationWrap.pic?checkFileUrl(conversationWrap.pic):imAvatarPng"
@@ -134,7 +133,6 @@ const connectStatusListener = async (status) => {
   let userId = []
   if (status === ConnectStatus.Connected) {
     remoteConversations.value = await WKSDK.shared().conversationManager.sync() // 同步最近会话列表
-    console.log('🚀 ~ connectStatusListener ~ remoteConversations.value:', remoteConversations.value)
     loadingend.value = false
     if (remoteConversations.value && remoteConversations.value.length > 0) {
       conversationWraps.value = sortConversations(remoteConversations.value.map(conversation => new ConversationWrap(conversation)))

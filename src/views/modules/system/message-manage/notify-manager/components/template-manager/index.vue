@@ -217,8 +217,8 @@
     <!-- 分页条 -->
     <pagination
       v-show="pageData.total>0"
-      v-model:page="pageQuery.pageNum"
-      v-model:limit="pageQuery.pageSize"
+      v-model:page="searchParam.pageNum"
+      v-model:limit="searchParam.pageSize"
       :total="pageData.total"
       @pagination="getPage()"
     />
@@ -241,11 +241,6 @@ const searchTypesMessage = [
   { key: 2, name: '商家' },
   { key: 3, name: '供应商' }
 ]
-// 查询的参数
-const pageQuery = reactive({
-  pageSize: 10,
-  pageNum: 1
-})
 
 // loading
 const pageLoading = ref(true)
@@ -292,17 +287,8 @@ const sendTypes = [{
   value: 11,
   label: $t('biz.notify.timeoutRem')
 }, {
-  value: 12,
-  label: $t('biz.notify.register')
-}, {
-  value: 13,
-  label: $t('biz.notify.login')
-}, {
-  value: 14,
-  label: $t('biz.notify.updatePassword')
-}, {
   value: 15,
-  label: $t('biz.notify.vaild')
+  label: '验证码提醒'
 }, {
   value: 16,
   label: $t('biz.notify.distributionApplySuccess')
@@ -392,17 +378,8 @@ const tableSendTypes = [{
   value: 11,
   label: $t('biz.notify.timeoutRem')
 }, {
-  value: 12,
-  label: $t('biz.notify.register')
-}, {
-  value: 13,
-  label: $t('biz.notify.login')
-}, {
-  value: 14,
-  label: $t('biz.notify.updatePassword')
-}, {
   value: 15,
-  label: $t('biz.notify.vaild')
+  label: '验证码提醒'
 }, {
   value: 16,
   label: $t('biz.notify.distributionApplySuccess')
@@ -477,10 +454,10 @@ let tempSearchForm = null
 const getPage = (newData = false) => {
   pageLoading.value = true
   if (newData || !tempSearchForm) {
-    tempSearchForm = { ...pageQuery, ...searchParam }
+    tempSearchForm = { ...searchParam }
   } else {
-    tempSearchForm.pageSize = pageQuery.pageSize
-    tempSearchForm.pageNum = pageQuery.pageNum
+    tempSearchForm.pageSize = searchParam.pageSize
+    tempSearchForm.pageNum = searchParam.pageNum
   }
   api.page(tempSearchForm).then(pageVO => {
     pageLoading.value = false

@@ -93,6 +93,7 @@
       >
         <el-select
           v-model="dataForm.isMenuHide"
+          :disabled="dataForm.disabled"
           placeholder="请选择"
         >
           <el-option
@@ -181,7 +182,8 @@ const dataForm = ref({
   isMenuHide: '',
   seq: 0,
   icon: '',
-  iconList: []
+  iconList: [],
+  disabled: false
 })
 // 必填输入框验证 validateName：验证名称/validateUrl：验证菜单/validateComponent：验证组件路径
 // eslint-disable-next-line no-unused-vars
@@ -293,7 +295,7 @@ const init = (menuId) => {
 
       if (dataForm.value.menuId) {
         api.get(menuId).then(data => {
-        // 不是目录，才显示组件路径（data.component返回Layout就为目录）
+          // 不是目录，才显示组件路径（data.component返回Layout就为目录）
           if (data.component !== 'Layout') {
             dataForm.value.type = 1
             dataForm.value.componentUrl = data.component
@@ -309,6 +311,7 @@ const init = (menuId) => {
           dataForm.value.isMenuHide = data.hidden
           dataForm.value.seq = data.seq
           dataForm.value.icon = data.icon
+          dataForm.value.disabled = data.name === 'Message' || data.title === '客服'
           // idList方法返回的选中菜单数组格式(内容:[{id: value, name: value}])
           // el-cascader回显的数组只需一个id的数字数组，因此需要把id取出来
           const selectedMenuList = idList(menuList.value, data.parentId).reverse()

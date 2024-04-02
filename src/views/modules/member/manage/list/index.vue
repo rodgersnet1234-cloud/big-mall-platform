@@ -93,7 +93,9 @@
             <el-select
               v-model="userTag"
               v-el-select-loadmore="onLoadMore"
+              :teleported="false"
               value-key="userTagId"
+              popper-class="single-select-loadmore"
               multiple
               clearable
               collapse-tags
@@ -529,8 +531,8 @@ const defaultTime = [
 ]
 const vElSelectLoadmore = {
   mounted: (el, binding) => {
-    // 获取element-ui定义好的scroll盒子
-    const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
+    // 获取element-ui定义好的scroll盒子（single-select-loadmore为自定义的类名）
+    const SELECTWRAP_DOM = el.querySelector('.single-select-loadmore .el-select-dropdown__wrap')
     SELECTWRAP_DOM?.addEventListener('scroll', function () {
       /**
        * scrollHeight 获取元素内容高度(只读)
@@ -539,9 +541,7 @@ const vElSelectLoadmore = {
        * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
        * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
        */
-      const condition =
-        document.documentElement.scrollHeight - document.documentElement.scrollTop <=
-        document.documentElement.clientHeight + 0.5
+      const condition = this.scrollHeight - this.scrollTop <= this.clientHeight
       if (condition) {
         binding.value()
       }
