@@ -74,7 +74,7 @@ const inputLimit = (val) => {
   // 没有则返回-1，有则返回对应位置
   const n = val.search(reg)
   if (n !== -1 || (val[val.length - 2] === '，' && val[val.length - 1] === '，')) {
-    dataForm.sensitiveWords = val.slice(0, n)
+    dataForm.value.sensitiveWords = val.slice(0, n)
     proxy.$forceUpdate()
   }
 }
@@ -82,6 +82,7 @@ const inputLimit = (val) => {
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
+      dataForm.value.sensitiveWords = formatSensitiveWord(dataForm.value.sensitiveWords)
       api.save({
         paramKey: 'SENSITIVE_WORDS',
         paramValue: JSON.stringify(dataForm.value),
@@ -100,6 +101,15 @@ const onSubmit = () => {
     }
   })
 }
+/**
+ * 删除重复、多余的中文逗号
+ * @param str 敏感词配置
+ * @returns {*}
+ */
+const formatSensitiveWord = (str) => {
+  return str.replace(/，+/g, '，').replace(/，$/, '').replace(/^，/, '')
+}
+
 defineExpose({ init })
 </script>
 <style lang="scss" scoped>

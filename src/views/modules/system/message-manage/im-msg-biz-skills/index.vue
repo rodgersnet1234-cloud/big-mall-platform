@@ -240,6 +240,7 @@
 import addOrUpdate from './add-or-update.vue'
 import * as http from '@/api/im-msg-biz-skills'
 import { ElMessage } from 'element-plus'
+import { Debounce } from '@/utils/debounce'
 
 const editText = ref(false)
 const onEditText = () => {
@@ -334,16 +335,7 @@ const updateList = (index, direction) => {
 }
 // 删除
 const removeItem = (id) => {
-  if (imAutoReplyData.value.content.issues.length === 1) {
-    ElMessage({
-      message: '问题至少保留一个',
-      type: 'warning',
-      duration: 1500,
-      onClose: () => {}
-    })
-  } else {
-    imAutoReplyData.value.content.issues = imAutoReplyData.value.content.issues.filter(item => item.id !== id)
-  }
+  imAutoReplyData.value.content.issues = imAutoReplyData.value.content.issues.filter(item => item.id !== id)
 }
 // 编辑
 const replaceItem = (array, newItem) => {
@@ -376,11 +368,15 @@ const changeSendTextState = (e) => {
     })
   }
 }
-const onSubmit = () => {
+
+const onSubmit = Debounce(() => {
   updateData.value.content = imAutoReplyData.value.content.content
-  updateData.value.sendIssusState = imAutoReplyData.value.content.sendIssusState
+  updateData.value.sendIssusState = imAutoReplyData.value.content.sendIssusState && imAutoReplyData.value.content.issues.length > 0
   updateData.value.sendTextState = imAutoReplyData.value.content.sendTextState
   updateData.value.issues = imAutoReplyData.value.content.issues
+  if (!updateData.value.sendIssusState && !updateData.value.sendTextState) {
+    imAutoReplyData.value.status = false
+  }
   if (imAutoReplyData.value.status && !imAutoReplyData.value.content.sendTextState && !imAutoReplyData.value.content.sendIssusState) {
     return ElMessage({
       message: '请勾选其中一个自动回复选项',
@@ -412,7 +408,8 @@ const onSubmit = () => {
       duration: 1500
     })
   })
-}
+})
+
 const content = ref('')
 const maxCharCount = 500
 const remainingCount = ref(500)

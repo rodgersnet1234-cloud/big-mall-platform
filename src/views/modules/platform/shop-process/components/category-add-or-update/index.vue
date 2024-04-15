@@ -91,7 +91,10 @@
             width="200px"
           >
             <template #default="scope">
-              <div class="business-qual">
+              <div
+                :key="scope.row.qualifications"
+                class="business-qual"
+              >
                 <imgs-upload
                   v-model="scope.row.qualifications"
                   :limit="2"
