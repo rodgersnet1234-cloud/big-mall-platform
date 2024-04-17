@@ -273,6 +273,7 @@ const onSubmit = (paramKey) => {
           }
           api.save(params).then(() => {
             ElMessage.success('保存成功')
+            allinpayVisible.value = false
             // 开启通联后，更新pinia中的配置
             useAllinpayStore().getPaySettlementType()
           })
@@ -289,6 +290,7 @@ const onSubmit = (paramKey) => {
         }).then(() => {
           // 保存成功后，更新appid
           init()
+          allinpayVisible.value = false
           ElMessage({
             message: $t('table.actionSuccess'),
             type: 'success',
@@ -298,7 +300,6 @@ const onSubmit = (paramKey) => {
       }
     })
   }
-  allinpayVisible.value = false
 }
 const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联
