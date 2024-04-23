@@ -1,0 +1,138 @@
+/*
+* Copyright (c) 2018-2999 广州市蓝海创新科技有限公司 All rights reserved.
+*
+* https://www.mall4j.com/
+*
+* 未经允许，不可做商业用途！
+*
+* 版权所有，侵权必究！
+*/
+import { defineStore } from 'pinia'
+import { login, logout } from '@/api/auth/auth'
+import { menuPermissionsList } from '@/api/rbac/menu-permission'
+import { shopUserInfo } from '@/api/platform/sys-user'
+import { listMenuIds } from '@/api/rbac/menu'
+import { getToken, removeToken, setToken, getTenantId, setTenantId, removeTenantId } from '@/utils/auth'
+import { resetRouter } from '@/router'
+import Cookies from 'vue-cookies'
+
+export const useUserStore = defineStore('user', {
+  state: () => {
+    return {
+      token: getToken(),
+      name: '',
+      userName: '',
+      avatar: '',
+      introduction: '',
+      isAdmin: 0,
+      platformUserId: '',
+      tenantId: getTenantId(),
+      roles: [],
+      menuIds: [],
+      isPassShop: 0,
+      channelId: ''
+    }
+  },
+  actions: {
+    // 登录
+    login (loginData) {
+      return new Promise((resolve, reject) => {
+        login(loginData).then(response => {
+          this.token = response.accessToken
+          this.tenantId = response.tenantId
+          setTenantId(response.tenantId)
+          setToken(response.accessToken)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    // get userInfo
+    getUserInfo () {
+      return new Promise((resolve, reject) => {
+        shopUserInfo().then(shopUser => {
+          this.name = shopUser.nickName
+          this.avatar = shopUser.avatar
+          this.isAdmin = shopUser.isAdmin
+          this.platformUserId = shopUser.platformUserId
+          this.userName = shopUser.userName
+          resolve(shopUser)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 获取权限列表
+    listPermissions () {
+      return new Promise((resolve, reject) => {
+        if (this.isAdmin) {
+          this.roles = ['']
+          resolve([''])
+          return
+        }
+        menuPermissionsList().then(permissions => {
+          if (!permissions) {
+            reject(new Error('Verification failed, please Login again.'))
+          }
+          // roles must be a non-empty array
+          if (!permissions || permissions.length <= 0) {
+            permissions = ['']
+          }
+          this.roles = permissions
+          resolve(permissions)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    // 获取拥有的菜单id
+    listMenuIds () {
+      return new Promise((resolve, reject) => {
+        listMenuIds().then(menuIds => {
+          this.menuIds = menuIds
+          resolve(menuIds)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 登出
+    logout () {
+      return new Promise((resolve, reject) => {
+        logout().then(() => {
+          this.resetToken()
+          resetRouter()
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    // 重置token
+    resetToken () {
+      this.token = ''
+      removeToken()
+      removeTenantId()
+      Cookies.remove('miniAppConfigSave')
+      Cookies.remove('mpConfigSave')
+      this.name = ''
+      this.userName = ''
+      this.avatar = ''
+      this.isAdmin = 0
+      this.platformUserId = ''
+      this.tenantId = ''
+      this.roles = []
+      this.menuIds = []
+      this.isPassShop = 0
+    },
+    saveChannelId (ids) {
+      this.channelId = ids
+    },
+    removeChannelId () {
+      this.channelId = []
+    }
+  }
+})

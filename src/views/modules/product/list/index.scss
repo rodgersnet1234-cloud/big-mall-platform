@@ -1,0 +1,61 @@
+.page-product-list {
+  .search-bar {
+    .input-row {
+      .range-box {
+        display: flex;
+        .interval-line {
+          margin: 0 10px;
+        }
+        .el-input--small .el-input__inner {
+          padding: 0;
+          padding-left: 12px;
+          text-overflow: ellipsis;
+          -o-text-overflow: ellipsis;
+          -webkit-text-overflow: ellipsis;
+          -moz-text-overflow: ellipsis;
+          word-break: break-word;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+  .main-content {
+    .operation-bar {
+      .all-check-btn {
+        margin-left: 18px;
+        margin-right: 10px;
+      }
+    }
+    .table-con {
+      .operation-bar {
+        margin: 10px 0;
+      }
+      .water-sold-con {
+        .el-input--small .el-input__inner {
+          padding: 0 0 0 12px;
+          text-overflow: ellipsis;
+          -o-text-overflow: ellipsis;
+          -webkit-text-overflow: ellipsis;
+          -moz-text-overflow: ellipsis;
+          word-break: break-word;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+  :deep(.el-popover.el-popper) {
+    min-width: 200px;
+    width: auto;
+  }
+}
+.popover-bottom {
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-end;
+}

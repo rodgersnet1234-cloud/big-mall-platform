@@ -1,0 +1,103 @@
+.content-box{
+  height: 500px;
+
+  .check-label{
+    padding-left: 8px;
+    padding-right: 6px;
+    cursor: pointer;
+  }
+
+  .addr-region{
+    display: flex;
+    line-height: 32px;
+    margin-bottom: 20px;
+
+    .region-name{
+      width: 100px;
+    }
+    .province-box{
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+
+      .province-item{
+        width: 33%;
+        position: relative;
+
+        .area-count{
+          color: #155bd4;
+          padding-right: 6px;
+        }
+
+        .bor-style{
+          border: 1px solid #eee;
+          background-color: #fff;
+          border-radius: 2px;
+          box-shadow: 0 0 3px #ccc;
+        }
+
+        .city-box{
+          min-width: 70%;
+          max-height: calc(32px * 10 + 6px);
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding:3px 12px;
+          position: absolute;
+          left: -13px;
+          z-index: 9;
+
+          .city-item{
+            position: relative;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            .area-box{
+              max-height: calc(32px * 8 + 8px);
+              overflow-y: auto;
+              overflow-x: hidden;
+              padding: 3px 20px;
+              line-height: 32px;
+              position: fixed;
+              background-color: #fff;
+              z-index: 999;
+            }
+
+            .area-mark{
+              background-color: #fff;
+              box-shadow: 1px 1px 3px 0 #ccc;
+              display: block;
+              width: 10px;
+              height: 10px;
+              position: fixed;
+              transform: rotate(135deg);
+            }
+
+          }
+        }
+      }
+    }
+  }
+}
+.dialog-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .area-num{
+    margin-right: 12px;
+  }
+}
+
+.shop-transcity-add-or-update ::v-deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner){
+  background-color:#fff;
+}
+
+.shop-transcity-add-or-update ::v-deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner::before){
+  background-color:#155bd4;
+}
+
+.shop-transcity-add-or-update {
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+  }
+}

@@ -1,0 +1,177 @@
+.group-container {
+  .button-add {
+    border-radius: 50%;
+    padding: 3px;
+    background-color: #fff;
+    color: #155bd4;
+    font-weight: bold;
+    border: 1px solid #155bd4;
+    font-size: 19px;
+  }
+
+  .spec-name {
+    display: flex;
+    margin: 15px 5px;
+    margin-bottom: 0;
+
+    .spec-name-conter{
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .tag-item-tit {
+      height: 32px;
+      line-height: 32px;
+      min-width: 56px;
+      margin-right: 10px;
+    }
+
+    // 属性名称
+    .spec-name-int {
+      padding: 0 10px;
+      border: 1px solid #DCDCDC;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: top;
+      width: 150px;
+      margin-bottom: 10px;
+      &.ft-spec-val-item{
+        padding-bottom: 10px;
+      }
+
+      .spec-name-box{
+        height: 32px;
+        line-height: 32px;
+        display: flex;
+        justify-content: space-between;
+
+        .text-hid{
+          width: 90%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .del-btn {
+          font-size: 12px;
+          line-height: 32px;
+          color: #999;
+          cursor: pointer;
+        }
+      }
+      // 属性图片
+      .img-box {
+        display: flex;
+        align-items: flex-end;
+        margin-top: 10px;
+        .spec-imgbox {
+          display: block;
+          width: 80px;
+          height: 80px;
+          position: relative;
+          .preview-btn {
+            display: none;
+            width: 100%;
+            position: absolute;
+            bottom: -1px;
+            left: 1px;
+            font-size: 12px;
+            line-height: 1.5em;
+            color: #fff;
+            text-align: center;
+            border-radius: 0 0 6px 6px;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+          }
+          :deep(.spec-img) {
+            // sku上传图片组件大小修改
+            .plugin-images {
+              .el-upload {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 80px;
+                height: 80px;
+                .pic-uploader-icon {
+                  width: 80px;
+                  height: 80px;
+                  line-height: 80px;
+                  font-size: 18px;
+                }
+                .pic {
+                  width: auto;
+                  max-width: 80px;
+                  height: auto;
+                  max-height: 80px;
+                }
+              }
+            }
+          }
+        }
+        .spec-imgbox:hover .preview-btn {
+          display: block;
+        }
+        .del-pic {
+          font-size: 12px;
+          color: #155bd4;
+          margin-left: 5px;
+          cursor: pointer;
+        }
+      }
+      .error-tips {
+        margin-left: 25px;
+        margin-top: 10px;
+        color: #e43130;
+      }
+      .el-tag--plain {
+        position: relative;
+        min-width: 100px;
+        color: #606266;
+        border-color: #dcdfe6;
+        justify-content: space-between;
+      }
+      :deep(.el-tag--plain) .el-tag__close {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 4px;
+        color: #606266;
+        &:hover {
+          background: #dcdfe6;
+        }
+      }
+    }
+    .add-spec-btn {
+      display: inline-block;
+      font-size: 12px;
+      line-height: 1.5em;
+      margin-top: 10px;
+      color: #155bd4;
+      cursor: pointer;
+    }
+    .sku-item {
+      height: 32px;
+      line-height: 32px;
+      display: flex;
+      align-items: center;
+      .popover-select {
+        width: 100%;
+      }
+
+      .add-btn {
+        font-size: 20px;
+        line-height: 32px;
+        vertical-align: middle;
+        color: #155bd4;
+        cursor: pointer;
+      }
+      .add-btn.disable {
+        color: #DCDCDC;
+      }
+    }
+  }
+}
+
+:deep(.popover-select .el-select-dropdown__item){
+  text-align: left;
+}

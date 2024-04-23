@@ -1,0 +1,474 @@
+.app-container {
+  margin-bottom: 30px;
+}
+.app-container.page-supplier-edit {
+  font-size: 14px;
+  color: #333;
+  .head-title {
+    margin-bottom: 15px;
+  }
+
+  .red-tag-txt {
+    color: #ff4949;
+  }
+
+  // 导航栏
+  .nav-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    .nav {
+      position: relative;
+      display: flex;
+      white-space: nowrap;
+      .nav-item {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1em;
+        padding: 15px 20px;
+        color: #999;
+        cursor: pointer;
+      }
+      .nav-item.active {
+        color: #155bd4;
+        background: rgba(24,144,255, 0.06);
+        border-radius: 4px 4px 0 0;
+        border-bottom: 2px solid #155bd4;
+      }
+    }
+  }
+  .nav-box::before {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    border-bottom: 1px solid #f0f0f0;
+    content: '';
+  }
+
+  .shop-info-box {
+    // 公共
+    p {
+      margin: 0;
+    }
+    p.tit {
+      display: inline-block;
+      text-align: right;
+    }
+    .asterisk {
+      color: red;
+      padding-right: 5px;
+    }
+    .table-box {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      ::v-deep(.el-table th), .el-table td {
+        border-color: #f0f0f0;
+        height: 40px;
+        line-height: 40px;
+      }
+      ::v-deep(.el-table td) {
+        height: 56px;
+        line-height: 56px;
+      }
+      ::v-deep .el-table__row:last-child{
+        td {
+          border-bottom: 0;
+        }
+      }
+      ::v-deep(.el-table th) {
+        background: #fafafa;
+      }
+      ::v-deep(.el-table__body-wrapper) {
+        max-height: 245px;
+        overflow-y: scroll;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+      }
+      ::v-deep(.el-table__body-wrapper::-webkit-scrollbar) {
+        display: none; /* Chrome Safari */
+      }
+      ::v-deep(.el-table__body) {
+        width: 100%;
+      }
+    }
+    .single-image-upload {
+      height: 120px;
+    }
+
+    // 表格上的标题
+    .table-data-title {
+      display: flex;
+      align-items: center;
+      .txt-bold {
+        color: #000;
+      }
+      .text {
+        font-size: 16px;
+        min-width: 80px;
+        .stress {
+          color: #FF2120;
+          margin-right: 5px;
+        }
+      }
+      .tips {
+        font-size: 12px;
+        color: #999;
+        margin-left: 10px;
+      }
+      .edit-btn {
+        width: 117px;
+        height: 30px;
+        line-height: 28px;
+        font-size: 14px;
+        color: #155bd4;
+        background: #FFFFFF;
+        text-align: center;
+        border: 1px solid #155bd4;
+        border-radius: 2px;
+        box-sizing: border-box;
+        margin-left: auto;
+        cursor: pointer;
+      }
+    }
+
+    // 基本信息模块
+    .basic-info-mod {
+      // 审核状态
+      .audit-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: #f5f5f5;
+        padding: 20px 40px;
+        line-height: 1em;
+        margin-top: 20px;
+        p.tit {
+          width: 95px;
+        }
+        p.txt {
+          ::v-deep(.el-input--mini .el-input__inner) {
+            width: 400px;
+          }
+        }
+        .week {
+          color: #666;
+        }
+      }
+      .bg-img {
+        display: flex;
+        justify-content: flex-start;
+        .business-license-box {
+          margin-right: 30px;
+          .img-tips {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5em;
+            margin-top: 8px;
+            p  {
+              margin: 0;
+              padding: 0;
+            }
+          }
+        }
+      }
+      // 信息
+      .basic-info-list {
+        margin: 20px 0;
+        .basic-info-box {
+          display: flex;
+          justify-content: flex-start;
+          width: 100%;
+          .left-info {
+            width: 550px;
+            margin-right: 20px;
+            text-align: left;
+          }
+          .right-info {
+            width: 30%;
+            min-width: 420px;
+          }
+        }
+        .basic-info-item {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 20px 30px;
+        }
+        .upload-tips {
+          font-size: 12px;
+          color: #999;
+          height: 16px;
+          line-height: 20px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    // 工商信息
+    .business-info-mod {
+      display: flex;
+      // justify-content: center;
+      margin-top: 50px;
+      .ci-wrapper {
+        display: flex;
+        .left-info {
+          width: 504px;
+          .price-unit-text {
+            font-size: 14px;
+            color: #666;
+            margin-left: 15px;
+          }
+          .capital-int {
+            ::v-deep(.el-input__inner) {
+              padding-right: 0;
+            }
+          }
+          .btn-box {
+            display: flex;
+            margin-left: 134px;
+            margin-bottom: 40px;
+            .prev-btn {
+              margin-right: 13px;
+            }
+          }
+        }
+        .right-info {
+          width: 440px;
+          margin-left: 106px;
+          .business-license-box {
+            .license-content {
+              display: flex;
+            }
+          }
+          .id-box {
+            .upload-content {
+              .upload-img {
+                display: flex;
+                div {
+                  &:nth-child(2) {
+                    margin-left: 20px;
+                  }
+                }
+              }
+              .upload-example {
+                display: flex;
+                // margin-top: 15px;
+                margin-left: 134px;
+                .example-box {
+                  margin-left: 0;
+                  &:nth-child(2) {
+                    margin-left: 20px;
+                  }
+                }
+              }
+              .upload-tips {
+                margin-left: 134px;
+              }
+            }
+          }
+          .img-static {
+            display: block;
+            width: 120px;
+            height: 120px;
+          }
+          .img-static:not(:first-child) {
+            margin-left: 20px;
+          }
+
+          // 示例框
+          .example-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 120px;
+            height: 120px;
+            background: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 3px;
+            box-sizing: border-box;
+            margin-left: 20px;
+            img {
+              display: block;
+              width: auto;
+              max-width: 100%;
+              height: auto;
+              max-height: 100%;
+            }
+            .tips {
+              position: absolute;
+              left: -1px;
+              bottom: 0;
+              width: 120px;
+              height: 20px;
+              line-height: 20px;
+              font-size: 12px;
+              color: #fff;
+              background: rgba(51, 51, 51, 0.5);
+              text-align: center;
+              border-radius: 0 0 3px 3px;
+            }
+          }
+
+          .upload-tips {
+            font-size: 12px;
+            color: #999;
+            height: 16px;
+            line-height: 20px;
+            margin-top: 13px;
+          }
+
+          // 图片上传框样式修改
+          ::v-deep .el-upload {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 121px;
+            background: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            border-radius: 3px;
+            box-sizing: border-box;
+            // img {
+            //   width: 120px;
+            // }
+            .el-icon-plus {
+              font-size: 22px;
+              color: #EAEAEA;
+            }
+          }
+        }
+      }
+    }
+    // 签约信息
+    .contract-info {
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 80px;
+      .s-item {
+        .si-content {
+          margin-top: 12px;
+          .img-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .tab-img {
+              width: 60px;
+              height: 60px;
+            }
+            .tab-img:not(:first-child) {
+              margin-left: 5px;
+            }
+          }
+          .contract-time-box{
+            display: flex;
+            align-items: center;
+            .end-time {
+              position: relative;
+              .text {
+                position: absolute;
+                left: 30px;
+                line-height: 32px;
+                font-size: 14px;
+                &.disable{
+                  color: #a8abb2;
+                  cursor: no-drop;
+                }
+              }
+            }
+          }
+        }
+      }
+      .s-brand-item {
+        margin: 39px 0 31px;
+      }
+      table {
+        .table-item {
+          .img-item {
+            img {
+              vertical-align: middle;
+              width: 38px;
+              height: 38px;
+              background: #EBF1FF;
+              border-radius: 19px;
+              margin: auto;
+            }
+          }
+        }
+      }
+      .btn-box {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 39px;
+        .prev-btn {
+          margin-right: 13px;
+        }
+      }
+    }
+    // 财务信息
+    .financial-info {
+      margin: 20px 0;
+      .table-box {
+        margin-top: 10px;
+        ::v-deep(.el-table__body-wrapper) {
+          height: auto;
+          max-height: 100%;
+        }
+      }
+    }
+
+  }
+
+  // 脚部
+  .footer {
+    z-index: 8;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 10px 20px;
+    box-shadow: 4px 2px 5px 5px #eee;
+    background: #fff;
+    margin-left: -24px;
+    .foot-box {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      .btn {
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .btn:first-child {
+        background: #155bd4;
+        color: #fff;
+      }
+      .btn:last-child {
+        border: 1px solid #d9d9d9;
+      }
+    }
+  }
+  :deep(.el-dialog){
+    .el-dialog__header{
+      padding-top: 0;
+    }
+    .el-dialog__body{
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+.end-time {
+  position: relative;
+  .text {
+    position: absolute;
+    left: 30px;
+  }
+}
