@@ -23,16 +23,16 @@
         </el-radio-group>
       </el-form-item>
       <!-- 业绩归属 -->
-      <el-form-item label="业绩归属 :">
-        <el-radio-group v-model="dataForm.attribution">
-          <el-radio :label="0">
-            {{ '允许绑定,关系优先' }}
-          </el-radio>
-          <el-radio :label="1">
-            {{ '不绑定 分享人优先' }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
+      <!--      <el-form-item label="业绩归属 :">-->
+      <!--        <el-radio-group v-model="dataForm.attribution">-->
+      <!--          <el-radio :label="0">-->
+      <!--            {{ '允许绑定,关系优先' }}-->
+      <!--          </el-radio>-->
+      <!--          <el-radio :label="1">-->
+      <!--            {{ '不绑定 分享人优先' }}-->
+      <!--          </el-radio>-->
+      <!--        </el-radio-group>-->
+      <!--      </el-form-item>-->
       <!-- 申请条件-条件审核判定 -->
       <el-form-item label="条件审核判定 :">
         <el-radio-group
@@ -314,7 +314,7 @@ const isExpenseAmount = ref(false)
 const dataFormRef = ref(null)
 const dataForm = reactive({
   distributionSwitch: 0,
-  attribution: 1,
+  // attribution: 1,
   autoCheck: 0,
   expenseNumber: null,
   spuIdList: [],
@@ -355,7 +355,7 @@ const getData = () => {
 // 设置数据
 const setDate = (data) => {
   dataForm.distributionSwitch = data.distributionSwitch
-  dataForm.attribution = data.attribution
+  // dataForm.attribution = data.attribution
   dataForm.autoCheck = data.autoCheck
   dataForm.expenseNumber = data.expenseNumber
   dataForm.spuIdList = data.spuIdList
@@ -475,7 +475,7 @@ const prodsSelectRef = ref(null)
 const prodsSelectHandle = () => {
   prodsSelectVisible.value = true
   nextTick(() => {
-    prodsSelectRef.value?.init(dataFormRef.value?.spuVOList, { filterSupDelivery: true })
+    prodsSelectRef.value?.init(dataForm.spuVOList, { filterSupDelivery: true })
   })
 }
 // 商品选择回调

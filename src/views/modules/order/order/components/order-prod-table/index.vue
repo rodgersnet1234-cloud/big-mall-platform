@@ -85,7 +85,7 @@
             </div>
           </td>
           <td>
-            <span>{{ item.activityType === 5 ? '-' : formatPrice(item.spuTotalAmount, item.count).toFixed(2) }}</span>
+            <span>{{ item.activityType === 5 ? '-' : formatPrice(item.price, item.count).toFixed(2) }}</span>
           </td>
           <td>
             <span>{{ item.count }}</span>
@@ -93,9 +93,15 @@
 
           <!-- 预售 -->
           <template v-if="orderInfo.preSaleType===1">
-            <td />
-            <td />
-            <td />
+            <td>
+              {{ formatPrice(orderInfo.orderPreSaleInfoVO?.depositAmount, 1).toFixed(2) }}
+            </td>
+            <td>
+              {{ formatPrice(orderInfo.orderPreSaleInfoVO?.depositExpansionAmount, 1).toFixed(2) }}
+            </td>
+            <td>
+              {{ formatPrice(orderInfo.orderPreSaleInfoVO?.balanceAmount, 1).toFixed(2) }}
+            </td>
           </template>
 
           <td>

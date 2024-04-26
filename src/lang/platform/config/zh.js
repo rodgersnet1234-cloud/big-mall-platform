@@ -110,5 +110,7 @@ export default {
   pushAuthKey: '推流鉴权key',
   pullAuthKey: '播流鉴权key',
   isHttps: '是否开启https配置',
-  liveTip2: '应用名称只支持数字、大小写字母、短划线(-)、下划线(_)、等号(=)'
+  liveTip2: '应用名称只支持数字、大小写字母、短划线(-)、下划线(_)、等号(=)',
+  liveAnchorNotExist: '该主播已经注销账号',
+  liveAnchorError: '该主播账号已被平台禁用'
 }

@@ -77,7 +77,8 @@
       width: 90%;
       margin: 50px auto;
       .password-par :deep(.el-form-item__error){
-        text-wrap: nowrap
+        text-wrap: nowrap;
+        white-space:nowrap;
       }
     }
 

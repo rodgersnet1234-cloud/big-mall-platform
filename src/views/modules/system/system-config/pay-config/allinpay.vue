@@ -175,7 +175,7 @@ import * as api from '@/api/platform/sys-config.js'
 import { ElMessage } from 'element-plus'
 const emit = defineEmits(['unSetState', 'toggle', 'appIdState'])
 const allinpayVisible = ref(false)
-const exposeVisible = (isSwitch) => {
+const exposeVisible = () => {
   allinpayVisible.value = true
 }
 const dataForm = ref({
@@ -190,15 +190,47 @@ const dataForm = ref({
   alipaySubAppId: ''
 })
 const appId = ref('') // 保存的appid，无数据时标识未保存
+// eslint-disable-next-line no-unused-vars
+const validEmptyTab = (rule, value, callback) => {
+  if (validNoEmptySpace(value)) {
+    callback(new Error('内容不能全为空格'))
+  } else {
+    callback()
+  }
+}
 const dataRule = reactive({
-  requestUrl: [{ required: true, message: '请求地址不能为空', trigger: 'blur' }],
-  appId: [{ required: true, message: 'appId不能为空', trigger: 'blur' }],
-  appSecret: [{ required: true, message: '签名秘钥不能为空', trigger: 'blur' }],
-  appPrivateKey: [{ required: true, message: '商户私钥不能为空', trigger: 'blur' }],
-  accountSetNo: [{ required: true, message: '托管账户集编号不能为空', trigger: 'blur' }],
-  appCertPath: [{ required: true, message: '应用公钥证书路径不能为空', trigger: 'blur' }],
-  appPrivateCertPath: [{ required: true, message: '应用私钥证书路径不能为空', trigger: 'blur' }],
-  vspCusId: [{ required: true, message: '集团商户号不能为空', trigger: 'blur' }]
+  requestUrl: [
+    { required: true, message: '请求地址不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  appId: [
+    { required: true, message: 'appId不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  appSecret: [
+    { required: true, message: '签名秘钥不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  appPrivateKey: [
+    { required: true, message: '商户私钥不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  accountSetNo: [
+    { required: true, message: '托管账户集编号不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  appCertPath: [
+    { required: true, message: '应用公钥证书路径不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  appPrivateCertPath: [
+    { required: true, message: '应用私钥证书路径不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ],
+  vspCusId: [
+    { required: true, message: '集团商户号不能为空', trigger: 'blur' },
+    { validator: validEmptyTab, trigger: 'blur' }
+  ]
 })
 const paySettlementType = ref(false)
 const unSet = ref(false)
@@ -241,6 +273,7 @@ const onSubmit = (paramKey) => {
           }
           api.save(params).then(() => {
             ElMessage.success('保存成功')
+            allinpayVisible.value = false
             // 开启通联后，更新pinia中的配置
             useAllinpayStore().getPaySettlementType()
           })
@@ -257,6 +290,7 @@ const onSubmit = (paramKey) => {
         }).then(() => {
           // 保存成功后，更新appid
           init()
+          allinpayVisible.value = false
           ElMessage({
             message: $t('table.actionSuccess'),
             type: 'success',
@@ -266,7 +300,6 @@ const onSubmit = (paramKey) => {
       }
     })
   }
-  allinpayVisible.value = false
 }
 const useAllinpay = useAllinpayStore()
 // 结算方式 1:通联 0：非通联

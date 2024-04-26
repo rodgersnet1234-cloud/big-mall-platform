@@ -429,7 +429,7 @@ const onClear = () => {
     orderNumber: '',
     refundSn: '',
     reason: '',
-    financeBizType: '1'
+    financeBizType: dataFrom.value.financeBizType
   }
   dateRangeParam.value = []
 }

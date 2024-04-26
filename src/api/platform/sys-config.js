@@ -82,3 +82,10 @@ export function getOfficialAccountQRcode () {
     responseType: 'arraybuffer'
   })
 }
+// 获取支付开启配置/微信配置信息
+export function getPlatformSubjectStatus () {
+  return request({
+    url: '/mall4cloud_admin/p/ua/sys_config/get_platform_subject_status',
+    method: 'get'
+  })
+}

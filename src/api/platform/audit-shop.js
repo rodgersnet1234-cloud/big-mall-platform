@@ -347,3 +347,11 @@ export function getLink () {
     method: 'GET'
   })
 }
+// 获取平台邀请的入驻url
+export function updateDomain (data) {
+  return request({
+    url: 'mall4cloud_admin/p/platform_detail/update_platform_url',
+    method: 'PUT',
+    data
+  })
+}

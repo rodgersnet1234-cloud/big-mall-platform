@@ -141,10 +141,12 @@ watch(type, (val) => {
   }
 })
 
-const init = (initId, initType, initPaperSize) => {
-  id.value = initId
-  type.value = initType
-  paperSize.value = initPaperSize
+let mobile = ''
+const init = (outletInfo) => {
+  id.value = outletInfo.outletConfigId
+  type.value = outletInfo.deliveryCompanyType
+  paperSize.value = outletInfo.paperSize
+  mobile = outletInfo.mobile
   visible.value = true
 }
 
@@ -154,6 +156,7 @@ const onSubmit = () => {
   tempUpdateForm.outletConfigId = id.value
   tempUpdateForm.deliveryCompanyType = type.value
   tempUpdateForm.paperSize = paperSize.value
+  tempUpdateForm.mobile = mobile
   api.update(tempUpdateForm).then(() => {
     ElMessage({
       message: $t('table.actionSuccess'),

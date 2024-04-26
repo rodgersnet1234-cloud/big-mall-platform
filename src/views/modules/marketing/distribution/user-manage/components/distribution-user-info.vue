@@ -109,11 +109,11 @@ const init = (data) => {
   nextTick(() => {
     dataFormRef.value?.resetFields()
   })
-  for (const key in data) {
-    if (Object.hasOwnProperty.call(data, key)) {
-      data[key] = checkFileUrl(data[key])
-    }
-  }
+  // for (const key in data) {
+  //   if (Object.hasOwnProperty.call(data, key)) {
+  //     data[key] = checkFileUrl(data[key])
+  //   }
+  // }
   dataForm.realName = data.realName
   dataForm.identityCardNumber = data.identityCardNumber
   dataForm.userMobile = data.userMobile

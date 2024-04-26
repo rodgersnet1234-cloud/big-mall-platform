@@ -145,7 +145,7 @@
 <script setup>
 import { treeDataTranslate, idList, formatPrice, deepClone } from '@/utils'
 import { page } from '@/api/product/list'
-import { categoryPage } from '@/api/product/category'
+import { enableCategories } from '@/api/product/category'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['refreshSelectProds'])
@@ -200,6 +200,8 @@ const init = (initSelectProds, option) => {
     indexImg.value = option.indexImg || false
     filterSupDelivery.value = option.filterSupDelivery || false
   }
+  searchForm.value.keyword = null
+  searchForm.value.categoryId = null
   singleSelectspuId.value = 0
   selectProds.value = initSelectProds || []
   visible.value = true
@@ -215,7 +217,7 @@ const init = (initSelectProds, option) => {
 }
 
 const getCategoryList = () => {
-  categoryPage().then((data) => {
+  enableCategories().then((data) => {
     categoryList.value = treeDataTranslate(data, 'categoryId', 'parentId')
   })
 }

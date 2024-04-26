@@ -110,5 +110,7 @@ export default {
   pushAuthKey: 'Push Stream Auth Key',
   pullAuthKey: 'Pull Stream Auth Key',
   isHttps: 'Whether to enable https configuration',
-  liveTip2: 'Application names only support numbers, upper and lower case letters, underscores (-), underscores (_), and equals signs (=).'
+  liveTip2: 'Application names only support numbers, upper and lower case letters, underscores (-), underscores (_), and equals signs (=).',
+  liveAnchorNotExist: 'The anchor has canceled his account',
+  liveAnchorError: 'The anchor\'s account has been disabled by the platform'
 }
