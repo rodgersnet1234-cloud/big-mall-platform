@@ -102,7 +102,6 @@
   </div>
 </template>
 <script setup>
-import { ElMessage } from 'element-plus'
 import selectGoodsComponent from '../../../../../decorate/create/common-component/select-goods-component/index.vue'
 import moduleComponent from './module.vue'
 import redirectNav from '../../../../../decorate/create/common-component/redirect-nav/index.vue'
@@ -146,7 +145,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -211,7 +210,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (isPass) {
     myCheckResult(isPass)
   } else {
-    ElMessage.error(errMessage)
+    emit('onErrorMessageTip', errMessage)
   }
 }
 

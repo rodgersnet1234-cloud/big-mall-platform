@@ -35,30 +35,10 @@
             </el-form-item>
             <el-form-item
               label="交易时间："
-              label-width="120px"
               class="date-range-param"
             >
-              <el-select
-                v-model="datePickerType"
-                class="date-picker-type"
-                @change="onSetdatePickerType(datePickerType)"
-              >
-                <el-option
-                  v-for="item in datePickerTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <el-date-picker
+              <cm-date-picker
                 v-model="dateRangeParam"
-                :type="datePickerType"
-                format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="defaultTime"
               />
             </el-form-item>
             <el-form-item>
@@ -242,6 +222,8 @@ import { page, soldExcel } from '@/api/finance-details/index'
 import Big from 'big.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
+import CmDatePicker from '../components/cm-date-picker/index.vue'
+
 const amount = (value) => {
   if (value) {
     return new Big(value).div(100).toFixed(2)
@@ -254,22 +236,8 @@ let tempSearchForm = null // 保存上次点击查询的请求条件
 const financeBizType = ref('1')
 const total = ref(0)
 let isSubmit = false
-const datePickerType = ref('daterange') // 日期筛选类型
 const dateRangeParam = ref([moment().add(-6, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'), moment().endOf('day').format('YYYY-MM-DD HH:mm:ss')])
-const defaultTime = ref([
-  new Date(2000, 1, 1, 0, 0, 0),
-  new Date(2000, 2, 1, 23, 59, 59)
-])
-const datePickerTypeOptions = [
-  {
-    label: '日期范围',
-    value: 'daterange'
-  },
-  {
-    label: '月份范围',
-    value: 'monthrange'
-  }
-]
+
 const params = ref({
   pageNum: 1,
   pageSize: 10
@@ -348,15 +316,7 @@ const pagination = (page) => {
   params.value.pageSize = page.pageSize
   onGetData()
 }
-const onSetdatePickerType = (val) => {
-  datePickerType.value = val
-  if (val === 'monthrange') {
-    dateRangeParam.value = [
-      moment().startOf('month').subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss'),
-      moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')
-    ]
-  }
-}
+
 // 导出
 const onExportFrom = () => {
   if (!(dateRangeParam.value && dateRangeParam.value[0] && dateRangeParam.value[1])) {
@@ -447,9 +407,6 @@ const onClear = () => {
       padding: 24px;
       .search-bar {
         margin-bottom: 20px;
-        :deep(.el-form-item__content .el-input){
-          width: 160px;
-        }
       }
       .date-range-param{
         :deep(.el-form-item__label:before) {
@@ -457,12 +414,6 @@ const onClear = () => {
           margin-right: 4px;
           content: '*';
         }
-      }
-      :deep(.date-picker-type .el-input--suffix) {
-        width: 120px !important;
-      }
-      .el-form-item .el-form-item__content .el-select{
-        width: 130px !important;
       }
     }
     .question{

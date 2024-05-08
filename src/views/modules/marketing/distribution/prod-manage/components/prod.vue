@@ -282,6 +282,7 @@ const closeDialog = () => {
   prodInfoVisible.value = false
 }
 const getPageData = (newData = false) => {
+  searchForm.keyword = searchForm.spuName
   if (newData || !tempSearchForm) {
     tempSearchForm = { ...searchForm }
   } else {

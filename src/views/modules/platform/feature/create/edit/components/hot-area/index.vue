@@ -238,7 +238,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -283,7 +283,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (formData.imageList.length > 0) {
     myCheckResult(true)
   } else {
-    ElMessage.error($t('shopFeature.imageAd.hotArea') + props.current + $t('shopFeature.tabNav.pleaseAddPic'))
+    emit('onErrorMessageTip', $t('shopFeature.imageAd.hotArea') + props.current + $t('shopFeature.tabNav.pleaseAddPic'))
   }
 }
 

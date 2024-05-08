@@ -57,7 +57,6 @@
 import selectGoodsComponent from '../../../../../decorate/create/common-component/select-goods-component/index.vue'
 import moduleComponent from './module.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -96,7 +95,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -153,7 +152,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (isPass) {
     myCheckResult(isPass)
   } else {
-    ElMessage.error(errMessage)
+    emit('onErrorMessageTip', errMessage)
   }
 }
 

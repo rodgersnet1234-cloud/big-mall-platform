@@ -109,27 +109,9 @@
               label-width="120px"
               class="date-range-param"
             >
-              <el-select
-                v-model="datePickerType"
-                class="date-picker-type"
-                @change="onSetdatePickerType(datePickerType)"
-              >
-                <el-option
-                  v-for="item in datePickerTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <el-date-picker
+              <cm-date-picker
                 v-model="dateRangeParam"
-                :type="datePickerType"
-                format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="defaultTime"
+                :is-need-def-val="false"
               />
             </el-form-item>
             <el-form-item label-width="120px">
@@ -179,6 +161,7 @@ import Trading from './components/trading.vue'
 import { shopWallet, soldExcel } from '@/api/merchant-balance/index'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
+import CmDatePicker from '../components/cm-date-picker/index.vue'
 
 import Big from 'big.js'
 
@@ -190,29 +173,13 @@ const amount = (value) => {
 }
 const activeName = 'first'
 
-const datePickerType = ref('daterange') // 日期筛选类型
 const dateRangeParam = ref([])
-const defaultTime = ref([
-  new Date(2000, 1, 1, 0, 0, 0),
-  new Date(2000, 2, 1, 23, 59, 59)
-])
-const datePickerTypeOptions = [
-  {
-    label: '日期范围',
-    value: 'daterange'
-  },
-  {
-    label: '月份范围',
-    value: 'monthrange'
-  }
-]
+
 onMounted(() => {
   onGetShopWallet()
   onSearch()
 })
-const onSetdatePickerType = (val) => {
-  datePickerType.value = val
-}
+
 const tradingRef = ref(null)
 const searchForm = ref({
   startTime: '',
@@ -301,9 +268,6 @@ const onExportFrom = () => {
       margin-top: 20px;
       margin-bottom: 25px;
       padding-bottom: 25px;
-     :deep(.date-picker-type .el-input--suffix) {
-          width: 120px !important;
-     }
     }
    .head {
      background: #F5F5F5;

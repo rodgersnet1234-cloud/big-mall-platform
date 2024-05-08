@@ -264,7 +264,6 @@ import { formatPrice } from '@/utils/index'
  * */
 import ProdsSelect from '@/components/prods-select/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -303,7 +302,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -349,7 +348,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (formData.goods.length > 0) {
     myCheckResult(true)
   } else {
-    ElMessage.error($t('shopFeature.allCanUse.goodsList') + props.current + $t('shopFeature.goods.pleaseAddProd'))
+    emit('onErrorMessageTip', $t('shopFeature.allCanUse.goodsList') + props.current + $t('shopFeature.goods.pleaseAddProd'))
   }
 }
 
