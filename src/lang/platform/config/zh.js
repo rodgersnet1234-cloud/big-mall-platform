@@ -25,6 +25,7 @@ export default {
   alipayCertPublicKey: '支付宝公钥证书',
   alipayRootCertPath: '支付宝根证书',
   appPrivateKey: '应用私钥',
+  cancel: '取消',
   save: '保存',
   protocolConfiguration: '协议配置',
   appNullTips: 'appId不能为空',

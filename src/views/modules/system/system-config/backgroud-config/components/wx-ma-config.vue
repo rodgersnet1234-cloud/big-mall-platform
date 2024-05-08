@@ -132,9 +132,5 @@ defineExpose({ init })
 </script>
 
 <style lang="scss" scoped>
-.el-form-item-lable-no-padding {
-  :deep(.el-form-item__label) {
-    padding-right: 0;
-  }
-}
+@use '../index.scss';
 </style>

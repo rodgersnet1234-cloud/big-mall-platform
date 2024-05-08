@@ -217,7 +217,6 @@
 import ElxImgbox from '@/components/img-box/index.vue'
 import redirectNav from '../../../../../decorate/create/common-component/redirect-nav/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus' // 选择商品
 import defPng from '@/assets/micro-page/def.png'
 
 const props = defineProps({
@@ -257,7 +256,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -351,7 +350,7 @@ const startCheckFieldRulesCommonFun = () => {
     errIndex.value = ''
   } else {
     showCheckForm() // 使用element-ui表单自定义校验规则: 需在form标签内,自定义rules:{required:true}
-    ElMessage.error(errorMessage)
+    emit('onErrorMessageTip', errorMessage)
   }
 }
 

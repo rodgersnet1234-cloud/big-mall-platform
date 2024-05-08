@@ -1,7 +1,7 @@
 <template>
-  <div class="wx-mp-config gray-box top-redius border-bottom-gray">
+  <div class="wx-app-config gray-box top-redius border-bottom-gray">
     <div class="title">
-      {{ $t("platform.config.weChatOfficialAccountConfiguration") }}
+      {{ $t('platform.config.wechatOpenPlatformApplicationConfig') }}
     </div>
     <el-form
       ref="dataFormRef"
@@ -14,24 +14,13 @@
       @keyup.enter="onSubmit()"
     >
       <el-form-item
-        :label="`${$t('platform.config.weChatOfficialAccount')}appId：`"
-        style="width: 640px"
+        :label="`${$t('platform.config.wechatOpenPlatformApplication')} appId：`"
+        style="width:640px"
         prop="appId"
       >
         <el-input
           v-model="dataForm.appId"
-          :placeholder="`${$t('platform.config.weChatOfficialAccount')}appId`"
-          controls-position="right"
-        />
-      </el-form-item>
-      <el-form-item
-        :label="`${$t('platform.config.weChatOfficialAccount')}secret：`"
-        style="width: 640px"
-        prop="secret"
-      >
-        <el-input
-          v-model="dataForm.secret"
-          :placeholder="`${$t('platform.config.weChatOfficialAccount')}secret`"
+          :placeholder="`${$t('platform.config.wechatOpenPlatformApplication')} appId`"
           controls-position="right"
         />
       </el-form-item>
@@ -39,9 +28,7 @@
         v-permission="['platform:config:save']"
         @click="onSubmit()"
       >
-        {{
-          $t("platform.config.save")
-        }}
+        {{ $t('platform.config.save') }}
       </el-button>
     </el-form>
   </div>
@@ -54,15 +41,11 @@ import { ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 
 const dataForm = ref({
-  appId: null,
-  secret: null
+  appId: null
 })
 const dataRule = {
   appId: [
-    { required: true, message: `${$t('platform.config.weChatOfficialAccount')} appId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
-  ],
-  secret: [
-    { required: true, message: `${$t('platform.config.weChatOfficialAccount')} secret ${$t('platform.config.nullTips')}`, trigger: 'blur' }
+    { required: true, message: `${$t('platform.config.wechatOpenPlatformApplication')} appId ${$t('platform.config.nullTips')}`, trigger: 'blur' }
   ]
 }
 
@@ -70,10 +53,10 @@ onMounted(() => {
   init()
 })
 
-const dataFormRef = ref()
 const init = () => {
+  // $refs['dataForm'].resetFields()
   nextTick(() => {
-    api.get('MP_CONFIG').then(data => {
+    api.get('MX_APP_CONFIG').then(data => {
       if (data) {
         dataForm.value = JSON.parse(data)
       }
@@ -81,17 +64,17 @@ const init = () => {
     dataFormRef.value?.resetFields()
   })
 }
+const dataFormRef = ref()
 // 表单提交
 const onSubmit = () => {
   const obj = {}
   obj.appId = dataForm.value.appId
-  obj.secret = dataForm.value.secret
   dataFormRef.value?.validate((valid) => {
     if (valid) {
       api.save({
-        paramKey: 'MP_CONFIG',
-        paramValue: JSON.stringify(obj),
-        remark: $t('platform.config.weChatOfficialAccountConfiguration')
+        paramKey: 'MX_APP_CONFIG',
+        paramValue: JSON.stringify(dataForm.value),
+        remark: $t('platform.config.wechatOpenPlatformApplicationConfig')
       }).then(data => {
         if (data) {
           init()
@@ -110,3 +93,6 @@ const onSubmit = () => {
 }
 defineExpose({ init })
 </script>
+<style lang="scss" scoped>
+@use '../index.scss';
+</style>

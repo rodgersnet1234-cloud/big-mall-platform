@@ -561,6 +561,7 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 const emit = defineEmits(['refreshDataList'])
 
 let tempSearchForm = null // 保存上次点击查询的请求条件
+const resourcesUrl = import.meta.env.VITE_APP_RESOURCES_URL
 const dataForm = reactive({
   shopName: '',
   prodName: '',
@@ -1078,6 +1079,7 @@ const exportFrom = () => {
     searchParam.spuStatus = dataForm.spuStatus
     searchParam.isCompose = dataForm.currentyuPreSaleStatus === '' ? undefined : dataForm.currentyuPreSaleStatus
     searchParam.sort = searchParam.sort || undefined
+    searchParam.imgDomain = resourcesUrl
     api.soldPlatformExcel({ ...searchParam }).then((data) => {
       const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
       const fileName = '商品信息.xlsx'

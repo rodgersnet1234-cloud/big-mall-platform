@@ -10,6 +10,9 @@
       <el-tab-pane :label="$t('platform.config.expressConfig')">
         <quick-config ref="quickConfigRef" />
       </el-tab-pane>
+      <el-tab-pane :label="$t('platform.config.wechatConfiguration')">
+        <WxConfig />
+      </el-tab-pane>
       <el-tab-pane :label="$t('platform.config.protocolConfig')">
         <protocol-config ref="protocolConfigRef" />
       </el-tab-pane>
@@ -33,6 +36,7 @@ import SensitiveConfig from './components/sensitive-config.vue'
 import SysSwitchConfig from './components/sys-switch-config.vue'
 import AliLiveConfig from './components/ali-live-config.vue'
 import OssConfig from './components/oss-config.vue'
+import WxConfig from './components/wx-config.vue'
 
 </script>
 <style lang="scss" scoped>

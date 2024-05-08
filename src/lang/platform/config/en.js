@@ -25,6 +25,7 @@ export default {
   alipayCertPublicKey: 'AlipayCertPublicKey',
   alipayRootCertPath: 'AlipayRootCertPath',
   appPrivateKey: 'AppPrivateKey',
+  cancel: 'Cancel',
   save: 'Save',
   appNullTips: 'The appId cannot be empty',
   protocolConfiguration: 'Protocol Configuration',

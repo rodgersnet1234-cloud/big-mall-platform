@@ -8,7 +8,7 @@
         content="建议单笔提现最低设置1元，避免平台亏损"
         placement="right"
       >
-        <el-icon><QuestionFilled /></el-icon>
+        <span><i class="el-icon-question" /></span>
       </el-tooltip>
     </div>
     <el-form
@@ -84,7 +84,6 @@
       </el-form-item>
       <!-- 提现设置end -->
       <el-button
-        v-permission="['platform:config:save']"
         @click="onSubmit()"
       >
         {{ $t('platform.config.save') }}
@@ -129,7 +128,7 @@ const onSubmit = () => {
         frequency: dataForm.frequency,
         number: dataForm.number
       }
-      save(params).then(() => {
+      save(params).then(data => {
         ElMessage({
           message: $t('table.actionSuccess'),
           type: 'success',
@@ -160,3 +159,5 @@ const handleEdit = (e) => {
 }
 
 </script>
+<style scoped>
+</style>

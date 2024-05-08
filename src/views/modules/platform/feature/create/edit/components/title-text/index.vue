@@ -271,7 +271,7 @@ const props = defineProps({
     default: () => false
   }
 })
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -346,7 +346,7 @@ const startCheckFieldRulesCommonFun = () => {
   } else {
     // 弹窗提示错误消息
     showCheckForm()
-    ElMessage.error(errorMessage)
+    emit('onErrorMessageTip', errorMessage)
   }
 }
 

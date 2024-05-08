@@ -461,7 +461,7 @@ const handleShowProdDetailPop = (spuId) => {
 // 处理价格显示
 const onToPrice = (price) => {
   Big.DP = 2
-  return new Big(price).div(100).toFixed(2)
+  return new Big(price).toFixed(2)
 }
 
 // 单个商品趋势弹窗

@@ -75,28 +75,9 @@
             label="时间范围："
             class="date-range-param"
           >
-            <el-select
-              v-model="datePickerType"
-              class="date-picker-type"
-              style="width: 120px"
-              @change="onSetdatePickerType(datePickerType)"
-            >
-              <el-option
-                v-for="item in datePickerTypeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-            <el-date-picker
+            <cm-date-picker
               v-model="dateRangeParam"
-              :type="datePickerType"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="defaultTime"
+              :is-need-def-val="false"
             />
           </el-form-item>
           <el-form-item>
@@ -110,6 +91,11 @@
               @click="onClear"
             >
               {{ $t('table.reset') }}
+            </el-button>
+            <el-button
+              @click="getExportExcel()"
+            >
+              导出
             </el-button>
           </el-form-item>
         </div>
@@ -264,24 +250,16 @@
 </template>
 
 <script setup>
-import Pagination from '@/components/pagination/index.vue'
-import { page } from '@/api/wallet-log/index'
+import { page, exportExcel } from '@/api/wallet-log/index'
+import { ElLoading, ElMessageBox } from 'element-plus'
+import CmDatePicker from '../../components/cm-date-picker/index.vue'
+
 const price = (value) => {
   if (value) {
     return (value / 100).toFixed(2)
   }
   return 0
 }
-const datePickerTypeOptions = [
-  {
-    label: '日期范围',
-    value: 'daterange'
-  },
-  {
-    label: '月份范围',
-    value: 'monthrange'
-  }
-]
 const ioType = [{
   value: 0,
   label: '支出'
@@ -344,11 +322,6 @@ const onGetData = (newData = false) => {
     total.value = res.total
   })
 }
-const datePickerType = ref('daterange') // 日期筛选类型
-
-const onSetdatePickerType = (val) => {
-  datePickerType.value = val
-}
 
 const pagination = (page) => {
   params.value.pageNum = page.pageNum
@@ -357,10 +330,6 @@ const pagination = (page) => {
 }
 // 查询
 const dateRangeParam = ref([])
-const defaultTime = ref([
-  new Date(2000, 1, 1, 0, 0, 0),
-  new Date(2000, 2, 1, 23, 59, 59)
-])
 const onSubmit = (newData = false) => {
   dataFrom.value.startTime = dateRangeParam.value ? dateRangeParam.value[0] : ''
   dataFrom.value.endTime = dateRangeParam.value ? dateRangeParam.value[1] : ''
@@ -392,15 +361,53 @@ const onClear = () => {
   }
   dateRangeParam.value = []
 }
+// excel导出
+const getExportExcel = () => {
+  ElMessageBox.confirm('导出筛选出的交易记录', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    const loading = ElLoading.service({
+      lock: true,
+      target: '.prod-list-mod',
+      customClass: 'export-load',
+      background: 'transparent',
+      text: '导出中'
+    })
+    exportExcel(
+      dataFrom.value
+    ).then((data) => {
+      loading.close()
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+      const fileName = '店铺结算表.xlsx'
+      const elink = document.createElement('a')
+      if ('download' in elink) { // 非IE下载
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href) // 释放URL 对象
+        document.body.removeChild(elink)
+      } else { // IE10+下载
+        navigator.msSaveBlob(blob, fileName)
+      }
+    }).catch(() => {
+      loading.close()
+    })
+  })
+}
 
 </script>
 
 <style lang="scss" scoped>
 .table {
-     margin-top: 30px;
-      ::v-deep(.date-picker-type .el-input--suffix) {
-        width: 120px !important;
-      }
-   }
+  margin-top: 30px;
+
+  ::v-deep(.date-picker-type .el-input--suffix) {
+    width: 120px !important;
+  }
+}
 
 </style>

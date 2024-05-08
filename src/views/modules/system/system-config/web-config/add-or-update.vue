@@ -529,6 +529,13 @@ const updateWebConfigData = () => {
 
 <style lang="scss" scoped>
 .page-webConfig-add-or-update{
+  :deep(.el-form-item) {
+    img {
+      // 单独设置：网站配置图标按原比例缩放显示
+      object-fit: scale-down !important;
+    }
+  }
+
   :deep(.el-form-item__content){
     display: block;
 

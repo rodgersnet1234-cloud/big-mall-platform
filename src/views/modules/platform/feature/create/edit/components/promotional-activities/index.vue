@@ -226,7 +226,6 @@
  * */
 import ProdsSelect from '@/components/prods-select/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus'
 import beenShelves from '@/assets/pc-micro-page/been_shelves.png'
 import hasEnd from '@/assets/pc-micro-page/has_end.png'
 import defPng from '@/assets/micro-page/def.png'
@@ -269,7 +268,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'save'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'save', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -314,7 +313,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (formData.prodIds.length > 0) {
     myCheckResult(true)
   } else {
-    ElMessage.error($t('shopFeature.allCanUse.activities') + props.current + $t('shopFeature.promotionalActivities.addProd'))
+    emit('onErrorMessageTip', $t('shopFeature.allCanUse.activities') + props.current + $t('shopFeature.promotionalActivities.addProd'))
   }
 }
 

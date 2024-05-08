@@ -115,29 +115,13 @@ onUnmounted(() => {
   destroyTinymce()
 })
 
-const resourceCdn1 = '/static/js/tinymce/js/tinymce/tinymce.min.js'
-const resourceCdn2 = 'https://unpkg.com/tinymce-all-in-one@4.9.3/tinymce.min.js'
-const resourceCdn3 = 'https://npm.elemecdn.com/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const resourceCdn1 = new URL('/static/js/tinymce/js/tinymce/tinymce.min.js', import.meta.url).href
 const init = () => {
   // dynamic load tinymce from cdn
   load(resourceCdn1, (err) => {
     if (!err) {
       initTinymce()
-      return
     }
-    load(resourceCdn2, (err2) => {
-      if (!err2) {
-        initTinymce()
-        return
-      }
-      load(resourceCdn3, (err3) => {
-        if (!err3) {
-          initTinymce()
-          return
-        }
-        ElMessage.error(err.message)
-      })
-    })
   })
 }
 

@@ -67,6 +67,7 @@
                       :is-check-my-self="item.isCheckMySelf"
                       :is-start-check-field-rules="isStartCheckFieldRules"
                       @my-check-result="everyComponentsCheckResultFun"
+                      @on-error-message-tip="onErrorMessageTip"
                       @components-value-chance="componentsValueChanceFromConfig"
                       @save="save"
                     />
@@ -106,6 +107,7 @@
                           :is-start-check-field-rules="isStartCheckFieldRules"
                           @top-fixed="topFixed"
                           @my-check-result="everyComponentsCheckResultFun"
+                          @on-error-message-tip="onErrorMessageTip"
                           @components-value-chance="componentsValueChance"
                           @save="save"
                         />
@@ -1148,6 +1150,21 @@ const topFixed = (current) => {
   currentUseComponents.value.splice(current + 1, 1)
   currentEditComponent.value = 0
 }
+
+let errorMessageTipList = []
+/**
+ * 获取所有组件的错误提示，集中处理
+ * 利用防抖函数，每次只展示一条报错信息
+ */
+const onErrorMessageTip = Debounce((errorTip) => {
+  errorMessageTipList.push(errorTip)
+  if (errorMessageTipList.length > 0) {
+    for (let i = 0; i < 1; i++) {
+      ElMessage.error(errorMessageTipList[0])
+    }
+    errorMessageTipList = []
+  }
+}, 1000)
 
 </script>
 

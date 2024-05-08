@@ -93,7 +93,6 @@
       </el-form-item>
       <!-- 提现设置end -->
       <el-button
-        v-permission="['platform:distributionConfig:save']"
         @click="onSubmit()"
       >
         {{ $t('platform.config.save') }}
@@ -164,7 +163,7 @@ const onSubmit = () => {
     return
   }
   const param = dataForm.value
-  api.save(param).then(() => {
+  api.save(param).then(data => {
     ElMessage({
       message: $t('table.actionSuccess'),
       type: 'success',
@@ -172,6 +171,10 @@ const onSubmit = () => {
       onClose: () => {
       }
     })
+  }).catch((e) => {
   })
 }
+
 </script>
+<style lang="scss" scoped>
+</style>
