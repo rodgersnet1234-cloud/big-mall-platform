@@ -1047,9 +1047,20 @@ const isTrueData = (data) => {
   }
   return 0
 }
+// eslint-disable-next-line no-unused-vars
+const validateDomain = (rule, value, callback) => {
+  const reg = /^(https?:\/\/)[a-zA-Z0-9-]{1,63}(?:\.[a-zA-Z0-9-]{1,63})*\.(com|cn|top|tech|net|org|biz)$/
+  const format = reg.test(dataForm.newDomain)
+  if (!format) {
+    callback(new Error('请输入正确的域名'))
+  }
+  callback()
+}
 const dataRule = reactive({
   newDomain: [
-    { required: true, message: '域名不能为空', trigger: 'blur' }
+    { required: true, message: '域名不能为空', trigger: 'blur' },
+    { validator: validateDomain, trigger: 'blur' }
+
   ]
 
 })
