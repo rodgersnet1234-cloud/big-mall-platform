@@ -138,7 +138,12 @@
           <!-- /分页 -->
         </div>
       </el-main>
-
+      <el-alert
+        :title="$t('发放优惠券时，库存不足或者达到用户领券上限则用户无法收到该优惠券')"
+        type="warning"
+        show-icon
+        :closable="false"
+      />
       <template #footer>
         <span>
           <el-button

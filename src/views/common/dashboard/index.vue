@@ -1060,7 +1060,6 @@ const dataRule = reactive({
   newDomain: [
     { required: true, message: '域名不能为空', trigger: 'blur' },
     { validator: validateDomain, trigger: 'blur' }
-
   ]
 
 })
