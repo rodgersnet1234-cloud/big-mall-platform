@@ -17,7 +17,16 @@
     >
       <div class="design-config-editor">
         <div class="design-editor-component-title">
-          商品模块1
+          <div style="flex: 1;">
+            商品模块1
+            {{ currentComponent.customRemark }}
+          </div>
+          <custom-remark-edit-popover
+            :index="currentUseComponents.findIndex(item => item.id === currentComponent.id)"
+            :current-edit-component="currentEditComponent"
+            @set-current-component="setCurrentComponent"
+            @save-edit="saveCustomRemark"
+          />
         </div>
         <div class="config-item">
           <div class="title">
@@ -214,6 +223,7 @@ import pickColorComponent from '../../../../../decorate/create/common-component/
 import selectGoodsComponent from '../../../../../decorate/create/common-component/select-goods-component/index.vue'
 import moduleComponent from './module.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -249,6 +259,10 @@ const props = defineProps({
   isStartCheckFieldRules: { // 是否开始校验规则
     type: Boolean,
     default: () => false
+  },
+  currentUseComponents: {
+    type: Array,
+    default: () => {}
   }
 })
 
@@ -495,6 +509,15 @@ const rightMainChange = (val) => {
 // 右副标题
 const rightSubChange = (val) => {
   return (formData.rightConfig.subTitleSize = Math.floor(val))
+}
+
+// 自定义标签
+const currentEditComponent = ref({})
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = props.currentUseComponents[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
 }
 
 </script>

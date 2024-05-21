@@ -215,7 +215,9 @@
             header-cell-class-name="table-header"
             style="width: 100%"
           >
-            <el-table-column label="sku名称">
+            <el-table-column
+              :label="skus.length === 1 && !skus[0]?.skuName ? '商品名称' : 'sku名称'"
+            >
               <template #default="scope">
                 <span>{{ scope.row.skuName || spus[scope.$index].spuName || '-' }}</span>
               </template>

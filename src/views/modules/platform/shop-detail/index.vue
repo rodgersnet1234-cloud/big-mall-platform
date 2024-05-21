@@ -1042,6 +1042,7 @@
           <el-form-item
             v-if="auditform.contractType === 1"
             label="签约有效期"
+            class="contract-item"
             prop="date"
           >
             <div class="contract-time-box">
@@ -1789,6 +1790,15 @@ const dataUpdate = Debounce(function () {
           color: #a8abb2;
           cursor: no-drop;
         }
+      }
+    }
+  }
+  .content {
+    .contract-item :deep(.el-form-item__label) {
+      &::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
       }
     }
   }

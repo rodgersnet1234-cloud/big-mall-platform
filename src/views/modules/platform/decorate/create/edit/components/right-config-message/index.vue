@@ -1,13 +1,24 @@
 <template>
   <div class="right-config-container">
     <div class="title">
-      {{ $t(`pcdecorate.componentTitle.${configMessage.currentConfigTitle}`) }}
-      <el-icon
-        class="el-icon-close"
-        @click="closeRightConfigContainer"
-      >
-        <Close />
-      </el-icon>
+      <div class="text-con">
+        {{ $t(`pcdecorate.componentTitle.${configMessage.currentConfigTitle}`) }}
+        <span class="custom-remark">{{ showCustomRemark }}</span>
+      </div>
+      <div class="title-icon-box">
+        <custom-remark-edit-popover
+          :index="currentIndex"
+          :current-edit-component="configMessage"
+          @set-current-component="setCurrentComponent"
+          @save-edit="saveCustomRemark"
+        />
+        <el-icon
+          :size="18"
+          @click="closeRightConfigContainer"
+        >
+          <Close />
+        </el-icon>
+      </div>
     </div>
     <div class="title-border" />
     <div class="show-components">
@@ -206,6 +217,8 @@ import goodsModuleComponentThreeTool from '../extend-component/goods-module-comp
 import goodsModuleComponentFourTool from '../extend-component/goods-module-component-four/components/right-tool.vue' // 商品模块4配置组件
 import goodsModuleComponentFiveTool from '../extend-component/goods-module-component-five/components/right-tool.vue' // 商品模块5配置组件
 
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
+
 const props = defineProps({
   configMessage: { // 配置信息
     type: Object,
@@ -218,9 +231,28 @@ const props = defineProps({
   operationType: { // 当前的操作类型
     type: String,
     default: () => ''
+  },
+  currentIndex: {
+    type: [String, Number],
+    default: ''
   }
 })
-const emit = defineEmits(['closeRightConfigContainer', 'handleUpdateMessage'])
+const emit = defineEmits(['closeRightConfigContainer', 'handleUpdateMessage', 'handleUpdateCustomRemark'])
+
+const showCustomRemark = ref('')
+watch(() => props.configMessage, newVal => {
+  showCustomRemark.value = newVal.customRemark
+})
+let remarkIndex = 0
+const setCurrentComponent = (index) => {
+  remarkIndex = index
+}
+const saveCustomRemark = (remark) => {
+  const newConfigMessage = Object.assign({}, props.configMessage)
+  newConfigMessage.customRemark = remark
+  showCustomRemark.value = remark
+  emit('handleUpdateCustomRemark', newConfigMessage, remarkIndex)
+}
 // 验证各个组件
 const { proxy } = getCurrentInstance()
 const handleChangeValidate = () => {

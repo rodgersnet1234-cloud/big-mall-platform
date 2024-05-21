@@ -27,7 +27,16 @@
     >
       <div class="design-config-editor">
         <div class="design-editor-component-title">
-          {{ formData.title }}
+          <div style="flex: 1;">
+            {{ formData.title }}
+            {{ currentComponent.customRemark }}
+          </div>
+          <custom-remark-edit-popover
+            :index="currentUseComponents.findIndex(item => item.id === currentComponent.id)"
+            :current-edit-component="currentEditComponent"
+            @set-current-component="setCurrentComponent"
+            @save-edit="saveCustomRemark"
+          />
         </div>
         <el-form
           ref="formDataRef"
@@ -98,6 +107,7 @@
  * 必须应用 microCreateMinis
  * 数据必须以formData包含
  * */
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
     type: Boolean,
@@ -234,6 +244,15 @@ const showTooltip = ref(true)
 /* 控制滑块tooltip隐藏 */
 const changeBoxHeight = (t) => {
   showTooltip.value = t
+}
+
+// 自定义标签
+const currentEditComponent = ref({})
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = props.currentUseComponents[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
 }
 
 </script>

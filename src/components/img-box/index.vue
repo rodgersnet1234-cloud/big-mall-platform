@@ -772,9 +772,6 @@ const uploadTypeTip = () => {
   return $t('biz.imgbox.onlySupported') + ' jpg/png/gif ' + $t('biz.imgbox.pic')
 }
 
-// const uploadSizeTip = () => {
-//   return $t('biz.imgbox.notExceed') + '2M'
-// }
 const show = ref(true)
 const uploadTips = () => {
   const tips = [uploadTypeTip()]
@@ -782,9 +779,6 @@ const uploadTips = () => {
     return tips.join('，')
   }
 
-  if (fileNum > 0) {
-    tips.push($t('biz.imgbox.alreadyExist') + fileNum + $t('biz.imgbox.unit'))
-  }
   const uploadFileNum = fileList.value ? fileList.value.length : 0
   if (uploadFileNum > 0) {
     tips.push($t('biz.imgbox.soonUpload') + uploadFileNum + $t('biz.imgbox.unit'))

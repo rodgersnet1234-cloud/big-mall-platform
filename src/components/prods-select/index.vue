@@ -199,6 +199,7 @@ const init = (initSelectProds, option) => {
     filterSup.value = option.filterSup || false
     indexImg.value = option.indexImg || false
     filterSupDelivery.value = option.filterSupDelivery || false
+    searchForm.value.mustNotProdTypes = option.mustNotProdTypes || null
   }
   searchForm.value.keyword = null
   searchForm.value.categoryId = null
