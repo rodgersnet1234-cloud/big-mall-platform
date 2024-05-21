@@ -32,6 +32,9 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
+      :hover {
+          color: var(--el-color-primary);
+      }
     }
   }
   .title-border {
@@ -109,16 +112,25 @@
               left: 0;
               cursor: all-scroll;
           }
-          .el-icon-delete {
-              cursor: pointer;
-              position: absolute;
-              z-index: 999;
-              right: 10px;
-          }
           .items-content {
               display: flex;
               justify-content: space-between;
               width: 100%;
+              align-items: center;
+              .icon-con {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+
+                  :deep(.el-icon) {
+                      cursor: pointer;
+                      z-index: 999;
+                  }
+
+                  .el-icon + .el-icon {
+                      margin-left: 10px;
+                  }
+              }
           }
           &:hover {
               border-color: #155bd4;

@@ -41,7 +41,6 @@
           </div>
           <el-form-item
             :label="`请求地址：`"
-            style="width:640px"
             prop="requestUrl"
           >
             <el-input
@@ -52,7 +51,6 @@
           </el-form-item>
           <el-form-item
             :label="`appId：`"
-            style="width:640px"
             prop="appId"
           >
             <el-input
@@ -63,7 +61,6 @@
           </el-form-item>
           <el-form-item
             :label="`签名秘钥：`"
-            style="width:640px"
             prop="appSecret"
           >
             <el-input
@@ -74,7 +71,6 @@
           </el-form-item>
           <el-form-item
             :label="`商户私钥：`"
-            style="width:640px"
             prop="appPrivateKey"
           >
             <el-input
@@ -85,7 +81,6 @@
           </el-form-item>
           <el-form-item
             :label="`托管账户集编号：`"
-            style="width:640px"
             prop="accountSetNo"
           >
             <el-input
@@ -96,7 +91,6 @@
           </el-form-item>
           <el-form-item
             :label="`应用公钥证书路径：`"
-            style="width:640px"
             prop="appCertPath"
           >
             <el-input
@@ -107,7 +101,6 @@
           </el-form-item>
           <el-form-item
             :label="`应用私钥证书路径：`"
-            style="width:640px"
             prop="appPrivateCertPath"
           >
             <el-input
@@ -118,7 +111,6 @@
           </el-form-item>
           <el-form-item
             :label="`集团商户号：`"
-            style="width:640px"
             prop="vspCusId"
           >
             <el-input
@@ -129,7 +121,6 @@
           </el-form-item>
           <el-form-item
             :label="`微信子商户号：`"
-            style="width:640px"
             prop="wechatSubAppId"
           >
             <el-input
@@ -140,7 +131,6 @@
           </el-form-item>
           <el-form-item
             :label="`支付宝子商户号：`"
-            style="width:640px"
             prop="alipaySubAppId"
           >
             <el-input

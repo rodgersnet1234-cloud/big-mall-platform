@@ -14,6 +14,8 @@
         color: #333333;
         position: relative;
         margin-left: 10px;
+        display: flex;
+        justify-content: space-between;
         &::before {
             content: '';
             position: absolute;
@@ -23,13 +25,16 @@
             top: 2px;
             background: rgba(21, 91, 212, 1);
         }
-        .el-icon-close {
-          color: #8C8C8C;
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          cursor: pointer;
+        .title-icon-box {
+            .el-icon {
+                cursor: pointer;
+                :hover {
+                  color: var(--el-color-primary);
+                }
+            }
+            .el-icon + .el-icon {
+                margin-left: 15px;
+            }
         }
     }
     .title-border {

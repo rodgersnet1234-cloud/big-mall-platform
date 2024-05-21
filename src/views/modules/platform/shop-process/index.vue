@@ -104,56 +104,6 @@
                 @submit.prevent
               >
                 <div class="ci-wrapper">
-                  <div class="right-info">
-                    <el-form-item
-                      label="店铺logo"
-                      prop="shopLogo"
-                    >
-                      <div class="business-license-box">
-                        <div class="license-content">
-                          <img-upload
-                            v-model="shopDetail.shopLogo"
-                            @input="imgChange(1, 'shopLogo')"
-                          />
-                        </div>
-                        <div class="upload-tips">
-                          仅限jpg、gif、png，仅限上传1张
-                        </div>
-                      </div>
-                    </el-form-item>
-                    <div class="bg-img">
-                      <div class="business-license-box">
-                        <el-form-item
-                          label="店铺背景图"
-                          prop="mobileBackgroundPic"
-                        >
-                          <img-upload
-                            v-model="shopDetail.mobileBackgroundPic"
-                            @input="imgChange(1, 'mobileBackgroundPic')"
-                          />
-                          <div class="img-tips">
-                            <p>移动端背景图</p>
-                            <p>(建议尺寸750*380)</p>
-                          </div>
-                        </el-form-item>
-                      </div>
-                      <div class="business-license-box">
-                        <el-form-item
-                          label-width="0"
-                          prop="pcBackgroundPic"
-                        >
-                          <img-upload
-                            v-model="shopDetail.pcBackgroundPic"
-                            @input="imgChange(1, 'pcBackgroundPic')"
-                          />
-                          <div class="img-tips">
-                            <p>PC端背景图</p>
-                            <p>(建议尺寸590*220)</p>
-                          </div>
-                        </el-form-item>
-                      </div>
-                    </div>
-                  </div>
                   <div class="left-info">
                     <el-form-item
                       label="商家名称"
@@ -208,6 +158,56 @@
                         placeholder="请输入200字以内店铺简介"
                       />
                     </el-form-item>
+                  </div>
+                  <div class="right-info">
+                    <el-form-item
+                      label="店铺logo"
+                      prop="shopLogo"
+                    >
+                      <div class="business-license-box">
+                        <div class="license-content">
+                          <img-upload
+                            v-model="shopDetail.shopLogo"
+                            @input="imgChange(1, 'shopLogo')"
+                          />
+                        </div>
+                        <div class="upload-tips">
+                          仅限jpg、gif、png，仅限上传1张
+                        </div>
+                      </div>
+                    </el-form-item>
+                    <div class="bg-img">
+                      <div class="business-license-box">
+                        <el-form-item
+                          label="店铺背景图"
+                          prop="mobileBackgroundPic"
+                        >
+                          <img-upload
+                            v-model="shopDetail.mobileBackgroundPic"
+                            @input="imgChange(1, 'mobileBackgroundPic')"
+                          />
+                          <div class="img-tips">
+                            <p>移动端背景图</p>
+                            <p>(建议尺寸750*380)</p>
+                          </div>
+                        </el-form-item>
+                      </div>
+                      <div class="business-license-box">
+                        <el-form-item
+                          label-width="0"
+                          prop="pcBackgroundPic"
+                        >
+                          <img-upload
+                            v-model="shopDetail.pcBackgroundPic"
+                            @input="imgChange(1, 'pcBackgroundPic')"
+                          />
+                          <div class="img-tips">
+                            <p>PC端背景图</p>
+                            <p>(建议尺寸590*220)</p>
+                          </div>
+                        </el-form-item>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </el-form>

@@ -15,6 +15,7 @@
                 v-model="dataFrom.orderId"
                 maxlength="20"
                 style="width: 160px"
+                type="number"
                 clearable
                 placeholder="订单编号"
               />
@@ -24,6 +25,7 @@
                 v-model="dataFrom.refundId"
                 maxlength="20"
                 style="width: 160px"
+                type="number"
                 clearable
                 placeholder="退款编号"
               />

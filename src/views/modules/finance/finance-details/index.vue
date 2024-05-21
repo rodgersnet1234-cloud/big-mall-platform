@@ -33,10 +33,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item
-              label="交易时间："
-              class="date-range-param"
-            >
+            <el-form-item label="交易时间：">
               <cm-date-picker
                 v-model="dateRangeParam"
               />
@@ -368,10 +365,8 @@ const onExportFrom = () => {
 }
 // 查询
 const onSubmit = (newData = false) => {
-  if (dateRangeParam.value) {
-    dataFrom.value.startTime = dateRangeParam.value ? dateRangeParam.value[0] : ''
-    dataFrom.value.endTime = dateRangeParam.value ? dateRangeParam.value[1] : ''
-  }
+  dataFrom.value.startTime = dateRangeParam.value?.length ? dateRangeParam.value[0] : ''
+  dataFrom.value.endTime = dateRangeParam.value?.length ? dateRangeParam.value[1] : ''
   onGetData(newData)
 }
 
@@ -407,13 +402,6 @@ const onClear = () => {
       padding: 24px;
       .search-bar {
         margin-bottom: 20px;
-      }
-      .date-range-param{
-        :deep(.el-form-item__label:before) {
-          color: #F56C6C;
-          margin-right: 4px;
-          content: '*';
-        }
       }
     }
     .question{

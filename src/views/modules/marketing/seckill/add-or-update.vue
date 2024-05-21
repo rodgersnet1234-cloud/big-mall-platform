@@ -128,7 +128,7 @@
           >
             <el-table-column
               prop="skuName"
-              label="sku名称"
+              :label="skuList.length === 1 && !skuList[0]?.skuName ? '商品名称' : 'sku名称'"
               min-width="230"
             >
               <template #default="scope">

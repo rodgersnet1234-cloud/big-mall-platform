@@ -230,10 +230,20 @@
                         class="drag-box"
                       >
                         {{ componentLists.find(x=>x.type === item.type) ?
-                          componentLists.find(x=>x.type === item.type).title : '' }} <em>{{ index }}</em>
+                          componentLists.find(x=>x.type === item.type).title : '' }}
+                        <span class="drag-box-remark">{{ item.customRemark }}</span>
                       </div>
                       <div class="drag-box-icon">
-                        <el-icon @click="popBtn(2, index)">
+                        <custom-remark-edit-popover
+                          :index="index"
+                          :current-edit-component="currentEditComponent"
+                          @set-current-component="setCurrentComponent"
+                          @save-edit="saveCustomRemark"
+                        />
+                        <el-icon
+                          :size="18"
+                          @click="popBtn(2, index)"
+                        >
                           <Delete />
                         </el-icon>
                       </div>
@@ -286,6 +296,7 @@ import allCanUseComponents from './components/all-can-use-components/index.vue'
 import decorateNavbar from './components/decorate-navbar/index.vue' // 顶边栏
 import request from '@/utils/request'
 import { ElMessage } from 'element-plus'
+import customRemarkEditPopover from '../../../components/custom-remark-edit-poppver/index.vue'
 
 /**
  * 作为组件时传入说明
@@ -1166,6 +1177,13 @@ const onErrorMessageTip = Debounce((errorTip) => {
   }
 }, 1000)
 
+// 自定义标签名
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = currentUseComponents.value[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
+}
 </script>
 
 <style lang="scss" scoped>

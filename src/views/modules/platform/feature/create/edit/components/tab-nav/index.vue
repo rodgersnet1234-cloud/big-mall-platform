@@ -76,7 +76,16 @@
     >
       <div class="design-config-editor">
         <div class="design-editor-component-title">
-          {{ $t('shopFeature.tabNav.navBar') }}
+          <div style="flex: 1;">
+            {{ $t('shopFeature.tabNav.navBar') }}
+            {{ currentComponent.customRemark }}
+          </div>
+          <custom-remark-edit-popover
+            :index="currentUseComponents.findIndex(item => item.id === currentComponent.id)"
+            :current-edit-component="currentEditComponent"
+            @set-current-component="setCurrentComponent"
+            @save-edit="saveCustomRemark"
+          />
         </div>
         <div class="tab-nav-set design-editor-component-container">
           <!-- 配置-->
@@ -218,6 +227,7 @@ import ElxImgbox from '@/components/img-box/index.vue'
 import redirectNav from '../../../../../decorate/create/common-component/redirect-nav/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
 import defPng from '@/assets/micro-page/def.png'
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -253,6 +263,10 @@ const props = defineProps({
   isStartCheckFieldRules: { // 是否开始校验规则
     type: Boolean,
     default: () => false
+  },
+  currentUseComponents: {
+    type: Array,
+    default: () => {}
   }
 })
 
@@ -537,6 +551,15 @@ const handleDialogSubmit = ({ type, value }) => {
     formData.nav[currentNavIndex].path.type = '6'
   }
   dialogVisible.value = false
+}
+
+// 自定义标签
+const currentEditComponent = ref({})
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = props.currentUseComponents[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
 }
 
 </script>

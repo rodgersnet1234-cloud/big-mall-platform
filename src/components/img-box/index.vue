@@ -779,9 +779,6 @@ const uploadTips = () => {
     return tips.join('，')
   }
 
-  if (fileNum > 0) {
-    tips.push($t('biz.imgbox.alreadyExist') + fileNum + $t('biz.imgbox.unit'))
-  }
   const uploadFileNum = fileList.value ? fileList.value.length : 0
   if (uploadFileNum > 0) {
     tips.push($t('biz.imgbox.soonUpload') + uploadFileNum + $t('biz.imgbox.unit'))

@@ -314,6 +314,8 @@
     // 1-填写基本信息
     .shop-base-info {
       .ci-wrapper {
+        display: flex;
+        width: 100%;
         .left-info {
           ::v-deep(.el-date-editor--daterange.el-input),
           .el-date-editor--daterange.el-input__inner,
@@ -321,6 +323,14 @@
           .el-date-editor--timerange.el-input__inner {
             width: 100%;
           }
+        }
+        .right-info,
+        .left-info {
+          width: 50%;
+          min-width: 500px;
+        }
+        .right-info {
+           margin-left: 106px;
         }
       }
       .location-btn {
