@@ -18,13 +18,16 @@
                 :class="{goodsItem1:formData.size === 1}"
               >
                 <!--图片-->
-                <div class="goods-img-box">
+                <div
+                  class="goods-img-box"
+                  :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : 152 + 'px', margin: formData.size!==1?'0 auto' : ''}"
+                >
                   <el-image
                     class="goods-img-one"
-                    :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : '', margin: formData.size!==1?'0 auto' : ''}"
-                    :class="{goodsImgOne1:formData.size === 1, 'goods-empty': !formData.goods[0].prodId}"
+                    :style="{width: formData.size===3 ? 90 + 'px' : 152 + 'px', height: formData.size!==1 ? (formData.size===3 ? 90 + 'px' : 152 + 'px') : 152 + 'px', margin: formData.size!==1?'0 auto' : ''}"
+                    :class="{ 'goods-empty': !formData.goods[0].prodId}"
                     :src="checkFileUrl(item.pic)"
-                    fit="fill"
+                    fit="cover"
                   >
                     <template #error>
                       <div class="image-slot">
@@ -150,7 +153,16 @@
     >
       <div class="design-config-editor">
         <div class="design-editor-component-title">
-          {{ $t('shopFeature.allCanUse.goodsList') }}
+          <div style="flex: 1;">
+            {{ $t('shopFeature.allCanUse.goodsList') }}
+            {{ currentComponent.customRemark }}
+          </div>
+          <custom-remark-edit-popover
+            :index="currentUseComponents.findIndex(item => item.id === currentComponent.id)"
+            :current-edit-component="currentEditComponent"
+            @set-current-component="setCurrentComponent"
+            @save-edit="saveCustomRemark"
+          />
         </div>
         <!--选择商品-->
         <div class="design-editor-component-container">
@@ -264,7 +276,7 @@ import { formatPrice } from '@/utils/index'
  * */
 import ProdsSelect from '@/components/prods-select/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus'
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -300,10 +312,14 @@ const props = defineProps({
   isStartCheckFieldRules: { // 是否开始校验规则
     type: Boolean,
     default: () => false
+  },
+  currentUseComponents: {
+    type: Array,
+    default: () => {}
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -349,7 +365,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (formData.goods.length > 0) {
     myCheckResult(true)
   } else {
-    ElMessage.error($t('shopFeature.allCanUse.goodsList') + props.current + $t('shopFeature.goods.pleaseAddProd'))
+    emit('onErrorMessageTip', $t('shopFeature.allCanUse.goodsList') + props.current + $t('shopFeature.goods.pleaseAddProd'))
   }
 }
 
@@ -485,6 +501,15 @@ const handleDialogSubmit = ({ type, value }) => {
     })
   }
   dialogVisible.value = false
+}
+
+// 自定义标签
+const currentEditComponent = ref({})
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = props.currentUseComponents[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
 }
 
 </script>

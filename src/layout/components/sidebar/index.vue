@@ -295,9 +295,8 @@ onBeforeMount(() => {
 
 const gotoRouteHandle = (menu) => {
   if (menu.name === '客服' || menu.name === 'Message') {
-    window.open('/im-box', 'view_window')
     const url = router.resolve({
-      name: 'im-box'
+      path: '/im-box'
     })
     // 打开新窗口
     window.open(url.href)

@@ -125,10 +125,12 @@
           >
             属性值不能为空或空格！
           </div>
-          <div
-            v-if="dataForm.attrValues.length"
-            class="attr-val"
-          >
+        </el-form-item>
+        <el-form-item
+          v-if="dataForm.attrValues.length"
+          label=" "
+        >
+          <div class="attr-val">
             <div class="attr-scr">
               <div class="lang-head">
                 <div class="lang-int">

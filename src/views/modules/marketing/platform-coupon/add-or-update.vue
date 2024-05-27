@@ -104,7 +104,10 @@
         :label="$t('coupon.coupon.getWay')"
         prop="getWay"
       >
-        <el-radio-group v-model="dataForm.getWay">
+        <el-radio-group
+          v-model="dataForm.getWay"
+          :disabled="dataForm.putonStatus === -1"
+        >
           <el-radio :label="0">
             {{ $t("coupon.coupon.receiveDirectly") }}
           </el-radio>
@@ -367,7 +370,10 @@
         :label="$t('coupon.coupon.suitableProdType')"
         prop="suitableProdType"
       >
-        <el-radio-group v-model="dataForm.suitableProdType">
+        <el-radio-group
+          v-model="dataForm.suitableProdType"
+          :disabled="dataForm.putonStatus === -1"
+        >
           <el-radio :label="0">
             全部商品参与
           </el-radio>
@@ -381,6 +387,7 @@
         >
           <el-button
             style="margin-bottom: 10px;"
+            :disabled="dataForm.putonStatus === -1"
             @click="selectProds"
           >
             选择商品
@@ -407,6 +414,7 @@
                 link
                 type="primary"
                 class="card-prod-name-buttons"
+                :disabled="dataForm.putonStatus === -1"
                 @click="onDeleteCurrentProd(index)"
               >
                 删除
@@ -790,6 +798,10 @@ const onSubmit = Debounce(function () {
   const endDate = dataForm.endTime && endTimeValue.value ? dataForm.endTime + ' ' + endTimeValue.value + ':00' : ''
   if (dataForm.validTimeType === 1 && Date.parse(startDate) >= Date.parse(endDate)) {
     ElMessage.error('开始时间不能小于或等于结束时间')
+    return
+  }
+  if (dataForm.suitableProdType === 1 && dataForm.spuIds && dataForm.spuIds.length < 0) {
+    ElMessage.error('请选择商品')
     return
   }
   dataFormRef.value?.validate(valid => {

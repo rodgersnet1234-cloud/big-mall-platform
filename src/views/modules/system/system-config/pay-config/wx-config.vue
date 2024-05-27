@@ -31,7 +31,6 @@
         >
           <el-form-item
             :label="`${$t('platform.config.wechatPay')} mchId：`"
-            style="width:640px"
             prop="mchId"
           >
             <el-input
@@ -42,7 +41,6 @@
           </el-form-item>
           <el-form-item
             :label="`支付接口类型:`"
-            style="width:640px"
             prop="version"
           >
             <el-radio-group v-model="dataForm.version">
@@ -58,7 +56,6 @@
           <el-form-item
             v-if="dataForm.version === 2"
             :label="`${$t('platform.config.wechatPay')} mchKey：`"
-            style="width:640px"
             prop="mchKey"
           >
             <el-input
@@ -70,7 +67,6 @@
           <el-form-item
             v-if="dataForm.version === 2"
             :label="`${$t('platform.config.paymentCertificatePath')}：`"
-            style="width:640px"
             prop="keyPath"
           >
             <el-input
@@ -83,7 +79,6 @@
           <el-form-item
             v-if="dataForm.version === 3"
             :label="`微信支付 apiv3Key:`"
-            style="width:640px"
             prop="apiv3Key"
           >
             <el-input
@@ -95,7 +90,6 @@
           <el-form-item
             v-if="dataForm.version === 3"
             :label="`证书序列号:`"
-            style="width:640px"
             prop="certSerialNo"
           >
             <el-input
@@ -107,7 +101,6 @@
           <el-form-item
             v-if="dataForm.version === 3"
             :label="`商户apiclient_key.pem:`"
-            style="width:640px"
             prop="privateKeyContent"
           >
             <el-input
@@ -121,7 +114,6 @@
           <el-form-item
             v-if="dataForm.version === 3"
             :label="`商户apiclient_cert.pem:`"
-            style="width:640px"
             prop="privateCertContent"
           >
             <el-input
@@ -135,7 +127,6 @@
           <el-form-item
             v-if="dataForm.version === 3"
             :label="$t('platform.config.wechatOpenPlatformApplicationConfig')"
-            style="width:640px"
           >
             <el-input
               v-model="dataFormAppId.appId"

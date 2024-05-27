@@ -16,10 +16,11 @@ export function scorePage (pageParam) {
   })
 }
 
-export function orderInfo (orderId) {
+export function orderInfo (orderId, params = {}) {
   return request({
     url: '/mall4cloud_order/p/order/order_info/' + orderId,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

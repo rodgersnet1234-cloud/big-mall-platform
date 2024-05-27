@@ -88,51 +88,6 @@
             @submit.prevent
           >
             <div class="basic-info-box">
-              <div class="right-info">
-                <el-form-item
-                  label="店铺logo"
-                  prop="shopLogo"
-                >
-                  <div class="business-license-box">
-                    <div class="license-content">
-                      <img-upload v-model="shopBasicInfo.shopLogo" />
-                    </div>
-                    <div class="upload-tips">
-                      仅限jpg、gif、png，仅限上传1张
-                    </div>
-                  </div>
-                </el-form-item>
-                <div class="bg-img">
-                  <div class="business-license-box">
-                    <el-form-item
-                      label="店铺背景图"
-                      prop="mobileBackgroundPic"
-                    >
-                      <div class="license-content">
-                        <img-upload v-model="shopBasicInfo.mobileBackgroundPic" />
-                      </div>
-                      <div class="img-tips">
-                        <p>移动端背景图</p>
-                        <p>(建议尺寸750*380)</p>
-                      </div>
-                    </el-form-item>
-                  </div>
-                  <div class="business-license-box">
-                    <el-form-item
-                      label-width="0"
-                      prop="pcBackgroundPic"
-                    >
-                      <div class="license-content">
-                        <img-upload v-model="shopBasicInfo.pcBackgroundPic" />
-                      </div>
-                      <div class="img-tips">
-                        <p>PC端背景图</p>
-                        <p>(主要展示在店铺外部入口处，建议尺寸590*220)</p>
-                      </div>
-                    </el-form-item>
-                  </div>
-                </div>
-              </div>
               <div class="left-info">
                 <el-form-item
                   label="商家名称"
@@ -200,6 +155,51 @@
                     placeholder="请输入200字以内店铺简介"
                   />
                 </el-form-item>
+              </div>
+              <div class="right-info">
+                <el-form-item
+                  label="店铺logo"
+                  prop="shopLogo"
+                >
+                  <div class="business-license-box">
+                    <div class="license-content">
+                      <img-upload v-model="shopBasicInfo.shopLogo" />
+                    </div>
+                    <div class="upload-tips">
+                      仅限jpg、gif、png，仅限上传1张
+                    </div>
+                  </div>
+                </el-form-item>
+                <div class="bg-img">
+                  <div class="business-license-box">
+                    <el-form-item
+                      label="店铺背景图"
+                      prop="mobileBackgroundPic"
+                    >
+                      <div class="license-content">
+                        <img-upload v-model="shopBasicInfo.mobileBackgroundPic" />
+                      </div>
+                      <div class="img-tips">
+                        <p>移动端背景图</p>
+                        <p>(建议尺寸750*380)</p>
+                      </div>
+                    </el-form-item>
+                  </div>
+                  <div class="business-license-box">
+                    <el-form-item
+                      label-width="0"
+                      prop="pcBackgroundPic"
+                    >
+                      <div class="license-content">
+                        <img-upload v-model="shopBasicInfo.pcBackgroundPic" />
+                      </div>
+                      <div class="img-tips">
+                        <p>PC端背景图</p>
+                        <p>(主要展示在店铺外部入口处，建议尺寸590*220)</p>
+                      </div>
+                    </el-form-item>
+                  </div>
+                </div>
               </div>
             </div>
           </el-form>

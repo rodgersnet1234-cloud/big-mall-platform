@@ -751,9 +751,13 @@ watch(() => deliveryExpress.value, () => {
 
 const dataFormRef = ref()
 const visible = ref(false)
-const init = (orderId) => {
+let userId = ''
+const init = (orderId, _userId) => {
   dataForm.orderId = orderId || 0
+  userId = ''
+  if (_userId) userId = _userId
   visible.value = true
+
   nextTick(() => {
     dataFormRef.value?.resetFields()
   })
@@ -766,7 +770,9 @@ const orderSelfStationVO = ref({})
 const prodList = reactive([])
 const virtualRemarkList = reactive([])
 const onGetDataList = () => {
-  api.orderInfo(dataForm.orderId).then((data) => {
+  const params = {}
+  if (userId) params.userId = userId
+  api.orderInfo(dataForm.orderId, params).then((data) => {
     Object.assign(dataForm, data)
     orderSelfStationVO.value = data.orderSelfStationVO
     handleArr(virtualRemarkList, dataForm.orderItems[0].virtualRemark && dataForm.orderItems[0].virtualRemark !== 'null' ? JSON.parse(dataForm.orderItems[0].virtualRemark) : [])

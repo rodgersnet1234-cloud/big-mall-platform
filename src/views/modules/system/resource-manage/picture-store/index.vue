@@ -1225,14 +1225,17 @@ const onUploadSuccess = (response, file, fileList) => {
   fileList.forEach(file => {
     filesNames.push(file.name)
   })
-  const uploadFile = []
-  attachFiles.forEach(file => {
-    if (filesNames.indexOf(file.fileName) !== -1) {
-      file.attachFileGroupId = groupForm.value.attachFileGroupId
-      uploadFile.push(file)
+  let uploadFile = []
+  filesNames.forEach(name => {
+    const obj = attachFiles.find(i => i.fileName === name)
+    if (obj) {
+      obj.attachFileGroupId = groupForm.value.attachFileGroupId
+      uploadFile.push(obj)
     }
   })
   if (uploadFile.length > 0) {
+    // 倒序数组：使得上传预览时的顺序与上传成功后获取到的顺序一致
+    uploadFile = uploadFile.reverse()
     save(uploadFile).then(() => {
       attachFiles = []
       options.activeTab = 'pick'

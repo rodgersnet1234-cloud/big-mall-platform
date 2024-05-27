@@ -1,12 +1,17 @@
 <template>
   <div class="page-information-config">
-    <div
-      class="wx-applet"
-    >
+    <div class="wx-applet">
       <div
         class="label-item"
         style="margin-right:80px"
       >
+        <div
+          v-if="payConfigStatus"
+          class="state-text"
+        >
+          认证成功
+        </div>
+
         <img
           src="@/assets/images/Payment_Illustration.png"
           alt=""
@@ -40,6 +45,12 @@
         class="label-item"
         style="margin-right:80px"
       >
+        <div
+          v-if="wxConfigStatus"
+          class="state-text"
+        >
+          认证成功
+        </div>
         <img
           src="@/assets/images/Authorized-illustration.png"
           alt=""
@@ -73,7 +84,18 @@
   </div>
 </template>
 <script setup>
+import { getPlatformSubjectStatus } from '@/api/platform/sys-config'
+
 const { query } = useRoute()
+query.type = 'NonSubSelfManage'
+const payConfigStatus = ref(false)
+const wxConfigStatus = ref(false)
+onMounted(() => {
+  getPlatformSubjectStatus().then((res) => {
+    payConfigStatus.value = res.payConfigStatus
+    wxConfigStatus.value = res.wxConfigStatus
+  })
+})
 </script>
 <style lang="scss" scoped>
 .page-information-config{
@@ -95,11 +117,24 @@ const { query } = useRoute()
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     width: 620px;
     height: 454px;;
     border: 1px solid #E3E2E5;
     border-radius: 5px;
     padding: 80px 10px 60px 10px;
+    .state-text{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 82px;
+        height: 30px;
+        line-height: 30px;
+        background: rgba(81,196,25,0.2);
+        border-radius: 0px 1px 0px 8px;
+        text-align: center;
+        color: #51C419;
+      }
     .top-text{
       height: 24px;
       line-height: 21px;

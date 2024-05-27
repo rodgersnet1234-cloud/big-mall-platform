@@ -153,7 +153,7 @@
       </el-form-item>
       <!-- 申请所需信息 -->
       <el-form-item
-        v-if="paySettlementType!==1"
+        v-if="paySettlementType!==1 && dataForm.autoCheck !== 2"
         label="申请所需信息 :"
       >
         <el-checkbox v-model="dataForm.realName">
@@ -475,7 +475,7 @@ const prodsSelectRef = ref(null)
 const prodsSelectHandle = () => {
   prodsSelectVisible.value = true
   nextTick(() => {
-    prodsSelectRef.value?.init(dataForm.spuVOList, { filterSupDelivery: true })
+    prodsSelectRef.value?.init(dataForm.spuVOList, { filterSupDelivery: true, mustNotProdTypes: [5] })
   })
 }
 // 商品选择回调
