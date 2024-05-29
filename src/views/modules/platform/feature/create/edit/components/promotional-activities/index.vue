@@ -94,7 +94,16 @@
     >
       <div class="design-config-editor">
         <div class="design-editor-component-title">
-          {{ $t('shopFeature.promotionalActivities.promotionalActivity') }}
+          <div style="flex: 1;">
+            {{ $t('shopFeature.promotionalActivities.promotionalActivity') }}
+            {{ currentComponent.customRemark }}
+          </div>
+          <custom-remark-edit-popover
+            :index="currentUseComponents.findIndex(item => item.id === currentComponent.id)"
+            :current-edit-component="currentEditComponent"
+            @set-current-component="setCurrentComponent"
+            @save-edit="saveCustomRemark"
+          />
         </div>
         <el-form
           ref="formDataRef"
@@ -226,11 +235,11 @@
  * */
 import ProdsSelect from '@/components/prods-select/index.vue'
 import decorateDialogSelect from '@/components/decorate-dialog-select/index.vue'
-import { ElMessage } from 'element-plus'
 import beenShelves from '@/assets/pc-micro-page/been_shelves.png'
 import hasEnd from '@/assets/pc-micro-page/has_end.png'
 import defPng from '@/assets/micro-page/def.png'
 import { formatPrice } from '@/utils/index.js'
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -266,10 +275,14 @@ const props = defineProps({
   isStartCheckFieldRules: { // 是否开始校验规则
     type: Boolean,
     default: () => false
+  },
+  currentUseComponents: {
+    type: Array,
+    default: () => {}
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'save'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'save', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -314,7 +327,7 @@ const startCheckFieldRulesCommonFun = () => {
   if (formData.prodIds.length > 0) {
     myCheckResult(true)
   } else {
-    ElMessage.error($t('shopFeature.allCanUse.activities') + props.current + $t('shopFeature.promotionalActivities.addProd'))
+    emit('onErrorMessageTip', $t('shopFeature.allCanUse.activities') + props.current + $t('shopFeature.promotionalActivities.addProd'))
   }
 }
 
@@ -514,6 +527,15 @@ const handleDialogSubmit = ({ type, value }) => {
 
 const handRadioChange = () => {
   formData.prodIds = []
+}
+
+// 自定义标签
+const currentEditComponent = ref({})
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = props.currentUseComponents[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
 }
 
 </script>

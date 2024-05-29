@@ -28,7 +28,7 @@
                 :value="item[optionValue]"
               />
             </el-select>
-            <span class="tips">规格名称不超过10个字符</span>
+            <span class="tips">支持手动输入创建新规格名，鼠标点击或回车均可添加，规格名称不超过10个字符</span>
           </div>
           <div
             v-else
@@ -237,6 +237,7 @@ const handleSkuLeafChange = (leaf) => {
             height: 1em;
             line-height: 1em;
             margin: 5px 0;
+            white-space: nowrap;
           }
         }
       }

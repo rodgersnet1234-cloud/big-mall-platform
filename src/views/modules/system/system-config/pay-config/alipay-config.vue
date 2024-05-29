@@ -30,7 +30,6 @@
       >
         <el-form-item
           :label="$t('platform.config.alipayAppId') + '：'"
-          style="width:640px"
           prop="appId"
         >
           <el-input
@@ -41,7 +40,6 @@
         </el-form-item>
         <el-form-item
           :label="$t('platform.config.appCertPublicKey') + '：'"
-          style="width:640px"
           prop="appCertContent"
         >
           <el-input
@@ -54,7 +52,6 @@
         </el-form-item>
         <el-form-item
           :label="$t('platform.config.alipayCertPublicKey') + '：'"
-          style="width:640px"
           prop="alipayCertContent"
         >
           <el-input
@@ -67,7 +64,6 @@
         </el-form-item>
         <el-form-item
           :label="$t('platform.config.alipayRootCertPath') + '：'"
-          style="width:640px"
           prop="alipayRootCertContent"
         >
           <el-input
@@ -80,7 +76,6 @@
         </el-form-item>
         <el-form-item
           :label="$t('platform.config.appPrivateKey') + '：'"
-          style="width:640px"
           prop="appPrivateKey"
         >
           <el-input

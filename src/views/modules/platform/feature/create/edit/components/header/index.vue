@@ -121,7 +121,6 @@
 </template>
 <script setup>
 import ImgUpload from '@/components/img-upload/index.vue'
-import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   isCheckMySelf: { // 是否开始内部验证 比如提示弹窗等。。。
@@ -160,7 +159,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['myCheckResult', 'componentsValueChance'])
+const emit = defineEmits(['myCheckResult', 'componentsValueChance', 'onErrorMessageTip'])
 
 watch(() => props.dataField, (val) => {
   if (val) {
@@ -213,7 +212,7 @@ const startCheckFieldRulesCommonFun = () => {
     if (valid) {
       myCheckResult(true)
     } else {
-      ElMessage.error($t('shopFeature.header.pageNameCanntEmpty'))
+      emit('onErrorMessageTip', $t('shopFeature.header.pageNameCanntEmpty'))
     }
   })
 }

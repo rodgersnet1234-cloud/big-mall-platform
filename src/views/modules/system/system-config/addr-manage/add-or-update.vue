@@ -127,7 +127,11 @@ const init = (areaId) => {
 }
 
 const onChange = (val) => {
-  dataForm.parentId = val[val.length - 1]
+  if (val && val.length) {
+    dataForm.parentId = val[val.length - 1]
+  } else {
+    dataForm.parentId = null
+  }
 }
 
 // 关闭弹窗时

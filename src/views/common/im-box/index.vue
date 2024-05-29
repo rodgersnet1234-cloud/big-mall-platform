@@ -727,7 +727,8 @@ const toProdDetail = (prodInfo, type, orderType) => {
     routeUrl = router.resolve({
       path: orderType === 3 || prodInfo.spuType === 3 ? '/member/score/order' : '/order/order',
       query: {
-        orderNumber: prodInfo.orderId
+        orderNumber: prodInfo.orderId,
+        userId: selectedID
       }
     })
   } else {

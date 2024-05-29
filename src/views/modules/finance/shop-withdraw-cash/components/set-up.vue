@@ -111,6 +111,10 @@ const onOpen = () => {
 const onSubmit = () => {
   dataFormRef.value?.validate((valid) => {
     if (valid) {
+      if (!paySettlementType && dataForm.value.withdrawCashLeast == null) {
+        ElMessage.error('最低金额不能为空')
+        return
+      }
       const params = {
         withdrawCashLeast: formatPrice(dataForm.value.withdrawCashLeast),
         withdrawCashMax: dataForm.value.withdrawCashMax == null ? null : formatPrice(dataForm.value.withdrawCashMax),

@@ -220,7 +220,7 @@ const idKey = computed(() => {
   return props.type === 1 ? 'shopId' : props.type === 2 ? 'userId' : 'supplierId'
 })
 
-watch(() => dialogVisible, (data) => {
+watch(() => dialogVisible.value, (data) => {
   if (data) {
     nextTick(() => {
       multipleTableRef.value?.clearSelection()
@@ -247,6 +247,12 @@ const getPage = () => {
     pageVO.list = res.list
     pageVO.total = res.total
     pageVO.pages = res.pages
+    tableData.value.forEach(row => {
+      const index = pageVO.list.findIndex(item => item[idKey.value] === row[idKey.value])
+      if (index >= 0) {
+        multipleTableRef.value.toggleRowSelection(pageVO.list[index], true)
+      }
+    })
     pageLoading.value = false
   }).catch(() => {
     pageLoading.value = false

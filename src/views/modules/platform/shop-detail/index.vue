@@ -1028,7 +1028,22 @@
           @submit.prevent
         >
           <el-form-item
+            :label="'签约类型'"
+            prop="contractType"
+          >
+            <el-radio-group v-model="auditform.contractType">
+              <el-radio :label="0">
+                {{ '永久营业' }}
+              </el-radio>
+              <el-radio :label="1">
+                {{ '签约有效期' }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            v-if="auditform.contractType === 1"
             label="签约有效期"
+            class="contract-item"
             prop="date"
           >
             <div class="contract-time-box">
@@ -1125,6 +1140,7 @@
 import { Debounce } from '@/utils/debounce'
 import * as api from '@/api/platform/audit-shop'
 import { ElMessage } from 'element-plus'
+import moment from 'moment'
 
 const route = useRoute()
 const shopId = route.query.shopId || 0
@@ -1159,7 +1175,8 @@ const settlementAccounts = ref([])
 // 审核信息
 const auditform = reactive({
   date: [],
-  shopType: '2'
+  shopType: '2',
+  contractType: 0
 })
 // 审核弹窗
 const auditDialogVisible = ref(false)
@@ -1183,6 +1200,9 @@ const auditformRules = reactive({
   ],
   shopType: [
     { required: true, message: '请选择商家类型', trigger: 'change' }
+  ],
+  contractType: [
+    { required: true, message: '请选择签约类型', trigger: 'change' }
   ]
 })
 // 驳回弹窗
@@ -1376,8 +1396,15 @@ const reviewStoreApplications = (status) => {
         return
       }
       param.value.shopType = auditform.shopType
-      param.value.contractStartTime = contractStartTime.value
-      param.value.contractEndTime = contractEndTime.value
+      if (auditform.contractType === 0) {
+        // 永久营业
+        param.value.contractStartTime = moment(new Date().setHours(0, 0, 0, 0)).format('YYYY-MM-DD HH:mm:ss')
+        param.value.contractEndTime = null
+      } else {
+        // 签约有效期
+        param.value.contractStartTime = contractStartTime.value
+        param.value.contractEndTime = contractEndTime.value
+      }
       auditApply(status, param.value)
     })
     return
@@ -1783,6 +1810,16 @@ const dataUpdate = Debounce(function () {
         color: #a8abb2;
         cursor: no-drop;
       }
+    }
+  }
+}
+
+.content {
+  .contract-item :deep(.el-form-item__label) {
+    &::before {
+      content: '*';
+      color: #f56c6c;
+      margin-right: 4px;
     }
   }
 }

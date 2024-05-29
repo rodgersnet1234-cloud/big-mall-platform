@@ -53,3 +53,13 @@ export function orderDetaiList (orderId, refundId) {
     }
   })
 }
+
+// excel导出
+export function exportExcel (searchParams) {
+  return request({
+    url: '/mall4cloud_admin/mp/shop_wallet/export',
+    method: 'get',
+    params: searchParams,
+    responseType: 'blob'
+  })
+}

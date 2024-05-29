@@ -31,6 +31,14 @@
               @change="addColumn(index)"
             >
               {{ item }}
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="getSalesTargetsTips(item)"
+                placement="top"
+              >
+                <el-icon><InfoFilled /></el-icon>
+              </el-tooltip>
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -45,6 +53,14 @@
               @change="addColumn(10+index)"
             >
               {{ item }}
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="getServiceIndicatorsTips(item)"
+                placement="top"
+              >
+                <el-icon><InfoFilled /></el-icon>
+              </el-tooltip>
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
@@ -113,6 +129,48 @@ const addColumn = (index) => {
   } else if (list.value.indexOf(index) !== -1) {
     list.value.splice(list.value.indexOf(index), 1)
     emit('handleTable', list.value)
+  }
+}
+const getSalesTargetsTips = (item) => {
+  if (item === '曝光次数') {
+    return '在统计时间内，浏览该商品的次数'
+  } else if (item === '曝光人数') {
+    return '在统计时间内，浏览该商品的人数，一个用户浏览多次算一个'
+  } else if (item === '加购人数') {
+    return '在统计时间内，该商品被加入购物车的用户人数'
+  } else if (item === '加购件数') {
+    return '在统计时间内，该商品被加入购物车的件数'
+  } else if (item === '下单人数') {
+    return '在统计时间内，对该商品进行下单操作的用户人数'
+  } else if (item === '支付人数') {
+    return '在统计时间内，对该商品进行支付操作的用户人数'
+  } else if (item === '下单件数') {
+    return '在统计时间内，该商品被下单的件数'
+  } else if (item === '支付件数') {
+    return '在统计时间内，该商品被支付的件数'
+  } else if (item === '下单金额') {
+    return '在统计时间内，所有用户对该商品下单的金额'
+  } else if (item === '支付金额') {
+    return '在统计时间内，所有用户对该商品付款的金额'
+  } else {
+    return ''
+  }
+}
+const getServiceIndicatorsTips = (item) => {
+  if (item === '申请退款订单数') {
+    return '在统计时间内，用户对该商品提出退款的订单数量，一个用户提出多笔退款算多笔数量'
+  } else if (item === '申请退款人数') {
+    return '在统计时间内，用户对该商品提出退款的用户数量，一个用户提出多笔退款算一个人数'
+  } else if (item === '成功退款订单数') {
+    return '在统计时间内，用户对该商品提出退款成功的订单数量，一个用户提出多笔退款算多笔数量'
+  } else if (item === '成功退款人数') {
+    return '在统计时间内，用户对该商品提出退款成功的用户数量，一个用户提出多笔退款算一个人数'
+  } else if (item === '成功退款金额') {
+    return '在统计时间内，所有用户对该商品提出退款成功的金额'
+  } else if (item === '退款率') {
+    return '在统计时间内，成功退款订单数/申请退款订单数'
+  } else {
+    return ''
   }
 }
 
