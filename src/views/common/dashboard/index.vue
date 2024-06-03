@@ -658,6 +658,7 @@
 <script setup>
 import applyOnline from '@/components/apply-online/index.vue'
 import { getLink, updateDomain } from '@/api/platform/audit-shop.js'
+import { Debounce } from '@/utils/debounce'
 import {
   getDetailByHour,
   getCurrentMonthByDay,
@@ -695,7 +696,7 @@ const offlineManageHandle = () => {
     applyOnlineRef.value.init(eventInfoData)
   })
 }
-const reReapplyDataSubmit = (data) => {
+const reReapplyDataSubmit = Debounce((data) => {
   const param = {
     eventId: data.eventId,
     reapplyReason: data.reapplyReason // 申请理由
@@ -711,7 +712,7 @@ const reReapplyDataSubmit = (data) => {
     getMallEventInfo()
     getMallStatus()
   })
-}
+})
 
 const pendingShop = ref(0)
 // 客户数量概况
