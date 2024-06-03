@@ -6,8 +6,9 @@
       style="margin-top: -15px;"
     >
       <el-tab-pane :label="$t('platform.config.chineseConfig')">
+        <!-- 通过v-if实现组件数据更新时，重新加载 -->
         <tiny-mce
-          v-if="contentCN"
+          v-if="contentCN || contentCN === ''"
           v-model="contentCN"
           style="width: 1000px"
         />
@@ -47,8 +48,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['refreshDataList'])
 
-const contentCN = ref('')
-const contentEN = ref('')
+const contentCN = ref(null)
+const contentEN = ref(null)
 
 onMounted(() => {
   init()
@@ -57,14 +58,10 @@ onMounted(() => {
 const init = () => {
   nextTick(() => {
     api.get(props.params.keyCN).then(data => {
-      if (data) {
-        contentCN.value = data
-      }
+      contentCN.value = data || ''
     })
     api.get(props.params.keyEN).then(data => {
-      if (data) {
-        contentEN.value = data
-      }
+      contentEN.value = data || ''
     })
   })
 }

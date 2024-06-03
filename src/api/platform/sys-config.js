@@ -18,7 +18,7 @@ export function saveWebConfig (data) {
 // 网站配置
 export function get (key) {
   return request({
-    url: '/mall4cloud_admin/p/ua/sys_config/' + key,
+    url: '/mall4cloud_admin/p/sys_config/info/' + key,
     method: 'get',
     params: ''
   })
@@ -80,5 +80,12 @@ export function getOfficialAccountQRcode () {
     url: '/mall4cloud_biz/p/wx/mp_qrcode',
     method: 'get',
     responseType: 'arraybuffer'
+  })
+}
+// 获取支付开启配置/微信配置信息
+export function getPlatformSubjectStatus () {
+  return request({
+    url: '/mall4cloud_admin/p/ua/sys_config/get_platform_subject_status',
+    method: 'get'
   })
 }

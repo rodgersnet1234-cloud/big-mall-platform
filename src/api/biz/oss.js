@@ -1,12 +1,20 @@
 import request from '@/utils/request'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 export function getBatchPreSignUrl (fileNames) {
-  return request({
-    url: '/mall4cloud_biz/ua/oss/get_batch_pre_sign_url',
-    method: 'get',
-    params: { fileNames }
-  })
+  // 当前选择的图片名称太长时无法上传，提示修改名称或分批上传
+  if (encodeURIComponent(fileNames).length > 4096) {
+    const msg = '已选的文件名称太长，请修改名称或分批上传'
+    ElMessage.error(msg)
+    return Promise.reject(new Error(msg))
+  } else {
+    return request({
+      url: '/mall4cloud_biz/ua/oss/get_batch_pre_sign_url',
+      method: 'get',
+      params: { fileNames }
+    })
+  }
 }
 
 export function pageFileGroup (param) {

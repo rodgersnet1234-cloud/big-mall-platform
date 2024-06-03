@@ -183,13 +183,22 @@
               </p>
             </div>
           </div>
-          <el-button
-            type="primary"
-            link
-            @click="copyLink('enterUrl')"
-          >
-            复制链接
-          </el-button>
+          <div>
+            <el-button
+              type="primary"
+              link
+              @click="updateUrl('enterUrl')"
+            >
+              修改域名
+            </el-button>
+            <el-button
+              type="primary"
+              link
+              @click="copyLink('enterUrl')"
+            >
+              复制链接
+            </el-button>
+          </div>
         </div>
         <!-- 门店端链接 -->
         <div class="link-content">
@@ -207,13 +216,22 @@
               </p>
             </div>
           </div>
-          <el-button
-            type="primary"
-            link
-            @click="copyLink('stationUrl')"
-          >
-            复制链接
-          </el-button>
+          <div>
+            <el-button
+              type="primary"
+              link
+              @click="updateUrl('stationUrl')"
+            >
+              修改域名
+            </el-button>
+            <el-button
+              type="primary"
+              link
+              @click="copyLink('stationUrl')"
+            >
+              复制链接
+            </el-button>
+          </div>
         </div>
         <!-- H5端链接 -->
         <div class="link-content">
@@ -231,13 +249,22 @@
               </p>
             </div>
           </div>
-          <el-button
-            type="primary"
-            link
-            @click="copyLink('h5Url')"
-          >
-            复制链接
-          </el-button>
+          <div>
+            <el-button
+              type="primary"
+              link
+              @click="updateUrl('h5Url')"
+            >
+              修改域名
+            </el-button>
+            <el-button
+              type="primary"
+              link
+              @click="copyLink('h5Url')"
+            >
+              复制链接
+            </el-button>
+          </div>
         </div>
         <!-- PC端链接 -->
         <div class="link-content">
@@ -255,13 +282,22 @@
               </p>
             </div>
           </div>
-          <el-button
-            type="primary"
-            link
-            @click="copyLink('pcUrl')"
-          >
-            复制链接
-          </el-button>
+          <div>
+            <el-button
+              type="primary"
+              link
+              @click="updateUrl('pcUrl')"
+            >
+              修改域名
+            </el-button>
+            <el-button
+              type="primary"
+              link
+              @click="copyLink('pcUrl')"
+            >
+              复制链接
+            </el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -568,11 +604,60 @@
     ref="applyOnlineRef"
     @on-re-apply-data-submit="reReapplyDataSubmit"
   />
+  <el-dialog
+    v-model="visible"
+    :close-on-click-modal="false"
+    :title="dialogTitle"
+    :append-to-body="true"
+    width="750px"
+  >
+    <el-form
+      ref="dataFormRef"
+      :model="dataForm"
+      :rules="dataRule"
+      label-width="80px"
+      @submit.prevent
+      @keyup.enter="onSubmit(dataFormRef)"
+    >
+      <el-form-item
+        label="原域名"
+      >
+        <el-input
+          v-model="dataForm. originalDomain"
+          v-input-rule
+          :disabled="true"
+        />
+      </el-form-item>
+      <el-form-item
+        label="修改域名"
+        prop="newDomain"
+      >
+        <el-input
+          v-model="dataForm.newDomain"
+          v-input-rule
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button
+        plain
+        @click="visible = false"
+      >
+        {{ $t("table.cancel") }}
+      </el-button>
+      <el-button
+        type="primary"
+        @click="onSubmit(dataFormRef)"
+      >
+        {{ $t("table.confirm") }}
+      </el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import applyOnline from '@/components/apply-online/index.vue'
-import { getLink } from '@/api/platform/audit-shop.js'
+import { getLink, updateDomain } from '@/api/platform/audit-shop.js'
 import {
   getDetailByHour,
   getCurrentMonthByDay,
@@ -961,6 +1046,61 @@ const isTrueData = (data) => {
     return data
   }
   return 0
+}
+// eslint-disable-next-line no-unused-vars
+const validateDomain = (rule, value, callback) => {
+  const reg = /^(https?:\/\/)[a-zA-Z0-9-]{1,63}(?:\.[a-zA-Z0-9-]{1,63})*\.(com|cn|top|tech|net|org|biz)$/
+  const format = reg.test(dataForm.newDomain)
+  if (!format) {
+    callback(new Error('请输入正确的域名'))
+  }
+  callback()
+}
+const dataRule = reactive({
+  newDomain: [
+    { required: true, message: '域名不能为空', trigger: 'blur' },
+    { validator: validateDomain, trigger: 'blur' }
+  ]
+
+})
+const visible = ref(false)
+const dialogTitle = ref('')
+const dataForm = reactive({
+  originalDomain: '',
+  newDomain: ''
+})
+let domainKey = ''
+const updateUrl = (value) => {
+  dataFormRef.value?.resetFields()
+  const titles = {
+    enterUrl: '商家端域名',
+    stationUrl: '门店端域名',
+    h5Url: 'H5端域名',
+    pcUrl: 'PC端域名'
+  }
+  domainKey = value
+  dataForm.newDomain = ''
+  visible.value = true
+  dialogTitle.value = titles[value]
+  dataForm.originalDomain = links[value]
+}
+const dataFormRef = ref()
+const onSubmit = async formEl => {
+  if (!formEl) return
+  await formEl.validate(valid => {
+    if (valid) {
+      const data = { [domainKey]: dataForm.newDomain }
+      updateDomain(data).then(() => {
+        ElMessage({
+          message: '修改成功',
+          type: 'success',
+          duration: 1000
+        })
+        visible.value = false
+        getShopLink()
+      })
+    }
+  })
 }
 </script>
 

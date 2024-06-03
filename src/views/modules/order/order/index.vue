@@ -599,6 +599,7 @@ const defaultTime = [
   new Date(2000, 2, 1, 23, 59, 59)
 ]
 let orderId = null
+let userId = null
 let oldPar = {}
 const deliveryType = [{
   value: 1,
@@ -734,9 +735,11 @@ const sidebarOpenState = computed(() => {
 
 onMounted(() => {
   // 获取首页跳转传递的参数
-  if (useRoute().query.orderNumber) {
+  if (useRoute().query.orderNumber || useRoute().query.userId) {
     orderId = useRoute().query.orderNumber
-    onAddOrUpdate(orderId)
+    userId = useRoute().query.userId
+
+    onAddOrUpdate(orderId, userId)
   }
   if (Object.keys(useRoute().params).length > 0) {
     onSelectNav(useRoute().params.orderStatus)
@@ -849,10 +852,10 @@ const onSetDateRange = (val) => {
 // 新增 / 修改
 const addOrUpdateRef = ref()
 const addOrUpdateVisible = ref(false)
-const onAddOrUpdate = (val) => {
+const onAddOrUpdate = (val, userId) => {
   addOrUpdateVisible.value = true
   nextTick(() => {
-    addOrUpdateRef.value?.init(val)
+    addOrUpdateRef.value?.init(val, userId)
   })
 }
 

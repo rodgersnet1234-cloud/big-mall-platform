@@ -29,28 +29,9 @@
               label-width="120px"
               class="date-range-param"
             >
-              <el-select
-                v-model="datePickerType"
-                class="date-picker-type"
-                @change="setdatePickerType(datePickerType)"
-              >
-                <el-option
-                  v-for="item in datePickerTypeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <el-date-picker
+              <cm-date-picker
                 v-model="dateRangeParam"
-                :type="datePickerType"
-                format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="defaultTime"
-                @change="dealDatetime"
+                @date-change="dealDatetime"
               />
             </el-form-item>
             <el-form-item label-width="120px">
@@ -104,7 +85,7 @@ import Revenue from './components/revenue.vue'
 import Refunds from './components/refunds.vue'
 import moment from 'moment'
 import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
+import CmDatePicker from '../components/cm-date-picker/index.vue'
 
 const activeName = ref('revenue') // 对账类型 0支出 1 收入
 const searchForm = ref({
@@ -112,22 +93,7 @@ const searchForm = ref({
   endTime: '',
   shopName: ''
 })
-const datePickerType = ref('daterange') // 日期筛选类型
 const dateRangeParam = ref([moment().add(-6, 'days').startOf('day').format('YYYY-MM-DD HH:mm:ss'), moment().endOf('day').format('YYYY-MM-DD HH:mm:ss')])
-const defaultTime = ref([
-  new Date(2000, 1, 1, 0, 0, 0),
-  new Date(2000, 2, 1, 23, 59, 59)
-])
-const datePickerTypeOptions = [
-  {
-    label: '日期范围',
-    value: 'daterange'
-  },
-  {
-    label: '月份范围',
-    value: 'monthrange'
-  }
-]
 
 onMounted(() => {
   dealDatetime()
@@ -138,10 +104,7 @@ const handleClick = (tab) => {
   activeName.value = tab.props.name
   getData()
 }
-const setdatePickerType = (val) => {
-  datePickerType.value = val
-  dealDatetime()
-}
+
 const revenueRef = ref(null)
 const refundsRef = ref(null)
 const getData = () => {
@@ -155,7 +118,6 @@ const search = () => {
   if (!dateRangeParam.value) {
     return ElMessage.error('请选择时间范围')
   }
-  // dealDatetime()
   getData()
 }
 const dealDatetime = () => {
@@ -166,44 +128,49 @@ const dealDatetime = () => {
 </script>
 
 <style lang="scss" scoped>
-  .page-manage-check {
-    background: #F5F5F5;
-    width: 100%;
-    :deep(.el-select .el-input){
+.page-manage-check {
+  background: #F5F5F5;
+  width: 100%;
+
+  :deep(.el-select .el-input) {
     width: 120px;
   }
+
   .manage-check {
-   background: #FFFFFF;
-   width: 100%;
-   padding: 24px;
-   .title {
-     font-size: 18px;
-     margin-bottom: 16px;
-   }
-   .date-picker-type {
-    width: 120px !important;
+    background: #FFFFFF;
+    width: 100%;
+    padding: 24px;
+
+    .title {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    :deep(.date-range-param .el-form-item__label:before) {
+      color: #F56C6C;
+      margin-right: 4px;
+      content: '*';
+    }
+
+    .table {
+      position: relative;
+    }
+
+    .search {
+      background: #F5F5F5;
+      padding: 20px;
+      margin-bottom: 30px;
+
+      .search-btn {
+        margin-left: 10px;
+      }
+    }
+
+    .icon-search {
+      bottom: 1px;
+      right: 5px;
+    }
   }
-  :deep(.date-range-param .el-form-item__label:before) {
-    color: #F56C6C;
-    margin-right: 4px;
-    content: '*';
-  }
-  .table {
-    position: relative;
-  }
-   .search {
-     background: #F5F5F5;
-     padding: 20px;
-     margin-bottom: 30px;
-     .search-btn {
-       margin-left: 10px;
-     }
-   }
-   .icon-search{
-     bottom: 1px;
-     right: 5px;
 }
- }
-  }
 
 </style>

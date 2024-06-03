@@ -78,13 +78,21 @@
               v-handle
               class="item-drag-box"
             />
-            <span>{{ $t(`pcdecorate.componentTitle.${item.rightConfigTitle}`) }} {{ index }}</span>
-            <el-icon
-              class="el-icon-delete"
-              @click="handleDel(index)"
-            >
-              <Delete />
-            </el-icon>
+            <span>{{ $t(`pcdecorate.componentTitle.${item.rightConfigTitle}`) }}  {{ item.customRemark || index }}</span>
+            <div class="icon-con">
+              <custom-remark-edit-popover
+                :index="index"
+                :current-edit-component="currentEditComponent"
+                @set-current-component="setCurrentComponent"
+                @save-edit="saveCustomRemark"
+              />
+              <el-icon
+                :size="18"
+                @click="handleDel(index)"
+              >
+                <Delete />
+              </el-icon>
+            </div>
           </div>
         </SlickItem>
       </SlickList>
@@ -101,6 +109,7 @@
 <script setup>
 import { SlickList, SlickItem, HandleDirective } from 'vue-slicksort' // 拖动组件
 import pickColorComponent from '../../../common-component/pick-color/index.vue' // 选择颜色
+import customRemarkEditPopover from '../../../../../components/custom-remark-edit-poppver/index.vue'
 const vHandle = HandleDirective
 
 const props = defineProps({
@@ -166,6 +175,18 @@ const handleBackColor = (color) => {
   pageBackground.value = color
   emit('handlePageColor', pageBackground.value)
 }
+
+// 自定义标签
+const currentEditComponent = ref(null)
+const currentEditComponentIndex = ref(0)
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = componentList.value[index]
+  currentEditComponentIndex.value = index
+}
+const saveCustomRemark = (remark) => {
+  componentList.value[currentEditComponentIndex.value].customRemark = remark
+}
+
 defineExpose({ smallPageName, pageBackground: pageBackground.value })
 </script>
 <style lang="scss" scoped>

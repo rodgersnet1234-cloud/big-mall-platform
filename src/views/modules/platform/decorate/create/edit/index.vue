@@ -121,8 +121,10 @@
             <right-config-message
               ref="rightConfigFormRef"
               :config-message="configMessage"
+              :current-index="currentIndex"
               :operation-type="operationType"
               :current-use-components="currentUseComponents.concat(HeaderComponent)"
+              @handle-update-custom-remark="handleUpdateCustomRemark"
               @close-right-config-container="isRightShow = false"
               @handle-update-message="handleUpdateMessage"
             />
@@ -314,11 +316,12 @@ const getDetail = () => {
           componentManageRef.value.pageBackground = ele.dataField.background
         })
       }
-      configComponentList.forEach(item => {
+      configComponentList.forEach((item, index) => {
         if (ele.type === item.type) {
           useArr.push({
             ...item,
-            rightConfigMessage: ele.dataField
+            rightConfigMessage: ele.dataField,
+            customRemark: ele.customRemark || index
           })
         }
       })
@@ -633,7 +636,8 @@ const addComponent = (item) => {
   }
   setTimeout(() => {
     const arr = []
-    allCurrentUseComponents.forEach(item => {
+    allCurrentUseComponents.forEach((item, index) => {
+      item.customRemark = item.customRemark || index
       arr.push(item)
     })
     currentUseComponents.value = [...arr] // 其他组件
@@ -674,7 +678,8 @@ const sortInput = (newList) => {
           type: 'basic_component',
           currentConfigType: item.type,
           Ref: item.Ref + index,
-          config: item.rightConfigMessage
+          config: item.rightConfigMessage,
+          customRemark: item.customRemark
         }
       }
     })
@@ -702,7 +707,8 @@ const clickComponent = (item, index) => {
       type: 'basic_component',
       currentConfigType: item.type,
       Ref: item.Ref + index,
-      config: item.rightConfigMessage
+      config: item.rightConfigMessage,
+      customRemark: item.customRemark
     }
   }, 300)
 }
@@ -761,12 +767,13 @@ const beforeSave = () => {
     return ElMessage.warning(`${isValidateHeaderArr[headerIndex].message}`)
   }
   // 其他组件信息
-  currentUseComponents.value.forEach(item => {
+  currentUseComponents.value.forEach((item, index) => {
     arr.push({
       type: item.type, // 当前组件的类型
       dataField: {
         ...item.rightConfigMessage
-      }
+      },
+      customRemark: item.customRemark || index
     })
   })
   // 头部组件信息
@@ -1017,6 +1024,11 @@ const handleHeaderClick = (item) => {
     Ref: item.Ref + '-1',
     config: item.rightConfigMessage
   }
+}
+
+// 设置自定义标记
+const handleUpdateCustomRemark = (obj, index) => {
+  currentUseComponents.value[index].customRemark = obj.customRemark
 }
 
 </script>

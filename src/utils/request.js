@@ -99,7 +99,7 @@ service.interceptors.response.use(
     // A00004 未授权
     if (res.code === 'A00004') {
       // to re-login
-      ElMessageBox.confirm('您已注销，您可以取消停留在该页上，或重新登录', '确认注销', {
+      ElMessageBox.confirm('登录状态已过期，请重新登录', '重新登录', {
         confirmButtonText: '重新登录',
         cancelButtonText: '取消',
         type: 'warning'

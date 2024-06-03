@@ -69,33 +69,33 @@
       >
         <el-popover
           placement="bottom"
-          :disabled="selectNum>100"
+          :disabled="selectNum > 100"
           trigger="click"
-          :width="250"
+          :width="350"
         >
-          <div style="text-align: right; margin: 0">
-            <el-select
-              v-model="leafValue"
-              class="popover-select"
-              multiple
-              filterable
-              allow-create
-              default-first-option
-              :popper-append-to-body="false"
-              placeholder="规格值"
-              :teleported="false"
-              style="width:100%"
-              @change="createSkuLeaf"
-              @visible-change="status => !status && handleSelectSku()"
-            >
-              <el-option
-                v-for="item in skuOptions"
-                :key="item[optionValue]"
-                :label="item[optionText]"
-                :value="item[optionValue]"
-              />
-            </el-select>
-          </div>
+          <el-select
+            v-model="leafValue"
+            class="popover-select"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            :popper-append-to-body="false"
+            placeholder="规格值"
+            :teleported="false"
+            style="width:100%"
+            @change="createSkuLeaf"
+            @visible-change="status => !status && handleSelectSku()"
+          >
+            <el-option
+              v-for="item in skuOptions"
+              :key="item[optionValue]"
+              :label="item[optionText]"
+              :value="item[optionValue]"
+            />
+          </el-select>
+
+          <!-- 新增 -->
           <template
             v-if="view"
             #reference

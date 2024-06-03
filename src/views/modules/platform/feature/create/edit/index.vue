@@ -67,6 +67,7 @@
                       :is-check-my-self="item.isCheckMySelf"
                       :is-start-check-field-rules="isStartCheckFieldRules"
                       @my-check-result="everyComponentsCheckResultFun"
+                      @on-error-message-tip="onErrorMessageTip"
                       @components-value-chance="componentsValueChanceFromConfig"
                       @save="save"
                     />
@@ -106,6 +107,7 @@
                           :is-start-check-field-rules="isStartCheckFieldRules"
                           @top-fixed="topFixed"
                           @my-check-result="everyComponentsCheckResultFun"
+                          @on-error-message-tip="onErrorMessageTip"
                           @components-value-chance="componentsValueChance"
                           @save="save"
                         />
@@ -228,10 +230,20 @@
                         class="drag-box"
                       >
                         {{ componentLists.find(x=>x.type === item.type) ?
-                          componentLists.find(x=>x.type === item.type).title : '' }} <em>{{ index }}</em>
+                          componentLists.find(x=>x.type === item.type).title : '' }}
+                        <span class="drag-box-remark">{{ item.customRemark }}</span>
                       </div>
                       <div class="drag-box-icon">
-                        <el-icon @click="popBtn(2, index)">
+                        <custom-remark-edit-popover
+                          :index="index"
+                          :current-edit-component="currentEditComponent"
+                          @set-current-component="setCurrentComponent"
+                          @save-edit="saveCustomRemark"
+                        />
+                        <el-icon
+                          :size="18"
+                          @click="popBtn(2, index)"
+                        >
                           <Delete />
                         </el-icon>
                       </div>
@@ -284,6 +296,7 @@ import allCanUseComponents from './components/all-can-use-components/index.vue'
 import decorateNavbar from './components/decorate-navbar/index.vue' // 顶边栏
 import request from '@/utils/request'
 import { ElMessage } from 'element-plus'
+import customRemarkEditPopover from '../../../components/custom-remark-edit-poppver/index.vue'
 
 /**
  * 作为组件时传入说明
@@ -1149,6 +1162,28 @@ const topFixed = (current) => {
   currentEditComponent.value = 0
 }
 
+let errorMessageTipList = []
+/**
+ * 获取所有组件的错误提示，集中处理
+ * 利用防抖函数，每次只展示一条报错信息
+ */
+const onErrorMessageTip = Debounce((errorTip) => {
+  errorMessageTipList.push(errorTip)
+  if (errorMessageTipList.length > 0) {
+    for (let i = 0; i < 1; i++) {
+      ElMessage.error(errorMessageTipList[0])
+    }
+    errorMessageTipList = []
+  }
+}, 1000)
+
+// 自定义标签名
+const setCurrentComponent = (index) => {
+  currentEditComponent.value = currentUseComponents.value[index]
+}
+const saveCustomRemark = (remark) => {
+  currentEditComponent.value.customRemark = remark
+}
 </script>
 
 <style lang="scss" scoped>

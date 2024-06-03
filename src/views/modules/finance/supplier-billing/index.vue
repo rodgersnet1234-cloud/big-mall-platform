@@ -16,6 +16,7 @@
                 maxlength="20"
                 style="width: 160px"
                 clearable
+                type="number"
                 placeholder="订单号"
               />
             </el-form-item>
@@ -25,6 +26,7 @@
                 maxlength="20"
                 style="width: 160px"
                 clearable
+                type="number"
                 placeholder="退款编号"
               />
             </el-form-item>

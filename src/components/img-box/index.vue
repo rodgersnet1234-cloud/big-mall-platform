@@ -304,7 +304,7 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import ImageCompressor from 'compressorjs'
-import { page as pageApi, save, updateFileName } from '@/api/biz/attach-file'
+import { page as pageApi, save } from '@/api/biz/attach-file'
 
 import { awsImgUpdate, getBatchPreSignUrl, pageFileGroup, saveFileGroup, updateFileGroup } from '@/api/biz/oss'
 import { Debounce } from '@/utils/debounce'
@@ -779,9 +779,6 @@ const uploadTips = () => {
     return tips.join('，')
   }
 
-  if (fileNum > 0) {
-    tips.push($t('biz.imgbox.alreadyExist') + fileNum + $t('biz.imgbox.unit'))
-  }
   const uploadFileNum = fileList.value ? fileList.value.length : 0
   if (uploadFileNum > 0) {
     tips.push($t('biz.imgbox.soonUpload') + uploadFileNum + $t('biz.imgbox.unit'))
@@ -824,15 +821,18 @@ const onUploadSuccess = (response, file, fileList) => {
   fileList.forEach(file => {
     filesNames.push(file.name)
   })
-  const uploadFile = []
-  attachFiles.value.forEach(file => {
-    if (filesNames.indexOf(file.fileName) !== -1) {
-      file.attachFileGroupId = groupForm.attachFileGroupId
-      file.sysType = 3
-      uploadFile.push(file)
+  let uploadFile = []
+  filesNames.forEach(name => {
+    const obj = attachFiles.value.find(i => i.fileName === name)
+    if (obj) {
+      obj.sysType = 3
+      obj.attachFileGroupId = groupForm.attachFileGroupId
+      uploadFile.push(obj)
     }
   })
   if (uploadFile.length > 0) {
+    // 倒序数组：使得上传预览时的顺序与上传成功后获取到的顺序一致
+    uploadFile = uploadFile.reverse()
     save(uploadFile).then(() => {
       attachFiles.value = []
       options.activeTab = 'pick'
